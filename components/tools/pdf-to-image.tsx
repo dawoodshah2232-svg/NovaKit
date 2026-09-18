@@ -5,6 +5,7 @@ import { useDropzone } from 'react-dropzone';
 import * as pdfjsLib from 'pdfjs-dist';
 import JSZip from 'jszip';
 import { saveAs } from 'file-saver';
+import { trackToolExecution } from '@/lib/analytics';
 import {
   FileImage,
   FileText,
@@ -258,6 +259,7 @@ export function PdfToImage() {
       setSuccessMessage(
         `Successfully converted all ${totalPages} pages to high-resolution ${format.toUpperCase()} images!`
       );
+      trackToolExecution('pdf-to-image');
     } catch (err: unknown) {
       console.error('PDF Conversion error:', err);
       setErrorMessage(

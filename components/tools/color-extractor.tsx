@@ -2,6 +2,7 @@
 
 import React, { useState, useCallback, useRef } from 'react';
 import { useDropzone } from 'react-dropzone';
+import { trackToolExecution } from '@/lib/analytics';
 import {
   Palette,
   UploadCloud,
@@ -180,6 +181,7 @@ export function ColorExtractor() {
               setPalette(pal);
               setImageMeta(fileMeta);
               setIsProcessing(false);
+              trackToolExecution('color-extractor');
               return;
             }
           } catch (e) {

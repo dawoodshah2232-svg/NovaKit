@@ -3,6 +3,7 @@
 import React, { useState, useEffect, useCallback, useRef } from 'react';
 import { useDropzone } from 'react-dropzone';
 import imageCompression from 'browser-image-compression';
+import { trackToolExecution } from '@/lib/analytics';
 import {
   UploadCloud,
   Download,
@@ -204,6 +205,7 @@ export function ImageCompressor() {
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
+    trackToolExecution('image-compressor');
   };
 
   // Savings calculation

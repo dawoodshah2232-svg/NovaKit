@@ -3,6 +3,7 @@
 import React, { useState, useMemo } from 'react';
 import { jsPDF } from 'jspdf';
 import autoTable from 'jspdf-autotable';
+import { trackToolExecution } from '@/lib/analytics';
 import {
   Download,
   Plus,
@@ -526,6 +527,7 @@ export function InvoiceGenerator() {
       // Save PDF directly to user's device
       const fileName = `Invoice-${invoiceNumber.trim() || 'draft'}.pdf`;
       doc.save(fileName);
+      trackToolExecution('invoice-generator');
     } catch (err) {
       console.error('Failed to generate PDF:', err);
       alert('An error occurred while generating your invoice PDF. Please try again.');

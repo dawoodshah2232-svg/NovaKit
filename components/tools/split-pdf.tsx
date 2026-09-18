@@ -5,6 +5,7 @@ import { useDropzone } from 'react-dropzone';
 import { PDFDocument } from 'pdf-lib';
 import JSZip from 'jszip';
 import { saveAs } from 'file-saver';
+import { trackToolExecution } from '@/lib/analytics';
 import {
   Scissors,
   FileText,
@@ -275,6 +276,7 @@ export function SplitPdf() {
             pages.length === 1 ? 'page' : 'pages'
           } successfully into "${outputFileName}" (${formatBytes(blob.size)})`
         );
+        trackToolExecution('split-pdf');
       } else {
         // Option B: Extract all individual pages and bundle into ZIP
         const total = loadedPdf.pageCount;
@@ -309,6 +311,7 @@ export function SplitPdf() {
             zipBlob.size
           )})`
         );
+        trackToolExecution('split-pdf');
       }
     } catch (err: unknown) {
       console.error('Error during split operation:', err);

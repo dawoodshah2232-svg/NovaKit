@@ -9,6 +9,7 @@ import {
   Tooltip,
 } from 'recharts';
 import { jsPDF } from 'jspdf';
+import { trackToolExecution } from '@/lib/analytics';
 import {
   Calculator,
   ShieldCheck,
@@ -296,6 +297,7 @@ Take-Home Ratio: ${takeHomePercentage.toFixed(1)}%
 
       // Save PDF
       doc.save(`NovaKit-Tax-Breakdown-${new Date().toISOString().slice(0, 10)}.pdf`);
+      trackToolExecution('tax-calculator');
     } catch (err) {
       console.error('Failed to export PDF:', err);
       alert('Unable to generate PDF document. Please try again.');

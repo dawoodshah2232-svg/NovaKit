@@ -5,6 +5,7 @@ import { useDropzone } from 'react-dropzone';
 import { PDFDocument } from 'pdf-lib';
 import { encryptPDF, EncryptPDFOptions } from '@pdfsmaller/pdf-encrypt';
 import { saveAs } from 'file-saver';
+import { trackToolExecution } from '@/lib/analytics';
 import {
   Lock,
   Unlock,
@@ -221,6 +222,7 @@ export function ProtectPdf() {
           blob.size
         )}).`
       );
+      trackToolExecution('protect-pdf');
     } catch (err: unknown) {
       console.error('Encryption failed:', err);
       setErrorMessage(

@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useState, useEffect, useCallback, useMemo } from 'react';
+import { trackToolExecution } from '@/lib/analytics';
 import {
   KeyRound,
   Copy,
@@ -188,6 +189,7 @@ export function PasswordGenerator() {
       await navigator.clipboard.writeText(password);
       setCopied(true);
       setTimeout(() => setCopied(false), 2000);
+      trackToolExecution('password-generator');
     } catch (err) {
       console.error('Failed to copy password:', err);
     }

@@ -3,6 +3,7 @@
 import React, { useState, useCallback, useId } from 'react';
 import { useDropzone } from 'react-dropzone';
 import { PDFDocument } from 'pdf-lib';
+import { trackToolExecution } from '@/lib/analytics';
 import {
   DndContext,
   closestCenter,
@@ -378,6 +379,7 @@ export function PdfMerger() {
       setSuccessMessage(
         `Successfully merged ${pdfFiles.length} files (${mergedPdf.getPageCount()} pages) into ${downloadName}.`
       );
+      trackToolExecution('pdf-merger');
     } catch (err) {
       console.error('PDF Merge Error:', err);
       if (err instanceof Error) {

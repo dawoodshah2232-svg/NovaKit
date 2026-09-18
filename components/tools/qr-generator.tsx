@@ -2,6 +2,7 @@
 
 import React, { useState, useRef } from 'react';
 import { QRCodeCanvas, QRCodeSVG } from 'qrcode.react';
+import { trackToolExecution } from '@/lib/analytics';
 import {
   Download,
   Copy,
@@ -101,6 +102,7 @@ export function QrGenerator() {
       document.body.appendChild(link);
       link.click();
       document.body.removeChild(link);
+      trackToolExecution('qr-generator');
     } catch (err) {
       console.error('Failed to download PNG:', err);
       alert('Unable to export PNG image.');
@@ -124,6 +126,7 @@ export function QrGenerator() {
       link.click();
       document.body.removeChild(link);
       URL.revokeObjectURL(svgUrl);
+      trackToolExecution('qr-generator');
     } catch (err) {
       console.error('Failed to download SVG:', err);
       alert('Unable to export SVG vector.');

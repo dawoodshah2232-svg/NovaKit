@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useState, useMemo } from 'react';
+import { trackToolExecution } from '@/lib/analytics';
 import {
   FileSearch,
   Sparkles,
@@ -129,6 +130,7 @@ export function TextAnalyzer() {
       await navigator.clipboard.writeText(text);
       setCopied(true);
       setTimeout(() => setCopied(false), 2000);
+      trackToolExecution('text-analyzer');
     } catch (err) {
       console.error('Failed to copy text:', err);
     }
@@ -142,6 +144,7 @@ export function TextAnalyzer() {
   // Load sample text
   const handleLoadSample = () => {
     setText(SAMPLE_TEXT);
+    trackToolExecution('text-analyzer');
   };
 
   return (

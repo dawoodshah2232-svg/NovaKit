@@ -5,6 +5,7 @@ import { useDropzone } from 'react-dropzone';
 import { PDFDocument } from 'pdf-lib';
 import { compress, CompressionPreset } from '@quicktoolsone/pdf-compress';
 import { saveAs } from 'file-saver';
+import { trackToolExecution } from '@/lib/analytics';
 import {
   Minimize2,
   FileText,
@@ -245,6 +246,7 @@ export function CompressPdf() {
 
       // Trigger instant client-side download
       saveAs(blob, outName);
+      trackToolExecution('compress-pdf');
     } catch (err: unknown) {
       console.error('Compression failed:', err);
       setErrorMessage(
