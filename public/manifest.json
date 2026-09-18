@@ -1,0 +1,117 @@
+{
+  "name": "NovaKit",
+  "short_name": "NovaKit",
+  "description": "High-speed, 100% private in-browser utilities. Image compressor, PDF merger, invoice generator, and tax calculator with zero server uploads.",
+  "start_url": "/",
+  "id": "/",
+  "display": "standalone",
+  "orientation": "any",
+  "background_color": "#f8fafc",
+  "theme_color": "#f8fafc",
+  "categories": [
+    "productivity",
+    "utilities",
+    "business",
+    "finance"
+  ],
+  "icons": [
+    {
+      "src": "/icon.svg",
+      "sizes": "192x192",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/icon.svg",
+      "sizes": "512x512",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "Image Compressor",
+      "short_name": "Compress",
+      "description": "Compress JPEG, PNG, and WebP images locally",
+      "url": "/tools/image-compressor",
+      "icons": [{ "src": "/icon.svg", "sizes": "192x192" }]
+    },
+    {
+      "name": "PDF Merger",
+      "short_name": "Merge PDF",
+      "description": "Merge multiple PDF files in browser memory",
+      "url": "/tools/pdf-merger",
+      "icons": [{ "src": "/icon.svg", "sizes": "192x192" }]
+    },
+    {
+      "name": "Invoice Generator",
+      "short_name": "Invoice",
+      "description": "Create professional PDF invoices instantly",
+      "url": "/tools/invoice-generator",
+      "icons": [{ "src": "/icon.svg", "sizes": "192x192" }]
+    },
+    {
+      "name": "Tax Calculator",
+      "short_name": "Tax Calc",
+      "description": "Calculate take-home salary and tax breakdown",
+      "url": "/tools/tax-calculator",
+      "icons": [{ "src": "/icon.svg", "sizes": "192x192" }]
+    },
+    {
+      "name": "QR Code Generator",
+      "short_name": "QR Code",
+      "description": "Generate custom QR codes with SVG/PNG export",
+      "url": "/tools/qr-generator",
+      "icons": [{ "src": "/icon.svg", "sizes": "192x192" }]
+    },
+    {
+      "name": "Color Palette Extractor",
+      "short_name": "Colors",
+      "description": "Extract dominant palettes and HEX codes from images",
+      "url": "/tools/color-extractor",
+      "icons": [{ "src": "/icon.svg", "sizes": "192x192" }]
+    },
+    {
+      "name": "SEO Text Analyzer",
+      "short_name": "SEO Text",
+      "description": "Analyze word counts, reading time, and keyword density",
+      "url": "/tools/text-analyzer",
+      "icons": [{ "src": "/icon.svg", "sizes": "192x192" }]
+    },
+    {
+      "name": "Secure Password Generator",
+      "short_name": "Passwords",
+      "description": "Generate cryptographically secure random credentials",
+      "url": "/tools/password-generator",
+      "icons": [{ "src": "/icon.svg", "sizes": "192x192" }]
+    },
+    {
+      "name": "Split PDF",
+      "short_name": "Split PDF",
+      "description": "Extract pages and split documents in browser",
+      "url": "/tools/split-pdf",
+      "icons": [{ "src": "/icon.svg", "sizes": "192x192" }]
+    },
+    {
+      "name": "Compress PDF",
+      "short_name": "Compress PDF",
+      "description": "Reduce PDF file sizes with local stream optimization",
+      "url": "/tools/compress-pdf",
+      "icons": [{ "src": "/icon.svg", "sizes": "192x192" }]
+    },
+    {
+      "name": "PDF to Image",
+      "short_name": "PDF to Image",
+      "description": "Convert PDF pages to JPG and PNG images",
+      "url": "/tools/pdf-to-image",
+      "icons": [{ "src": "/icon.svg", "sizes": "192x192" }]
+    },
+    {
+      "name": "Protect PDF",
+      "short_name": "Protect PDF",
+      "description": "Encrypt PDF documents with AES-256 passwords",
+      "url": "/tools/protect-pdf",
+      "icons": [{ "src": "/icon.svg", "sizes": "192x192" }]
+    }
+  ]
+}

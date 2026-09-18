@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512">
+  <defs>
+    <linearGradient id="bgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#2563eb" />
+      <stop offset="50%" stop-color="#4f46e5" />
+      <stop offset="100%" stop-color="#7c3aed" />
+    </linearGradient>
+    <filter id="shadow" x="-10%" y="-10%" width="120%" height="120%">
+      <feDropShadow dx="0" dy="8" stdDeviation="16" flood-opacity="0.25" />
+    </filter>
+  </defs>
+  <rect width="512" height="512" rx="128" fill="url(#bgGrad)" />
+  <!-- Sparkles / Nova symbol -->
+  <path d="M256 96 L284 216 L404 244 L416 256 L404 268 L284 296 L256 416 L244 416 L228 296 L108 268 L96 256 L108 244 L228 216 Z" fill="#ffffff" filter="url(#shadow)" />
+  <circle cx="384" cy="128" r="28" fill="#ffffff" opacity="0.9" />
+  <circle cx="128" cy="384" r="20" fill="#ffffff" opacity="0.8" />
+</svg>
