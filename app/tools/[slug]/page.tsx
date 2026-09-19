@@ -150,7 +150,7 @@ export default async function ToolPage({ params }: ToolPageProps) {
                 </span>
               )}
             </div>
-            <h1 className="text-3xl sm:text-4xl font-black tracking-tight text-slate-950 dark:text-white">
+            <h1 className="text-2xl sm:text-3xl md:text-4xl font-black tracking-tight text-slate-950 dark:text-white">
               {tool.name}
             </h1>
             <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-300 mt-1.5 max-w-xl leading-relaxed">

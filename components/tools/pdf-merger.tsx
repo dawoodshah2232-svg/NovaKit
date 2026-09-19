@@ -93,70 +93,70 @@ function SortablePdfItem({
     <div
       ref={setNodeRef}
       style={style}
-      className={`group relative flex items-center justify-between gap-2 p-3 sm:p-4 rounded-2xl border transition-all duration-150 ${
+      className={`group relative flex items-center justify-between gap-1.5 sm:gap-2 p-2.5 sm:p-4 rounded-2xl border transition-all duration-150 ${
         isDragging
           ? 'bg-emerald-50/90 dark:bg-emerald-950/70 border-emerald-500 shadow-xl ring-2 ring-emerald-500/30 opacity-95 scale-[1.01]'
           : 'bg-white dark:bg-slate-900 border-slate-200/80 dark:border-slate-800/80 hover:border-slate-300 dark:hover:border-slate-700 shadow-xs'
       }`}
     >
       {/* Left section: Drag handle + Index badge + File metadata */}
-      <div className="flex items-center gap-2 sm:gap-3 min-w-0 flex-1">
-        {/* Drag handle button with minimum 44px touch area */}
+      <div className="flex items-center gap-1.5 sm:gap-3 min-w-0 flex-1">
+        {/* Drag handle button with minimum 48px touch target */}
         <button
           type="button"
           {...attributes}
           {...listeners}
           aria-label={`Drag to reorder ${item.name}`}
-          className="min-h-[44px] min-w-[44px] -ml-1 sm:ml-0 flex items-center justify-center rounded-xl text-slate-400 hover:text-slate-700 dark:hover:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors cursor-grab active:cursor-grabbing touch-none shrink-0"
+          className="min-h-[48px] min-w-[48px] -ml-1 sm:ml-0 flex items-center justify-center rounded-xl text-slate-400 hover:text-slate-700 dark:hover:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors cursor-grab active:cursor-grabbing touch-none shrink-0"
         >
           <GripVertical className="w-5 h-5" />
         </button>
 
         {/* Order index badge */}
-        <div className="w-7 h-7 rounded-lg bg-emerald-50 dark:bg-emerald-950/80 border border-emerald-200/70 dark:border-emerald-800/60 text-emerald-700 dark:text-emerald-300 flex items-center justify-center text-xs font-black shrink-0">
+        <div className="w-7 h-7 sm:w-8 sm:h-8 rounded-lg sm:rounded-xl bg-emerald-50 dark:bg-emerald-950/80 border border-emerald-200/70 dark:border-emerald-800/60 text-emerald-700 dark:text-emerald-300 flex items-center justify-center text-xs font-black shrink-0">
           {index + 1}
         </div>
 
         {/* File icon */}
-        <div className="w-9 h-9 rounded-xl bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 flex items-center justify-center shrink-0 hidden xs:flex">
+        <div className="w-9 h-9 sm:w-10 sm:h-10 rounded-xl bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 items-center justify-center shrink-0 hidden xs:flex">
           <FileText className="w-5 h-5 text-emerald-600 dark:text-emerald-400" />
         </div>
 
         {/* File name and metadata */}
-        <div className="min-w-0 flex-1">
+        <div className="min-w-0 flex-1 pr-1">
           <p
-            className="text-xs sm:text-sm font-bold text-slate-900 dark:text-white truncate"
+            className="text-xs sm:text-sm font-bold text-slate-900 dark:text-white truncate max-w-[150px] xs:max-w-[200px] sm:max-w-xs md:max-w-md"
             title={item.name}
           >
             {item.name}
           </p>
-          <div className="flex flex-wrap items-center gap-1.5 sm:gap-2 mt-0.5 text-[11px] text-slate-500 dark:text-slate-400">
+          <div className="flex flex-wrap items-center gap-1 sm:gap-2 mt-0.5 text-[10px] sm:text-[11px] text-slate-500 dark:text-slate-400">
             <span>{formatBytes(item.size)}</span>
             <span className="text-slate-300 dark:text-slate-700">•</span>
             {item.pageCount !== undefined ? (
-              <span className="inline-flex items-center gap-1 font-semibold text-emerald-600 dark:text-emerald-400">
+              <span className="inline-flex items-center gap-0.5 font-semibold text-emerald-600 dark:text-emerald-400">
                 <Layers className="w-3 h-3" />
-                {item.pageCount} {item.pageCount === 1 ? 'page' : 'pages'}
+                <span>{item.pageCount} {item.pageCount === 1 ? 'pg' : 'pgs'}</span>
               </span>
             ) : item.error ? (
-              <span className="text-amber-500 font-medium">Page count unreadable</span>
+              <span className="text-amber-500 font-medium">Unreadable</span>
             ) : (
-              <span className="text-slate-400 animate-pulse">Reading pages...</span>
+              <span className="text-slate-400 animate-pulse">Reading...</span>
             )}
           </div>
         </div>
       </div>
 
-      {/* Right section: Move Up/Down shortcuts (touch accessible) + Delete button */}
-      <div className="flex items-center gap-1 shrink-0">
-        {/* Secondary reorder buttons for quick keyboard/touch ordering */}
-        <div className="hidden sm:flex items-center gap-0.5 border-r border-slate-200 dark:border-slate-800 pr-1 mr-1">
+      {/* Right section: Reorder shortcuts + Delete button (all min 48px touch targets) */}
+      <div className="flex items-center gap-0.5 sm:gap-1 shrink-0">
+        {/* Touch-friendly up/down reorder buttons */}
+        <div className="flex items-center gap-0.5 border-r border-slate-200 dark:border-slate-800 pr-1 mr-0.5">
           <button
             type="button"
             disabled={index === 0}
             onClick={() => onMoveUp(index)}
             aria-label={`Move ${item.name} up`}
-            className="min-h-[44px] min-w-[36px] flex items-center justify-center rounded-lg text-slate-400 hover:text-slate-700 dark:hover:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800 disabled:opacity-25 disabled:pointer-events-none transition-colors"
+            className="min-h-[48px] min-w-[38px] sm:min-w-[44px] flex items-center justify-center rounded-xl text-slate-400 hover:text-slate-700 dark:hover:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800 disabled:opacity-20 disabled:pointer-events-none transition-colors touch-manipulation active:scale-95"
           >
             <ArrowUp className="w-4 h-4" />
           </button>
@@ -165,18 +165,18 @@ function SortablePdfItem({
             disabled={index === totalItems - 1}
             onClick={() => onMoveDown(index)}
             aria-label={`Move ${item.name} down`}
-            className="min-h-[44px] min-w-[36px] flex items-center justify-center rounded-lg text-slate-400 hover:text-slate-700 dark:hover:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800 disabled:opacity-25 disabled:pointer-events-none transition-colors"
+            className="min-h-[48px] min-w-[38px] sm:min-w-[44px] flex items-center justify-center rounded-xl text-slate-400 hover:text-slate-700 dark:hover:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800 disabled:opacity-20 disabled:pointer-events-none transition-colors touch-manipulation active:scale-95"
           >
             <ArrowDown className="w-4 h-4" />
           </button>
         </div>
 
-        {/* Delete button (minimum 44px hit target) */}
+        {/* Delete button (minimum 48px touch target) */}
         <button
           type="button"
           onClick={() => onRemove(item.id)}
           aria-label={`Remove ${item.name}`}
-          className="min-h-[44px] min-w-[44px] flex items-center justify-center rounded-xl text-slate-400 hover:text-red-600 dark:hover:text-red-400 hover:bg-red-50 dark:hover:bg-red-950/50 transition-colors active:scale-95"
+          className="min-h-[48px] min-w-[48px] flex items-center justify-center rounded-xl text-slate-400 hover:text-red-600 dark:hover:text-red-400 hover:bg-red-50 dark:hover:bg-red-950/50 transition-colors active:scale-95 touch-manipulation cursor-pointer"
         >
           <Trash2 className="w-4 h-4" />
         </button>
@@ -427,31 +427,31 @@ export function PdfMerger() {
       {pdfFiles.length === 0 ? (
         <div
           {...getRootProps()}
-          className={`group relative rounded-3xl border-3 border-dashed transition-all duration-200 p-8 sm:p-16 text-center cursor-pointer min-h-[340px] sm:min-h-[380px] flex flex-col items-center justify-center bg-white dark:bg-slate-900 shadow-[0_4px_24px_rgba(0,0,0,0.03)] hover:shadow-[0_16px_40px_rgba(16,185,129,0.12)] ${
+          className={`group relative rounded-3xl border-2 sm:border-3 border-dashed transition-all duration-200 p-6 sm:p-14 text-center cursor-pointer min-h-[320px] sm:min-h-[380px] flex flex-col items-center justify-center bg-white dark:bg-slate-900 shadow-[0_4px_24px_rgba(0,0,0,0.03)] hover:shadow-[0_16px_40px_rgba(16,185,129,0.12)] active:scale-[0.98] select-none touch-manipulation ${
             isDragActive
               ? 'border-emerald-500 bg-emerald-50/70 dark:bg-emerald-950/50 scale-[0.99] ring-4 ring-emerald-500/20'
               : 'border-emerald-300/80 dark:border-emerald-900/60 hover:border-emerald-600 dark:hover:border-emerald-400'
           }`}
         >
           <input {...getInputProps()} aria-label="Select PDF files to merge" />
-          <div className="max-w-md mx-auto space-y-5">
-            <div className="w-20 h-20 sm:w-24 sm:h-24 rounded-3xl bg-emerald-50 dark:bg-emerald-950/80 text-emerald-600 dark:text-emerald-400 flex items-center justify-center mx-auto shadow-inner group-hover:scale-110 transition-transform duration-200">
-              <UploadCloud className="w-10 h-10 sm:w-12 sm:h-12" />
+          <div className="max-w-md mx-auto space-y-4 sm:space-y-5">
+            <div className="w-16 h-16 sm:w-24 sm:h-24 rounded-3xl bg-emerald-50 dark:bg-emerald-950/80 text-emerald-600 dark:text-emerald-400 flex items-center justify-center mx-auto shadow-inner group-hover:scale-110 transition-transform duration-200">
+              <UploadCloud className="w-8 h-8 sm:w-12 sm:h-12" />
             </div>
-            <div className="space-y-1.5">
-              <h3 className="text-xl sm:text-2xl font-black text-slate-950 dark:text-white tracking-tight">
+            <div className="space-y-1 sm:space-y-1.5">
+              <h3 className="text-xl sm:text-2xl md:text-3xl font-black text-slate-950 dark:text-white tracking-tight">
                 {isDragActive ? 'Drop your PDF files here' : 'Drag & drop multiple PDFs here'}
               </h3>
-              <p className="text-sm sm:text-base text-slate-500 dark:text-slate-400">
-                or tap below to choose documents from your computer
+              <p className="text-xs sm:text-base text-slate-500 dark:text-slate-400">
+                or tap below to choose documents from your device
               </p>
-              <p className="text-xs text-slate-400 dark:text-slate-500 pt-1">
+              <p className="text-[11px] sm:text-xs text-slate-400 dark:text-slate-500 pt-0.5">
                 Combine 2 or more PDF documents securely in local memory
               </p>
             </div>
             <button
               type="button"
-              className="min-h-[52px] px-8 py-3.5 rounded-2xl bg-emerald-600 hover:bg-emerald-700 text-white text-sm sm:text-base font-bold shadow-lg shadow-emerald-500/25 active:scale-95 transition-all inline-flex items-center gap-2.5"
+              className="w-full sm:w-auto min-h-[50px] sm:min-h-[52px] px-8 py-3.5 rounded-2xl bg-emerald-600 hover:bg-emerald-700 text-white text-sm sm:text-base font-bold shadow-lg shadow-emerald-500/25 active:scale-95 transition-all inline-flex items-center justify-center gap-2.5 cursor-pointer touch-manipulation"
             >
               <FileText className="w-5 h-5" />
               <span>Choose PDF Files</span>
@@ -460,9 +460,9 @@ export function PdfMerger() {
         </div>
       ) : (
         /* Reorderable Workspace when files are loaded */
-        <div className="space-y-5">
+        <div className="space-y-4 sm:space-y-5 pb-28 md:pb-0">
           {/* Workspace summary toolbar */}
-          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 p-4 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800/80 shadow-xs">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 p-3.5 sm:p-4 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800/80 shadow-xs">
             <div>
               <h3 className="text-sm font-bold text-slate-900 dark:text-white flex items-center gap-2">
                 <span>Merge Sequence</span>
@@ -479,12 +479,12 @@ export function PdfMerger() {
               </p>
             </div>
 
-            {/* Quick action buttons */}
+            {/* Quick action buttons - 48px touch targets */}
             <div className="flex items-center gap-2 self-stretch sm:self-auto">
               <button
                 type="button"
                 onClick={open}
-                className="flex-1 sm:flex-initial min-h-[44px] px-3.5 py-2 rounded-xl bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 text-xs font-semibold inline-flex items-center justify-center gap-1.5 transition-colors active:scale-95"
+                className="flex-1 sm:flex-initial min-h-[48px] px-4 py-2.5 rounded-xl bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 text-xs font-bold inline-flex items-center justify-center gap-1.5 transition-colors active:scale-95 cursor-pointer touch-manipulation"
               >
                 <Plus className="w-4 h-4" />
                 <span>Add More</span>
@@ -492,9 +492,9 @@ export function PdfMerger() {
               <button
                 type="button"
                 onClick={handleReset}
-                className="min-h-[44px] px-3.5 py-2 rounded-xl text-slate-500 hover:text-slate-900 dark:text-slate-400 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-800 text-xs font-semibold inline-flex items-center justify-center gap-1.5 transition-colors active:scale-95"
+                className="min-h-[48px] px-4 py-2.5 rounded-xl text-slate-500 hover:text-slate-900 dark:text-slate-400 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-800 text-xs font-bold inline-flex items-center justify-center gap-1.5 transition-colors active:scale-95 cursor-pointer touch-manipulation"
               >
-                <RotateCcw className="w-3.5 h-3.5" />
+                <RotateCcw className="w-4 h-4" />
                 <span>Clear</span>
               </button>
             </div>
@@ -516,7 +516,7 @@ export function PdfMerger() {
               items={pdfFiles.map((f) => f.id)}
               strategy={verticalListSortingStrategy}
             >
-              <div className="space-y-2.5">
+              <div className="space-y-2 sm:space-y-2.5">
                 {pdfFiles.map((item, index) => (
                   <SortablePdfItem
                     key={item.id}
@@ -540,33 +540,43 @@ export function PdfMerger() {
             </div>
           )}
 
-          {/* Primary Action Button: Merge & Download (Massive & Foolproof) */}
-          <div className="sticky bottom-20 md:static z-30 pt-3">
-            <button
-              type="button"
-              onClick={handleMergeAndDownload}
-              disabled={isMerging || pdfFiles.length < 2}
-              className="w-full min-h-[56px] px-8 py-4 rounded-2xl bg-gradient-to-r from-emerald-600 via-teal-600 to-emerald-700 hover:from-emerald-500 hover:to-teal-500 disabled:opacity-50 disabled:cursor-not-allowed text-white text-base sm:text-lg font-black shadow-xl shadow-emerald-600/25 active:scale-[0.98] transition-all flex items-center justify-center gap-3 cursor-pointer"
-              aria-label="Merge and download combined PDF document"
-            >
-              {isMerging ? (
-                <>
-                  <div className="w-6 h-6 border-3 border-white border-t-transparent rounded-full animate-spin" />
-                  <span>Merging {pdfFiles.length} Documents in Browser...</span>
-                </>
-              ) : (
-                <>
-                  <Download className="w-5 h-5 sm:w-6 sm:h-6" />
-                  <span>
-                    Merge & Download (
-                    {pdfFiles.length >= 2
-                      ? `${pdfFiles.length} files • ${totalPages > 0 ? `${totalPages} pgs` : formatBytes(totalBytes)}`
-                      : 'Add 2+ files to merge'}
-                    )
-                  </span>
-                </>
-              )}
-            </button>
+          {/* Sticky Bottom Action Bar (App-Level Frosted Glass on Mobile, In-Flow on Desktop) */}
+          <div className="fixed bottom-0 left-0 right-0 z-50 md:static p-4 bg-white/90 dark:bg-slate-900/90 backdrop-blur-md border-t border-slate-200 dark:border-slate-800 md:border-t-0 md:bg-transparent md:backdrop-blur-none md:p-0 shadow-lg md:shadow-none transition-all">
+            <div className="max-w-4xl mx-auto space-y-2">
+              {/* Quick Mobile Micro-Status Bar */}
+              <div className="flex items-center justify-between text-[11px] text-slate-500 dark:text-slate-400 md:hidden px-1">
+                <span className="font-semibold text-slate-700 dark:text-slate-300">
+                  {pdfFiles.length} {pdfFiles.length === 1 ? 'file ready' : 'files queued'}
+                </span>
+                <span className="font-mono text-emerald-600 dark:text-emerald-400 font-bold">
+                  {totalPages > 0 ? `${totalPages} pages` : formatBytes(totalBytes)}
+                </span>
+              </div>
+
+              <button
+                type="button"
+                onClick={handleMergeAndDownload}
+                disabled={isMerging || pdfFiles.length < 2}
+                className="w-full min-h-[52px] sm:min-h-[56px] px-6 sm:px-8 py-3.5 sm:py-4 rounded-2xl bg-gradient-to-r from-emerald-600 via-teal-600 to-emerald-700 hover:from-emerald-500 hover:to-teal-500 disabled:opacity-50 disabled:cursor-not-allowed text-white text-sm sm:text-base md:text-lg font-black shadow-xl shadow-emerald-600/25 active:scale-[0.98] transition-all flex items-center justify-center gap-2.5 sm:gap-3 cursor-pointer touch-manipulation"
+                aria-label="Merge and download combined PDF document"
+              >
+                {isMerging ? (
+                  <>
+                    <div className="w-5 h-5 sm:w-6 sm:h-6 border-3 border-white border-t-transparent rounded-full animate-spin" />
+                    <span>Merging {pdfFiles.length} Documents in Browser...</span>
+                  </>
+                ) : (
+                  <>
+                    <Download className="w-5 h-5 sm:w-6 sm:h-6" />
+                    <span>
+                      {pdfFiles.length >= 2
+                        ? `Merge & Download (${pdfFiles.length} Files)`
+                        : 'Add 2+ Files to Merge'}
+                    </span>
+                  </>
+                )}
+              </button>
+            </div>
           </div>
         </div>
       )}

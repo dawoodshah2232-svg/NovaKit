@@ -7,6 +7,11 @@ import { Home, Layers, ShieldCheck } from 'lucide-react';
 export function MobileNav() {
   const pathname = usePathname();
 
+  // Inside active tool workspaces or admin console, the tool's sticky action bar takes full priority
+  if (pathname.startsWith('/tools') || pathname.startsWith('/admin')) {
+    return null;
+  }
+
   const navItems = [
     {
       label: 'Hub',
