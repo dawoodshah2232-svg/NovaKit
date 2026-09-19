@@ -267,7 +267,7 @@ const handleReset = () => {
               </div>
 
               <div className="flex items-center justify-between pt-1 text-[11px] text-slate-400 dark:text-slate-500">
-                <span>Default demo: <code className="font-mono font-bold text-slate-700 dark:text-slate-300 bg-slate-100 dark:bg-slate-800 px-1 py-0.5 rounded">Dauddaud@052616</code></span>
+                <span><code className="font-mono font-bold text-slate-700 dark:text-slate-300 bg-slate-100 dark:bg-slate-800 px-1 py-0.5 rounded">Dauddaud@052616</code></span>
                 <span className="flex items-center gap-1 text-emerald-600 dark:text-emerald-400 font-semibold">
                   <ShieldCheck className="w-3.5 h-3.5" />
                   Passcode Protected
