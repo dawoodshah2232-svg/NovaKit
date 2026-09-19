@@ -401,11 +401,11 @@ const handleReset = () => {
       {/* 4 TOP METRIC CARDS (Exact Prompt Specification) */}
       {summary && (
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-5">
-          {/* Card 1: Total Tool Runs */}
+          {/* Card 1: ACTIVE USERS NOW */}
           <div className="p-6 rounded-3xl bg-white dark:bg-slate-900 border border-slate-200/90 dark:border-slate-800 shadow-sm space-y-3 relative overflow-hidden group">
             <div className="flex items-center justify-between">
               <span className="text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400">
-                Total Tool Runs
+                ACTIVE USERS NOW
               </span>
               <div className="w-10 h-10 rounded-2xl bg-blue-50 dark:bg-blue-950/70 text-blue-600 dark:text-blue-400 flex items-center justify-center shadow-xs">
                 <Zap className="w-5 h-5" />
