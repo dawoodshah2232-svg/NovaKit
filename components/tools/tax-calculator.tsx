@@ -174,6 +174,7 @@ Take-Home Ratio: ${takeHomePercentage.toFixed(1)}%
     try {
       await navigator.clipboard.writeText(text);
       setCopied(true);
+      trackToolExecution('tax-calculator');
       setTimeout(() => setCopied(false), 2500);
     } catch (err) {
       console.error('Failed to copy to clipboard:', err);

@@ -294,6 +294,11 @@ export function TextAnalyzer() {
                 rows={16}
                 value={text}
                 onChange={(e) => setText(e.target.value)}
+                onBlur={() => {
+                  if (text.trim().length > 30) {
+                    trackToolExecution('text-analyzer');
+                  }
+                }}
                 placeholder="Paste or write your article, blog post, or SEO copy here..."
                 className="w-full p-4 text-sm sm:text-base rounded-2xl border border-slate-200 dark:border-slate-700 bg-slate-50/50 dark:bg-slate-800/40 text-slate-900 dark:text-white placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-emerald-500/40 focus:border-emerald-500 transition-all resize-y leading-relaxed font-sans"
               />

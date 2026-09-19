@@ -92,6 +92,7 @@ export function ImageCompressor() {
         const newCompressedUrl = URL.createObjectURL(resultFile);
         prevCompressedUrlRef.current = newCompressedUrl;
         setCompressedUrl(newCompressedUrl);
+        trackToolExecution('image-compressor');
       } catch (err) {
         console.error('Compression error:', err);
         setErrorMessage('Failed to compress image. Please try a different quality or format.');

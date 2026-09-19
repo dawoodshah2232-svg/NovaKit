@@ -255,7 +255,10 @@ export function PasswordGenerator() {
             {/* Quick Regenerate Button */}
             <button
               type="button"
-              onClick={generatePassword}
+              onClick={() => {
+                generatePassword();
+                trackToolExecution('password-generator');
+              }}
               aria-label="Generate new password"
               className="min-h-[46px] min-w-[46px] flex items-center justify-center rounded-xl bg-white dark:bg-slate-700 border border-slate-200 dark:border-slate-600 text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-600 shadow-xs active:scale-95 transition-all cursor-pointer"
             >

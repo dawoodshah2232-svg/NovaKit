@@ -46,24 +46,30 @@ export async function generateMetadata({ params }: ToolPageProps): Promise<Metad
     };
   }
 
-  const title = `${tool.name} – Free, 100% Private Online Tool`;
-  const description = `${tool.description} Zero server uploads, completely free, and secure in your browser.`;
+  const geoData = getToolGeoData(slug);
+  const title = geoData.seoTitle || `${tool.name} – Free, 100% Private Online Tool | NovaKit`;
+  const description =
+    geoData.metaDescription ||
+    `${tool.description} Zero server uploads, completely free, and secure in your browser.`;
 
   return {
     title,
     description,
     keywords: [
       tool.name,
+      geoData.primaryKeyword,
+      ...(geoData.longTailKeywords || []),
       ...tool.tags,
       tool.category,
       'free online tool',
       'browser tool',
       'zero server upload',
       'privacy-focused utility',
-      'NovaKit',
+      'NovaKit Tier-1 Suite',
+      'client-side WebAssembly',
     ],
     openGraph: {
-      title: `${tool.name} | NovaKit Private Web Tools`,
+      title: `${tool.name} | NovaKit Enterprise Web Tools`,
       description,
       url: `https://novakit.app/tools/${tool.slug}`,
       siteName: 'NovaKit',
@@ -308,6 +314,63 @@ export default async function ToolPage({ params }: ToolPageProps) {
           </div>
         </div>
       </section>
+
+      {/* Semantic Long-Tail Keyword & Architectural Deep-Dive Section (Targeted for AI Search & Google Crawlers) */}
+      {geoData.semanticSubheadings && geoData.semanticSubheadings.length > 0 && (
+        <section aria-labelledby="technical-deep-dive-heading" className="space-y-4 pt-2">
+          <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-1 pb-1 border-b border-slate-200/80 dark:border-slate-800">
+            <div>
+              <span className="text-[11px] font-bold uppercase tracking-wider text-blue-600 dark:text-cyan-400">
+                Technical Architecture & Security Insights
+              </span>
+              <h2
+                id="technical-deep-dive-heading"
+                className="text-xl sm:text-2xl font-black text-slate-950 dark:text-white tracking-tight"
+              >
+                Why Professionals Choose NovaKit for {tool.name}
+              </h2>
+            </div>
+            <span className="text-xs text-slate-500 dark:text-slate-400 font-medium">
+              Enterprise Data Isolation Standard
+            </span>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            {geoData.semanticSubheadings.map((item, idx) => (
+              <article
+                key={idx}
+                className="p-5 sm:p-6 rounded-3xl bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800 shadow-xs space-y-2.5 hover:border-blue-500/30 dark:hover:border-cyan-500/30 transition-colors"
+              >
+                <h3 className="text-base font-extrabold text-slate-900 dark:text-white tracking-tight leading-snug">
+                  {item.heading}
+                </h3>
+                <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-300 leading-relaxed">
+                  {item.body}
+                </p>
+              </article>
+            ))}
+          </div>
+
+          {/* High-Intent Long-Tail Search Index Tag Cloud */}
+          {geoData.longTailKeywords && geoData.longTailKeywords.length > 0 && (
+            <div className="pt-2">
+              <span className="text-[10px] uppercase font-bold tracking-widest text-slate-400 dark:text-slate-500 block mb-2">
+                Supported Query Intents & Capabilities
+              </span>
+              <div className="flex flex-wrap gap-1.5">
+                {geoData.longTailKeywords.map((kw, i) => (
+                  <span
+                    key={i}
+                    className="text-[11px] font-semibold px-3 py-1 rounded-full bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 border border-slate-200/60 dark:border-slate-700/60"
+                  >
+                    #{kw}
+                  </span>
+                ))}
+              </div>
+            </div>
+          )}
+        </section>
+      )}
 
       {/* Generative Engine Optimization (GEO) Accordion FAQ Component */}
       <GeoFaq faqs={geoData.faqs} toolName={tool.name} />

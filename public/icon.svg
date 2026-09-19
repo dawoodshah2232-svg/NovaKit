@@ -1,17 +1,60 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512">
   <defs>
-    <linearGradient id="bgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stop-color="#2563eb" />
-      <stop offset="50%" stop-color="#4f46e5" />
-      <stop offset="100%" stop-color="#7c3aed" />
+    <!-- Radiant Blue to Cyan Prism Gradients -->
+    <linearGradient id="iconBg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#090d16" />
+      <stop offset="100%" stop-color="#020617" />
     </linearGradient>
-    <filter id="shadow" x="-10%" y="-10%" width="120%" height="120%">
-      <feDropShadow dx="0" dy="8" stdDeviation="16" flood-opacity="0.25" />
+
+    <linearGradient id="prismLeft" x1="64" y1="64" x2="192" y2="448" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#38bdf8" />
+      <stop offset="50%" stop-color="#2563eb" />
+      <stop offset="100%" stop-color="#1e40af" />
+    </linearGradient>
+
+    <linearGradient id="prismBlade" x1="96" y1="80" x2="416" y2="432" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#06b6d4" />
+      <stop offset="45%" stop-color="#3b82f6" />
+      <stop offset="100%" stop-color="#4f46e5" />
+    </linearGradient>
+
+    <linearGradient id="prismRight" x1="320" y1="64" x2="448" y2="448" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#22d3ee" />
+      <stop offset="60%" stop-color="#0284c7" />
+      <stop offset="100%" stop-color="#1e3a8a" />
+    </linearGradient>
+
+    <linearGradient id="prismBevel" x1="64" y1="64" x2="448" y2="128" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#a5f3fc" />
+      <stop offset="50%" stop-color="#67e8f9" />
+      <stop offset="100%" stop-color="#93c5fd" />
+    </linearGradient>
+
+    <filter id="iconGlow" x="-20%" y="-20%" width="140%" height="140%">
+      <feGaussianBlur stdDeviation="24" result="blur" />
+      <feComposite in="SourceGraphic" in2="blur" operator="over" />
     </filter>
   </defs>
-  <rect width="512" height="512" rx="128" fill="url(#bgGrad)" />
-  <!-- Sparkles / Nova symbol -->
-  <path d="M256 96 L284 216 L404 244 L416 256 L404 268 L284 296 L256 416 L244 416 L228 296 L108 268 L96 256 L108 244 L228 216 Z" fill="#ffffff" filter="url(#shadow)" />
-  <circle cx="384" cy="128" r="28" fill="#ffffff" opacity="0.9" />
-  <circle cx="128" cy="384" r="20" fill="#ffffff" opacity="0.8" />
+
+  <!-- Squircle Container -->
+  <rect width="512" height="512" rx="128" fill="url(#iconBg)" stroke="#1e293b" stroke-width="4" />
+
+  <!-- Ambient Glow Behind Prism -->
+  <circle cx="256" cy="256" r="140" fill="#2563eb" opacity="0.25" filter="url(#iconGlow)" />
+
+  <!-- Geometric "N" Prism Shape -->
+  <g filter="url(#iconGlow)">
+    <!-- Left Pillar -->
+    <path d="M96 112 L180 72 V392 L96 432 Z" fill="url(#prismLeft)" />
+
+    <!-- Diagonal Prism Blade -->
+    <path d="M164 72 L356 384 V456 L156 128 Z" fill="url(#prismBlade)" />
+
+    <!-- Right Pillar -->
+    <path d="M332 80 L416 112 V440 L332 408 Z" fill="url(#prismRight)" />
+
+    <!-- Top Reflective Bevels -->
+    <path d="M96 112 L180 72 L256 184 L160 224 Z" fill="url(#prismBevel)" fill-opacity="0.85" />
+    <path d="M256 312 L352 376 L416 440 L332 408 Z" fill="#06b6d4" fill-opacity="0.75" />
+  </g>
 </svg>

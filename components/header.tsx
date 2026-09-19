@@ -3,62 +3,14 @@
 import Link from 'next/link';
 import { Sparkles, ShieldCheck } from 'lucide-react';
 import { ThemeToggle } from './theme-toggle';
+import { Logo } from './logo';
 
 export function Header() {
   return (
     <header className="sticky top-0 z-40 w-full border-b border-slate-200/80 dark:border-slate-800/80 bg-white/90 dark:bg-slate-950/90 backdrop-blur-xl transition-all duration-200 shadow-[0_1px_2px_0_rgba(0,0,0,0.02)]">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between gap-4">
-        {/* Logo & Brand (Corporate Geometric & Modern Modern Typeface) */}
-        <div className="flex items-center gap-3">
-          <Link
-            href="/"
-            className="group flex items-center gap-3 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 rounded-2xl p-1 transition-all"
-          >
-            {/* Corporate Geometric SVG Mark */}
-            <div className="w-10 h-10 rounded-xl bg-slate-950 dark:bg-white flex items-center justify-center shadow-md shadow-slate-950/15 dark:shadow-white/10 group-hover:scale-105 group-hover:shadow-blue-500/25 group-active:scale-95 transition-all duration-200 shrink-0">
-              <svg
-                width="24"
-                height="25"
-                viewBox="0 0 28 29"
-                fill="none"
-                xmlns="http://www.w3.org/2000/svg"
-                className="transition-transform duration-300 group-hover:scale-105"
-              >
-                <defs>
-                  <linearGradient id="nova-top" x1="4.5" y1="3" x2="23.5" y2="14" gradientUnits="userSpaceOnUse">
-                    <stop stopColor="#60A5FA" />
-                    <stop offset="1" stopColor="#818CF8" />
-                  </linearGradient>
-                  <linearGradient id="nova-left" x1="4" y1="10.5" x2="13" y2="26" gradientUnits="userSpaceOnUse">
-                    <stop stopColor="#3B82F6" />
-                    <stop offset="1" stopColor="#1D4ED8" />
-                  </linearGradient>
-                  <linearGradient id="nova-right" x1="15" y1="10.5" x2="24" y2="26" gradientUnits="userSpaceOnUse">
-                    <stop stopColor="#6366F1" />
-                    <stop offset="1" stopColor="#4338CA" />
-                  </linearGradient>
-                </defs>
-                {/* Isometric Geometric Facets */}
-                <path d="M14 3L23.5 8.5L14 14L4.5 8.5L14 3Z" fill="url(#nova-top)" />
-                <path d="M4 10.5L13 15.8V26L4 20.8V10.5Z" fill="url(#nova-left)" />
-                <path d="M15 15.8L24 10.5V20.8L15 26V15.8Z" fill="url(#nova-right)" />
-              </svg>
-            </div>
-            <div className="flex flex-col">
-              <div className="flex items-center gap-2">
-                <span className="font-black text-xl sm:text-2xl tracking-tight text-slate-950 dark:text-white leading-none">
-                  NovaKit
-                </span>
-                <span className="text-[10px] uppercase font-black tracking-widest px-2 py-0.5 rounded-md bg-slate-900 text-white dark:bg-white dark:text-slate-900">
-                  Directory
-                </span>
-              </div>
-              <span className="text-[11px] text-slate-500 dark:text-slate-400 hidden sm:inline-block font-semibold tracking-tight mt-0.5">
-                50+ Client-Side Tools
-              </span>
-            </div>
-          </Link>
-        </div>
+        {/* Enterprise Brand Logo */}
+        <Logo href="/" badgeText="Enterprise" />
 
         {/* Desktop Navigation Links */}
         <nav className="hidden md:flex items-center gap-1.5 text-sm font-medium text-slate-600 dark:text-slate-300">

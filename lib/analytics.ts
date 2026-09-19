@@ -4,6 +4,7 @@ export interface DayUsage {
   date: string;
   displayDate: string;
   runs: number;
+  uniqueVisitors: number;
   pdfRuns: number;
   imageRuns: number;
   financeRuns: number;
@@ -22,8 +23,10 @@ export interface ToolUsageStat {
 
 export interface AnalyticsSummary {
   totalRuns: number;
+  uniqueVisitors: number;
   activeUsersToday: number;
   mostPopularTool: ToolUsageStat;
+  operationalStatus: string;
   estimatedImpressions: number;
   estimatedAdRevenue: number;
   toolBreakdown: ToolUsageStat[];
@@ -33,11 +36,14 @@ export interface AnalyticsSummary {
 
 interface StoredAnalyticsData {
   toolCounts: Record<string, number>;
-  dailyHistory: Record<string, { runs: number; byCategory: Record<string, number> }>;
+  dailyHistory: Record<string, { runs: number; uniqueVisitors?: number; byCategory: Record<string, number> }>;
+  totalUniqueVisitors: number;
   lastSeedTime: number;
 }
 
-const STORAGE_KEY = 'novakit_analytics_data_v1';
+const STORAGE_KEY = 'novakit_analytics_prod_v3';
+const VISITOR_ID_KEY = 'novakit_visitor_id_v3';
+const VISITED_DATES_KEY = 'novakit_visited_dates_v3';
 const EVENT_NAME = 'novakit_analytics_updated';
 
 // Format YYYY-MM-DD
@@ -59,39 +65,44 @@ function getPast7Days(): Date[] {
   return days;
 }
 
-// Baseline seed data to make the admin dashboard look rich and professional out of the box
-function generateBaselineData(): StoredAnalyticsData {
-  const initialCounts: Record<string, number> = {
-    'pdf-merger': 412,
-    'image-compressor': 348,
-    'invoice-generator': 285,
-    'pdf-to-image': 234,
-    'compress-pdf': 210,
-    'split-pdf': 186,
-    'qr-generator': 165,
-    'tax-calculator': 142,
-    'password-generator': 118,
-    'color-extractor': 98,
-    'text-analyzer': 87,
-    'protect-pdf': 79,
-  };
+// Client-side unique visitor identifier (Zero-cost, anonymous, strictly client-side)
+export function getOrCreateVisitorId(): string {
+  if (typeof window === 'undefined') return 'serverless-visitor';
+  try {
+    let id = localStorage.getItem(VISITOR_ID_KEY);
+    if (!id) {
+      id = typeof crypto !== 'undefined' && crypto.randomUUID
+        ? crypto.randomUUID()
+        : `nvk_${Date.now()}_${Math.random().toString(36).substring(2, 9)}`;
+      localStorage.setItem(VISITOR_ID_KEY, id);
+    }
+    return id;
+  } catch {
+    return 'ephemeral-client';
+  }
+}
 
-  const dailyHistory: Record<string, { runs: number; byCategory: Record<string, number> }> = {};
+// Baseline data: clean 0 baseline for live production telemetry ingestion
+function generateBaselineData(): StoredAnalyticsData {
+  const initialCounts: Record<string, number> = {};
+  TOOLS_CONFIG.forEach((tool) => {
+    initialCounts[tool.slug] = 0;
+  });
+
+  const dailyHistory: Record<string, { runs: number; uniqueVisitors: number; byCategory: Record<string, number> }> = {};
   const past7 = getPast7Days();
 
-  const dailyDeltas = [280, 315, 295, 360, 340, 395, 410]; // Past 7 days pattern
-
-  past7.forEach((dateObj, idx) => {
+  past7.forEach((dateObj) => {
     const key = getLocalDateKey(dateObj);
-    const dayRuns = dailyDeltas[idx] || 320;
     dailyHistory[key] = {
-      runs: dayRuns,
+      runs: 0,
+      uniqueVisitors: 0,
       byCategory: {
-        PDF: Math.round(dayRuns * 0.48),
-        Image: Math.round(dayRuns * 0.28),
-        Finance: Math.round(dayRuns * 0.14),
-        Text: Math.round(dayRuns * 0.05),
-        Security: Math.round(dayRuns * 0.05),
+        PDF: 0,
+        Image: 0,
+        Finance: 0,
+        Text: 0,
+        Security: 0,
       },
     };
   });
@@ -99,6 +110,7 @@ function generateBaselineData(): StoredAnalyticsData {
   return {
     toolCounts: initialCounts,
     dailyHistory,
+    totalUniqueVisitors: 0,
     lastSeedTime: Date.now(),
   };
 }
@@ -116,7 +128,23 @@ function getStoredData(): StoredAnalyticsData {
       localStorage.setItem(STORAGE_KEY, JSON.stringify(initial));
       return initial;
     }
-    return JSON.parse(raw);
+    const parsed = JSON.parse(raw);
+    // Ensure all required fields exist
+    if (!parsed.toolCounts || typeof parsed.toolCounts !== 'object') {
+      parsed.toolCounts = {};
+    }
+    TOOLS_CONFIG.forEach((tool) => {
+      if (typeof parsed.toolCounts[tool.slug] !== 'number') {
+        parsed.toolCounts[tool.slug] = 0;
+      }
+    });
+    if (!parsed.dailyHistory || typeof parsed.dailyHistory !== 'object') {
+      parsed.dailyHistory = {};
+    }
+    if (typeof parsed.totalUniqueVisitors !== 'number') {
+      parsed.totalUniqueVisitors = 0;
+    }
+    return parsed;
   } catch (err) {
     console.warn('Failed to parse analytics from localStorage, using fallback:', err);
     return generateBaselineData();
@@ -135,6 +163,42 @@ function saveStoredData(data: StoredAnalyticsData): void {
 }
 
 /**
+ * Register visitor session for today.
+ */
+export function trackVisitor(): void {
+  if (typeof window === 'undefined') return;
+  try {
+    getOrCreateVisitorId();
+    const todayKey = getLocalDateKey(new Date());
+
+    let visitedDates: string[] = [];
+    try {
+      const raw = localStorage.getItem(VISITED_DATES_KEY);
+      visitedDates = raw ? JSON.parse(raw) : [];
+    } catch {
+      visitedDates = [];
+    }
+
+    if (!visitedDates.includes(todayKey)) {
+      visitedDates.push(todayKey);
+      if (visitedDates.length > 30) visitedDates.shift();
+      localStorage.setItem(VISITED_DATES_KEY, JSON.stringify(visitedDates));
+
+      const data = getStoredData();
+      data.totalUniqueVisitors = (data.totalUniqueVisitors || 0) + 1;
+      if (!data.dailyHistory[todayKey]) {
+        data.dailyHistory[todayKey] = { runs: 0, uniqueVisitors: 0, byCategory: {} };
+      }
+      data.dailyHistory[todayKey].uniqueVisitors =
+        (data.dailyHistory[todayKey].uniqueVisitors || 0) + 1;
+      saveStoredData(data);
+    }
+  } catch (err) {
+    console.error('Error recording visitor:', err);
+  }
+}
+
+/**
  * Record a tool execution event.
  * Call this whenever a user executes a tool action in the browser.
  */
@@ -142,6 +206,7 @@ export function trackToolExecution(toolSlug: string): void {
   if (typeof window === 'undefined') return;
 
   try {
+    trackVisitor();
     const data = getStoredData();
     const today = new Date();
     const dateKey = getLocalDateKey(today);
@@ -157,11 +222,12 @@ export function trackToolExecution(toolSlug: string): void {
     if (!data.dailyHistory[dateKey]) {
       data.dailyHistory[dateKey] = {
         runs: 0,
+        uniqueVisitors: 1,
         byCategory: {},
       };
     }
 
-    data.dailyHistory[dateKey].runs += 1;
+    data.dailyHistory[dateKey].runs = (data.dailyHistory[dateKey].runs || 0) + 1;
     data.dailyHistory[dateKey].byCategory[category] =
       (data.dailyHistory[dateKey].byCategory[category] || 0) + 1;
 
@@ -178,7 +244,7 @@ export function getAnalyticsSummary(): AnalyticsSummary {
   const data = getStoredData();
   const past7 = getPast7Days();
 
-  // 1. Calculate tool breakdown
+  // 1. Calculate tool breakdown across all 12 tools
   let totalRuns = 0;
   const toolBreakdownRaw = TOOLS_CONFIG.map((tool) => {
     const runs = data.toolCounts[tool.slug] || 0;
@@ -203,21 +269,26 @@ export function getAnalyticsSummary(): AnalyticsSummary {
     .sort((a, b) => b.runs - a.runs);
 
   // 2. Most popular tool
-  const mostPopularTool = toolBreakdown[0] || {
-    slug: 'pdf-merger',
-    name: 'PDF Merger',
-    category: 'PDF',
-    runs: 0,
-    percentage: 0,
-    gradient: 'from-emerald-500 to-teal-600',
-    accentColor: 'text-emerald-500',
-  };
+  const topTool = toolBreakdown[0];
+  const mostPopularTool =
+    topTool && topTool.runs > 0
+      ? topTool
+      : {
+          slug: 'pdf-merger',
+          name: 'Awaiting First Run',
+          category: 'Live Ingestion Ready',
+          runs: 0,
+          percentage: 0,
+          gradient: 'from-blue-500 to-indigo-600',
+          accentColor: 'text-blue-500',
+        };
 
   // 3. Past 7 Days History
   const history7Days: DayUsage[] = past7.map((d) => {
     const key = getLocalDateKey(d);
     const dayEntry = data.dailyHistory[key];
     const runs = dayEntry ? dayEntry.runs : 0;
+    const uniqueVisitors = dayEntry ? dayEntry.uniqueVisitors || 0 : 0;
     const byCategory = dayEntry ? dayEntry.byCategory : {};
 
     const displayDate = d.toLocaleDateString('en-US', {
@@ -230,6 +301,7 @@ export function getAnalyticsSummary(): AnalyticsSummary {
       date: key,
       displayDate,
       runs,
+      uniqueVisitors,
       pdfRuns: byCategory['PDF'] || 0,
       imageRuns: byCategory['Image'] || 0,
       financeRuns: byCategory['Finance'] || 0,
@@ -237,12 +309,13 @@ export function getAnalyticsSummary(): AnalyticsSummary {
     };
   });
 
-  // 4. Active Users Today (calculated ratio from today's executions)
+  // 4. Active Users Today
   const todayKey = getLocalDateKey(new Date());
   const todayEntry = data.dailyHistory[todayKey];
-  const todayRuns = todayEntry ? todayEntry.runs : 0;
-  // Conservative estimate: ~0.65 unique users per tool action + baseline sessions
-  const activeUsersToday = Math.max(12, Math.round(todayRuns * 0.68) + 14);
+  const activeUsersToday = todayEntry?.uniqueVisitors || 0;
+
+  // Total Unique Visitors
+  const uniqueVisitors = data.totalUniqueVisitors || 0;
 
   // 5. AdSense Impressions (~2.45 page impressions per tool run with zero layout shift)
   const estimatedImpressions = Math.round(totalRuns * 2.45);
@@ -252,8 +325,10 @@ export function getAnalyticsSummary(): AnalyticsSummary {
 
   return {
     totalRuns,
+    uniqueVisitors,
     activeUsersToday,
     mostPopularTool,
+    operationalStatus: '100% Serverless / $0 Cost',
     estimatedImpressions,
     estimatedAdRevenue,
     toolBreakdown,
@@ -276,23 +351,97 @@ export function resetAnalyticsData(): void {
 }
 
 /**
+ * Reset all analytics data to clean 0 baseline.
+ */
+export function clearAllAnalyticsData(): void {
+  if (typeof window === 'undefined') return;
+  const empty = generateBaselineData();
+  saveStoredData(empty);
+}
+
+/**
  * Export analytics breakdown as CSV string.
  */
 export function generateAnalyticsCsv(): string {
   const summary = getAnalyticsSummary();
   const rows = [
-    ['Tool Name', 'Category', 'Execution Runs', 'Share (%)'].join(','),
-    ...summary.toolBreakdown.map((t) =>
-      [`"${t.name}"`, `"${t.category}"`, t.runs, `${t.percentage}%`].join(',')
+    ['# NovaKit Telemetry Report', `Exported: ${new Date().toISOString()}`].join(','),
+    ['Total Tool Runs', summary.totalRuns].join(','),
+    ['Unique Visitors', summary.uniqueVisitors].join(','),
+    ['Top Performing Tool', `"${summary.mostPopularTool.name}"`].join(','),
+    ['Operational Status', `"${summary.operationalStatus}"`].join(','),
+    [],
+    ['# Tool Breakdown', 'All 12 Utilities'].join(','),
+    ['Rank', 'Tool Name', 'Slug', 'Category', 'Execution Runs', 'Share (%)'].join(','),
+    ...summary.toolBreakdown.map((t, idx) =>
+      [idx + 1, `"${t.name}"`, `"${t.slug}"`, `"${t.category}"`, t.runs, `${t.percentage}%`].join(',')
     ),
     [],
-    ['Date', 'Total Runs', 'PDF Runs', 'Image Runs', 'Finance Runs', 'Other Runs'].join(','),
+    ['# 7-Day Daily History'].join(','),
+    ['Date', 'Total Runs', 'Unique Visitors', 'PDF Runs', 'Image Runs', 'Finance Runs', 'Other Runs'].join(','),
     ...summary.history7Days.map((d) =>
-      [d.date, d.runs, d.pdfRuns, d.imageRuns, d.financeRuns, d.otherRuns].join(',')
+      [d.date, d.runs, d.uniqueVisitors, d.pdfRuns, d.imageRuns, d.financeRuns, d.otherRuns].join(',')
     ),
   ];
 
   return rows.join('\n');
+}
+
+/**
+ * Export full analytics snapshot as JSON string.
+ */
+export function generateAnalyticsJson(): string {
+  const summary = getAnalyticsSummary();
+  const rawData = getStoredData();
+
+  const exportPayload = {
+    metadata: {
+      platform: 'NovaKit Suite',
+      version: '1.0.0',
+      exportedAt: new Date().toISOString(),
+      architecture: '100% Serverless / Client-Side WebAssembly & HTML5 Canvas',
+      storageEngine: 'localStorage (novakit_analytics_prod_v2)',
+    },
+    metrics: {
+      totalRuns: summary.totalRuns,
+      uniqueVisitors: summary.uniqueVisitors,
+      activeUsersToday: summary.activeUsersToday,
+      topPerformingTool: summary.mostPopularTool,
+      operationalStatus: summary.operationalStatus,
+      estimatedImpressions: summary.estimatedImpressions,
+      estimatedAdRevenueUsd: summary.estimatedAdRevenue,
+    },
+    toolBreakdown: summary.toolBreakdown,
+    history7Days: summary.history7Days,
+    rawCounts: rawData.toolCounts,
+  };
+
+  return JSON.stringify(exportPayload, null, 2);
+}
+
+/**
+ * Trigger direct file download in the browser.
+ */
+export function exportAnalyticsData(format: 'json' | 'csv'): void {
+  if (typeof window === 'undefined') return;
+  try {
+    const isJson = format === 'json';
+    const content = isJson ? generateAnalyticsJson() : generateAnalyticsCsv();
+    const mimeType = isJson ? 'application/json' : 'text/csv;charset=utf-8;';
+    const extension = isJson ? 'json' : 'csv';
+
+    const blob = new Blob([content], { type: mimeType });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = `novakit-analytics-${new Date().toISOString().slice(0, 10)}.${extension}`;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    URL.revokeObjectURL(url);
+  } catch (err) {
+    console.error(`Failed to export analytics as ${format}:`, err);
+  }
 }
 
 /**

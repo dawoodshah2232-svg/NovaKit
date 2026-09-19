@@ -1,5 +1,6 @@
 import Link from 'next/link';
 import { ShieldCheck, Zap, Lock, Cpu } from 'lucide-react';
+import { Logo } from './logo';
 
 export function Footer() {
   return (
@@ -8,14 +9,7 @@ export function Footer() {
         <div className="grid grid-cols-1 md:grid-cols-4 gap-8 mb-8">
           {/* Brand & mission */}
           <div className="md:col-span-2 space-y-3">
-            <div className="flex items-center gap-2">
-              <span className="font-extrabold text-lg tracking-tight text-slate-900 dark:text-white">
-                NovaKit
-              </span>
-              <span className="text-[10px] uppercase font-bold tracking-wider px-2 py-0.5 rounded-full bg-blue-100 dark:bg-blue-950 text-blue-700 dark:text-blue-300">
-                100% Client-Side
-              </span>
-            </div>
+            <Logo size="sm" badgeText="100% Client-Side" />
             <p className="text-sm text-slate-600 dark:text-slate-400 max-w-sm leading-relaxed">
               High-speed, browser-native utility hub. All operations occur strictly within your browser. 
               Your files and sensitive numbers never touch any server or database.
@@ -96,7 +90,16 @@ export function Footer() {
         </div>
 
         <div className="border-t border-slate-200/60 dark:border-slate-800/60 pt-6 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-slate-500 dark:text-slate-400">
-          <p>© {new Date().getFullYear()} NovaKit. Engineered for speed and total client privacy.</p>
+          <div className="flex flex-wrap items-center gap-x-4 gap-y-1">
+            <p>© {new Date().getFullYear()} NovaKit. Engineered for speed and total client privacy.</p>
+            <Link
+              href="/admin"
+              className="inline-flex items-center gap-1 text-slate-400 hover:text-blue-600 dark:hover:text-blue-400 transition-colors"
+            >
+              <Lock className="w-3 h-3" />
+              <span>Admin Console</span>
+            </Link>
+          </div>
           <p className="flex items-center gap-1 text-slate-400 dark:text-slate-500">
             <Cpu className="w-3.5 h-3.5" />
             Runs 100% on your device hardware

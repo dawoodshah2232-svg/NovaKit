@@ -194,6 +194,7 @@ export function ColorExtractor() {
           setPalette(res.palette);
           setImageMeta(fileMeta);
           setIsProcessing(false);
+          trackToolExecution('color-extractor');
         })
         .catch(() => {
           const res = extractColorsFallback(imgElement, 8);
@@ -201,6 +202,7 @@ export function ColorExtractor() {
           setPalette(res.palette);
           setImageMeta(fileMeta);
           setIsProcessing(false);
+          trackToolExecution('color-extractor');
         });
     } catch (err) {
       console.error('Failed to process image colors:', err);

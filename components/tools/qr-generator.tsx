@@ -146,6 +146,7 @@ export function QrGenerator() {
             }),
           ]);
           setCopiedImage(true);
+          trackToolExecution('qr-generator');
           setTimeout(() => setCopiedImage(false), 2000);
         } catch (clipErr) {
           console.warn('Direct clipboard image copy not supported:', clipErr);

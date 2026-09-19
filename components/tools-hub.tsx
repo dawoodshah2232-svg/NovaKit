@@ -112,6 +112,16 @@ export function ToolsHub() {
           </span>
         </h1>
 
+        {/* Trust & Advantage Hero Banner (Stripe/Apple-Grade Pill) */}
+        <div className="inline-flex flex-wrap items-center justify-center gap-1.5 sm:gap-2.5 px-4 sm:px-6 py-2 rounded-full bg-gradient-to-r from-blue-500/10 via-indigo-500/10 to-cyan-500/10 dark:from-blue-950/50 dark:via-indigo-950/40 dark:to-cyan-950/50 border border-blue-500/30 dark:border-cyan-500/30 text-slate-800 dark:text-slate-100 shadow-[0_4px_24px_rgba(37,99,235,0.08)] backdrop-blur-xl text-xs sm:text-sm font-semibold tracking-tight transition-all duration-300 hover:border-blue-500/50 dark:hover:border-cyan-400/50">
+          <span className="text-amber-500 font-bold text-sm">⚡</span>
+          <span className="text-slate-950 dark:text-white font-extrabold">No Signup Required</span>
+          <span className="text-slate-300 dark:text-slate-700 hidden xs:inline">•</span>
+          <span className="text-blue-600 dark:text-cyan-400 font-extrabold">100% Free Forever</span>
+          <span className="text-slate-300 dark:text-slate-700 hidden sm:inline">•</span>
+          <span className="text-slate-700 dark:text-slate-300 font-medium">Instant Local In-Browser Processing (Zero Server Uploads)</span>
+        </div>
+
         {/* Subtitle */}
         <p className="text-sm sm:text-base md:text-lg text-slate-600 dark:text-slate-300 max-w-2xl mx-auto leading-relaxed">
           Massive directory of browser-based utilities. Merge PDFs, compress images, generate invoices, and analyze text with zero cloud storage.
