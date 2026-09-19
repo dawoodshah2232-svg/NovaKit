@@ -1,8 +1,15 @@
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import Link from 'next/link';
-import { ArrowLeft, ShieldCheck, UploadCloud, Sparkles } from 'lucide-react';
+import { ArrowLeft, ShieldCheck, UploadCloud, Sparkles, CheckCircle2, Lock, Cpu, Zap } from 'lucide-react';
 import { getToolBySlug, TOOLS_CONFIG } from '@/lib/tools-config';
+import {
+  getToolGeoData,
+  generateFaqSchema,
+  generateSoftwareAppSchema,
+  generateHowToSchema,
+} from '@/lib/geo-data';
+import { GeoFaq } from '@/components/geo-faq';
 import { ImageCompressor } from '@/components/tools/image-compressor';
 import { PdfMerger } from '@/components/tools/pdf-merger';
 import { InvoiceGenerator } from '@/components/tools/invoice-generator';
@@ -89,44 +96,27 @@ export default async function ToolPage({ params }: ToolPageProps) {
     notFound();
   }
 
-  const jsonLd = {
-    '@context': 'https://schema.org',
-    '@type': 'WebApplication',
-    name: tool.name,
-    url: `https://novakit.app/tools/${tool.slug}`,
-    description: tool.description,
-    applicationCategory:
-      tool.category === 'Finance'
-        ? 'FinanceApplication'
-        : tool.category === 'PDF'
-        ? 'BusinessApplication'
-        : 'UtilitiesApplication',
-    operatingSystem: 'All',
-    browserRequirements: 'Requires JavaScript. Requires HTML5.',
-    offers: {
-      '@type': 'Offer',
-      price: '0',
-      priceCurrency: 'USD',
-    },
-    featureList: [
-      '100% Client-Side Processing',
-      'Zero Server Uploads',
-      tool.processingNote,
-      ...tool.tags,
-    ],
-    creator: {
-      '@type': 'Organization',
-      name: 'NovaKit',
-      url: 'https://novakit.app',
-    },
-  };
+  const geoData = getToolGeoData(slug);
+  const softwareSchema = generateSoftwareAppSchema(tool, geoData);
+  const faqSchema = generateFaqSchema(geoData.faqs, tool.name);
+  const howToSchema = generateHowToSchema(tool, geoData.howItWorks);
 
   return (
     <div className="max-w-4xl mx-auto space-y-8 py-3 sm:py-6">
-      {/* Structured Data for Google Rich Snippets */}
+      {/* Generative Engine Optimization (GEO): SoftwareApplication JSON-LD */}
       <script
         type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(softwareSchema) }}
+      />
+      {/* Generative Engine Optimization (GEO): FAQPage JSON-LD */}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
+      />
+      {/* Generative Engine Optimization (GEO): HowTo Procedural JSON-LD */}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(howToSchema) }}
       />
       {/* Back button & tool header */}
       <div>
@@ -237,6 +227,90 @@ export default async function ToolPage({ params }: ToolPageProps) {
           </p>
         </div>
       </div>
+
+      {/* Procedural "How It Works" Guide (Targeted for AI Overviews & Answer Engines) */}
+      <section aria-labelledby="how-it-works-heading" className="space-y-4 pt-2">
+        <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-1 pb-1">
+          <div>
+            <span className="text-[11px] font-bold uppercase tracking-wider text-blue-600 dark:text-blue-400">
+              Step-by-Step Guide
+            </span>
+            <h2
+              id="how-it-works-heading"
+              className="text-xl sm:text-2xl font-black text-slate-950 dark:text-white tracking-tight"
+            >
+              How to Use {tool.name} in 3 Easy Steps
+            </h2>
+          </div>
+          <span className="text-xs text-slate-500 dark:text-slate-400 font-medium">
+            100% In-Browser • Zero Wait Queue
+          </span>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+          {geoData.howItWorks.map((step) => (
+            <div
+              key={step.number}
+              className="relative p-5 sm:p-6 rounded-3xl bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800 shadow-xs space-y-3 hover:border-slate-300 dark:hover:border-slate-700 transition-colors"
+            >
+              <div className="flex items-center justify-between">
+                <span className="text-2xl font-black text-blue-600 dark:text-blue-400 font-mono">
+                  {step.number}
+                </span>
+                <span className="px-2 py-0.5 rounded-lg bg-blue-50 dark:bg-blue-950/70 text-blue-700 dark:text-blue-300 border border-blue-200/60 dark:border-blue-800/60 text-[10px] font-black uppercase">
+                  Step
+                </span>
+              </div>
+              <h3 className="text-base font-extrabold text-slate-900 dark:text-white tracking-tight">
+                {step.title}
+              </h3>
+              <p className="text-xs text-slate-600 dark:text-slate-300 leading-relaxed">
+                {step.description}
+              </p>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      {/* Local Zero-Server Privacy Badges & Compliance Guarantee */}
+      <section
+        aria-label="Privacy and Security Standards"
+        className="rounded-3xl p-5 sm:p-6 bg-gradient-to-r from-emerald-50/80 via-teal-50/50 to-blue-50/60 dark:from-emerald-950/30 dark:via-teal-950/20 dark:to-blue-950/30 border border-emerald-200/80 dark:border-emerald-800/60 shadow-xs space-y-4"
+      >
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 pb-2 border-b border-emerald-200/60 dark:border-emerald-800/40">
+          <div className="flex items-center gap-2">
+            <ShieldCheck className="w-5 h-5 text-emerald-600 dark:text-emerald-400 shrink-0" />
+            <h3 className="text-sm sm:text-base font-black text-slate-900 dark:text-white">
+              Zero-Server Privacy & Architecture Standards
+            </h3>
+          </div>
+          <span className="text-[11px] font-bold px-2.5 py-0.5 rounded-full bg-emerald-100 dark:bg-emerald-900/60 text-emerald-800 dark:text-emerald-200 self-start sm:self-auto">
+            GDPR & HIPAA Data Isolation Compliant
+          </span>
+        </div>
+
+        <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 text-xs">
+          <div className="flex items-center gap-2 text-slate-700 dark:text-slate-200">
+            <CheckCircle2 className="w-4 h-4 text-emerald-600 dark:text-emerald-400 shrink-0" />
+            <span className="font-semibold">In-Memory Sandbox</span>
+          </div>
+          <div className="flex items-center gap-2 text-slate-700 dark:text-slate-200">
+            <Lock className="w-4 h-4 text-emerald-600 dark:text-emerald-400 shrink-0" />
+            <span className="font-semibold">Zero Cloud Storage</span>
+          </div>
+          <div className="flex items-center gap-2 text-slate-700 dark:text-slate-200">
+            <Cpu className="w-4 h-4 text-emerald-600 dark:text-emerald-400 shrink-0" />
+            <span className="font-semibold">Local Hardware Speed</span>
+          </div>
+          <div className="flex items-center gap-2 text-slate-700 dark:text-slate-200">
+            <Zap className="w-4 h-4 text-emerald-600 dark:text-emerald-400 shrink-0" />
+            <span className="font-semibold">No Usage Caps</span>
+          </div>
+        </div>
+      </section>
+
+      {/* Generative Engine Optimization (GEO) Accordion FAQ Component */}
+      <GeoFaq faqs={geoData.faqs} toolName={tool.name} />
 
       {/* AdSense Safe-Zone Banner (Layout Containment for 0 CLS) */}
       <div className="w-full rounded-3xl border border-dashed border-slate-300 dark:border-slate-800 bg-white dark:bg-slate-900/60 p-5 text-center shadow-xs">
