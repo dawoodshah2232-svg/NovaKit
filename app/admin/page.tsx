@@ -56,10 +56,6 @@ import {
 import { TOOLS_CONFIG, ToolCategory } from '@/lib/tools-config';
 
 const PASSCODE_STORAGE_KEY = 'pdfedit_admin_auth_v3';
-const EXPECTED_PASSCODE =
-  process.env.NEXT_PUBLIC_ADMIN_PASS ||
-  process.env.NEXT_PUBLIC_ADMIN_PASSCODE ||
-  'Dauddaud@052616';
 
 export default function AdminPage() {
   const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
@@ -67,6 +63,7 @@ export default function AdminPage() {
   const [showPasscode, setShowPasscode] = useState<boolean>(false);
   const [authError, setAuthError] = useState<string | null>(null);
   const [isShaking, setIsShaking] = useState<boolean>(false);
+  const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
 
   const [summary, setSummary] = useState<AnalyticsSummary | null>(null);
   const [isRefreshing, setIsRefreshing] = useState<boolean>(false);
@@ -106,28 +103,46 @@ export default function AdminPage() {
     return () => unsubscribe();
   }, [isAuthenticated, refreshData]);
 
-  // Handle Login
-  const handleLogin = (e: React.FormEvent) => {
+  // Handle Login via secure server-side verification
+  const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
     setAuthError(null);
 
     const input = passcode.trim();
-    const envPass = EXPECTED_PASSCODE.trim();
-
-    if (input === envPass || input === 'Dauddaud@052616') {
-      localStorage.setItem(PASSCODE_STORAGE_KEY, 'authorized');
-      setIsAuthenticated(true);
-      setPasscode('');
-    } else {
-      setAuthError('Incorrect admin passcode. Please verify your credentials.');
+    if (!input) {
+      setAuthError('Please enter the admin passcode.');
       setIsShaking(true);
       setTimeout(() => setIsShaking(false), 600);
+      return;
     }
-  };
 
-  // Handle Quick Demo Passcode Fill
-  const handleQuickDemoFill = () => {
-    setPasscode('Dauddaud@052616');
+    setIsSubmitting(true);
+
+    try {
+      const res = await fetch('/api/admin/verify', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ passcode: input }),
+      });
+
+      const data = await res.json();
+
+      if (res.ok && data.success) {
+        localStorage.setItem(PASSCODE_STORAGE_KEY, 'authorized');
+        setIsAuthenticated(true);
+        setPasscode('');
+      } else {
+        setAuthError(data.error || 'Incorrect admin passcode. Please verify your credentials.');
+        setIsShaking(true);
+        setTimeout(() => setIsShaking(false), 600);
+      }
+    } catch {
+      setAuthError('Unable to connect to verification server. Please try again.');
+      setIsShaking(true);
+      setTimeout(() => setIsShaking(false), 600);
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   // Handle Logout
@@ -238,13 +253,6 @@ const handleReset = () => {
                 <label className="text-xs font-bold uppercase tracking-wider text-slate-700 dark:text-slate-300">
                   Security Passcode
                 </label>
-                <button
-                  type="button"
-                  onClick={handleQuickDemoFill}
-                  className="text-[11px] font-semibold text-blue-600 dark:text-blue-400 hover:underline cursor-pointer"
-                >
-                  Use Default Passcode
-                </button>
               </div>
 
               <div className="relative">
@@ -266,8 +274,7 @@ const handleReset = () => {
                 </button>
               </div>
 
-              <div className="flex items-center justify-between pt-1 text-[11px] text-slate-400 dark:text-slate-500">
-                <span><code className="font-mono font-bold text-slate-700 dark:text-slate-300 bg-slate-100 dark:bg-slate-800 px-1 py-0.5 rounded">Dauddaud@052616</code></span>
+              <div className="flex items-center justify-end pt-1 text-[11px] text-slate-400 dark:text-slate-500">
                 <span className="flex items-center gap-1 text-emerald-600 dark:text-emerald-400 font-semibold">
                   <ShieldCheck className="w-3.5 h-3.5" />
                   Passcode Protected
@@ -277,10 +284,11 @@ const handleReset = () => {
 
             <button
               type="submit"
-              className="w-full h-12 rounded-2xl bg-slate-950 hover:bg-slate-900 dark:bg-white dark:hover:bg-slate-100 text-white dark:text-slate-950 font-black text-sm transition-all shadow-md active:scale-98 flex items-center justify-center gap-2 cursor-pointer"
+              disabled={isSubmitting}
+              className="w-full h-12 rounded-2xl bg-slate-950 hover:bg-slate-900 dark:bg-white dark:hover:bg-slate-100 disabled:opacity-60 disabled:cursor-not-allowed text-white dark:text-slate-950 font-black text-sm transition-all shadow-md active:scale-98 flex items-center justify-center gap-2 cursor-pointer"
             >
               <Unlock className="w-4 h-4" />
-              <span>Unlock Admin Console</span>
+              <span>{isSubmitting ? 'Verifying...' : 'Unlock Admin Console'}</span>
             </button>
           </form>
 
