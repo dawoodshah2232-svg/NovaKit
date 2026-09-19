@@ -19,7 +19,7 @@ const jetbrainsMono = JetBrains_Mono({
 });
 
 export const metadata: Metadata = {
-  metadataBase: new URL('https://pdfedit.website'),
+  metadataBase: new URL('https://www.pdfedit.website'),
   title: {
     default: 'PDFEdit Studio – 100% Free & Private Online PDF Editor & Tools',
     template: '%s | PDFEdit Studio',
@@ -64,7 +64,7 @@ export const metadata: Metadata = {
     title: 'PDFEdit Studio – 100% Free & Private Online PDF Editor & Tools',
     description:
       'Professional, browser-native PDF utilities. Edit, merge, split, rotate, watermark, convert, reorder, and unlock PDF files with zero server uploads.',
-    url: 'https://pdfedit.website',
+    url: 'https://www.pdfedit.website',
     siteName: 'PDFEdit Studio',
     type: 'website',
   },

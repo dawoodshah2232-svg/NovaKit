@@ -77,7 +77,7 @@ export async function generateMetadata({ params }: ToolPageProps): Promise<Metad
     openGraph: {
       title: `${tool.name} | PDFEdit Studio Tools`,
       description,
-      url: `https://pdfedit.website/tools/${tool.slug}`,
+      url: `https://www.pdfedit.website/tools/${tool.slug}`,
       siteName: 'PDFEdit Studio',
       type: 'website',
       images: [
@@ -95,7 +95,7 @@ export async function generateMetadata({ params }: ToolPageProps): Promise<Metad
       description,
     },
     alternates: {
-      canonical: `https://pdfedit.website/tools/${tool.slug}`,
+      canonical: `https://www.pdfedit.website/tools/${tool.slug}`,
     },
   };
 }

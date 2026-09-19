@@ -1197,7 +1197,7 @@ export function generateSoftwareAppSchema(tool: ToolConfig, geoData: GeoToolData
     '@context': 'https://schema.org',
     '@type': ['SoftwareApplication', 'WebApplication'],
     name: `${tool.name} – PDFEdit Studio Utility`,
-    url: `https://pdfedit.website/tools/${tool.slug}`,
+    url: `https://www.pdfedit.website/tools/${tool.slug}`,
     description: `${geoData.metaDescription || tool.description} Engineered with 100% client-side execution, zero server uploads, and total document privacy. Supports search intents: ${keywordSnippet}.`,
     keywords: allKeywords,
     applicationCategory:
@@ -1237,8 +1237,8 @@ export function generateSoftwareAppSchema(tool: ToolConfig, geoData: GeoToolData
     creator: {
       '@type': 'Organization',
       name: 'PDFEdit Studio',
-      url: 'https://pdfedit.website',
-      logo: 'https://pdfedit.website/icon.svg',
+      url: 'https://www.pdfedit.website',
+      logo: 'https://www.pdfedit.website/icon.svg',
     },
   };
 }

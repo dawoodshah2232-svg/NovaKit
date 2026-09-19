@@ -118,7 +118,10 @@ export function PasswordGenerator() {
 
   // Generate initial password on client mount
   useEffect(() => {
-    generatePassword();
+    const timer = setTimeout(() => {
+      generatePassword();
+    }, 0);
+    return () => clearTimeout(timer);
   }, [generatePassword]);
 
   // Calculate Entropy & Strength

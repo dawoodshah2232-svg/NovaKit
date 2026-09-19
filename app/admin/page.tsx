@@ -68,7 +68,11 @@ export default function AdminPage() {
   const [summary, setSummary] = useState<AnalyticsSummary | null>(null);
   const [isRefreshing, setIsRefreshing] = useState<boolean>(false);
   const [chartView, setChartView] = useState<'area' | 'bar'>('area');
-  const [isMounted, setIsMounted] = useState<boolean>(false);
+  const isMounted = React.useSyncExternalStore(
+    () => () => {},
+    () => true,
+    () => false
+  );
   const [searchQuery, setSearchQuery] = useState<string>('');
   const [categoryFilter, setCategoryFilter] = useState<ToolCategory>('All');
   const [showSimulator, setShowSimulator] = useState<boolean>(false);
@@ -76,10 +80,9 @@ export default function AdminPage() {
 
   // Check saved authentication state
   useEffect(() => {
-    setIsMounted(true);
     const saved = localStorage.getItem(PASSCODE_STORAGE_KEY);
     if (saved === 'authorized') {
-      setIsAuthenticated(true);
+      setTimeout(() => setIsAuthenticated(true), 0);
     }
   }, []);
 
@@ -96,11 +99,16 @@ export default function AdminPage() {
   // Subscribe to real-time events
   useEffect(() => {
     if (!isAuthenticated) return;
-    refreshData();
+    const timer = setTimeout(() => {
+      refreshData();
+    }, 0);
     const unsubscribe = subscribeToAnalytics(() => {
       setSummary(getAnalyticsSummary());
     });
-    return () => unsubscribe();
+    return () => {
+      clearTimeout(timer);
+      unsubscribe();
+    };
   }, [isAuthenticated, refreshData]);
 
   // Handle Login via secure server-side verification

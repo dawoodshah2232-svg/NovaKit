@@ -1,7 +1,7 @@
 import type { MetadataRoute } from 'next';
 
 export default function sitemap(): MetadataRoute.Sitemap {
-  const baseUrl = 'https://pdfedit.website';
+  const baseUrl = 'https://www.pdfedit.website';
   const currentDate = new Date().toISOString();
 
   const canonicalRoutes = [

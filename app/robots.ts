@@ -6,6 +6,6 @@ export default function robots(): MetadataRoute.Robots {
       userAgent: '*',
       allow: '/',
     },
-    sitemap: 'https://pdfedit.website/sitemap.xml',
+    sitemap: 'https://www.pdfedit.website/sitemap.xml',
   };
 }

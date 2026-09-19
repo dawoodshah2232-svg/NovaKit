@@ -39,7 +39,7 @@ const CONTENT_PRESETS = [
   {
     label: 'Website URL',
     icon: Globe,
-    value: 'https://pdfedit.website',
+    value: 'https://www.pdfedit.website',
   },
   {
     label: 'Wi-Fi Network',
@@ -55,12 +55,12 @@ const CONTENT_PRESETS = [
     label: 'Business Card',
     icon: UserCheck,
     value:
-      'BEGIN:VCARD\nVERSION:3.0\nN:Smith;Alex;;;\nFN:Alex Smith\nORG:PDFEdit Studio\nTITLE:Lead Product Designer\nTEL:+1-555-019-2834\nEMAIL:alex@pdfedit.website\nURL:https://pdfedit.website\nEND:VCARD',
+      'BEGIN:VCARD\nVERSION:3.0\nN:Smith;Alex;;;\nFN:Alex Smith\nORG:PDFEdit Studio\nTITLE:Lead Product Designer\nTEL:+1-555-019-2834\nEMAIL:alex@pdfedit.website\nURL:https://www.pdfedit.website\nEND:VCARD',
   },
 ];
 
 export function QrGenerator() {
-  const [text, setText] = useState('https://pdfedit.website');
+  const [text, setText] = useState('https://www.pdfedit.website');
   const [fgColor, setFgColor] = useState('#0f172a');
   const [bgColor, setBgColor] = useState('#ffffff');
   const [size, setSize] = useState<number>(256);
@@ -73,7 +73,7 @@ export function QrGenerator() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const svgWrapperRef = useRef<HTMLDivElement>(null);
 
-  const effectiveValue = text.trim() || 'https://pdfedit.website';
+  const effectiveValue = text.trim() || 'https://www.pdfedit.website';
 
   // Apply color preset
   const handleApplyPreset = (preset: ColorPreset) => {
@@ -83,7 +83,7 @@ export function QrGenerator() {
 
   // Reset to default
   const handleReset = () => {
-    setText('https://pdfedit.website');
+    setText('https://www.pdfedit.website');
     setFgColor('#0f172a');
     setBgColor('#ffffff');
     setSize(256);
