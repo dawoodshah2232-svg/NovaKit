@@ -25,6 +25,10 @@ import {
   X,
   Sparkles,
   Layers,
+  RotateCw,
+  Stamp,
+  Unlock,
+  FilePenLine,
 } from 'lucide-react';
 import { TOOLS_CONFIG, ToolConfig, ToolCategory } from '@/lib/tools-config';
 
@@ -42,6 +46,11 @@ const ICON_MAP: Record<string, React.ElementType> = {
   Minimize2: Minimize2,
   FileImage: FileImage,
   ShieldAlert: ShieldAlert,
+  RotateCw: RotateCw,
+  Stamp: Stamp,
+  Layers: Layers,
+  Unlock: Unlock,
+  FilePenLine: FilePenLine,
 };
 
 const CATEGORIES: { id: ToolCategory; label: string }[] = [
@@ -99,16 +108,16 @@ export function ToolsHub() {
         {/* Micro Pill Badge */}
         <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white dark:bg-slate-900 border border-slate-200/90 dark:border-slate-800 shadow-[0_2px_8px_rgba(0,0,0,0.04)] text-slate-800 dark:text-slate-200 text-xs font-semibold">
           <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
-          <span className="font-bold text-slate-900 dark:text-white">NovaKit Directory</span>
+          <span className="font-bold text-slate-900 dark:text-white">PDFEdit Studio Directory</span>
           <span className="text-slate-300 dark:text-slate-700">•</span>
           <span className="text-slate-500 dark:text-slate-400">Zero Server Uploads</span>
         </div>
 
         {/* High-Contrast Corporate Typography */}
         <h1 className="text-3xl xs:text-4xl sm:text-5xl lg:text-6xl font-black tracking-tight text-slate-950 dark:text-white leading-[1.12]">
-          Every tool you need.{' '}
+          Professional PDF Tools.{' '}
           <span className="bg-gradient-to-r from-blue-600 via-indigo-600 to-violet-600 bg-clip-text text-transparent">
-            100% Free & Private.
+            100% Free & In-Browser.
           </span>
         </h1>
 
@@ -119,12 +128,12 @@ export function ToolsHub() {
           <span className="text-slate-300 dark:text-slate-700 hidden xs:inline">•</span>
           <span className="text-blue-600 dark:text-cyan-400 font-extrabold">100% Free Forever</span>
           <span className="text-slate-300 dark:text-slate-700 hidden sm:inline">•</span>
-          <span className="text-slate-700 dark:text-slate-300 font-medium">Instant Local In-Browser Processing (Zero Server Uploads)</span>
+          <span className="text-slate-700 dark:text-slate-300 font-medium">Instant Local PDF Processing (Zero Server Uploads)</span>
         </div>
 
         {/* Subtitle */}
         <p className="text-sm sm:text-base md:text-lg text-slate-600 dark:text-slate-300 max-w-2xl mx-auto leading-relaxed">
-          Massive directory of browser-based utilities. Merge PDFs, compress images, generate invoices, and analyze text with zero cloud storage.
+          Comprehensive suite of ultra-fast in-browser PDF utilities. Convert, extract images, organize, unlock, rotate, watermark, split, and edit metadata without cloud storage.
         </p>
 
         {/* Prominent TinyWow-Style Search Bar */}
@@ -137,7 +146,7 @@ export function ToolsHub() {
                 type="text"
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                placeholder="Search all 50+ tools (e.g., PDF, compress, split, invoice, password)..."
+                placeholder="Search PDF tools (e.g., Image to PDF, Rotate, Watermark, Split, Unlock)..."
                 className="w-full px-3 sm:px-4 py-2.5 text-sm sm:text-base font-medium bg-transparent text-slate-950 dark:text-white placeholder:text-slate-400 focus:outline-none"
               />
               {searchQuery && (
@@ -160,7 +169,7 @@ export function ToolsHub() {
           {/* Quick Keyword Suggestion Chips */}
           <div className="flex flex-wrap items-center justify-center gap-1.5 sm:gap-2 pt-3 text-xs">
             <span className="text-slate-400 dark:text-slate-500 font-semibold mr-1">Popular:</span>
-            {['PDF Merger', 'Split PDF', 'Compress PDF', 'Image Compressor', 'Invoice', 'Password'].map((tag) => (
+            {['Image to PDF', 'PDF to Images', 'Organize PDF', 'Rotate PDF', 'Watermark PDF', 'Unlock PDF', 'Split PDF', 'PDF Merger'].map((tag) => (
               <button
                 key={tag}
                 type="button"
@@ -358,7 +367,7 @@ export function ToolsHub() {
               Engineered with zero network egress.
             </h2>
             <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-400 leading-relaxed">
-              Standard online tools transmit your personal files to unverified backend servers. NovaKit is built from the ground up to execute all processing locally on your device.
+              Standard online tools transmit your personal files to unverified backend servers. PDFEdit Studio is built from the ground up to execute all processing locally on your device.
             </p>
           </div>
 

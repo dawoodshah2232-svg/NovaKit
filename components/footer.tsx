@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import { ShieldCheck, Zap, Lock, Cpu } from 'lucide-react';
+import { ShieldCheck, Zap, Lock, Cpu, FileText } from 'lucide-react';
 import { Logo } from './logo';
 
 export function Footer() {
@@ -11,60 +11,76 @@ export function Footer() {
           <div className="md:col-span-2 space-y-3">
             <Logo size="sm" badgeText="100% Client-Side" />
             <p className="text-sm text-slate-600 dark:text-slate-400 max-w-sm leading-relaxed">
-              High-speed, browser-native utility hub. All operations occur strictly within your browser. 
-              Your files and sensitive numbers never touch any server or database.
+              Professional, browser-native PDF and document utility studio. All operations occur strictly within your device memory. 
+              Your confidential documents, contracts, and images never touch any external server or database.
             </p>
             <div className="flex flex-wrap items-center gap-4 text-xs text-slate-500 dark:text-slate-400 pt-1">
-              <span className="flex items-center gap-1.5">
+              <span className="flex items-center gap-1.5 font-medium">
                 <ShieldCheck className="w-4 h-4 text-emerald-500" />
-                Zero Uploads
+                Zero Server Uploads
               </span>
-              <span className="flex items-center gap-1.5">
+              <span className="flex items-center gap-1.5 font-medium">
                 <Zap className="w-4 h-4 text-amber-500" />
-                Instant WASM / JS
+                Instant Local Processing
               </span>
-              <span className="flex items-center gap-1.5">
-                <Lock className="w-4 h-4 text-blue-500" />
-                Local Memory Only
+              <span className="flex items-center gap-1.5 font-medium">
+                <Lock className="w-4 h-4 text-rose-500" />
+                Device Memory Only
               </span>
             </div>
           </div>
 
-          {/* Quick links */}
+          {/* Core PDF Tools */}
           <div>
-            <h4 className="text-xs font-semibold text-slate-900 dark:text-slate-200 uppercase tracking-wider mb-3">
-              Tools Hub
+            <h4 className="text-xs font-semibold text-slate-900 dark:text-slate-200 uppercase tracking-wider mb-3 flex items-center gap-1.5">
+              <FileText className="w-3.5 h-3.5 text-rose-500" />
+              <span>PDF Utilities</span>
             </h4>
             <ul className="space-y-2 text-sm text-slate-600 dark:text-slate-400">
               <li>
-                <Link href="#tools" className="hover:text-blue-600 dark:hover:text-blue-400 transition-colors">
-                  Image Compressor
+                <Link href="/tools/image-to-pdf" className="hover:text-rose-600 dark:hover:text-rose-400 transition-colors">
+                  Image to PDF Converter
                 </Link>
               </li>
               <li>
-                <Link href="#tools" className="hover:text-blue-600 dark:hover:text-blue-400 transition-colors">
-                  PDF Merger
+                <Link href="/tools/pdf-to-images" className="hover:text-rose-600 dark:hover:text-rose-400 transition-colors">
+                  PDF to Images Converter
                 </Link>
               </li>
               <li>
-                <Link href="#tools" className="hover:text-blue-600 dark:hover:text-blue-400 transition-colors">
-                  Invoice Generator
+                <Link href="/tools/organize-pdf" className="hover:text-rose-600 dark:hover:text-rose-400 transition-colors">
+                  Organize & Reorder PDF
                 </Link>
               </li>
               <li>
-                <Link href="#tools" className="hover:text-blue-600 dark:hover:text-blue-400 transition-colors">
-                  Tax Calculator
+                <Link href="/tools/rotate-pdf" className="hover:text-rose-600 dark:hover:text-rose-400 transition-colors">
+                  Rotate PDF Pages
+                </Link>
+              </li>
+              <li>
+                <Link href="/tools/watermark-pdf" className="hover:text-rose-600 dark:hover:text-rose-400 transition-colors">
+                  Watermark PDF
+                </Link>
+              </li>
+              <li>
+                <Link href="/tools/unlock-pdf" className="hover:text-rose-600 dark:hover:text-rose-400 transition-colors">
+                  Unlock / Remove Password
                 </Link>
               </li>
             </ul>
           </div>
 
-          {/* Legal / AdSense compliance */}
+          {/* Legal / Architecture */}
           <div>
             <h4 className="text-xs font-semibold text-slate-900 dark:text-slate-200 uppercase tracking-wider mb-3">
-              Transparency
+              Trust & Architecture
             </h4>
             <ul className="space-y-2 text-sm text-slate-600 dark:text-slate-400">
+              <li>
+                <Link href="/#security" className="hover:text-slate-900 dark:hover:text-slate-200 transition-colors">
+                  Client-Side Architecture
+                </Link>
+              </li>
               <li>
                 <span className="hover:text-slate-900 dark:hover:text-slate-200 cursor-pointer">
                   Privacy Policy
@@ -77,13 +93,14 @@ export function Footer() {
               </li>
               <li>
                 <span className="hover:text-slate-900 dark:hover:text-slate-200 cursor-pointer">
-                  Ad & Cookie Choices
+                  Cookie & Ad Choices
                 </span>
               </li>
               <li>
-                <span className="hover:text-slate-900 dark:hover:text-slate-200 cursor-pointer">
-                  Architecture & Security
-                </span>
+                <Link href="/admin" className="hover:text-slate-900 dark:hover:text-slate-200 transition-colors flex items-center gap-1 text-xs text-slate-400">
+                  <Lock className="w-3 h-3" />
+                  <span>Admin Console</span>
+                </Link>
               </li>
             </ul>
           </div>
@@ -91,18 +108,11 @@ export function Footer() {
 
         <div className="border-t border-slate-200/60 dark:border-slate-800/60 pt-6 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-slate-500 dark:text-slate-400">
           <div className="flex flex-wrap items-center gap-x-4 gap-y-1">
-            <p>© {new Date().getFullYear()} NovaKit. Engineered for speed and total client privacy.</p>
-            <Link
-              href="/admin"
-              className="inline-flex items-center gap-1 text-slate-400 hover:text-blue-600 dark:hover:text-blue-400 transition-colors"
-            >
-              <Lock className="w-3 h-3" />
-              <span>Admin Console</span>
-            </Link>
+            <p>© {new Date().getFullYear()} PDFEdit Studio (pdfedit.website). Engineered for speed and total client privacy.</p>
           </div>
           <p className="flex items-center gap-1 text-slate-400 dark:text-slate-500">
             <Cpu className="w-3.5 h-3.5" />
-            Runs 100% on your device hardware
+            Runs 100% on your device hardware (Zero Cloud Storage)
           </p>
         </div>
       </div>

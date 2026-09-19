@@ -329,7 +329,7 @@ export function ColorExtractor() {
       dominant: dominantColor,
       palette,
       extractedAt: new Date().toISOString(),
-      tool: 'NovaKit Color Palette Extractor',
+      tool: 'PDFEdit Studio Color Palette Extractor',
     };
 
     const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });

@@ -160,7 +160,7 @@ export function TaxCalculator() {
 
   // Copy breakdown to clipboard
   const handleCopyBreakdown = async () => {
-    const text = `NovaKit Tax & Salary Calculation Breakdown:
+    const text = `PDFEdit Studio Tax & Salary Calculation Breakdown:
 Gross Annual Income: ${formatMoney(grossIncome)} (${formatMoney(monthlyGross)}/mo)
 Taxable Base: ${formatMoney(taxableIncome)}
 Custom Deductions: ${formatMoney(deductions)} (${formatMoney(monthlyDeductions)}/mo)
@@ -169,7 +169,7 @@ Total Tax Paid: ${formatMoney(totalTax)} (${formatMoney(monthlyTax)}/mo)
 Effective Tax Rate: ${effectiveTaxRate.toFixed(1)}%
 Net Take-Home Pay: ${formatMoney(netIncome)} (${formatMoney(monthlyNet)}/mo)
 Take-Home Ratio: ${takeHomePercentage.toFixed(1)}%
-100% In-Browser Computation via NovaKit`;
+100% In-Browser Computation via PDFEdit Studio`;
 
     try {
       await navigator.clipboard.writeText(text);
@@ -297,7 +297,7 @@ Take-Home Ratio: ${takeHomePercentage.toFixed(1)}%
       doc.text(splitDisclaimer, 14, tableY + 5);
 
       // Save PDF
-      doc.save(`NovaKit-Tax-Breakdown-${new Date().toISOString().slice(0, 10)}.pdf`);
+      doc.save(`PDFEdit-Studio-Tax-Breakdown-${new Date().toISOString().slice(0, 10)}.pdf`);
       trackToolExecution('tax-calculator');
     } catch (err) {
       console.error('Failed to export PDF:', err);

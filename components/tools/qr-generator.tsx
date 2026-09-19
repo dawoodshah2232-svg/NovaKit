@@ -39,28 +39,28 @@ const CONTENT_PRESETS = [
   {
     label: 'Website URL',
     icon: Globe,
-    value: 'https://novakit.app',
+    value: 'https://pdfedit.website',
   },
   {
     label: 'Wi-Fi Network',
     icon: Wifi,
-    value: 'WIFI:T:WPA;S:NovaKit_Secure_5G;P:ClientSideSpeed2026;;',
+    value: 'WIFI:T:WPA;S:PDFEdit_Secure_5G;P:ClientSideSpeed2026;;',
   },
   {
     label: 'Email',
     icon: Mail,
-    value: 'mailto:hello@novakit.app?subject=Inquiry%20from%20NovaKit',
+    value: 'mailto:hello@pdfedit.website?subject=Inquiry%20from%20PDFEdit%20Studio',
   },
   {
     label: 'Business Card',
     icon: UserCheck,
     value:
-      'BEGIN:VCARD\nVERSION:3.0\nN:Smith;Alex;;;\nFN:Alex Smith\nORG:NovaKit Studio\nTITLE:Lead Product Designer\nTEL:+1-555-019-2834\nEMAIL:alex@novakit.app\nURL:https://novakit.app\nEND:VCARD',
+      'BEGIN:VCARD\nVERSION:3.0\nN:Smith;Alex;;;\nFN:Alex Smith\nORG:PDFEdit Studio\nTITLE:Lead Product Designer\nTEL:+1-555-019-2834\nEMAIL:alex@pdfedit.website\nURL:https://pdfedit.website\nEND:VCARD',
   },
 ];
 
 export function QrGenerator() {
-  const [text, setText] = useState('https://novakit.app');
+  const [text, setText] = useState('https://pdfedit.website');
   const [fgColor, setFgColor] = useState('#0f172a');
   const [bgColor, setBgColor] = useState('#ffffff');
   const [size, setSize] = useState<number>(256);
@@ -73,7 +73,7 @@ export function QrGenerator() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const svgWrapperRef = useRef<HTMLDivElement>(null);
 
-  const effectiveValue = text.trim() || 'https://novakit.app';
+  const effectiveValue = text.trim() || 'https://pdfedit.website';
 
   // Apply color preset
   const handleApplyPreset = (preset: ColorPreset) => {
@@ -83,7 +83,7 @@ export function QrGenerator() {
 
   // Reset to default
   const handleReset = () => {
-    setText('https://novakit.app');
+    setText('https://pdfedit.website');
     setFgColor('#0f172a');
     setBgColor('#ffffff');
     setSize(256);
@@ -97,7 +97,7 @@ export function QrGenerator() {
     try {
       const dataUrl = canvasRef.current.toDataURL('image/png');
       const link = document.createElement('a');
-      link.download = 'novakit-qrcode.png';
+      link.download = 'pdfedit-qrcode.png';
       link.href = dataUrl;
       document.body.appendChild(link);
       link.click();
@@ -120,7 +120,7 @@ export function QrGenerator() {
       const svgBlob = new Blob([svgData], { type: 'image/svg+xml;charset=utf-8' });
       const svgUrl = URL.createObjectURL(svgBlob);
       const link = document.createElement('a');
-      link.download = 'novakit-qrcode.svg';
+      link.download = 'pdfedit-qrcode.svg';
       link.href = svgUrl;
       document.body.appendChild(link);
       link.click();

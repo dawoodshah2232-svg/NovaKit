@@ -19,18 +19,18 @@ const jetbrainsMono = JetBrains_Mono({
 });
 
 export const metadata: Metadata = {
-  metadataBase: new URL('https://novakit.app'),
+  metadataBase: new URL('https://pdfedit.website'),
   title: {
-    default: 'NovaKit - Premium Client-Side Web Tools Hub',
-    template: '%s | NovaKit',
+    default: 'PDFEdit Studio – 100% Free & Private Online PDF Editor & Tools',
+    template: '%s | PDFEdit Studio',
   },
   description:
-    'High-speed, 100% private browser-based utilities. Image compression, PDF merging, invoice creation, and tax calculation with zero server uploads.',
+    'Professional, browser-native PDF utilities. Edit, merge, split, rotate, watermark, convert, reorder, and unlock PDF files with zero server uploads.',
   manifest: '/manifest.json',
   appleWebApp: {
     capable: true,
     statusBarStyle: 'default',
-    title: 'NovaKit',
+    title: 'PDFEdit Studio',
   },
   icons: {
     icon: '/icon.svg',
@@ -38,30 +38,41 @@ export const metadata: Metadata = {
     apple: '/icon.svg',
   },
   keywords: [
-    'web tools',
-    'free local pdf compressor',
-    'secure client-side pdf merger',
-    'browser-based image compressor without quality loss',
-    'instant invoice generator for freelancers',
-    'high-speed qr code maker',
-    'image compressor',
+    'pdf editor',
+    'pdf tools',
+    'pdfedit studio',
+    'free pdf editor online',
+    'edit pdf without uploading',
+    'pdf to images converter',
+    'image to pdf converter',
+    'organize pdf pages',
+    'reorder pdf pages',
+    'pdf password remover',
+    'unlock pdf online free',
+    'rotate pdf pages',
+    'watermark pdf in browser',
+    'split pdf pages',
+    'edit pdf metadata',
     'pdf merger',
-    'invoice generator',
-    'tax calculator',
-    'client-side',
-    'privacy first',
+    'compress pdf',
+    'client-side pdf processing',
     'zero server upload',
-    'offline web app',
-    'pwa',
+    'privacy-first pdf editor',
   ],
-  authors: [{ name: 'NovaKit Team' }],
+  authors: [{ name: 'PDFEdit Studio Team' }],
   openGraph: {
-    title: 'NovaKit - Premium Client-Side Web Tools Hub',
+    title: 'PDFEdit Studio – 100% Free & Private Online PDF Editor & Tools',
     description:
-      'High-speed, 100% private browser-based utilities. Image compression, PDF merging, invoice creation, and tax calculation with zero server uploads.',
-    url: 'https://novakit.app',
-    siteName: 'NovaKit',
+      'Professional, browser-native PDF utilities. Edit, merge, split, rotate, watermark, convert, reorder, and unlock PDF files with zero server uploads.',
+    url: 'https://pdfedit.website',
+    siteName: 'PDFEdit Studio',
     type: 'website',
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'PDFEdit Studio – 100% Free & Private Online PDF Editor & Tools',
+    description:
+      'Professional, browser-native PDF utilities with zero server uploads.',
   },
 };
 

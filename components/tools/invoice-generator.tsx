@@ -516,7 +516,7 @@ export function InvoiceGenerator() {
       doc.setFontSize(8);
       doc.setTextColor(148, 163, 184);
       doc.text(
-        `Thank you for your business! Generated with NovaKit (${selectedTemplate} Template) • 100% In-Browser & Private.`,
+        `Thank you for your business! Generated with PDFEdit Studio (${selectedTemplate} Template) • 100% In-Browser & Private.`,
         pageWidth / 2,
         285,
         {

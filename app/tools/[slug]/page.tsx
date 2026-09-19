@@ -2,7 +2,7 @@ import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import Link from 'next/link';
 import { ArrowLeft, ShieldCheck, UploadCloud, Sparkles, CheckCircle2, Lock, Cpu, Zap } from 'lucide-react';
-import { getToolBySlug, TOOLS_CONFIG } from '@/lib/tools-config';
+import { getToolBySlug, getAllToolSlugs, TOOLS_CONFIG } from '@/lib/tools-config';
 import {
   getToolGeoData,
   generateFaqSchema,
@@ -22,6 +22,12 @@ import { SplitPdf } from '@/components/tools/split-pdf';
 import { CompressPdf } from '@/components/tools/compress-pdf';
 import { PdfToImage } from '@/components/tools/pdf-to-image';
 import { ProtectPdf } from '@/components/tools/protect-pdf';
+import { ImageToPdf } from '@/components/tools/image-to-pdf';
+import { OrganizePdf } from '@/components/tools/organize-pdf';
+import { RotatePdf } from '@/components/tools/rotate-pdf';
+import { WatermarkPdf } from '@/components/tools/watermark-pdf';
+import { UnlockPdf } from '@/components/tools/unlock-pdf';
+import { EditPdfMetadata } from '@/components/tools/edit-pdf-metadata';
 
 interface ToolPageProps {
   params: Promise<{
@@ -30,8 +36,8 @@ interface ToolPageProps {
 }
 
 export async function generateStaticParams() {
-  return TOOLS_CONFIG.map((tool) => ({
-    slug: tool.slug,
+  return getAllToolSlugs().map((slug) => ({
+    slug,
   }));
 }
 
@@ -42,12 +48,12 @@ export async function generateMetadata({ params }: ToolPageProps): Promise<Metad
   if (!tool) {
     return {
       title: 'Tool Not Found',
-      description: 'The requested tool does not exist on NovaKit.',
+      description: 'The requested tool does not exist on PDFEdit Studio.',
     };
   }
 
   const geoData = getToolGeoData(slug);
-  const title = geoData.seoTitle || `${tool.name} – Free, 100% Private Online Tool | NovaKit`;
+  const title = geoData.seoTitle || `${tool.name} – Free, 100% Private Online Tool | PDFEdit Studio`;
   const description =
     geoData.metaDescription ||
     `${tool.description} Zero server uploads, completely free, and secure in your browser.`;
@@ -65,14 +71,14 @@ export async function generateMetadata({ params }: ToolPageProps): Promise<Metad
       'browser tool',
       'zero server upload',
       'privacy-focused utility',
-      'NovaKit Tier-1 Suite',
+      'PDFEdit Studio Suite',
       'client-side WebAssembly',
     ],
     openGraph: {
-      title: `${tool.name} | NovaKit Enterprise Web Tools`,
+      title: `${tool.name} | PDFEdit Studio Tools`,
       description,
-      url: `https://novakit.app/tools/${tool.slug}`,
-      siteName: 'NovaKit',
+      url: `https://pdfedit.website/tools/${tool.slug}`,
+      siteName: 'PDFEdit Studio',
       type: 'website',
       images: [
         {
@@ -85,11 +91,11 @@ export async function generateMetadata({ params }: ToolPageProps): Promise<Metad
     },
     twitter: {
       card: 'summary_large_image',
-      title: `${tool.name} | NovaKit`,
+      title: `${tool.name} | PDFEdit Studio`,
       description,
     },
     alternates: {
-      canonical: `https://novakit.app/tools/${tool.slug}`,
+      canonical: `https://pdfedit.website/tools/${tool.slug}`,
     },
   };
 }
@@ -137,7 +143,7 @@ export default async function ToolPage({ params }: ToolPageProps) {
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-6 border-b border-slate-200/80 dark:border-slate-800">
           <div>
             <div className="flex items-center gap-2 mb-2">
-              <span className="text-[11px] font-extrabold uppercase tracking-wider text-blue-600 dark:text-blue-400">
+              <span className="text-[11px] font-extrabold uppercase tracking-wider text-rose-600 dark:text-rose-400">
                 {tool.category}
               </span>
               {tool.badge && (
@@ -163,18 +169,30 @@ export default async function ToolPage({ params }: ToolPageProps) {
       </div>
 
       {/* Render Tool Engine */}
-      {slug === 'image-compressor' ? (
-        <ImageCompressor />
+      {slug === 'image-to-pdf' ? (
+        <ImageToPdf />
+      ) : slug === 'pdf-to-images' || slug === 'pdf-to-image' ? (
+        <PdfToImage />
+      ) : slug === 'organize-pdf' || slug === 'pdf-page-reorder' ? (
+        <OrganizePdf />
+      ) : slug === 'unlock-pdf' || slug === 'pdf-password-remover' ? (
+        <UnlockPdf />
+      ) : slug === 'rotate-pdf' || slug === 'pdf-page-rotator' ? (
+        <RotatePdf />
+      ) : slug === 'watermark-pdf' || slug === 'pdf-watermarker' ? (
+        <WatermarkPdf />
+      ) : slug === 'split-pdf' || slug === 'pdf-page-splitter' ? (
+        <SplitPdf />
+      ) : slug === 'edit-pdf-metadata' || slug === 'pdf-metadata-editor' ? (
+        <EditPdfMetadata />
       ) : slug === 'pdf-merger' ? (
         <PdfMerger />
-      ) : slug === 'split-pdf' ? (
-        <SplitPdf />
       ) : slug === 'compress-pdf' ? (
         <CompressPdf />
-      ) : slug === 'pdf-to-image' ? (
-        <PdfToImage />
       ) : slug === 'protect-pdf' ? (
         <ProtectPdf />
+      ) : slug === 'image-compressor' ? (
+        <ImageCompressor />
       ) : slug === 'invoice-generator' ? (
         <InvoiceGenerator />
       ) : slug === 'tax-calculator' ? (
@@ -188,28 +206,7 @@ export default async function ToolPage({ params }: ToolPageProps) {
       ) : slug === 'password-generator' ? (
         <PasswordGenerator />
       ) : (
-        /* Placeholder for upcoming tools */
-        <div className="rounded-3xl border-2 border-dashed border-slate-300 dark:border-slate-700 hover:border-blue-500 dark:hover:border-blue-400 bg-white/70 dark:bg-slate-900/60 p-8 sm:p-14 text-center transition-all duration-200">
-          <div className="max-w-md mx-auto space-y-4">
-            <div className="w-16 h-16 rounded-2xl bg-blue-50 dark:bg-blue-950/60 text-blue-600 dark:text-blue-400 flex items-center justify-center mx-auto shadow-sm">
-              <UploadCloud className="w-8 h-8" />
-            </div>
-            <div className="space-y-1">
-              <h3 className="text-base sm:text-lg font-bold text-slate-900 dark:text-white">
-                {tool.name} Workspace
-              </h3>
-              <p className="text-xs sm:text-sm text-slate-500 dark:text-slate-400">
-                100% in-browser processing module ready for Phase 3 implementation.
-              </p>
-            </div>
-            <button
-              type="button"
-              className="min-h-[44px] px-5 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-500 text-white text-xs sm:text-sm font-semibold shadow-md shadow-blue-500/20 active:scale-95 transition-all"
-            >
-              Select Local Files
-            </button>
-          </div>
-        </div>
+        <div className="text-center py-12 text-slate-400">Tool not found</div>
       )}
 
       {/* Tool Architecture & Security Guarantee Cards */}
@@ -327,7 +324,7 @@ export default async function ToolPage({ params }: ToolPageProps) {
                 id="technical-deep-dive-heading"
                 className="text-xl sm:text-2xl font-black text-slate-950 dark:text-white tracking-tight"
               >
-                Why Professionals Choose NovaKit for {tool.name}
+                Why Professionals Choose PDFEdit Studio for {tool.name}
               </h2>
             </div>
             <span className="text-xs text-slate-500 dark:text-slate-400 font-medium">

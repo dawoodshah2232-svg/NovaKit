@@ -55,7 +55,7 @@ import {
 } from '@/lib/analytics';
 import { TOOLS_CONFIG, ToolCategory } from '@/lib/tools-config';
 
-const PASSCODE_STORAGE_KEY = 'novakit_admin_auth_v2';
+const PASSCODE_STORAGE_KEY = 'pdfedit_admin_auth_v3';
 const EXPECTED_PASSCODE =
   process.env.NEXT_PUBLIC_ADMIN_PASS ||
   process.env.NEXT_PUBLIC_ADMIN_PASSCODE ||
@@ -215,7 +215,7 @@ const handleReset = () => {
 
             <div>
               <h1 className="text-2xl sm:text-3xl font-black text-slate-950 dark:text-white tracking-tight">
-                NovaKit Admin
+                PDFEdit Studio Admin
               </h1>
               <p className="text-xs sm:text-sm text-slate-500 dark:text-slate-400 mt-1">
                 Zero-Cost Serverless Telemetry & Operational Control
@@ -321,10 +321,10 @@ const handleReset = () => {
           </div>
 
           <h1 className="text-3xl sm:text-4xl font-black tracking-tight text-slate-950 dark:text-white">
-            NovaKit Analytics & Operations
+            PDFEdit Studio Analytics & Operations
           </h1>
           <p className="text-xs sm:text-sm text-slate-500 dark:text-slate-400 mt-1">
-            Real-time client telemetry, unique visitor tracking, and usage share across all 12 tools.
+            Real-time client telemetry, unique visitor tracking, and usage share across all tools.
           </p>
         </div>
 
@@ -874,7 +874,7 @@ const handleReset = () => {
           <div>
             <h4 className="text-sm font-bold">Serverless & Zero Maintenance Guarantee</h4>
             <p className="text-xs text-slate-400">
-              NovaKit requires $0 in backend servers. All compute is distributed to client devices via HTML5 Canvas, WebAssembly, and Web Crypto.
+              PDFEdit Studio requires $0 in backend servers. All compute is distributed to client devices via HTML5 Canvas, WebAssembly, and Web Crypto.
             </p>
           </div>
         </div>

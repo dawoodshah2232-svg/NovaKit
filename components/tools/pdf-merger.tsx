@@ -362,7 +362,7 @@ export function PdfMerger() {
       const downloadUrl = URL.createObjectURL(blob);
 
       const timestamp = new Date().toISOString().slice(0, 10);
-      const downloadName = `novakit-merged-${timestamp}.pdf`;
+      const downloadName = `pdfedit-merged-${timestamp}.pdf`;
 
       const downloadLink = document.createElement('a');
       downloadLink.href = downloadUrl;

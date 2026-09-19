@@ -2,7 +2,7 @@ import type { MetadataRoute } from 'next';
 import { TOOLS_CONFIG } from '@/lib/tools-config';
 
 export default function sitemap(): MetadataRoute.Sitemap {
-  const baseUrl = 'https://novakit.app';
+  const baseUrl = 'https://pdfedit.website';
   const currentDate = new Date().toISOString();
 
   const toolRoutes: MetadataRoute.Sitemap = TOOLS_CONFIG.map((tool) => ({

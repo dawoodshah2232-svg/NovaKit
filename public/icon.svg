@@ -1,60 +1,76 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" fill="none">
   <defs>
-    <!-- Radiant Blue to Cyan Prism Gradients -->
-    <linearGradient id="iconBg" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stop-color="#090d16" />
-      <stop offset="100%" stop-color="#020617" />
+    <linearGradient id="bg-grad" x1="0" y1="0" x2="512" y2="512" gradientUnits="userSpaceOnUse">
+      <stop stopColor="#0F172A" />
+      <stop offset="1" stopColor="#020617" />
     </linearGradient>
-
-    <linearGradient id="prismLeft" x1="64" y1="64" x2="192" y2="448" gradientUnits="userSpaceOnUse">
-      <stop offset="0%" stop-color="#38bdf8" />
-      <stop offset="50%" stop-color="#2563eb" />
-      <stop offset="100%" stop-color="#1e40af" />
+    <linearGradient id="doc-grad" x1="64" y1="48" x2="384" y2="464" gradientUnits="userSpaceOnUse">
+      <stop stopColor="#F43F5E" />
+      <stop offset="0.5" stopColor="#E11D48" />
+      <stop offset="1" stopColor="#4F46E5" />
     </linearGradient>
-
-    <linearGradient id="prismBlade" x1="96" y1="80" x2="416" y2="432" gradientUnits="userSpaceOnUse">
-      <stop offset="0%" stop-color="#06b6d4" />
-      <stop offset="45%" stop-color="#3b82f6" />
-      <stop offset="100%" stop-color="#4f46e5" />
+    <linearGradient id="corner-grad" x1="288" y1="48" x2="384" y2="144" gradientUnits="userSpaceOnUse">
+      <stop stopColor="#FECDD3" />
+      <stop offset="1" stopColor="#FB7185" />
     </linearGradient>
-
-    <linearGradient id="prismRight" x1="320" y1="64" x2="448" y2="448" gradientUnits="userSpaceOnUse">
-      <stop offset="0%" stop-color="#22d3ee" />
-      <stop offset="60%" stop-color="#0284c7" />
-      <stop offset="100%" stop-color="#1e3a8a" />
+    <linearGradient id="pen-grad" x1="220" y1="220" x2="460" y2="460" gradientUnits="userSpaceOnUse">
+      <stop stopColor="#38BDF8" />
+      <stop offset="0.5" stopColor="#6366F1" />
+      <stop offset="1" stopColor="#2563EB" />
     </linearGradient>
-
-    <linearGradient id="prismBevel" x1="64" y1="64" x2="448" y2="128" gradientUnits="userSpaceOnUse">
-      <stop offset="0%" stop-color="#a5f3fc" />
-      <stop offset="50%" stop-color="#67e8f9" />
-      <stop offset="100%" stop-color="#93c5fd" />
+    <linearGradient id="stroke-grad" x1="112" y1="336" x2="288" y2="400" gradientUnits="userSpaceOnUse">
+      <stop stopColor="#06B6D4" />
+      <stop offset="1" stopColor="#38BDF8" />
     </linearGradient>
-
-    <filter id="iconGlow" x="-20%" y="-20%" width="140%" height="140%">
-      <feGaussianBlur stdDeviation="24" result="blur" />
+    <filter id="glow" x="-20%" y="-20%" width="140%" height="140%">
+      <feGaussianBlur stdDeviation="16" result="blur" />
       <feComposite in="SourceGraphic" in2="blur" operator="over" />
     </filter>
   </defs>
 
-  <!-- Squircle Container -->
-  <rect width="512" height="512" rx="128" fill="url(#iconBg)" stroke="#1e293b" stroke-width="4" />
+  <!-- Background container -->
+  <rect width="512" height="512" rx="128" fill="url(#bg-grad)" />
+  <rect width="504" height="504" x="4" y="4" rx="124" stroke="#F43F5E" stroke-opacity="0.25" stroke-width="8" />
 
-  <!-- Ambient Glow Behind Prism -->
-  <circle cx="256" cy="256" r="140" fill="#2563eb" opacity="0.25" filter="url(#iconGlow)" />
+  <!-- Document Base -->
+  <g filter="url(#glow)">
+    <path
+      d="M96 88C96 65.9 113.9 48 136 48H296L400 152V424C400 446.1 382.1 464 360 464H136C113.9 464 96 446.1 96 424V88Z"
+      fill="url(#doc-grad)"
+    />
+    <!-- Folded Corner -->
+    <path
+      d="M296 48V128C296 141.3 306.7 152 320 152H400L296 48Z"
+      fill="url(#corner-grad)"
+    />
 
-  <!-- Geometric "N" Prism Shape -->
-  <g filter="url(#iconGlow)">
-    <!-- Left Pillar -->
-    <path d="M96 112 L180 72 V392 L96 432 Z" fill="url(#prismLeft)" />
+    <!-- Document Content Lines -->
+    <rect x="152" y="192" width="112" height="28" rx="14" fill="#FFFFFF" fill-opacity="0.85" />
+    <rect x="152" y="256" width="176" height="28" rx="14" fill="#FFFFFF" fill-opacity="0.7" />
+    <rect x="152" y="320" width="88" height="28" rx="14" fill="#FFFFFF" fill-opacity="0.5" />
 
-    <!-- Diagonal Prism Blade -->
-    <path d="M164 72 L356 384 V456 L156 128 Z" fill="url(#prismBlade)" />
+    <!-- Edit Pen Drawing Dynamic Stroke -->
+    <path
+      d="M136 392C184 368 224 416 288 392"
+      stroke="url(#stroke-grad)"
+      stroke-width="24"
+      stroke-linecap="round"
+    />
 
-    <!-- Right Pillar -->
-    <path d="M332 80 L416 112 V440 L332 408 Z" fill="url(#prismRight)" />
-
-    <!-- Top Reflective Bevels -->
-    <path d="M96 112 L180 72 L256 184 L160 224 Z" fill="url(#prismBevel)" fill-opacity="0.85" />
-    <path d="M256 312 L352 376 L416 440 L332 408 Z" fill="#06b6d4" fill-opacity="0.75" />
+    <!-- Edit Pen / Stylus -->
+    <g>
+      <path
+        d="M435 220L403 188C395 180 382 180 374 188L260 302L248 374L320 362L435 247C443 239 443 228 435 220Z"
+        fill="url(#pen-grad)"
+      />
+      <path
+        d="M260 302L248 374L320 362L292 334L260 302Z"
+        fill="#FFFFFF"
+      />
+      <path
+        d="M248 374L268 354L258 344L248 374Z"
+        fill="#06B6D4"
+      />
+    </g>
   </g>
 </svg>

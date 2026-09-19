@@ -41,10 +41,10 @@ interface StoredAnalyticsData {
   lastSeedTime: number;
 }
 
-const STORAGE_KEY = 'novakit_analytics_prod_v3';
-const VISITOR_ID_KEY = 'novakit_visitor_id_v3';
-const VISITED_DATES_KEY = 'novakit_visited_dates_v3';
-const EVENT_NAME = 'novakit_analytics_updated';
+const STORAGE_KEY = 'pdfedit_analytics_prod_v3';
+const VISITOR_ID_KEY = 'pdfedit_visitor_id_v3';
+const VISITED_DATES_KEY = 'pdfedit_visited_dates_v3';
+const EVENT_NAME = 'pdfedit_analytics_updated';
 
 // Format YYYY-MM-DD
 function getLocalDateKey(d: Date): string {
@@ -365,13 +365,13 @@ export function clearAllAnalyticsData(): void {
 export function generateAnalyticsCsv(): string {
   const summary = getAnalyticsSummary();
   const rows = [
-    ['# NovaKit Telemetry Report', `Exported: ${new Date().toISOString()}`].join(','),
+    ['# PDFEdit Studio Telemetry Report', `Exported: ${new Date().toISOString()}`].join(','),
     ['Total Tool Runs', summary.totalRuns].join(','),
     ['Unique Visitors', summary.uniqueVisitors].join(','),
     ['Top Performing Tool', `"${summary.mostPopularTool.name}"`].join(','),
     ['Operational Status', `"${summary.operationalStatus}"`].join(','),
     [],
-    ['# Tool Breakdown', 'All 12 Utilities'].join(','),
+    ['# Tool Breakdown', 'All Utilities'].join(','),
     ['Rank', 'Tool Name', 'Slug', 'Category', 'Execution Runs', 'Share (%)'].join(','),
     ...summary.toolBreakdown.map((t, idx) =>
       [idx + 1, `"${t.name}"`, `"${t.slug}"`, `"${t.category}"`, t.runs, `${t.percentage}%`].join(',')
@@ -396,11 +396,11 @@ export function generateAnalyticsJson(): string {
 
   const exportPayload = {
     metadata: {
-      platform: 'NovaKit Suite',
+      platform: 'PDFEdit Studio',
       version: '1.0.0',
       exportedAt: new Date().toISOString(),
       architecture: '100% Serverless / Client-Side WebAssembly & HTML5 Canvas',
-      storageEngine: 'localStorage (novakit_analytics_prod_v2)',
+      storageEngine: 'localStorage (pdfedit_analytics_prod_v3)',
     },
     metrics: {
       totalRuns: summary.totalRuns,
@@ -434,7 +434,7 @@ export function exportAnalyticsData(format: 'json' | 'csv'): void {
     const url = URL.createObjectURL(blob);
     const link = document.createElement('a');
     link.href = url;
-    link.download = `novakit-analytics-${new Date().toISOString().slice(0, 10)}.${extension}`;
+    link.download = `pdfedit-analytics-${new Date().toISOString().slice(0, 10)}.${extension}`;
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);

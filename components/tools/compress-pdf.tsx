@@ -203,8 +203,8 @@ export function CompressPdf() {
           pdfDoc.setAuthor('');
           pdfDoc.setSubject('');
           pdfDoc.setKeywords([]);
-          pdfDoc.setProducer('NovaKit');
-          pdfDoc.setCreator('NovaKit Client Compressor');
+          pdfDoc.setProducer('PDFEdit Studio (pdfedit.website)');
+          pdfDoc.setCreator('PDFEdit Studio Client Compressor');
         }
 
         // Save with Object Streams enabled (PDF 1.5+ flate object stream compression)

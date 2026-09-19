@@ -30,7 +30,7 @@ export interface GeoToolData {
 export const GEO_DATA_MAP: Record<string, GeoToolData> = {
   'pdf-merger': {
     primaryKeyword: 'secure client-side PDF merger',
-    seoTitle: 'Secure Client-Side PDF Merger – Combine PDF Files Locally Free | NovaKit',
+    seoTitle: 'Secure Client-Side PDF Merger – Combine PDF Files Locally Free | PDFEdit Studio',
     metaDescription:
       'Combine multiple PDF files into one clean document with zero server uploads. 100% private, client-side in-memory processing via pdf-lib. Drag-and-drop page reordering with instant local download. Unlimited file size, no watermark, no sign-up required.',
     longTailKeywords: [
@@ -54,7 +54,7 @@ export const GEO_DATA_MAP: Record<string, GeoToolData> = {
     semanticSubheadings: [
       {
         heading: 'Why Client-Side PDF Merging Is the Superior Enterprise Standard',
-        body: 'Unlike legacy online PDF tools that upload sensitive client records to remote cloud servers, NovaKit processes multi-page documents strictly within device RAM using pdf-lib. This guarantees zero server exposure, 100% compliance with GDPR/HIPAA standards, and zero network lag.',
+        body: 'Unlike legacy online PDF tools that upload sensitive client records to remote cloud servers, PDFEdit Studio processes multi-page documents strictly within device RAM using pdf-lib. This guarantees zero server exposure, 100% compliance with GDPR/HIPAA standards, and zero network lag.',
       },
       {
         heading: 'How to Reorder and Assemble PDFs Without File Size Limits',
@@ -83,35 +83,35 @@ export const GEO_DATA_MAP: Record<string, GeoToolData> = {
     ],
     faqs: [
       {
-        question: 'Is NovaKit PDF Merger safe for confidential or legal documents?',
+        question: 'Is PDFEdit Studio PDF Merger safe for confidential or legal documents?',
         answer:
-          'Yes, 100% safe. NovaKit executes all PDF manipulation directly in your browser using client-side JavaScript (pdf-lib). Your documents never leave your local device and are never uploaded to any remote server or cloud storage.',
+          'Yes, 100% safe. PDFEdit Studio executes all PDF manipulation directly in your browser using client-side JavaScript (pdf-lib). Your documents never leave your local device and are never uploaded to any remote server or cloud storage.',
       },
       {
         question: 'How many PDF documents can I merge at once?',
         answer:
-          'There are no artificial limits. You can combine as many PDF files as your device memory supports. NovaKit does not throttle batch sizes or impose daily quotas.',
+          'There are no artificial limits. You can combine as many PDF files as your device memory supports. PDFEdit Studio does not throttle batch sizes or impose daily quotas.',
       },
       {
-        question: 'Does NovaKit add watermarks or reduce document quality?',
+        question: 'Does PDFEdit Studio add watermarks or reduce document quality?',
         answer:
-          'No. NovaKit produces pristine, high-fidelity PDF documents with zero watermarks, zero branding overlays, and zero loss of original vector text or image quality.',
+          'No. PDFEdit Studio produces pristine, high-fidelity PDF documents with zero watermarks, zero branding overlays, and zero loss of original vector text or image quality.',
       },
       {
-        question: 'How does NovaKit differ from online mergers like iLovePDF or Smallpdf?',
+        question: 'How does PDFEdit Studio differ from online mergers like iLovePDF or Smallpdf?',
         answer:
-          'Traditional online tools require transmitting your sensitive files across the internet to third-party servers where they are queued and stored. NovaKit processes documents completely offline in your browser memory, offering total privacy, zero wait times, and no subscription fees.',
+          'Traditional online tools require transmitting your sensitive files across the internet to third-party servers where they are queued and stored. PDFEdit Studio processes documents completely offline in your browser memory, offering total privacy, zero wait times, and no subscription fees.',
       },
       {
         question: 'Can I reorder pages before merging on mobile?',
         answer:
-          'Yes. On mobile devices, NovaKit provides dedicated 48px touch-friendly reordering arrows alongside touch drag handles, making single-handed reorganization fast and error-free.',
+          'Yes. On mobile devices, PDFEdit Studio provides dedicated 48px touch-friendly reordering arrows alongside touch drag handles, making single-handed reorganization fast and error-free.',
       },
     ],
   },
   'split-pdf': {
     primaryKeyword: 'client-side split PDF online free',
-    seoTitle: 'Split PDF Online Free – Extract Pages & Separate PDF Locally | NovaKit',
+    seoTitle: 'Split PDF Online Free – Extract Pages & Separate PDF Locally | PDFEdit Studio',
     metaDescription:
       'Extract individual pages or separate multi-page PDF documents into discrete files or bundled ZIP archives. 100% in-browser processing with zero server uploads. Extract custom page ranges or split all pages instantly.',
     longTailKeywords: [
@@ -144,7 +144,7 @@ export const GEO_DATA_MAP: Record<string, GeoToolData> = {
         number: '01',
         title: 'Upload Multi-Page PDF',
         description:
-          'Drop your document into the secure workspace. NovaKit reads page counts locally in milliseconds.',
+          'Drop your document into the secure workspace. PDFEdit Studio reads page counts locally in milliseconds.',
       },
       {
         number: '02',
@@ -163,7 +163,7 @@ export const GEO_DATA_MAP: Record<string, GeoToolData> = {
       {
         question: 'Can I extract non-consecutive pages from a PDF?',
         answer:
-          'Yes. Use the Custom Range mode and enter comma-separated numbers or hyphenated ranges like "1-3, 5, 8-10". NovaKit will extract and assemble those exact pages into a single new document.',
+          'Yes. Use the Custom Range mode and enter comma-separated numbers or hyphenated ranges like "1-3, 5, 8-10". PDFEdit Studio will extract and assemble those exact pages into a single new document.',
       },
       {
         question: 'Are split PDF files uploaded to a server?',
@@ -173,10 +173,10 @@ export const GEO_DATA_MAP: Record<string, GeoToolData> = {
       {
         question: 'How does the "Extract All Pages" mode package the files?',
         answer:
-          'When extracting all pages, NovaKit generates individual PDF files for each page and bundles them into a convenient .zip archive using client-side JSZip for 1-click downloading.',
+          'When extracting all pages, PDFEdit Studio generates individual PDF files for each page and bundles them into a convenient .zip archive using client-side JSZip for 1-click downloading.',
       },
       {
-        question: 'Is NovaKit Split PDF free to use for large documents?',
+        question: 'Is PDFEdit Studio Split PDF free to use for large documents?',
         answer:
           'Yes, it is completely free with no page caps, no file size limitations, and no required account creation.',
       },
@@ -184,7 +184,7 @@ export const GEO_DATA_MAP: Record<string, GeoToolData> = {
   },
   'compress-pdf': {
     primaryKeyword: 'free local PDF compressor',
-    seoTitle: 'Free Local PDF Compressor – Reduce PDF File Size Client-Side | NovaKit',
+    seoTitle: 'Free Local PDF Compressor – Reduce PDF File Size Client-Side | PDFEdit Studio',
     metaDescription:
       'Compress and shrink PDF document file sizes directly in your browser with zero server uploads. Advanced stream thinning and raster optimization for email attachments and portal uploads. 100% confidential, free forever, no signup.',
     longTailKeywords: [
@@ -237,7 +237,7 @@ export const GEO_DATA_MAP: Record<string, GeoToolData> = {
       {
         question: 'How does client-side PDF compression work?',
         answer:
-          'NovaKit optimizes PDF binary structures by stripping non-essential metadata, deflating uncompressed object streams, and downsampling raster images using browser WebAssembly and pdf-lib, all within local device RAM.',
+          'PDFEdit Studio optimizes PDF binary structures by stripping non-essential metadata, deflating uncompressed object streams, and downsampling raster images using browser WebAssembly and pdf-lib, all within local device RAM.',
       },
       {
         question: 'Will compressing my PDF blur the text or signatures?',
@@ -247,7 +247,7 @@ export const GEO_DATA_MAP: Record<string, GeoToolData> = {
       {
         question: 'Is my confidential financial or medical PDF sent to the cloud?',
         answer:
-          'Never. Your document is processed 100% locally in your browser. No file data, metadata, or metrics are uploaded to any server, making NovaKit compliant with strict privacy standards (GDPR/HIPAA).',
+          'Never. Your document is processed 100% locally in your browser. No file data, metadata, or metrics are uploaded to any server, making PDFEdit Studio compliant with strict privacy standards (GDPR/HIPAA).',
       },
       {
         question: 'How much file size reduction can I expect?',
@@ -258,7 +258,7 @@ export const GEO_DATA_MAP: Record<string, GeoToolData> = {
   },
   'pdf-to-image': {
     primaryKeyword: 'convert PDF to JPG PNG client-side',
-    seoTitle: 'PDF to Image Converter – High-Resolution JPG & PNG Online Free | NovaKit',
+    seoTitle: 'PDF to Image Converter – High-Resolution JPG & PNG Online Free | PDFEdit Studio',
     metaDescription:
       'Convert PDF pages into high-resolution JPG or PNG images directly in your browser using client-side canvas rendering. Zero server uploads, total privacy, batch ZIP download, no file size caps.',
     longTailKeywords: [
@@ -291,7 +291,7 @@ export const GEO_DATA_MAP: Record<string, GeoToolData> = {
         number: '01',
         title: 'Upload PDF Document',
         description:
-          'Drop your PDF into the converter. NovaKit loads the document structure locally via PDF.js worker.',
+          'Drop your PDF into the converter. PDFEdit Studio loads the document structure locally via PDF.js worker.',
       },
       {
         number: '02',
@@ -310,7 +310,7 @@ export const GEO_DATA_MAP: Record<string, GeoToolData> = {
       {
         question: 'Can I convert multi-page PDFs to images at once?',
         answer:
-          'Yes. NovaKit rasterizes all pages sequentially in browser memory and bundles them into a single high-speed ZIP archive for effortless download.',
+          'Yes. PDFEdit Studio rasterizes all pages sequentially in browser memory and bundles them into a single high-speed ZIP archive for effortless download.',
       },
       {
         question: 'What is the quality difference between PNG and JPG?',
@@ -318,15 +318,15 @@ export const GEO_DATA_MAP: Record<string, GeoToolData> = {
           'PNG offers lossless graphic reproduction ideal for diagrams, technical blueprints, and typography. JPG produces lightweight compressed files suitable for photographic documents and email delivery.',
       },
       {
-        question: 'Are my converted page images stored on NovaKit servers?',
+        question: 'Are my converted page images stored on PDFEdit Studio servers?',
         answer:
-          'No. NovaKit operates with zero server storage. The conversion takes place purely inside your browser rendering pipeline.',
+          'No. PDFEdit Studio operates with zero server storage. The conversion takes place purely inside your browser rendering pipeline.',
       },
     ],
   },
   'protect-pdf': {
     primaryKeyword: 'encrypt PDF document offline free',
-    seoTitle: 'Protect PDF Online – Encrypt & Password Protect PDF Locally | NovaKit',
+    seoTitle: 'Protect PDF Online – Encrypt & Password Protect PDF Locally | PDFEdit Studio',
     metaDescription:
       'Encrypt and password-protect your PDF documents with industry-standard security and permission controls. 100% local encryption—passwords and files never leave your device.',
     longTailKeywords: [
@@ -375,20 +375,20 @@ export const GEO_DATA_MAP: Record<string, GeoToolData> = {
     ],
     faqs: [
       {
-        question: 'Can NovaKit recover my PDF if I forget the password?',
+        question: 'Can PDFEdit Studio recover my PDF if I forget the password?',
         answer:
-          'No. Because NovaKit has zero access to your passwords and executes encryption entirely on your local machine, forgotten passwords cannot be retrieved by anyone.',
+          'No. Because PDFEdit Studio has zero access to your passwords and executes encryption entirely on your local machine, forgotten passwords cannot be retrieved by anyone.',
       },
       {
-        question: 'What level of encryption does NovaKit use?',
+        question: 'What level of encryption does PDFEdit Studio use?',
         answer:
-          'NovaKit applies standard 128-bit and 256-bit AES encryption compliant with Adobe Acrobat standards and modern PDF readers.',
+          'PDFEdit Studio applies standard 128-bit and 256-bit AES encryption compliant with Adobe Acrobat standards and modern PDF readers.',
       },
     ],
   },
   'image-compressor': {
     primaryKeyword: 'browser-based image compressor without quality loss',
-    seoTitle: 'Browser-Based Image Compressor – Compress JPEG, PNG & WebP Locally | NovaKit',
+    seoTitle: 'Browser-Based Image Compressor – Compress JPEG, PNG & WebP Locally | PDFEdit Studio',
     metaDescription:
       'Compress JPEG, PNG, and WebP images directly in your browser with adjustable quality and instant side-by-side preview. Zero cloud uploads, 100% private WebAssembly canvas processing with maximum byte reduction.',
     longTailKeywords: [
@@ -438,14 +438,14 @@ export const GEO_DATA_MAP: Record<string, GeoToolData> = {
     ],
     faqs: [
       {
-        question: 'Are my images stored on NovaKit servers?',
+        question: 'Are my images stored on PDFEdit Studio servers?',
         answer:
-          'Never. NovaKit compresses your images directly in your browser using local canvas and WebAssembly technologies. Zero bytes are uploaded to the cloud.',
+          'Never. PDFEdit Studio compresses your images directly in your browser using local canvas and WebAssembly technologies. Zero bytes are uploaded to the cloud.',
       },
       {
         question: 'Which image formats are supported?',
         answer:
-          'NovaKit supports JPEG, JPG, PNG, and WebP. You can also cross-convert formats during compression.',
+          'PDFEdit Studio supports JPEG, JPG, PNG, and WebP. You can also cross-convert formats during compression.',
       },
       {
         question: 'Is there a limit on how many images I can compress?',
@@ -456,7 +456,7 @@ export const GEO_DATA_MAP: Record<string, GeoToolData> = {
   },
   'color-extractor': {
     primaryKeyword: 'extract color palette from image online free',
-    seoTitle: 'Color Palette Extractor – Extract HEX & RGB Codes from Images | NovaKit',
+    seoTitle: 'Color Palette Extractor – Extract HEX & RGB Codes from Images | PDFEdit Studio',
     metaDescription:
       'Extract dominant color palettes, HEX/RGB codes, and accessibility contrast ratios directly from any uploaded image. Local canvas pixel sampling with zero server uploads. Free for designers and developers.',
     longTailKeywords: [
@@ -494,7 +494,7 @@ export const GEO_DATA_MAP: Record<string, GeoToolData> = {
         number: '02',
         title: 'Inspect Dominant Hues',
         description:
-          'NovaKit analyzes pixel distributions to generate dominant tones, secondary accents, and contrast scores.',
+          'PDFEdit Studio analyzes pixel distributions to generate dominant tones, secondary accents, and contrast scores.',
       },
       {
         number: '03',
@@ -507,7 +507,7 @@ export const GEO_DATA_MAP: Record<string, GeoToolData> = {
       {
         question: 'How accurate is the color extraction algorithm?',
         answer:
-          'NovaKit utilizes optimized color quantization algorithms to identify dominant clusters with 99.8% perceptual accuracy matching the human visual cortex.',
+          'PDFEdit Studio utilizes optimized color quantization algorithms to identify dominant clusters with 99.8% perceptual accuracy matching the human visual cortex.',
       },
       {
         question: 'Can I copy colors for CSS and Tailwind directly?',
@@ -518,7 +518,7 @@ export const GEO_DATA_MAP: Record<string, GeoToolData> = {
   },
   'qr-generator': {
     primaryKeyword: 'high-speed QR code maker',
-    seoTitle: 'High-Speed QR Code Maker – Generate Custom SVG & PNG QR Codes Free | NovaKit',
+    seoTitle: 'High-Speed QR Code Maker – Generate Custom SVG & PNG QR Codes Free | PDFEdit Studio',
     metaDescription:
       'Generate customizable, high-resolution QR codes for URLs, Wi-Fi passwords, contact cards, and text with instant SVG vector and PNG downloads. 100% client-side, zero tracking, free forever.',
     longTailKeywords: [
@@ -543,7 +543,7 @@ export const GEO_DATA_MAP: Record<string, GeoToolData> = {
       },
       {
         heading: 'Zero Dynamic Redirects or Third-Party Tracking Pixels',
-        body: 'Unlike commercial QR services that hijack URLs with redirect paywalls, NovaKit encodes direct static destinations that never expire.',
+        body: 'Unlike commercial QR services that hijack URLs with redirect paywalls, PDFEdit Studio encodes direct static destinations that never expire.',
       },
     ],
     howItWorks: [
@@ -568,9 +568,9 @@ export const GEO_DATA_MAP: Record<string, GeoToolData> = {
     ],
     faqs: [
       {
-        question: 'Do NovaKit QR codes ever expire?',
+        question: 'Do PDFEdit Studio QR codes ever expire?',
         answer:
-          'Never. NovaKit creates 100% static QR codes that encode your target URL or data directly into the matrix. They work permanently without third-party redirection.',
+          'Never. PDFEdit Studio creates 100% static QR codes that encode your target URL or data directly into the matrix. They work permanently without third-party redirection.',
       },
       {
         question: 'Which error correction level should I choose?',
@@ -581,7 +581,7 @@ export const GEO_DATA_MAP: Record<string, GeoToolData> = {
   },
   'invoice-generator': {
     primaryKeyword: 'instant invoice generator for freelancers',
-    seoTitle: 'Instant Invoice Generator for Freelancers – Free PDF Maker | NovaKit',
+    seoTitle: 'Instant Invoice Generator for Freelancers – Free PDF Maker | PDFEdit Studio',
     metaDescription:
       'Create, customize, and export professional PDF invoices with custom tax rates, multi-currency support, discounts, and line items. Instant client-side PDF rendering with zero sign-up and zero data retention.',
     longTailKeywords: [
@@ -644,7 +644,7 @@ export const GEO_DATA_MAP: Record<string, GeoToolData> = {
   },
   'tax-calculator': {
     primaryKeyword: 'gross to net salary tax calculator',
-    seoTitle: 'Tax & Salary Calculator – Gross to Net Take-Home Pay Breakdown | NovaKit',
+    seoTitle: 'Tax & Salary Calculator – Gross to Net Take-Home Pay Breakdown | PDFEdit Studio',
     metaDescription:
       'Quickly compute sales tax, value-added tax (VAT), gross-to-net earnings, deductions, and effective tax rates with real-time breakdowns. 100% private client-side computation—financial figures never leave your device.',
     longTailKeywords: [
@@ -694,12 +694,12 @@ export const GEO_DATA_MAP: Record<string, GeoToolData> = {
     ],
     faqs: [
       {
-        question: 'Is NovaKit Tax Calculator updated for 2026 regulations?',
+        question: 'Is PDFEdit Studio Tax Calculator updated for 2026 regulations?',
         answer:
           'Yes. The calculator supports custom bracket inputs, standard deduction offsets, and quick presets for major tax jurisdictions.',
       },
       {
-        question: 'Does NovaKit store my salary figures?',
+        question: 'Does PDFEdit Studio store my salary figures?',
         answer:
           'No. All calculations are executed locally via client-side JavaScript. Your financial information is never logged or stored.',
       },
@@ -707,7 +707,7 @@ export const GEO_DATA_MAP: Record<string, GeoToolData> = {
   },
   'text-analyzer': {
     primaryKeyword: 'free SEO text analyzer and word counter',
-    seoTitle: 'SEO Text Analyzer & Word Counter – Keyword Density & Reading Time | NovaKit',
+    seoTitle: 'SEO Text Analyzer & Word Counter – Keyword Density & Reading Time | PDFEdit Studio',
     metaDescription:
       'Analyze word count, reading time, speaking pace, keyword density, and sentence structure for high-ranking SEO copy. Instant local analysis in browser memory—your drafts remain strictly private.',
     longTailKeywords: [
@@ -746,7 +746,7 @@ export const GEO_DATA_MAP: Record<string, GeoToolData> = {
         number: '02',
         title: 'Analyze Density & Metrics',
         description:
-          'NovaKit computes word counts, character counts, average sentence lengths, and reading times instantly.',
+          'PDFEdit Studio computes word counts, character counts, average sentence lengths, and reading times instantly.',
       },
       {
         number: '03',
@@ -770,7 +770,7 @@ export const GEO_DATA_MAP: Record<string, GeoToolData> = {
   },
   'password-generator': {
     primaryKeyword: 'cryptographically secure password generator',
-    seoTitle: 'Secure Password Generator – Strong Cryptographic Passwords & Passphrases | NovaKit',
+    seoTitle: 'Secure Password Generator – Strong Cryptographic Passwords & Passphrases | PDFEdit Studio',
     metaDescription:
       'Create cryptographically secure, random passwords and passphrases with real-time entropy analysis and custom character rules. Powered by the browser Web Crypto API (crypto.getRandomValues)—passwords are never saved or transmitted.',
     longTailKeywords: [
@@ -809,7 +809,7 @@ export const GEO_DATA_MAP: Record<string, GeoToolData> = {
         number: '02',
         title: 'Evaluate Cryptographic Entropy',
         description:
-          'NovaKit measures bit entropy in real-time, providing resistance ratings against modern brute-force clusters.',
+          'PDFEdit Studio measures bit entropy in real-time, providing resistance ratings against modern brute-force clusters.',
       },
       {
         number: '03',
@@ -820,9 +820,9 @@ export const GEO_DATA_MAP: Record<string, GeoToolData> = {
     ],
     faqs: [
       {
-        question: 'Are generated passwords ever stored or logged by NovaKit?',
+        question: 'Are generated passwords ever stored or logged by PDFEdit Studio?',
         answer:
-          'Never. NovaKit uses the native browser Web Crypto API (crypto.getRandomValues). The generated password exists solely in your browser memory until you copy it.',
+          'Never. PDFEdit Studio uses the native browser Web Crypto API (crypto.getRandomValues). The generated password exists solely in your browser memory until you copy it.',
       },
       {
         question: 'What is password entropy and why does it matter?',
@@ -831,18 +831,291 @@ export const GEO_DATA_MAP: Record<string, GeoToolData> = {
       },
     ],
   },
+  'image-to-pdf': {
+    primaryKeyword: 'convert image to pdf online free',
+    seoTitle: 'Image to PDF Converter – Convert JPG & PNG to PDF Free | PDFEdit Studio',
+    metaDescription:
+      'Convert JPG, PNG, and WebP pictures into a clean PDF document with zero server uploads. Reorder images visually, choose A4 or Letter, and download instantly.',
+    longTailKeywords: [
+      'convert image to pdf online free',
+      'jpg to pdf converter without watermark',
+      'png to pdf high quality',
+      'combine multiple images into one pdf',
+      'client side image to pdf no upload',
+      'free photo to pdf maker',
+    ],
+    highlights: [
+      '100% Client-Side In-Memory Execution via pdf-lib',
+      'Interactive Drag-and-Drop Image Reordering',
+      'Flexible A4, US Letter, or Fit-to-Image Formats',
+      'Zero Server Uploads & Total Photo Privacy',
+    ],
+    semanticSubheadings: [
+      {
+        heading: 'Zero Cloud Storage Image Compilation',
+        body: 'Your personal photos and scans are processed directly within local device memory via WebAssembly and HTML5 Canvas, guaranteeing that images never leave your computer or phone.',
+      },
+    ],
+    howItWorks: [
+      { number: '01', title: 'Add Images', description: 'Drag and drop or select JPG, PNG, or WebP images from your device.' },
+      { number: '02', title: 'Arrange & Format', description: 'Reorder pages, set page orientation, and choose margins.' },
+      { number: '03', title: 'Compile & Save', description: 'Click Compile to generate and download your clean PDF immediately.' },
+    ],
+    faqs: [
+      {
+        question: 'Are my images uploaded to any server?',
+        answer: 'Never. All image encoding and PDF compilation takes place directly in your browser using client-side JavaScript.',
+      },
+      {
+        question: 'Can I reorder images before generating the PDF?',
+        answer: 'Yes. Use the visual arrow controls to move images forward or backward to achieve your exact desired page order.',
+      },
+    ],
+  },
+  'pdf-to-images': {
+    primaryKeyword: 'convert pdf to images online free',
+    seoTitle: 'PDF to Images Converter – Extract High-Res PNG & JPG Free | PDFEdit Studio',
+    metaDescription:
+      'Extract PDF pages as crisp PNG or JPG images directly in your browser. Download pages individually or bundled as a ZIP archive with zero cloud uploads.',
+    longTailKeywords: [
+      'convert pdf to images online free',
+      'extract images from pdf in browser',
+      'pdf to png high resolution 300dpi',
+      'save pdf pages as jpg zip',
+      'client side pdf to image converter',
+    ],
+    highlights: [
+      'Extract Pages as Individual PNG/JPG or Bundled ZIP',
+      'Adjustable DPI Resolutions (1x, 2x, 3x Retina Fidelity)',
+      '100% In-Browser Rendering via PDF.js Canvas',
+      'Zero Server Uploads for Legal & Financial Documents',
+    ],
+    semanticSubheadings: [
+      {
+        heading: 'Retina-Fidelity PDF Vector Rasterization',
+        body: 'Render document pages with high-DPI scaling directly inside your browser. Download single sheets or the entire document as a ZIP file without internet latency.',
+      },
+    ],
+    howItWorks: [
+      { number: '01', title: 'Upload PDF', description: 'Drop your PDF file into the secure in-browser workspace.' },
+      { number: '02', title: 'Select Format & DPI', description: 'Choose PNG or JPEG format and your preferred resolution.' },
+      { number: '03', title: 'Download Images', description: 'Download individual page graphics or export the entire book as a ZIP archive.' },
+    ],
+    faqs: [
+      {
+        question: 'What image formats can I export to?',
+        answer: 'PDFEdit Studio supports lossless PNG for crisp text and high-speed JPEG with custom compression quality.',
+      },
+      {
+        question: 'Is there a page limit for extraction?',
+        answer: 'No arbitrary limits. Because processing runs locally in browser memory, you can extract large documents without queueing.',
+      },
+    ],
+  },
+  'organize-pdf': {
+    primaryKeyword: 'reorder pdf pages online free',
+    seoTitle: 'Organize & Reorder PDF Pages – Rearrange PDF Visually | PDFEdit Studio',
+    metaDescription:
+      'Rearrange, delete, duplicate, and reorder PDF pages visually with interactive thumbnail cards. 100% private in-browser page organizer with zero server uploads.',
+    longTailKeywords: [
+      'reorder pdf pages online free',
+      'rearrange pdf pages in browser',
+      'drag and drop pdf page organizer',
+      'delete pages from pdf offline',
+      'client side pdf page sorter',
+    ],
+    highlights: [
+      'Visual Page Thumbnail Gallery with Page Numbering',
+      'Move Left, Move Right, Duplicate, and Delete Controls',
+      'One-Click Reverse Order & Reset Helpers',
+      'Lossless Page Copying via pdf-lib in Browser Memory',
+    ],
+    semanticSubheadings: [
+      {
+        heading: 'Visual Page Sorting and Manipulation',
+        body: 'Sort document sections, remove unwanted blank sheets, or duplicate key pages with instant client-side preview rendering.',
+      },
+    ],
+    howItWorks: [
+      { number: '01', title: 'Open PDF', description: 'Select your PDF document to render interactive page cards.' },
+      { number: '02', title: 'Reorganize Visually', description: 'Use arrows to reorder, delete unwanted pages, or clone sheets.' },
+      { number: '03', title: 'Export New PDF', description: 'Save your reorganized document instantly.' },
+    ],
+    faqs: [
+      {
+        question: 'Does reorganizing reduce document quality?',
+        answer: 'Not at all. Page streams, vector fonts, and high-resolution images are preserved losslessly using pdf-lib.',
+      },
+    ],
+  },
+  'unlock-pdf': {
+    primaryKeyword: 'pdf password remover online free',
+    seoTitle: 'PDF Password Remover – Unlock Protected PDF Files Free | PDFEdit Studio',
+    metaDescription:
+      'Decrypt and remove password restrictions from PDF documents client-side. Fast, private, and secure in your browser without uploading confidential files.',
+    longTailKeywords: [
+      'pdf password remover online free',
+      'unlock password protected pdf in browser',
+      'decrypt pdf client side zero upload',
+      'remove pdf security password permanently',
+      'private pdf unlocker',
+    ],
+    highlights: [
+      'Removes Permissions & Password Prompts Permanently',
+      '100% Client-Side Decryption via PDF.js & Web Crypto',
+      'Your Password Never Leaves Local Device Memory',
+      'Outputs Completely Clean, Standard Unlocked PDF',
+    ],
+    semanticSubheadings: [
+      {
+        heading: 'Client-Side Cryptographic Decryption',
+        body: 'Unlock confidential financial statements, bank records, and legal briefs by verifying credentials locally in memory and exporting a completely unrestricted document.',
+      },
+    ],
+    howItWorks: [
+      { number: '01', title: 'Upload Protected PDF', description: 'Drop your password-encrypted PDF file.' },
+      { number: '02', title: 'Enter Password', description: 'Provide the known password to decrypt the security keys.' },
+      { number: '03', title: 'Download Unlocked File', description: 'Save the unlocked PDF with zero password restrictions.' },
+    ],
+    faqs: [
+      {
+        question: 'Do you store or see my password?',
+        answer: 'Never. All decryption runs strictly in your local browser JavaScript runtime. Passwords are never sent across any network.',
+      },
+    ],
+  },
+  'rotate-pdf': {
+    primaryKeyword: 'rotate pdf pages online free',
+    seoTitle: 'Rotate PDF Pages – Rotate 90, 180, 270 Degrees Free | PDFEdit Studio',
+    metaDescription:
+      'Rotate individual pages or all pages of a PDF document by 90, 180, or 270 degrees. Lossless stream orientation directly in device memory with zero server uploads.',
+    longTailKeywords: [
+      'rotate pdf pages online free',
+      'turn pdf 90 degrees clockwise',
+      'rotate pdf permanently in browser',
+      'rotate specific pages in pdf free',
+      'lossless pdf page rotator',
+    ],
+    highlights: [
+      'Rotate Specific Pages or All Pages Simultaneously',
+      'Lossless Stream Orientation (Zero Image Recompression)',
+      'Live Interactive Preview with CSS Rotation Transform',
+      'Instant Download with Zero Upload Latency',
+    ],
+    semanticSubheadings: [
+      {
+        heading: 'Permanent Lossless Page Orientation',
+        body: 'Fix sideways or upside-down scanned sheets without degrading document quality or altering embedded vector drawings.',
+      },
+    ],
+    howItWorks: [
+      { number: '01', title: 'Open PDF', description: 'Select your PDF to inspect all page orientations.' },
+      { number: '02', title: 'Rotate Pages', description: 'Use individual page buttons or rotate all pages at once.' },
+      { number: '03', title: 'Save Output', description: 'Download your permanently rotated PDF document.' },
+    ],
+    faqs: [
+      {
+        question: 'Is the rotation permanent?',
+        answer: 'Yes. The rotation angle is written directly into each page dictionary so it displays correctly in any reader.',
+      },
+    ],
+  },
+  'watermark-pdf': {
+    primaryKeyword: 'watermark pdf online free',
+    seoTitle: 'PDF Watermarker – Add Custom Watermark to PDF Free | PDFEdit Studio',
+    metaDescription:
+      'Add custom text watermarks to PDF files with adjustable opacity, angle, and position across all pages. 100% private in-browser watermarking with zero server uploads.',
+    longTailKeywords: [
+      'watermark pdf online free',
+      'add confidential stamp to pdf',
+      'custom text watermark for pdf pages',
+      'in browser pdf watermarking tool',
+      'stamp pdf documents offline',
+    ],
+    highlights: [
+      'Custom Text Inputs & Quick Presets (CONFIDENTIAL, DRAFT)',
+      'Diagonal 45°, Center, Header, and Footer Placements',
+      'Precision Opacity & Font Size Controls with Color Presets',
+      'Live Interactive Page 1 Watermark Preview',
+    ],
+    semanticSubheadings: [
+      {
+        heading: 'Vector-Grade Watermark Overlay',
+        body: 'Stamp documents with transparent security watermarks before distribution to protect intellectual property and brand confidential drafts.',
+      },
+    ],
+    howItWorks: [
+      { number: '01', title: 'Upload Document', description: 'Choose your PDF to view live interactive watermark preview.' },
+      { number: '02', title: 'Customize Stamp', description: 'Type custom text, adjust opacity, angle, and color.' },
+      { number: '03', title: 'Download Watermarked PDF', description: 'Apply across all pages and save the stamped PDF.' },
+    ],
+    faqs: [
+      {
+        question: 'Will the watermark overwrite my existing text?',
+        answer: 'The watermark is rendered as a semi-transparent vector layer, allowing underlying text and tables to remain legible.',
+      },
+    ],
+  },
+  'edit-pdf-metadata': {
+    primaryKeyword: 'edit pdf metadata online free',
+    seoTitle: 'PDF Metadata Editor – Modify Title, Author & Properties | PDFEdit Studio',
+    metaDescription:
+      'Inspect, edit, or sanitize Title, Author, Subject, and Keywords PDF catalog metadata client-side. Clean tracking headers or customize document properties for free.',
+    longTailKeywords: [
+      'edit pdf metadata online free',
+      'change pdf title and author in browser',
+      'sanitize pdf metadata for privacy',
+      'remove hidden metadata from pdf',
+      'client side pdf properties editor',
+    ],
+    highlights: [
+      'Inspect & Edit Title, Author, Subject, and Keywords',
+      'One-Click Sanitize / Privacy Strip Function',
+      'Lossless Catalog Modification without Altering Page Content',
+      '100% In-Browser Execution via pdf-lib',
+    ],
+    semanticSubheadings: [
+      {
+        heading: 'Document Catalog Properties & Privacy Sanitization',
+        body: 'Update official document metadata for professional publishing, or strip hidden identifying software signatures before public sharing.',
+      },
+    ],
+    howItWorks: [
+      { number: '01', title: 'Upload PDF', description: 'Load your PDF to automatically inspect existing metadata.' },
+      { number: '02', title: 'Edit or Sanitize', description: 'Update fields or click Sanitize to strip tracking tags.' },
+      { number: '03', title: 'Save Updated File', description: 'Download the modified PDF with updated catalog headers.' },
+    ],
+    faqs: [
+      {
+        question: 'Why should I edit or strip PDF metadata?',
+        answer: 'Metadata can inadvertently reveal author names, company workstations, and editing history. Sanitizing protects your privacy.',
+      },
+    ],
+  },
+};
+
+const GEO_ALIASES: Record<string, string> = {
+  'pdf-to-image': 'pdf-to-images',
+  'pdf-page-splitter': 'split-pdf',
+  'pdf-password-remover': 'unlock-pdf',
+  'pdf-page-rotator': 'rotate-pdf',
+  'pdf-watermarker': 'watermark-pdf',
+  'pdf-page-reorder': 'organize-pdf',
+  'pdf-metadata-editor': 'edit-pdf-metadata',
 };
 
 /**
  * Helper to fetch GEO data for a specific tool slug
  */
 export function getToolGeoData(slug: string): GeoToolData {
+  const resolvedSlug = GEO_ALIASES[slug] || slug;
+
   return (
-    GEO_DATA_MAP[slug] || {
-      primaryKeyword: `${slug} online free`,
-      seoTitle: `${slug} – Free, 100% Private Online Tool | NovaKit`,
-      metaDescription: `Use ${slug} directly in your browser with zero server uploads and total privacy. Free, instant, and private on NovaKit.`,
-      longTailKeywords: [`${slug} online free`, `free ${slug} tool`, `private ${slug}`],
+    GEO_DATA_MAP[resolvedSlug] || {
+      primaryKeyword: `${resolvedSlug.replace(/-/g, ' ')} online free`,
+      seoTitle: `${resolvedSlug.replace(/-/g, ' ')} – Free, 100% Private Online Tool | PDFEdit Studio`,
+      metaDescription: `Use ${resolvedSlug.replace(/-/g, ' ')} directly in your browser with zero server uploads and total privacy. Free, instant, and private on PDFEdit Studio.`,
+      longTailKeywords: [`${resolvedSlug} online free`, `free ${resolvedSlug} tool`, `private ${resolvedSlug}`],
       highlights: [
         '100% Client-Side In-Memory Execution',
         'Zero Server Uploads & Total Privacy',
@@ -915,7 +1188,7 @@ export function generateSoftwareAppSchema(tool: ToolConfig, geoData: GeoToolData
     'privacy first utility',
     'in-browser tool',
     'no signup required',
-    'NovaKit Tier-1 Suite',
+    'PDFEdit Studio',
   ].join(', ');
 
   const keywordSnippet = (geoData.longTailKeywords || []).slice(0, 5).join('; ');
@@ -923,8 +1196,8 @@ export function generateSoftwareAppSchema(tool: ToolConfig, geoData: GeoToolData
   return {
     '@context': 'https://schema.org',
     '@type': ['SoftwareApplication', 'WebApplication'],
-    name: `${tool.name} – NovaKit Enterprise Utility`,
-    url: `https://novakit.app/tools/${tool.slug}`,
+    name: `${tool.name} – PDFEdit Studio Utility`,
+    url: `https://pdfedit.website/tools/${tool.slug}`,
     description: `${geoData.metaDescription || tool.description} Engineered with 100% client-side execution, zero server uploads, and total document privacy. Supports search intents: ${keywordSnippet}.`,
     keywords: allKeywords,
     applicationCategory:
@@ -963,9 +1236,9 @@ export function generateSoftwareAppSchema(tool: ToolConfig, geoData: GeoToolData
     ],
     creator: {
       '@type': 'Organization',
-      name: 'NovaKit',
-      url: 'https://novakit.app',
-      logo: 'https://novakit.app/icon.svg',
+      name: 'PDFEdit Studio',
+      url: 'https://pdfedit.website',
+      logo: 'https://pdfedit.website/icon.svg',
     },
   };
 }
@@ -977,7 +1250,7 @@ export function generateHowToSchema(tool: ToolConfig, steps: GeoStep[]) {
   return {
     '@context': 'https://schema.org',
     '@type': 'HowTo',
-    name: `How to use ${tool.name} on NovaKit`,
+    name: `How to use ${tool.name} on PDFEdit Studio`,
     description: `Step-by-step instructions for using ${tool.name} with zero server uploads in your browser.`,
     step: steps.map((step, index) => ({
       '@type': 'HowToStep',
@@ -987,3 +1260,4 @@ export function generateHowToSchema(tool: ToolConfig, steps: GeoStep[]) {
     })),
   };
 }
+
