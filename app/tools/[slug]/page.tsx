@@ -58,6 +58,10 @@ export async function generateMetadata({ params }: ToolPageProps): Promise<Metad
     geoData.metaDescription ||
     `${tool.description} Zero server uploads, completely free, and secure in your browser.`;
 
+  const canonicalUrl = slug === 'pdf-merger'
+      ? 'https://www.pdfedit.website/merge-pdf'
+      : `https://www.pdfedit.website/tools/${tool.slug}`;
+
   return {
     title,
     description,
@@ -74,10 +78,11 @@ export async function generateMetadata({ params }: ToolPageProps): Promise<Metad
       'PDFEdit Studio Suite',
       'client-side WebAssembly',
     ],
+    robots: slug === 'pdf-merger' ? { index: false, follow: true } : undefined,
     openGraph: {
       title: `${tool.name} | PDFEdit Studio Tools`,
       description,
-      url: `https://www.pdfedit.website/tools/${tool.slug}`,
+      url: canonicalUrl,
       siteName: 'PDFEdit Studio',
       type: 'website',
       images: [
@@ -95,7 +100,7 @@ export async function generateMetadata({ params }: ToolPageProps): Promise<Metad
       description,
     },
     alternates: {
-      canonical: `https://www.pdfedit.website/tools/${tool.slug}`,
+      canonical: canonicalUrl,
     },
   };
 }
@@ -109,9 +114,39 @@ export default async function ToolPage({ params }: ToolPageProps) {
   }
 
   const geoData = getToolGeoData(slug);
-  const softwareSchema = generateSoftwareAppSchema(tool, geoData);
+  const isMergePdf = slug === 'pdf-merger';
+  const softwareSchema = generateSoftwareAppSchema(
+    tool,
+    geoData,
+    isMergePdf
+      ? {
+          canonicalUrl: 'https://www.pdfedit.website/merge-pdf',
+          includeAggregateRating: false,
+        }
+      : undefined
+  );
   const faqSchema = generateFaqSchema(geoData.faqs, tool.name);
   const howToSchema = generateHowToSchema(tool, geoData.howItWorks);
+  const breadcrumbSchema = isMergePdf
+    ? {
+        '@context': 'https://schema.org',
+        '@type': 'BreadcrumbList',
+        itemListElement: [
+          {
+            '@type': 'ListItem',
+            position: 1,
+            name: 'Home',
+            item: 'https://www.pdfedit.website/',
+          },
+          {
+            '@type': 'ListItem',
+            position: 2,
+            name: 'Merge PDF',
+            item: 'https://www.pdfedit.website/merge-pdf',
+          },
+        ],
+      }
+    : null;
 
   return (
     <div className="max-w-4xl mx-auto space-y-8 py-3 sm:py-6">
@@ -130,6 +165,12 @@ export default async function ToolPage({ params }: ToolPageProps) {
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(howToSchema) }}
       />
+      {breadcrumbSchema && (
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }}
+        />
+      )}
       {/* Back button & tool header */}
       <div>
         <Link
@@ -207,6 +248,61 @@ export default async function ToolPage({ params }: ToolPageProps) {
         <PasswordGenerator />
       ) : (
         <div className="text-center py-12 text-slate-400">Tool not found</div>
+      )}
+
+      {isMergePdf && (
+        <section aria-labelledby="merge-pdf-guide" className="space-y-6 pt-2">
+          <div>
+            <span className="text-[11px] font-bold uppercase tracking-wider text-blue-600 dark:text-blue-400">
+              Merge PDF Guide
+            </span>
+            <h2 id="merge-pdf-guide" className="mt-1 text-xl font-black tracking-tight text-slate-950 dark:text-white sm:text-2xl">
+              How to merge PDF files
+            </h2>
+            <p className="mt-2 text-sm leading-6 text-slate-600 dark:text-slate-300">
+              Add two or more PDF files, arrange them in the order you want, then choose Merge PDFs. PDFEdit combines every page in that displayed order and keeps the work in your browser.
+            </p>
+          </div>
+
+          <div className="grid gap-4 md:grid-cols-2">
+            <article className="rounded-3xl border border-slate-200/80 bg-white p-5 shadow-sm dark:border-slate-800 dark:bg-slate-900">
+              <h3 className="text-base font-extrabold text-slate-900 dark:text-white">Why use PDFEdit Merge PDF?</h3>
+              <p className="mt-2 text-sm leading-6 text-slate-600 dark:text-slate-300">
+                Reorder contracts, reports, forms, and attachments before creating one clean document. The merger copies PDF pages directly instead of rasterizing them, so text and vector content remain usable.
+              </p>
+            </article>
+            <article className="rounded-3xl border border-slate-200/80 bg-white p-5 shadow-sm dark:border-slate-800 dark:bg-slate-900">
+              <h3 className="text-base font-extrabold text-slate-900 dark:text-white">Privacy and browser processing</h3>
+              <p className="mt-2 text-sm leading-6 text-slate-600 dark:text-slate-300">
+                The merge runs locally in browser memory using pdf-lib. This page does not send your selected PDF files to a merge server; files are released when you clear the workspace or close the page.
+              </p>
+            </article>
+          </div>
+
+          <div>
+            <h3 className="text-base font-extrabold text-slate-900 dark:text-white">Common use cases</h3>
+            <p className="mt-2 text-sm leading-6 text-slate-600 dark:text-slate-300">
+              Combine a signed cover letter with a resume, assemble an invoice packet, join project documents for review, or prepare one submission file from separate PDF attachments.
+            </p>
+          </div>
+
+          <nav aria-label="Related PDF tools" className="rounded-3xl border border-slate-200/80 bg-slate-50 p-5 dark:border-slate-800 dark:bg-slate-950/40">
+            <h3 className="text-base font-extrabold text-slate-900 dark:text-white">Related PDF tools</h3>
+            <div className="mt-3 flex flex-wrap gap-2">
+              {[
+                ['/split-pdf', 'Split PDF'],
+                ['/compress-pdf', 'Compress PDF'],
+                ['/organize-pdf', 'Organize PDF'],
+                ['/rotate-pdf', 'Rotate PDF'],
+                ['/Studio', 'PDF Studio'],
+              ].map(([href, label]) => (
+                <Link key={href} href={href} className="rounded-xl border border-slate-200 bg-white px-3 py-2 text-xs font-bold text-blue-700 transition hover:border-blue-300 hover:bg-blue-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-600 dark:border-slate-700 dark:bg-slate-900 dark:text-blue-300 dark:hover:bg-slate-800">
+                  {label}
+                </Link>
+              ))}
+            </div>
+          </nav>
+        </section>
       )}
 
       {/* Tool Architecture & Security Guarantee Cards */}

@@ -3,7 +3,6 @@ import type { NextConfig } from "next";
 const nextConfig: NextConfig = {
   async rewrites() {
     return [
-      { source: '/merge-pdf', destination: '/tools/pdf-merger' },
       { source: '/compress-pdf', destination: '/tools/compress-pdf' },
       { source: '/edit-pdf', destination: '/tools/edit-pdf-metadata' },
       { source: '/split-pdf', destination: '/tools/split-pdf' },

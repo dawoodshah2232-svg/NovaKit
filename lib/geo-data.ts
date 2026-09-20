@@ -1175,7 +1175,11 @@ export function generateFaqSchema(faqs: GeoFaqItem[], toolName: string) {
 /**
  * Generate exhaustive Schema.org SoftwareApplication structured JSON-LD object with aggressive SEO/GEO keywords
  */
-export function generateSoftwareAppSchema(tool: ToolConfig, geoData: GeoToolData) {
+export function generateSoftwareAppSchema(
+  tool: ToolConfig,
+  geoData: GeoToolData,
+  options?: { canonicalUrl?: string; includeAggregateRating?: boolean }
+) {
   const allKeywords = [
     tool.name,
     geoData.primaryKeyword,
@@ -1197,7 +1201,7 @@ export function generateSoftwareAppSchema(tool: ToolConfig, geoData: GeoToolData
     '@context': 'https://schema.org',
     '@type': ['SoftwareApplication', 'WebApplication'],
     name: `${tool.name} – PDFEdit Studio Utility`,
-    url: `https://www.pdfedit.website/tools/${tool.slug}`,
+    url: options?.canonicalUrl || `https://www.pdfedit.website/tools/${tool.slug}`,
     description: `${geoData.metaDescription || tool.description} Engineered with 100% client-side execution, zero server uploads, and total document privacy. Supports search intents: ${keywordSnippet}.`,
     keywords: allKeywords,
     applicationCategory:
@@ -1219,13 +1223,17 @@ export function generateSoftwareAppSchema(tool: ToolConfig, geoData: GeoToolData
       priceCurrency: 'USD',
       availability: 'https://schema.org/InStock',
     },
-    aggregateRating: {
-      '@type': 'AggregateRating',
-      ratingValue: '4.95',
-      reviewCount: '2840',
-      bestRating: '5',
-      worstRating: '1',
-    },
+    ...(options?.includeAggregateRating === false
+      ? {}
+      : {
+          aggregateRating: {
+            '@type': 'AggregateRating',
+            ratingValue: '4.95',
+            reviewCount: '2840',
+            bestRating: '5',
+            worstRating: '1',
+          },
+        }),
     featureList: [
       '100% Client-Side In-Memory Processing',
       'Zero Server Uploads & Total Document Privacy',

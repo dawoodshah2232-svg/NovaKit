@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useCallback, useId } from 'react';
+import React, { useState, useCallback, useEffect, useId } from 'react';
 import { useDropzone } from 'react-dropzone';
 import { PDFDocument } from 'pdf-lib';
 import { trackToolExecution } from '@/lib/analytics';
@@ -45,6 +45,15 @@ export interface PdfFileItem {
   pageCount?: number;
   error?: string;
 }
+
+interface MergeResult {
+  url: string;
+  name: string;
+  size: number;
+  pageCount: number;
+}
+
+const MAX_FILE_SIZE = 100 * 1024 * 1024;
 
 // Utility to format byte sizes
 function formatBytes(bytes: number, decimals = 1): string {
@@ -190,6 +199,8 @@ export function PdfMerger() {
   const [isMerging, setIsMerging] = useState<boolean>(false);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [successMessage, setSuccessMessage] = useState<string | null>(null);
+  const [mergeResult, setMergeResult] = useState<MergeResult | null>(null);
+  const [mergeProgress, setMergeProgress] = useState<string | null>(null);
   const dndContextId = useId();
 
   // Configure drag sensors
@@ -205,13 +216,18 @@ export function PdfMerger() {
   );
 
   // Read page count asynchronously in-browser using pdf-lib
-  const inspectPdf = useCallback(async (file: File): Promise<number | undefined> => {
+  const inspectPdf = useCallback(async (file: File): Promise<{ pageCount?: number; error?: string }> => {
     try {
       const buffer = await file.arrayBuffer();
-      const pdf = await PDFDocument.load(buffer, { ignoreEncryption: true });
-      return pdf.getPageCount();
-    } catch {
-      return undefined;
+      const pdf = await PDFDocument.load(buffer);
+      return { pageCount: pdf.getPageCount() };
+    } catch (error) {
+      const message = error instanceof Error ? error.message.toLowerCase() : '';
+      return {
+        error: message.includes('encrypt') || message.includes('password')
+          ? 'This PDF is password-protected or encrypted.'
+          : 'This PDF appears to be corrupted or unreadable.',
+      };
     }
   }, []);
 
@@ -221,19 +237,49 @@ export function PdfMerger() {
       setErrorMessage(null);
       setSuccessMessage(null);
 
+      const invalidFiles = files.filter(
+        (file) => file.type !== 'application/pdf' && !file.name.toLowerCase().endsWith('.pdf')
+      );
+      const oversizedFiles = files.filter((file) => file.size > MAX_FILE_SIZE);
+      const emptyFiles = files.filter((file) => file.size === 0);
       const pdfCandidates = files.filter(
         (file) =>
-          file.type === 'application/pdf' ||
-          file.name.toLowerCase().endsWith('.pdf')
+          (file.type === 'application/pdf' || file.name.toLowerCase().endsWith('.pdf')) &&
+          file.size > 0 &&
+          file.size <= MAX_FILE_SIZE
       );
 
-      if (pdfCandidates.length === 0) {
-        setErrorMessage('Please select valid PDF files.');
+      const existingKeys = new Set(
+        pdfFiles.map((item) => `${item.name}:${item.size}:${item.file.lastModified}`)
+      );
+      const batchKeys = new Set<string>();
+      const duplicateFiles = pdfCandidates.filter((file) => {
+        const key = `${file.name}:${file.size}:${file.lastModified}`;
+        if (existingKeys.has(key) || batchKeys.has(key)) return true;
+        batchKeys.add(key);
+        return false;
+      });
+      const uniqueCandidates = pdfCandidates.filter((file) => {
+        const key = `${file.name}:${file.size}:${file.lastModified}`;
+        return !existingKeys.has(key) && !duplicateFiles.includes(file);
+      });
+
+      if (invalidFiles.length || oversizedFiles.length || emptyFiles.length || duplicateFiles.length) {
+        const problems = [
+          invalidFiles.length ? 'Only PDF files are supported.' : '',
+          emptyFiles.length ? 'Zero-byte files cannot be opened.' : '',
+          oversizedFiles.length ? 'Files larger than 100 MB are not supported.' : '',
+          duplicateFiles.length ? 'Duplicate files were skipped.' : '',
+        ].filter(Boolean);
+        setErrorMessage(problems.join(' '));
+      }
+
+      if (uniqueCandidates.length === 0) {
         return;
       }
 
       // Create new initial items
-      const newItems: PdfFileItem[] = pdfCandidates.map((file) => ({
+      const newItems: PdfFileItem[] = uniqueCandidates.map((file) => ({
         id: `${file.name}-${file.lastModified}-${Math.random().toString(36).substring(2, 9)}`,
         file,
         name: file.name,
@@ -246,9 +292,13 @@ export function PdfMerger() {
 
       // Inspect page counts asynchronously without blocking UI
       for (const item of newItems) {
-        inspectPdf(item.file).then((pageCount) => {
+        inspectPdf(item.file).then((inspection) => {
           setPdfFiles((prev) =>
-            prev.map((f) => (f.id === item.id ? { ...f, pageCount } : f))
+            prev.map((f) =>
+              f.id === item.id
+                ? { ...f, pageCount: inspection.pageCount, error: inspection.error }
+                : f
+            )
           );
         });
       }
@@ -258,9 +308,12 @@ export function PdfMerger() {
 
   // React-dropzone config
   const onDrop = useCallback(
-    (acceptedFiles: File[]) => {
-      if (acceptedFiles.length > 0) {
-        handleAddFiles(acceptedFiles);
+    (acceptedFiles: File[], fileRejections: { file: File }[]) => {
+      if (acceptedFiles.length > 0 || fileRejections.length > 0) {
+        handleAddFiles([
+          ...acceptedFiles,
+          ...fileRejections.map((rejection) => rejection.file),
+        ]);
       }
     },
     [handleAddFiles]
@@ -274,6 +327,12 @@ export function PdfMerger() {
     multiple: true,
     noClick: pdfFiles.length > 0, // Click inside workspace triggers custom add button instead
   });
+
+  useEffect(() => {
+    return () => {
+      if (mergeResult) URL.revokeObjectURL(mergeResult.url);
+    };
+  }, [mergeResult]);
 
   // Handle DragEnd from @dnd-kit
   const handleDragEnd = (event: DragEndEvent) => {
@@ -308,9 +367,12 @@ export function PdfMerger() {
 
   // Clear all files
   const handleReset = () => {
+    if (mergeResult) URL.revokeObjectURL(mergeResult.url);
     setPdfFiles([]);
     setErrorMessage(null);
     setSuccessMessage(null);
+    setMergeResult(null);
+    setMergeProgress(null);
   };
 
   // Total summary metrics
@@ -319,14 +381,21 @@ export function PdfMerger() {
 
   // Client-side PDF Merge execution using pdf-lib
   const handleMergeAndDownload = async () => {
-    if (pdfFiles.length < 2) {
-      setErrorMessage('Please add at least 2 PDF files to merge.');
+    if (pdfFiles.length < 1) {
+      setErrorMessage('Add at least one PDF file to create a merged document.');
+      return;
+    }
+
+    const invalidItem = pdfFiles.find((item) => item.error || item.pageCount === undefined);
+    if (invalidItem) {
+      setErrorMessage(`Remove or replace "${invalidItem.name}" before merging.`);
       return;
     }
 
     setIsMerging(true);
     setErrorMessage(null);
     setSuccessMessage(null);
+    setMergeResult(null);
 
     try {
       // 1. Create a brand new empty PDF document
@@ -335,11 +404,12 @@ export function PdfMerger() {
       // 2. Sequentially load and copy pages in the exact user-sorted order
       for (let i = 0; i < pdfFiles.length; i++) {
         const item = pdfFiles[i];
+        setMergeProgress(`Reading ${i + 1} of ${pdfFiles.length}: ${item.name}`);
         const arrayBuffer = await item.file.arrayBuffer();
 
         let srcPdf: PDFDocument;
         try {
-          srcPdf = await PDFDocument.load(arrayBuffer, { ignoreEncryption: true });
+          srcPdf = await PDFDocument.load(arrayBuffer);
         } catch (loadErr) {
           console.error(`Error loading file: ${item.name}`, loadErr);
           throw new Error(
@@ -357,28 +427,17 @@ export function PdfMerger() {
       // 3. Serialize into Uint8Array bytes
       const mergedPdfBytes = await mergedPdf.save();
 
-      // 4. Create Blob and trigger instant browser download
+      // 4. Keep the result available for an explicit download.
       const blob = new Blob([mergedPdfBytes as unknown as BlobPart], { type: 'application/pdf' });
       const downloadUrl = URL.createObjectURL(blob);
-
-      const timestamp = new Date().toISOString().slice(0, 10);
-      const downloadName = `pdfedit-merged-${timestamp}.pdf`;
-
-      const downloadLink = document.createElement('a');
-      downloadLink.href = downloadUrl;
-      downloadLink.download = downloadName;
-      document.body.appendChild(downloadLink);
-      downloadLink.click();
-      document.body.removeChild(downloadLink);
-
-      // Clean up object URL after a brief delay
-      setTimeout(() => {
-        URL.revokeObjectURL(downloadUrl);
-      }, 5000);
-
-      setSuccessMessage(
-        `Successfully merged ${pdfFiles.length} files (${mergedPdf.getPageCount()} pages) into ${downloadName}.`
-      );
+      const downloadName = 'merged-pdf.pdf';
+      setMergeResult({
+        url: downloadUrl,
+        name: downloadName,
+        size: blob.size,
+        pageCount: mergedPdf.getPageCount(),
+      });
+      setSuccessMessage(`Successfully merged ${pdfFiles.length} PDF${pdfFiles.length === 1 ? '' : 's'}.`);
       trackToolExecution('pdf-merger');
     } catch (err) {
       console.error('PDF Merge Error:', err);
@@ -389,6 +448,7 @@ export function PdfMerger() {
       }
     } finally {
       setIsMerging(false);
+      setMergeProgress(null);
     }
   };
 
@@ -409,7 +469,7 @@ export function PdfMerger() {
 
       {/* Error alert */}
       {errorMessage && (
-        <div className="flex items-center gap-2.5 p-3.5 rounded-2xl bg-red-50 dark:bg-red-950/50 border border-red-200 dark:border-red-800 text-xs font-medium text-red-700 dark:text-red-300">
+        <div role="alert" className="flex items-center gap-2.5 p-3.5 rounded-2xl bg-red-50 dark:bg-red-950/50 border border-red-200 dark:border-red-800 text-xs font-medium text-red-700 dark:text-red-300">
           <AlertCircle className="w-4 h-4 text-red-500 shrink-0" />
           <span>{errorMessage}</span>
         </div>
@@ -417,9 +477,34 @@ export function PdfMerger() {
 
       {/* Success alert */}
       {successMessage && (
-        <div className="flex items-center gap-2.5 p-3.5 rounded-2xl bg-emerald-50 dark:bg-emerald-950/50 border border-emerald-200 dark:border-emerald-800 text-xs font-medium text-emerald-800 dark:text-emerald-300">
+        <div role="status" className="space-y-3 p-3.5 rounded-2xl bg-emerald-50 dark:bg-emerald-950/50 border border-emerald-200 dark:border-emerald-800 text-xs font-medium text-emerald-800 dark:text-emerald-300">
+          <div className="flex items-center gap-2.5">
           <FileCheck2 className="w-4 h-4 text-emerald-600 dark:text-emerald-400 shrink-0" />
-          <span>{successMessage}</span>
+            <span>{successMessage}</span>
+          </div>
+          {mergeResult && (
+            <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between sm:gap-4">
+              <span className="text-slate-600 dark:text-slate-300">
+                {mergeResult.pageCount} {mergeResult.pageCount === 1 ? 'page' : 'pages'} • {formatBytes(mergeResult.size)}
+              </span>
+              <a
+                href={mergeResult.url}
+                download={mergeResult.name}
+                className="inline-flex min-h-11 w-full items-center justify-center gap-2 rounded-xl bg-emerald-600 px-4 py-2.5 text-sm font-bold text-white transition hover:bg-emerald-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-600 focus-visible:ring-offset-2 sm:w-auto"
+              >
+                <Download className="h-4 w-4" />
+                Download Merged PDF
+              </a>
+              <button
+                type="button"
+                onClick={handleReset}
+                className="inline-flex min-h-11 w-full items-center justify-center gap-2 rounded-xl border border-emerald-300 px-4 py-2.5 text-sm font-bold text-emerald-800 transition hover:bg-emerald-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-600 focus-visible:ring-offset-2 dark:border-emerald-700 dark:text-emerald-200 dark:hover:bg-emerald-950/60 sm:w-auto"
+              >
+                <RotateCcw className="h-4 w-4" />
+                Start Again
+              </button>
+            </div>
+          )}
         </div>
       )}
 
@@ -473,7 +558,9 @@ export function PdfMerger() {
               <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
                 Drag rows to adjust order • Total:{' '}
                 <strong className="text-slate-700 dark:text-slate-200">
-                  {totalPages > 0 ? `${totalPages} pages` : 'Calculating...'}
+                  {pdfFiles.some((file) => !file.pageCount && !file.error)
+                    ? 'Calculating...'
+                    : `${totalPages} ${totalPages === 1 ? 'page' : 'pages'}`}
                 </strong>{' '}
                 ({formatBytes(totalBytes)})
               </p>
@@ -536,7 +623,7 @@ export function PdfMerger() {
           {pdfFiles.length < 2 && (
             <div className="p-3 rounded-xl bg-amber-50 dark:bg-amber-950/40 border border-amber-200 dark:border-amber-800/60 text-amber-800 dark:text-amber-300 text-xs flex items-center gap-2">
               <AlertCircle className="w-4 h-4 shrink-0 text-amber-600 dark:text-amber-400" />
-              <span>Please add at least one more PDF to merge.</span>
+              <span>Add another PDF to combine multiple documents, or create a PDF copy from this file.</span>
             </div>
           )}
 
@@ -563,15 +650,15 @@ export function PdfMerger() {
                 {isMerging ? (
                   <>
                     <div className="w-5 h-5 sm:w-6 sm:h-6 border-3 border-white border-t-transparent rounded-full animate-spin" />
-                    <span>Merging {pdfFiles.length} Documents in Browser...</span>
+                    <span>{mergeProgress || 'Merging PDFs in your browser...'}</span>
                   </>
                 ) : (
                   <>
                     <Download className="w-5 h-5 sm:w-6 sm:h-6" />
                     <span>
                       {pdfFiles.length >= 2
-                        ? `Merge & Download (${pdfFiles.length} Files)`
-                        : 'Add 2+ Files to Merge'}
+                        ? `Merge PDFs (${pdfFiles.length} files)`
+                        : 'Create PDF Copy'}
                     </span>
                   </>
                 )}
