@@ -29,6 +29,31 @@ import { WatermarkPdf } from '@/components/tools/watermark-pdf';
 import { UnlockPdf } from '@/components/tools/unlock-pdf';
 import { EditPdfMetadata } from '@/components/tools/edit-pdf-metadata';
 
+const canonicalPathBySlug: Record<string, string> = {
+  'image-to-pdf': '/jpg-to-pdf',
+  'pdf-to-images': '/pdf-to-images',
+  'organize-pdf': '/organize-pdf',
+  'unlock-pdf': '/unlock-pdf',
+  'rotate-pdf': '/rotate-pdf',
+  'watermark-pdf': '/watermark-pdf',
+  'split-pdf': '/split-pdf',
+  'pdf-merger': '/merge-pdf',
+  'compress-pdf': '/compress-pdf',
+};
+
+const relatedToolsBySlug: Record<string, [string, string][]> = {
+  'pdf-to-images': [['/jpg-to-pdf', 'JPG to PDF'], ['/split-pdf', 'Split PDF'], ['/compress-pdf', 'Compress PDF']],
+  'image-to-pdf': [['/pdf-to-images', 'PDF to Images'], ['/merge-pdf', 'Merge PDF'], ['/organize-pdf', 'Organize PDF']],
+  'organize-pdf': [['/merge-pdf', 'Merge PDF'], ['/split-pdf', 'Split PDF'], ['/rotate-pdf', 'Rotate PDF']],
+  'unlock-pdf': [['/merge-pdf', 'Merge PDF'], ['/watermark-pdf', 'Watermark PDF'], ['/compress-pdf', 'Compress PDF']],
+  'rotate-pdf': [['/organize-pdf', 'Organize PDF'], ['/watermark-pdf', 'Watermark PDF'], ['/merge-pdf', 'Merge PDF']],
+  'watermark-pdf': [['/organize-pdf', 'Organize PDF'], ['/compress-pdf', 'Compress PDF'], ['/Studio', 'PDF Studio']],
+  'split-pdf': [['/merge-pdf', 'Merge PDF'], ['/organize-pdf', 'Organize PDF'], ['/compress-pdf', 'Compress PDF']],
+  'pdf-merger': [['/split-pdf', 'Split PDF'], ['/compress-pdf', 'Compress PDF'], ['/organize-pdf', 'Organize PDF']],
+  'compress-pdf': [['/merge-pdf', 'Merge PDF'], ['/split-pdf', 'Split PDF'], ['/pdf-to-images', 'PDF to Images']],
+  'edit-pdf-metadata': [['/merge-pdf', 'Merge PDF'], ['/compress-pdf', 'Compress PDF'], ['/Studio', 'PDF Studio']],
+};
+
 interface ToolPageProps {
   params: Promise<{
     slug: string;
@@ -58,9 +83,8 @@ export async function generateMetadata({ params }: ToolPageProps): Promise<Metad
     geoData.metaDescription ||
     `${tool.description} Zero server uploads, completely free, and secure in your browser.`;
 
-  const canonicalUrl = slug === 'pdf-merger'
-      ? 'https://www.pdfedit.website/merge-pdf'
-      : `https://www.pdfedit.website/tools/${tool.slug}`;
+  const canonicalPath = canonicalPathBySlug[slug] || `/tools/${tool.slug}`;
+  const canonicalUrl = `https://www.pdfedit.website${canonicalPath}`;
 
   return {
     title,
@@ -78,7 +102,7 @@ export async function generateMetadata({ params }: ToolPageProps): Promise<Metad
       'PDFEdit Studio Suite',
       'client-side WebAssembly',
     ],
-    robots: slug === 'pdf-merger' ? { index: false, follow: true } : undefined,
+    robots: canonicalPath === `/tools/${tool.slug}` ? undefined : { index: false, follow: true },
     openGraph: {
       title: `${tool.name} | PDFEdit Studio Tools`,
       description,
@@ -114,21 +138,21 @@ export default async function ToolPage({ params }: ToolPageProps) {
   }
 
   const geoData = getToolGeoData(slug);
+  const canonicalPath = canonicalPathBySlug[slug] || `/tools/${tool.slug}`;
   const isMergePdf = slug === 'pdf-merger';
   const softwareSchema = generateSoftwareAppSchema(
     tool,
     geoData,
     isMergePdf
       ? {
-          canonicalUrl: 'https://www.pdfedit.website/merge-pdf',
+          canonicalUrl: `https://www.pdfedit.website${canonicalPath}`,
           includeAggregateRating: false,
         }
       : undefined
   );
   const faqSchema = generateFaqSchema(geoData.faqs, tool.name);
   const howToSchema = generateHowToSchema(tool, geoData.howItWorks);
-  const breadcrumbSchema = isMergePdf
-    ? {
+  const breadcrumbSchema = {
         '@context': 'https://schema.org',
         '@type': 'BreadcrumbList',
         itemListElement: [
@@ -141,12 +165,11 @@ export default async function ToolPage({ params }: ToolPageProps) {
           {
             '@type': 'ListItem',
             position: 2,
-            name: 'Merge PDF',
-            item: 'https://www.pdfedit.website/merge-pdf',
+            name: tool.name,
+            item: `https://www.pdfedit.website${canonicalPath}`,
           },
         ],
-      }
-    : null;
+      };
 
   return (
     <div className="max-w-4xl mx-auto space-y-8 py-3 sm:py-6">
@@ -165,12 +188,10 @@ export default async function ToolPage({ params }: ToolPageProps) {
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(howToSchema) }}
       />
-      {breadcrumbSchema && (
-        <script
-          type="application/ld+json"
-          dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }}
-        />
-      )}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }}
+      />
       {/* Back button & tool header */}
       <div>
         <Link
@@ -208,6 +229,12 @@ export default async function ToolPage({ params }: ToolPageProps) {
           </div>
         </div>
       </div>
+
+      <section aria-labelledby="tool-answer" className="rounded-3xl border border-blue-200/80 bg-blue-50/60 p-5 dark:border-blue-900/60 dark:bg-blue-950/20">
+        <h2 id="tool-answer" className="text-base font-black text-slate-950 dark:text-white">What this tool does</h2>
+        <p className="mt-2 text-sm leading-6 text-slate-700 dark:text-slate-300">{tool.description}</p>
+        <p className="mt-2 text-xs font-semibold text-blue-700 dark:text-blue-300">{tool.processingNote}</p>
+      </section>
 
       {/* Render Tool Engine */}
       {slug === 'image-to-pdf' ? (
@@ -294,7 +321,7 @@ export default async function ToolPage({ params }: ToolPageProps) {
                 ['/compress-pdf', 'Compress PDF'],
                 ['/organize-pdf', 'Organize PDF'],
                 ['/rotate-pdf', 'Rotate PDF'],
-                ['/Studio', 'PDF Studio'],
+                ['/studio', 'PDF Studio'],
               ].map(([href, label]) => (
                 <Link key={href} href={href} className="rounded-xl border border-slate-200 bg-white px-3 py-2 text-xs font-bold text-blue-700 transition hover:border-blue-300 hover:bg-blue-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-600 dark:border-slate-700 dark:bg-slate-900 dark:text-blue-300 dark:hover:bg-slate-800">
                   {label}
@@ -303,6 +330,19 @@ export default async function ToolPage({ params }: ToolPageProps) {
             </div>
           </nav>
         </section>
+      )}
+
+      {relatedToolsBySlug[slug] && !isMergePdf && (
+        <nav aria-label="Related PDF tools" className="rounded-3xl border border-slate-200/80 bg-slate-50 p-5 dark:border-slate-800 dark:bg-slate-950/40">
+          <h2 className="text-base font-black text-slate-900 dark:text-white">Related PDF tools</h2>
+          <div className="mt-3 flex flex-wrap gap-2">
+            {relatedToolsBySlug[slug].map(([href, label]) => (
+              <Link key={href} href={href} className="rounded-xl border border-slate-200 bg-white px-3 py-2 text-xs font-bold text-blue-700 transition hover:border-blue-300 hover:bg-blue-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-600 dark:border-slate-700 dark:bg-slate-900 dark:text-blue-300 dark:hover:bg-slate-800">
+                {label}
+              </Link>
+            ))}
+          </div>
+        </nav>
       )}
 
       {/* Tool Architecture & Security Guarantee Cards */}

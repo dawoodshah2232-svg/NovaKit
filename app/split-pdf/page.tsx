@@ -83,6 +83,11 @@ export default function SplitPdfPage() {
             Extract individual presentation slides or specific pages from large documents securely in your browser.
           </p>
 
+          <section className="mb-8 rounded-2xl border border-blue-100 bg-blue-50 p-5">
+            <h2 className="text-lg font-bold">What this tool does</h2>
+            <p className="mt-2 text-sm leading-6 text-slate-700">Upload a PDF, choose one page number, and download that page as a new PDF. Processing happens locally in your browser.</p>
+          </section>
+
           <div className="border-2 border-dashed border-slate-300 rounded-2xl p-8 text-center bg-white shadow-sm mb-6">
             <input
               type="file"
@@ -135,6 +140,14 @@ export default function SplitPdfPage() {
               {statusText}
             </div>
           )}
+
+          <section className="mt-10 space-y-6 text-slate-700">
+            <div><h2 className="text-xl font-bold text-slate-900">How to use Split PDF</h2><p className="mt-2 text-sm leading-6">Select a PDF, enter the page number to extract, then choose Extract &amp; Download Page. The output contains the selected page only.</p></div>
+            <div><h2 className="text-xl font-bold text-slate-900">Why use this tool?</h2><p className="mt-2 text-sm leading-6">It is useful when you need one page from a presentation, report, application, or scanned document without editing the original file.</p></div>
+            <div><h2 className="text-xl font-bold text-slate-900">Privacy and limitations</h2><p className="mt-2 text-sm leading-6">The PDF stays in browser memory. This version extracts one page at a time and requires a readable, non-password-protected PDF.</p></div>
+            <div><h2 className="text-xl font-bold text-slate-900">Frequently asked questions</h2><div className="mt-3 space-y-3 text-sm"><p><strong>Does it upload my PDF?</strong> No. The file is processed on your device.</p><p><strong>Can I extract several pages?</strong> Use the tool once per page; multi-range extraction is not currently provided here.</p><p><strong>What file type is downloaded?</strong> The selected page is saved as a PDF.</p><p><strong>Can I use a protected PDF?</strong> Password-protected or unreadable files may not open in the browser.</p></div></div>
+            <nav aria-label="Related PDF tools"><h2 className="text-xl font-bold text-slate-900">Related PDF tools</h2><div className="mt-3 flex flex-wrap gap-2"><Link href="/organize-pdf" className="rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm font-semibold text-blue-700">Organize PDF</Link><Link href="/merge-pdf" className="rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm font-semibold text-blue-700">Merge PDF</Link><Link href="/compress-pdf" className="rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm font-semibold text-blue-700">Compress PDF</Link></div></nav>
+          </section>
         </main>
       </div>
 

@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { PDFDocument } from "pdf-lib";
+import Link from "next/link";
 
 export default function BatchPdfPage() {
   const [files, setFiles] = useState<File[]>([]);
@@ -53,6 +54,11 @@ export default function BatchPdfPage() {
         Upload multiple PDF documents to process them simultaneously right inside your browser with zero server uploads.
       </p>
 
+      <section className="mb-8 rounded-xl border border-blue-100 bg-blue-50 p-5">
+        <h2 className="text-lg font-bold text-gray-900">What this tool does</h2>
+        <p className="mt-2 text-sm leading-6 text-gray-700">Select multiple PDF files and combine them into one downloaded PDF. Files are read and merged locally in your browser.</p>
+      </section>
+
       <div className="border-2 border-dashed border-gray-300 rounded-xl p-8 text-center bg-white shadow-sm mb-6">
         <input
           type="file"
@@ -102,6 +108,14 @@ export default function BatchPdfPage() {
           {statusText}
         </div>
       )}
+
+      <section className="mt-10 space-y-6 text-gray-700">
+        <div><h2 className="text-xl font-bold text-gray-900">How to use Batch PDF</h2><p className="mt-2 text-sm leading-6">Choose multiple PDF files, confirm the selected list, and select Merge All into One PDF. The files are processed in their displayed selection order.</p></div>
+        <div><h2 className="text-xl font-bold text-gray-900">Why use this tool?</h2><p className="mt-2 text-sm leading-6">Batch processing is useful for combining document packets, reports, invoices, or other PDF groups in one browser session.</p></div>
+        <div><h2 className="text-xl font-bold text-gray-900">Privacy and limitations</h2><p className="mt-2 text-sm leading-6">Selected files are not uploaded by this page. The browser must have enough memory for the source files and this simple batch page does not provide visual page reordering.</p></div>
+        <div><h2 className="text-xl font-bold text-gray-900">Frequently asked questions</h2><div className="mt-3 space-y-3 text-sm"><p><strong>Are files sent to a server?</strong> No. The merge runs in browser memory.</p><p><strong>How many files can I select?</strong> The practical limit depends on available device memory.</p><p><strong>Are pages rasterized?</strong> PDF pages are copied with pdf-lib rather than converted to images.</p><p><strong>Can I reorder files?</strong> This batch page uses selection order; use Merge PDF for drag-and-drop ordering.</p></div></div>
+        <nav aria-label="Related PDF tools"><h2 className="text-xl font-bold text-gray-900">Related PDF tools</h2><div className="mt-3 flex flex-wrap gap-2"><Link href="/merge-pdf" className="rounded-lg border border-gray-200 bg-white px-3 py-2 text-sm font-semibold text-blue-700">Merge PDF</Link><Link href="/compress-pdf" className="rounded-lg border border-gray-200 bg-white px-3 py-2 text-sm font-semibold text-blue-700">Compress PDF</Link><Link href="/split-pdf" className="rounded-lg border border-gray-200 bg-white px-3 py-2 text-sm font-semibold text-blue-700">Split PDF</Link></div></nav>
+      </section>
     </main>
   );
 }

@@ -1226,13 +1226,6 @@ export function generateSoftwareAppSchema(
     ...(options?.includeAggregateRating === false
       ? {}
       : {
-          aggregateRating: {
-            '@type': 'AggregateRating',
-            ratingValue: '4.95',
-            reviewCount: '2840',
-            bestRating: '5',
-            worstRating: '1',
-          },
         }),
     featureList: [
       '100% Client-Side In-Memory Processing',
