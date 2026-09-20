@@ -4,115 +4,108 @@ import { Logo } from './logo';
 
 export function Footer() {
   return (
-    <footer className="border-t border-slate-200/80 dark:border-slate-800/80 bg-slate-50/50 dark:bg-slate-950/50 mt-auto transition-colors duration-200">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 pb-28 md:pb-10">
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-8 mb-8">
-          {/* Brand & mission */}
-          <div className="md:col-span-2 space-y-3">
+    <footer className="mt-auto border-t border-slate-200 bg-white dark:border-slate-800 dark:bg-slate-950">
+      <div className="mx-auto max-w-7xl px-4 py-10 pb-28 sm:px-6 md:pb-10 lg:px-8">
+        <div className="grid grid-cols-1 gap-8 md:grid-cols-4">
+          <div className="space-y-4 md:col-span-2">
             <Logo size="sm" badgeText="100% Client-Side" />
-            <p className="text-sm text-slate-600 dark:text-slate-400 max-w-sm leading-relaxed">
-              Professional, browser-native PDF and document utility studio. All operations occur strictly within your device memory. 
-              Your confidential documents, contracts, and images never touch any external server or database.
+
+            <p className="max-w-md text-sm leading-relaxed text-slate-600 dark:text-slate-400">
+              Free browser-based PDF tools designed for speed, privacy, and everyday document work.
+              Your files are processed directly on your device whenever supported.
             </p>
-            <div className="flex flex-wrap items-center gap-4 text-xs text-slate-500 dark:text-slate-400 pt-1">
-              <span className="flex items-center gap-1.5 font-medium">
-                <ShieldCheck className="w-4 h-4 text-emerald-500" />
-                Zero Server Uploads
+
+            <div className="flex flex-wrap gap-4 text-xs font-medium text-slate-500 dark:text-slate-400">
+              <span className="flex items-center gap-1.5">
+                <ShieldCheck className="h-4 w-4 text-emerald-500" />
+                Private Processing
               </span>
-              <span className="flex items-center gap-1.5 font-medium">
-                <Zap className="w-4 h-4 text-amber-500" />
-                Instant Local Processing
+
+              <span className="flex items-center gap-1.5">
+                <Zap className="h-4 w-4 text-amber-500" />
+                Fast Tools
               </span>
-              <span className="flex items-center gap-1.5 font-medium">
-                <Lock className="w-4 h-4 text-rose-500" />
-                Device Memory Only
+
+              <span className="flex items-center gap-1.5">
+                <Lock className="h-4 w-4 text-blue-500" />
+                No Account Required
               </span>
             </div>
           </div>
 
-          {/* Core PDF Tools */}
           <div>
-            <h4 className="text-xs font-semibold text-slate-900 dark:text-slate-200 uppercase tracking-wider mb-3 flex items-center gap-1.5">
-              <FileText className="w-3.5 h-3.5 text-rose-500" />
-              <span>PDF Utilities</span>
+            <h4 className="mb-3 flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-slate-900 dark:text-slate-200">
+              <FileText className="h-4 w-4 text-blue-600" />
+              PDF Tools
             </h4>
+
             <ul className="space-y-2 text-sm text-slate-600 dark:text-slate-400">
               <li>
-                <Link href="/tools/image-to-pdf" className="hover:text-rose-600 dark:hover:text-rose-400 transition-colors">
-                  Image to PDF Converter
+                <Link href="/merge-pdf" className="transition hover:text-blue-600">
+                  Merge PDF
                 </Link>
               </li>
               <li>
-                <Link href="/tools/pdf-to-images" className="hover:text-rose-600 dark:hover:text-rose-400 transition-colors">
-                  PDF to Images Converter
+                <Link href="/split-pdf" className="transition hover:text-blue-600">
+                  Split PDF
                 </Link>
               </li>
               <li>
-                <Link href="/tools/organize-pdf" className="hover:text-rose-600 dark:hover:text-rose-400 transition-colors">
-                  Organize & Reorder PDF
+                <Link href="/compress-pdf" className="transition hover:text-blue-600">
+                  Compress PDF
                 </Link>
               </li>
               <li>
-                <Link href="/tools/rotate-pdf" className="hover:text-rose-600 dark:hover:text-rose-400 transition-colors">
-                  Rotate PDF Pages
+                <Link href="/rotate-pdf" className="transition hover:text-blue-600">
+                  Rotate PDF
                 </Link>
               </li>
               <li>
-                <Link href="/tools/watermark-pdf" className="hover:text-rose-600 dark:hover:text-rose-400 transition-colors">
-                  Watermark PDF
+                <Link href="/jpg-to-pdf" className="transition hover:text-blue-600">
+                  JPG to PDF
                 </Link>
               </li>
               <li>
-                <Link href="/tools/unlock-pdf" className="hover:text-rose-600 dark:hover:text-rose-400 transition-colors">
-                  Unlock / Remove Password
+                <Link href="/pdf-to-images" className="transition hover:text-blue-600">
+                  PDF to Images
                 </Link>
               </li>
             </ul>
           </div>
 
-          {/* Legal / Architecture */}
           <div>
-            <h4 className="text-xs font-semibold text-slate-900 dark:text-slate-200 uppercase tracking-wider mb-3">
-              Trust & Architecture
+            <h4 className="mb-3 text-xs font-bold uppercase tracking-wider text-slate-900 dark:text-slate-200">
+              Company
             </h4>
+
             <ul className="space-y-2 text-sm text-slate-600 dark:text-slate-400">
               <li>
-                <Link href="/#security" className="hover:text-slate-900 dark:hover:text-slate-200 transition-colors">
-                  Client-Side Architecture
+                <Link href="/privacy" className="transition hover:text-blue-600">
+                  Privacy Policy
                 </Link>
               </li>
               <li>
-                <span className="hover:text-slate-900 dark:hover:text-slate-200 cursor-pointer">
-                  Privacy Policy
-                </span>
-              </li>
-              <li>
-                <span className="hover:text-slate-900 dark:hover:text-slate-200 cursor-pointer">
+                <Link href="/terms" className="transition hover:text-blue-600">
                   Terms of Service
-                </span>
+                </Link>
               </li>
               <li>
-                <span className="hover:text-slate-900 dark:hover:text-slate-200 cursor-pointer">
-                  Cookie & Ad Choices
-                </span>
-              </li>
-              <li>
-                <Link href="/admin" className="hover:text-slate-900 dark:hover:text-slate-200 transition-colors flex items-center gap-1 text-xs text-slate-400">
-                  <Lock className="w-3 h-3" />
-                  <span>Admin Console</span>
+                <Link href="/#security" className="transition hover:text-blue-600">
+                  Security
                 </Link>
               </li>
             </ul>
           </div>
         </div>
 
-        <div className="border-t border-slate-200/60 dark:border-slate-800/60 pt-6 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-slate-500 dark:text-slate-400">
-          <div className="flex flex-wrap items-center gap-x-4 gap-y-1">
-            <p>© {new Date().getFullYear()} PDFEdit Studio (pdfedit.website). Engineered for speed and total client privacy.</p>
-          </div>
-          <p className="flex items-center gap-1 text-slate-400 dark:text-slate-500">
-            <Cpu className="w-3.5 h-3.5" />
-            Runs 100% on your device hardware (Zero Cloud Storage)
+        <div className="mt-8 flex flex-col gap-3 border-t border-slate-200 pt-6 text-xs text-slate-500 sm:flex-row sm:items-center sm:justify-between dark:border-slate-800 dark:text-slate-400">
+          <p>
+            © {new Date().getFullYear()} PDFEdit Enterprise Studio. All rights reserved.
+          </p>
+
+          <p className="flex items-center gap-1.5">
+            <Cpu className="h-4 w-4" />
+            Built for fast browser-based document processing
           </p>
         </div>
       </div>
