@@ -30,6 +30,10 @@ export const metadata: Metadata = {
   description:
     'Free online PDF editor and document tools. Edit, merge, split, compress, sign, rotate, watermark, convert and organize PDF files directly in your browser.',
 
+  alternates: {
+    canonical: 'https://www.pdfedit.website/',
+  },
+
   manifest: '/manifest.json',
 
   icons: {
@@ -72,7 +76,7 @@ export const metadata: Metadata = {
     title: 'PDFEdit – Free Online PDF Editor & Tools',
     description:
       'Edit, convert, organize and sign PDFs with fast browser-based tools.',
-    url: 'https://www.pdfedit.website',
+    url: 'https://www.pdfedit.website/',
     siteName: 'PDFEdit',
     type: 'website',
   },
