@@ -4,10 +4,7 @@ const nextConfig: NextConfig = {
   async rewrites() {
     return [
       { source: '/compress-pdf', destination: '/tools/compress-pdf' },
-      { source: '/edit-pdf', destination: '/tools/edit-pdf-metadata' },
       { source: '/split-pdf', destination: '/tools/split-pdf' },
-      { source: '/sign-pdf', destination: '/tools/protect-pdf' },
-      { source: '/ocr-pdf', destination: '/tools/pdf-to-images' },
       { source: '/pdf-to-jpg', destination: '/tools/pdf-to-images' },
       { source: '/jpg-to-pdf', destination: '/tools/image-to-pdf' },
       { source: '/rotate-pdf', destination: '/tools/rotate-pdf' },

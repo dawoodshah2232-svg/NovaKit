@@ -12,7 +12,7 @@ const BASE_URL = 'https://www.pdfedit.website';
 export default function sitemap(): MetadataRoute.Sitemap {
   const corePages: MetadataRoute.Sitemap = [
     {
-      url: BASE_URL,
+      url: `${BASE_URL}/`,
       changeFrequency: 'weekly',
       priority: 1,
     },
@@ -41,10 +41,6 @@ export default function sitemap(): MetadataRoute.Sitemap {
     '/merge-pdf',
     '/split-pdf',
     '/compress-pdf',
-    '/edit-pdf',
-    '/sign-pdf',
-    '/ocr-pdf',
-    '/pdf-to-jpg',
     '/jpg-to-pdf',
     '/pdf-to-images',
     '/rotate-pdf',
@@ -66,8 +62,20 @@ export default function sitemap(): MetadataRoute.Sitemap {
    * The sitemap automatically expands when a new tool is added
    * to TOOLS_CONFIG, so tools can no longer silently disappear.
    */
+  const dedicatedToolSlugs = new Set([
+    'image-to-pdf',
+    'pdf-to-images',
+    'organize-pdf',
+    'unlock-pdf',
+    'rotate-pdf',
+    'watermark-pdf',
+    'split-pdf',
+    'pdf-merger',
+    'compress-pdf',
+  ]);
+
   const dynamicTools: MetadataRoute.Sitemap =
-    TOOLS_CONFIG.map((tool) => ({
+    TOOLS_CONFIG.filter((tool) => !dedicatedToolSlugs.has(tool.slug)).map((tool) => ({
       url: `${BASE_URL}/tools/${tool.slug}`,
       changeFrequency: 'monthly',
       priority: tool.category === 'PDF' ? 0.8 : 0.7,

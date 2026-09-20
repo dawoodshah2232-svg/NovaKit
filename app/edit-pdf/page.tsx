@@ -1,5 +1,10 @@
 import type { Metadata } from 'next';
-import ToolPage from '../tools/[slug]/page';
+import { redirect } from 'next/navigation';
 const url = 'https://www.pdfedit.website/edit-pdf';
-export const metadata: Metadata = { alternates: { canonical: url }, openGraph: { url } };
-export default function Page() { return <ToolPage params={Promise.resolve({ slug: 'edit-pdf-metadata' })} />; }
+export const metadata: Metadata = {
+	title: 'PDF Metadata Editor | PDFEdit',
+	robots: { index: false, follow: true },
+	alternates: { canonical: 'https://www.pdfedit.website/tools/edit-pdf-metadata' },
+	openGraph: { url: 'https://www.pdfedit.website/tools/edit-pdf-metadata' },
+};
+export default function Page() { redirect('/tools/edit-pdf-metadata'); }
