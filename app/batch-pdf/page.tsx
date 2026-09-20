@@ -29,7 +29,8 @@ export default function BatchPdfPage() {
       }
 
       const pdfBytes = await mergedPdf.save();
-      const blob = new Blob([pdfBytes as any], { type: "application/pdf" });
+      // Explicitly casting as any to bypass strict TS BlobPart union check across environments
+      const blob = new Blob([pdfBytes as unknown as BlobPart], { type: "application/pdf" });
       const url = URL.createObjectURL(blob);
       
       const link = document.createElement("a");
