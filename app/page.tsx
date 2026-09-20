@@ -60,7 +60,6 @@ const categoryConfig = {
     title: 'PDF Tools',
     description:
       'Edit, organize, convert, compress, protect and manage PDF documents.',
-    accent: 'text-blue-600',
     badge: 'bg-blue-50 text-blue-700 dark:bg-blue-950/40 dark:text-blue-300',
   },
 
@@ -68,7 +67,6 @@ const categoryConfig = {
     title: 'Image & Design Tools',
     description:
       'Compress images, extract colors and create useful visual assets.',
-    accent: 'text-violet-600',
     badge:
       'bg-violet-50 text-violet-700 dark:bg-violet-950/40 dark:text-violet-300',
   },
@@ -77,7 +75,6 @@ const categoryConfig = {
     title: 'Business & Finance Tools',
     description:
       'Create invoices and handle everyday business calculations quickly.',
-    accent: 'text-emerald-600',
     badge:
       'bg-emerald-50 text-emerald-700 dark:bg-emerald-950/40 dark:text-emerald-300',
   },
@@ -86,7 +83,6 @@ const categoryConfig = {
     title: 'Writing & SEO Tools',
     description:
       'Analyze content and improve the structure of your written work.',
-    accent: 'text-cyan-600',
     badge:
       'bg-cyan-50 text-cyan-700 dark:bg-cyan-950/40 dark:text-cyan-300',
   },
@@ -95,7 +91,6 @@ const categoryConfig = {
     title: 'Security Tools',
     description:
       'Simple privacy and security utilities that run directly in your browser.',
-    accent: 'text-amber-600',
     badge:
       'bg-amber-50 text-amber-700 dark:bg-amber-950/40 dark:text-amber-300',
   },
@@ -165,6 +160,12 @@ export default function HomePage() {
     );
   }, [normalizedSearch]);
 
+  const handleSearch = () => {
+    document
+      .getElementById('all-tools')
+      ?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  };
+
   return (
     <div className="w-full">
       {/* HERO */}
@@ -214,22 +215,38 @@ export default function HomePage() {
           <p className="mt-3 text-[11px] font-medium text-slate-400">
             No account required for core tools
           </p>
-        </div>
-      </section>
 
-      {/* SEARCH */}
-      <section className="relative z-20 mx-auto -mt-5 max-w-3xl px-3">
-        <div className="rounded-2xl border border-slate-200 bg-white p-2 shadow-[0_12px_40px_rgba(15,23,42,0.08)] dark:border-slate-800 dark:bg-slate-900">
-          <div className="relative">
-            <Search className="absolute left-4 top-1/2 h-5 w-5 -translate-y-1/2 text-slate-400" />
+          {/* SEARCH INSIDE HERO */}
+          <div className="mx-auto mt-9 max-w-3xl">
+            <div className="rounded-2xl border border-slate-300 bg-white p-2 shadow-[0_12px_35px_rgba(15,23,42,0.12)] dark:border-slate-700 dark:bg-slate-950">
+              <div className="flex flex-col gap-2 sm:flex-row">
+                <div className="relative flex-1">
+                  <Search className="absolute left-4 top-1/2 h-5 w-5 -translate-y-1/2 text-slate-400" />
 
-            <input
-              type="search"
-              value={searchQuery}
-              onChange={(event) => setSearchQuery(event.target.value)}
-              placeholder="Search PDF, image, invoice, QR, SEO tools..."
-              className="h-12 w-full rounded-xl bg-slate-50 pl-12 pr-4 text-sm font-medium text-slate-900 outline-none ring-0 placeholder:text-slate-400 focus:bg-white dark:bg-slate-950 dark:text-white dark:focus:bg-slate-950"
-            />
+                  <input
+                    type="search"
+                    value={searchQuery}
+                    onChange={(event) => setSearchQuery(event.target.value)}
+                    onKeyDown={(event) => {
+                      if (event.key === 'Enter') {
+                        handleSearch();
+                      }
+                    }}
+                    placeholder="Search PDF, image, invoice, QR, SEO tools..."
+                    className="h-12 w-full rounded-xl border border-transparent bg-slate-50 pl-12 pr-4 text-sm font-medium text-slate-900 outline-none transition placeholder:text-slate-400 focus:border-slate-300 focus:bg-white dark:bg-slate-900 dark:text-white dark:focus:border-slate-700 dark:focus:bg-slate-900"
+                  />
+                </div>
+
+                <button
+                  type="button"
+                  onClick={handleSearch}
+                  className="inline-flex h-12 items-center justify-center gap-2 rounded-xl bg-slate-950 px-6 text-sm font-extrabold text-white transition hover:bg-slate-800 dark:bg-white dark:text-slate-950 dark:hover:bg-slate-200"
+                >
+                  <Search className="h-4 w-4" />
+                  Search
+                </button>
+              </div>
+            </div>
           </div>
         </div>
       </section>
@@ -352,7 +369,6 @@ export default function HomePage() {
         </div>
 
         <div className="grid gap-5 lg:grid-cols-2">
-          {/* PDF STUDIO */}
           <Link
             href="/studio"
             className="group overflow-hidden rounded-[28px] border border-blue-200 bg-[#071b3d] shadow-sm transition-all hover:-translate-y-1 hover:shadow-xl dark:border-blue-950"
@@ -391,7 +407,6 @@ export default function HomePage() {
             </div>
           </Link>
 
-          {/* CV BUILDER */}
           <div className="group overflow-hidden rounded-[28px] border border-emerald-200 bg-[#073a32] shadow-sm dark:border-emerald-950">
             <div className="relative aspect-[16/8.6] overflow-hidden">
               <Image
@@ -433,7 +448,7 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* WHY PDFEDIT */}
+      {/* TRUST */}
       <section
         id="security"
         className="mb-14 overflow-hidden rounded-[28px] border border-slate-200 bg-white dark:border-slate-800 dark:bg-slate-900"
