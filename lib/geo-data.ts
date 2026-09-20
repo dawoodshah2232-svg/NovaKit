@@ -184,7 +184,7 @@ export const GEO_DATA_MAP: Record<string, GeoToolData> = {
   },
   'compress-pdf': {
     primaryKeyword: 'free local PDF compressor',
-    seoTitle: 'Free Local PDF Compressor – Reduce PDF File Size Client-Side | PDFEdit Studio',
+    seoTitle: 'Compress PDF Online Free | PDF Compressor | PDFEdit Studio',
     metaDescription:
       'Compress and shrink PDF document file sizes directly in your browser with zero server uploads. Advanced stream thinning and raster optimization for email attachments and portal uploads. 100% confidential, free forever, no signup.',
     longTailKeywords: [
@@ -253,6 +253,16 @@ export const GEO_DATA_MAP: Record<string, GeoToolData> = {
         question: 'How much file size reduction can I expect?',
         answer:
           'Image-heavy scanned PDFs typically see reductions between 50% and 85%, while text-dominated documents typically see 15% to 40% reduction through object stream consolidation.',
+      },
+      {
+        question: 'Can this compress a PDF to 1 MB or 500 KB?',
+        answer:
+          'The presets reduce the file as much as the document structure and image content allow, but an exact 1 MB or 500 KB result cannot be guaranteed. Use Extreme compression and check the displayed compressed size.',
+      },
+      {
+        question: 'Which compression level should I use for email or uploads?',
+        answer:
+          'Use Recommended for a balance of readability and size. Use Extreme when an email attachment or upload portal has a strict limit, then verify the resulting size and document quality before sending.',
       },
     ],
   },

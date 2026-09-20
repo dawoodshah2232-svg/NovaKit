@@ -244,8 +244,6 @@ export function CompressPdf() {
       setSummary(resultSummary);
       setProgressPercent(100);
 
-      // Trigger instant client-side download
-      saveAs(blob, outName);
       trackToolExecution('compress-pdf', true);
     } catch (err: unknown) {
       trackToolExecution('compress-pdf', false);
