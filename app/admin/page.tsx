@@ -12,24 +12,32 @@ import {
   Zap, 
   Search,
   Sparkles,
-  CheckCircle2
+  Briefcase
 } from "lucide-react";
 
-const pdfTools = [
+const allTools = [
   {
     title: "Master PDF Studio",
     description: "All-in-one corporate workspace to edit text, apply signatures, stamp documents, and export seamlessly.",
     href: "/studio",
     icon: Sparkles,
-    badge: "Flagship",
+    category: "Edit & Sign",
     color: "bg-blue-600",
+  },
+  {
+    title: "Professional CV Builder",
+    description: "Create region-compliant resumes (UAE, USA, Europe) with live preview and instant PDF export.",
+    href: "/cv-builder",
+    icon: Briefcase,
+    category: "Career",
+    color: "bg-emerald-600",
   },
   {
     title: "Batch PDF Suite",
     description: "Merge, compress, or convert multiple documents simultaneously in an optimized client queue.",
     href: "/batch-pdf",
     icon: Layers,
-    badge: "Popular",
+    category: "Organize",
     color: "bg-indigo-600",
   },
   {
@@ -37,15 +45,15 @@ const pdfTools = [
     description: "Securely stamp signatures, dates, and text notes onto agreements and forms.",
     href: "/sign-pdf",
     icon: FileText,
-    badge: "Secure",
-    color: "bg-emerald-600",
+    category: "Edit & Sign",
+    color: "bg-violet-600",
   },
   {
     title: "PDF Data Extractor",
     description: "Extract text content, metadata, and tables directly into structured CSV format.",
     href: "/extract-pdf",
     icon: Database,
-    badge: "Utility",
+    category: "Convert",
     color: "bg-purple-600",
   },
   {
@@ -53,28 +61,32 @@ const pdfTools = [
     description: "Isolate precise page ranges or presentation slides from large PDF volumes instantly.",
     href: "/split-pdf",
     icon: Scissors,
-    badge: "Precise",
+    category: "Organize",
     color: "bg-amber-600",
   },
 ];
 
-export default function CorporateHomePage() {
-  const [activeTab, setActiveTab] = useState("all");
+const categories = ["All", "Organize", "Edit & Sign", "Convert", "Career"];
+
+export default function EnterpriseHomePage() {
+  const [selectedCategory, setSelectedCategory] = useState("All");
   const [searchQuery, setSearchQuery] = useState("");
 
-  const filteredTools = pdfTools.filter(tool => 
-    tool.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-    tool.description.toLowerCase().includes(searchQuery.toLowerCase())
-  );
+  const filteredTools = allTools.filter(tool => {
+    const matchesCategory = selectedCategory === "All" || tool.category === selectedCategory;
+    const matchesSearch = tool.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+                          tool.description.toLowerCase().includes(searchQuery.toLowerCase());
+    return matchesCategory && matchesSearch;
+  });
 
   return (
     <div className="min-h-screen bg-slate-50 text-slate-900 flex flex-col justify-between selection:bg-blue-600 selection:text-white">
       <div>
-        {/* Corporate Header */}
-        <header className="bg-white/80 backdrop-blur-md border-b border-slate-200 sticky top-0 z-50">
+        {/* Top Header */}
+        <header className="bg-white/90 backdrop-blur-md border-b border-slate-200 sticky top-0 z-50">
           <div className="max-w-7xl mx-auto px-6 h-18 flex justify-between items-center">
             <div className="flex items-center gap-3">
-              <div className="w-10 h-10 rounded-xl bg-blue-600 text-white flex items-center justify-center font-bold text-lg shadow-sm shadow-blue-500/30">
+              <div className="w-10 h-10 rounded-xl bg-blue-600 text-white flex items-center justify-center font-bold text-lg shadow-sm">
                 PDF
               </div>
               <div>
@@ -82,12 +94,18 @@ export default function CorporateHomePage() {
                 <span className="text-xs uppercase font-semibold text-blue-600 block tracking-widest">Enterprise Studio</span>
               </div>
             </div>
-            <div className="flex items-center gap-4">
+            <div className="flex items-center gap-3">
+              <Link 
+                href="/cv-builder" 
+                className="hidden sm:flex items-center gap-1.5 bg-emerald-50 text-emerald-700 border border-emerald-200 px-4 py-2 rounded-xl text-sm font-semibold hover:bg-emerald-100 transition"
+              >
+                <Briefcase className="w-4 h-4" /> CV Builder
+              </Link>
               <Link 
                 href="/studio" 
-                className="bg-blue-600 text-white px-5 py-2.5 rounded-xl text-sm font-medium hover:bg-blue-700 transition shadow-sm flex items-center gap-2"
+                className="bg-blue-600 text-white px-5 py-2.5 rounded-xl text-sm font-semibold hover:bg-blue-700 transition shadow-sm flex items-center gap-2"
               >
-                <Sparkles className="w-4 h-4" /> Launch Master Studio
+                <Sparkles className="w-4 h-4" /> Master Studio
               </Link>
             </div>
           </div>
@@ -103,15 +121,15 @@ export default function CorporateHomePage() {
             </div>
             
             <h1 className="text-4xl sm:text-5xl font-extrabold text-slate-900 tracking-tight mb-6">
-              Professional PDF Document Suite. <span className="text-blue-600">Built for Privacy.</span>
+              Every tool you need to work with PDFs <span className="text-blue-600">in one place.</span>
             </h1>
             
             <p className="text-base sm:text-lg text-slate-600 mb-8 max-w-2xl mx-auto leading-relaxed">
-              An enterprise-grade toolkit to manage, edit, sign, and transform your documents locally with absolute data confidentiality.
+              Fast, secure, and easy-to-use browser utilities. Merge, split, compress, sign, and build professional resumes locally.
             </p>
 
             {/* Search Input */}
-            <div className="relative max-w-xl mx-auto">
+            <div className="relative max-w-xl mx-auto mb-8">
               <span className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none text-slate-400">
                 <Search className="w-5 h-5" />
               </span>
@@ -119,28 +137,32 @@ export default function CorporateHomePage() {
                 type="text"
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                placeholder="Search tools (e.g., merge, signature, splitter)..."
+                placeholder="Search for tools (e.g., merge, signature, CV builder)..."
                 className="w-full pl-12 pr-4 py-3.5 bg-slate-50 border border-slate-300 rounded-2xl text-slate-900 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-600 focus:bg-white transition shadow-sm"
               />
+            </div>
+
+            {/* Category Filter Pills (iLovePDF Style) */}
+            <div className="flex flex-wrap justify-center gap-2">
+              {categories.map((cat, idx) => (
+                <button
+                  key={idx}
+                  onClick={() => setSelectedCategory(cat)}
+                  className={`px-4 py-2 rounded-xl text-xs font-semibold transition ${
+                    selectedCategory === cat
+                      ? "bg-blue-600 text-white shadow-sm"
+                      : "bg-white text-slate-600 border border-slate-200 hover:border-slate-300 hover:bg-slate-50"
+                  }`}
+                >
+                  {cat}
+                </button>
+              ))}
             </div>
           </div>
         </section>
 
-        {/* Main Content Sections */}
+        {/* Tools Grid Section */}
         <main className="max-w-7xl mx-auto px-6 py-12">
-          
-          {/* Section Header */}
-          <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-8 gap-4 border-b border-slate-200 pb-4">
-            <div>
-              <h2 className="text-xl font-bold text-slate-900">PDF Document Solutions</h2>
-              <p className="text-sm text-slate-500">Select a specialized workspace tool below</p>
-            </div>
-            <div className="flex items-center gap-2 text-xs font-medium text-slate-500">
-              <span className="flex items-center gap-1 text-emerald-600"><CheckCircle2 className="w-4 h-4" /> Ready for Production</span>
-            </div>
-          </div>
-
-          {/* 3-Column Corporate Grid */}
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {filteredTools.map((tool, index) => {
               const Icon = tool.icon;
@@ -156,7 +178,7 @@ export default function CorporateHomePage() {
                         <Icon className="w-6 h-6" />
                       </div>
                       <span className="text-xs font-semibold px-3 py-1 bg-slate-100 text-slate-600 rounded-full group-hover:bg-blue-50 group-hover:text-blue-600 transition-colors">
-                        {tool.badge}
+                        {tool.category}
                       </span>
                     </div>
                     
@@ -174,18 +196,17 @@ export default function CorporateHomePage() {
                       <Zap className="w-3.5 h-3.5" /> Client Engine
                     </span>
                     <span className="flex items-center gap-1">
-                      Access Workspace <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform" />
+                      Launch Tool <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform" />
                     </span>
                   </div>
                 </Link>
               );
             })}
           </div>
-
         </main>
       </div>
 
-      {/* Corporate Footer */}
+      {/* Footer */}
       <footer className="bg-white border-t border-slate-200 py-8 text-center text-xs text-slate-500">
         <div className="max-w-7xl mx-auto px-6 flex flex-col sm:flex-row justify-between items-center gap-4">
           <p>© {new Date().getFullYear()} PDFEdit Enterprise Studio. All rights reserved.</p>
