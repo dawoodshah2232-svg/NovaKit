@@ -57,9 +57,9 @@ function formatBytes(bytes: number, decimals = 1) {
   return `${parseFloat((bytes / Math.pow(k, i)).toFixed(dm))} ${sizes[i]}`;
 }
 
-export function PdfToImage() {
+export function PdfToImage({ jpgOnly = false, analyticsSlug = 'pdf-to-image' }: { jpgOnly?: boolean; analyticsSlug?: string } = {}) {
   const [loadedPdf, setLoadedPdf] = useState<LoadedPdf | null>(null);
-  const [format, setFormat] = useState<ImageFormat>('png');
+  const [format, setFormat] = useState<ImageFormat>(jpgOnly ? 'jpeg' : 'png');
   const [resolution, setResolution] = useState<ImageResolution>(2);
   const [jpegQuality, setJpegQuality] = useState<number>(0.92);
 
@@ -259,9 +259,9 @@ export function PdfToImage() {
       setSuccessMessage(
         `Successfully converted all ${totalPages} pages to high-resolution ${format.toUpperCase()} images!`
       );
-      trackToolExecution('pdf-to-image', true);
+      trackToolExecution(analyticsSlug, true);
     } catch (err: unknown) {
-      trackToolExecution('pdf-to-image', false);
+      trackToolExecution(analyticsSlug, false);
       console.error('PDF Conversion error:', err);
       setErrorMessage(
         err instanceof Error ? err.message : 'An error occurred while converting the PDF.'
@@ -431,8 +431,8 @@ export function PdfToImage() {
                 <label className="text-xs font-bold uppercase tracking-wider text-slate-700 dark:text-slate-300 block">
                   Image Format
                 </label>
-                <div className="grid grid-cols-2 gap-2.5">
-                  <button
+                <div className={jpgOnly ? 'grid grid-cols-1 gap-2.5' : 'grid grid-cols-2 gap-2.5'}>
+                  {!jpgOnly && <button
                     type="button"
                     onClick={() => setFormat('png')}
                     className={`min-h-[48px] p-3 rounded-2xl border text-left transition-all cursor-pointer flex items-center justify-between ${
@@ -458,7 +458,7 @@ export function PdfToImage() {
                     >
                       {format === 'png' && <Check className="w-2.5 h-2.5 stroke-[3]" />}
                     </div>
-                  </button>
+                  </button>}
 
                   <button
                     type="button"

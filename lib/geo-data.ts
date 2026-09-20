@@ -1092,6 +1092,63 @@ export const GEO_DATA_MAP: Record<string, GeoToolData> = {
       },
     ],
   },
+  'pdf-to-jpg': {
+    primaryKeyword: 'PDF to JPG converter online free',
+    seoTitle: 'PDF to JPG Converter Online Free | PDFEdit',
+    metaDescription: 'Convert every PDF page to JPG in your browser, choose output quality, and download pages individually or as a ZIP archive.',
+    longTailKeywords: ['convert pdf pages to jpg', 'pdf to jpg zip download', 'private pdf image converter'],
+    highlights: ['Every page converted to JPG', 'Quality and resolution controls', 'Individual downloads and ZIP export', 'Local browser processing'],
+    semanticSubheadings: [{ heading: 'JPG output for sharing and previews', body: 'Render each PDF page to a JPEG image when a compact, widely supported image format is more useful than a PDF.' }],
+    howItWorks: [
+      { number: '01', title: 'Choose a PDF', description: 'Select one readable PDF in the browser.' },
+      { number: '02', title: 'Set JPG quality', description: 'Choose the resolution and JPEG quality for the rendered pages.' },
+      { number: '03', title: 'Download pages', description: 'Download one page or all JPG files in a ZIP archive.' },
+    ],
+    faqs: [
+      { question: 'Does PDF to JPG convert every page?', answer: 'Yes. Every readable page is rendered as a separate JPG image.' },
+      { question: 'Can I download one page?', answer: 'Yes. Each converted page has its own download action, and all pages can also be downloaded as a ZIP.' },
+      { question: 'Does conversion happen on a server?', answer: 'No. PDF.js renders the selected PDF in your browser memory.' },
+      { question: 'Will text remain selectable in JPG output?', answer: 'No. JPG is a raster image format, so text is no longer selectable.' },
+    ],
+  },
+  'pdf-to-word': {
+    primaryKeyword: 'PDF to Word DOCX converter online',
+    seoTitle: 'PDF to Word Converter Online | PDFEdit',
+    metaDescription: 'Extract selectable PDF text into a DOCX Word document locally in your browser. Complex layouts and scanned PDFs are not reconstructed.',
+    longTailKeywords: ['convert pdf to docx', 'extract pdf text to word', 'private pdf word converter'],
+    highlights: ['DOCX export', 'Readable text extraction', 'Local PDF.js processing', 'No OCR claims for scanned documents'],
+    semanticSubheadings: [{ heading: 'Text-first PDF to DOCX conversion', body: 'This browser converter is designed for PDFs with selectable text and practical paragraph flow, not pixel-perfect desktop publishing layouts.' }],
+    howItWorks: [
+      { number: '01', title: 'Select a PDF', description: 'Choose a PDF containing selectable text.' },
+      { number: '02', title: 'Extract text', description: 'The browser reads text from each page with PDF.js.' },
+      { number: '03', title: 'Download DOCX', description: 'Save the extracted paragraphs as a Word document.' },
+    ],
+    faqs: [
+      { question: 'Does this convert scanned PDFs?', answer: 'No. Scanned PDFs need OCR, which is not provided by this tool.' },
+      { question: 'Are PDF images and complex tables preserved?', answer: 'No. The conversion focuses on readable text and basic paragraph structure.' },
+      { question: 'Does the PDF leave my device?', answer: 'No. Text extraction and DOCX generation run in browser memory.' },
+      { question: 'What file is downloaded?', answer: 'The output is a DOCX file that can be opened by Microsoft Word and compatible editors.' },
+    ],
+  },
+  'word-to-pdf': {
+    primaryKeyword: 'DOCX to PDF converter online',
+    seoTitle: 'Word to PDF Converter Online | PDFEdit',
+    metaDescription: 'Convert supported DOCX text documents into PDFs locally in your browser. Legacy DOC files and complex Word layouts are not supported.',
+    longTailKeywords: ['convert docx to pdf', 'word document to pdf browser', 'private docx pdf converter'],
+    highlights: ['DOCX text support', 'Local PDF generation', 'Automatic text wrapping', 'Clear legacy DOC limitation'],
+    semanticSubheadings: [{ heading: 'A lightweight DOCX text converter', body: 'The browser implementation creates a clean PDF from DOCX paragraph text; it is not a full Microsoft Word layout engine.' }],
+    howItWorks: [
+      { number: '01', title: 'Choose a DOCX', description: 'Select a supported .docx document.' },
+      { number: '02', title: 'Read paragraphs', description: 'The browser reads the document XML locally.' },
+      { number: '03', title: 'Download PDF', description: 'Save a PDF with wrapped paragraph text.' },
+    ],
+    faqs: [
+      { question: 'Are legacy .doc files supported?', answer: 'No. This browser converter supports .docx files; legacy .doc files require another conversion method.' },
+      { question: 'Are images and tables preserved?', answer: 'No. The current implementation focuses on paragraph text and basic line flow.' },
+      { question: 'Is the document uploaded?', answer: 'No. DOCX parsing and PDF creation happen locally in your browser.' },
+      { question: 'Will the PDF match Word pixel for pixel?', answer: 'No. Complex styles, page layouts, embedded images, and tables may not match.' },
+    ],
+  },
 };
 
 const GEO_ALIASES: Record<string, string> = {

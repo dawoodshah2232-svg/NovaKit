@@ -28,6 +28,8 @@ import { RotatePdf } from '@/components/tools/rotate-pdf';
 import { WatermarkPdf } from '@/components/tools/watermark-pdf';
 import { UnlockPdf } from '@/components/tools/unlock-pdf';
 import { EditPdfMetadata } from '@/components/tools/edit-pdf-metadata';
+import { PdfToWord } from '@/components/tools/pdf-to-word';
+import { WordToPdf } from '@/components/tools/word-to-pdf';
 
 const canonicalPathBySlug: Record<string, string> = {
   'image-to-pdf': '/jpg-to-pdf',
@@ -39,6 +41,9 @@ const canonicalPathBySlug: Record<string, string> = {
   'split-pdf': '/split-pdf',
   'pdf-merger': '/merge-pdf',
   'compress-pdf': '/compress-pdf',
+  'pdf-to-jpg': '/pdf-to-jpg',
+  'pdf-to-word': '/pdf-to-word',
+  'word-to-pdf': '/word-to-pdf',
 };
 
 const relatedToolsBySlug: Record<string, [string, string][]> = {
@@ -47,11 +52,14 @@ const relatedToolsBySlug: Record<string, [string, string][]> = {
   'organize-pdf': [['/merge-pdf', 'Merge PDF'], ['/split-pdf', 'Split PDF'], ['/rotate-pdf', 'Rotate PDF']],
   'unlock-pdf': [['/merge-pdf', 'Merge PDF'], ['/watermark-pdf', 'Watermark PDF'], ['/compress-pdf', 'Compress PDF']],
   'rotate-pdf': [['/organize-pdf', 'Organize PDF'], ['/watermark-pdf', 'Watermark PDF'], ['/merge-pdf', 'Merge PDF']],
-  'watermark-pdf': [['/organize-pdf', 'Organize PDF'], ['/compress-pdf', 'Compress PDF'], ['/Studio', 'PDF Studio']],
+  'watermark-pdf': [['/organize-pdf', 'Organize PDF'], ['/compress-pdf', 'Compress PDF'], ['/studio', 'PDF Studio']],
   'split-pdf': [['/merge-pdf', 'Merge PDF'], ['/organize-pdf', 'Organize PDF'], ['/compress-pdf', 'Compress PDF']],
   'pdf-merger': [['/split-pdf', 'Split PDF'], ['/compress-pdf', 'Compress PDF'], ['/organize-pdf', 'Organize PDF']],
   'compress-pdf': [['/merge-pdf', 'Merge PDF'], ['/split-pdf', 'Split PDF'], ['/pdf-to-images', 'PDF to Images']],
-  'edit-pdf-metadata': [['/merge-pdf', 'Merge PDF'], ['/compress-pdf', 'Compress PDF'], ['/Studio', 'PDF Studio']],
+  'pdf-to-jpg': [['/pdf-to-images', 'PDF to Images'], ['/jpg-to-pdf', 'JPG to PDF'], ['/compress-pdf', 'Compress PDF']],
+  'pdf-to-word': [['/pdf-to-jpg', 'PDF to JPG'], ['/merge-pdf', 'Merge PDF'], ['/compress-pdf', 'Compress PDF']],
+  'word-to-pdf': [['/jpg-to-pdf', 'JPG to PDF'], ['/pdf-to-word', 'PDF to Word'], ['/compress-pdf', 'Compress PDF']],
+  'edit-pdf-metadata': [['/merge-pdf', 'Merge PDF'], ['/compress-pdf', 'Compress PDF'], ['/studio', 'PDF Studio']],
 };
 
 interface ToolPageProps {
@@ -241,6 +249,12 @@ export default async function ToolPage({ params }: ToolPageProps) {
         <ImageToPdf />
       ) : slug === 'pdf-to-images' || slug === 'pdf-to-image' ? (
         <PdfToImage />
+      ) : slug === 'pdf-to-jpg' ? (
+        <PdfToImage jpgOnly analyticsSlug="pdf-to-jpg" />
+      ) : slug === 'pdf-to-word' ? (
+        <PdfToWord />
+      ) : slug === 'word-to-pdf' ? (
+        <WordToPdf />
       ) : slug === 'organize-pdf' || slug === 'pdf-page-reorder' ? (
         <OrganizePdf />
       ) : slug === 'unlock-pdf' || slug === 'pdf-password-remover' ? (
