@@ -21,7 +21,8 @@ import {
   Calculator,
   FileCode,
   KeyRound,
-  FileEdit
+  FileEdit,
+  Cpu
 } from "lucide-react";
 
 const toolCategories = [
@@ -71,30 +72,46 @@ export default function MasterCorporateHomepage() {
   return (
     <div className="min-h-screen bg-slate-50 text-slate-900 flex flex-col justify-between selection:bg-blue-600 selection:text-white">
       <div>
-        {/* Navigation Bar with New SVG Logo */}
-        <header className="bg-white/95 backdrop-blur-md border-b border-slate-200 sticky top-0 z-50 shadow-xs">
+        {/* Navigation Bar */}
+        <header className="bg-white/95 backdrop-blur-md border-b border-slate-200 sticky top-0 z-50">
           <div className="max-w-7xl mx-auto px-6 h-20 flex justify-between items-center">
+            {/* Brand Logo */}
             <div className="flex items-center gap-3">
               <Link href="/" className="flex items-center gap-2">
                 <img 
                   src="/pdfedit-light.svg" 
                   alt="PDFEdit Enterprise Studio" 
-                  className="h-10 w-auto object-contain" 
+                  className="h-9 w-auto object-contain" 
                 />
               </Link>
             </div>
+
+            {/* Header Navigation Links & Action Buttons */}
+            <div className="hidden md:flex items-center gap-6 text-sm font-semibold text-slate-600">
+              <a href="#tools" className="hover:text-blue-600 transition flex items-center gap-1.5">
+                <Layers className="w-4 h-4 text-blue-600" /> PDF Suite
+              </a>
+              <Link href="/privacy" className="hover:text-blue-600 transition flex items-center gap-1.5">
+                <Cpu className="w-4 h-4 text-indigo-600" /> Capabilities
+              </Link>
+              <Link href="/privacy" className="hover:text-blue-600 transition flex items-center gap-1.5">
+                <ShieldCheck className="w-4 h-4 text-emerald-600" /> Zero-Upload Architecture
+              </Link>
+            </div>
+
+            {/* Header CTAs */}
             <div className="flex items-center gap-3">
               <Link 
                 href="/cv-builder" 
-                className="flex items-center gap-2 bg-emerald-50 text-emerald-700 border border-emerald-200/80 px-4 py-2.5 rounded-xl text-sm font-semibold hover:bg-emerald-100 transition shadow-2xs"
+                className="flex items-center gap-1.5 bg-emerald-50 text-emerald-700 border border-emerald-200 px-3.5 py-2 rounded-xl text-xs font-bold hover:bg-emerald-100 transition shadow-2xs"
               >
-                <Sparkles className="w-4 h-4 text-emerald-600" /> AI CV Builder (Free)
+                <Sparkles className="w-3.5 h-3.5 text-emerald-600" /> AI CV Builder (Free)
               </Link>
               <Link 
                 href="/studio" 
-                className="bg-blue-600 text-white px-5 py-2.5 rounded-xl text-sm font-semibold hover:bg-blue-700 transition shadow-sm flex items-center gap-2"
+                className="bg-blue-600 text-white px-4 py-2 rounded-xl text-xs font-bold hover:bg-blue-700 transition shadow-xs flex items-center gap-1.5"
               >
-                <FileEdit className="w-4 h-4" /> PDF Editor & Creator
+                <FileEdit className="w-3.5 h-3.5" /> PDF Editor & Creator
               </Link>
             </div>
           </div>
@@ -134,7 +151,7 @@ export default function MasterCorporateHomepage() {
         </section>
 
         {/* CATEGORIZED TOOLS SECTIONS */}
-        <main className="max-w-7xl mx-auto px-6 py-12 space-y-16">
+        <main id="tools" className="max-w-7xl mx-auto px-6 py-12 space-y-16">
           
           {toolCategories.map((cat, idx) => (
             <div key={idx}>
@@ -182,38 +199,6 @@ export default function MasterCorporateHomepage() {
               </div>
             </div>
           ))}
-
-          {/* AI CV BUILDER BANNER SECTION */}
-          <div className="bg-gradient-to-r from-emerald-900 via-slate-900 to-blue-950 text-white rounded-3xl p-8 sm:p-12 shadow-xl border border-emerald-800/40 relative overflow-hidden flex flex-col md:flex-row items-center justify-between gap-8">
-            <div className="absolute inset-0 bg-[radial-gradient(#334155_1px,transparent_1px)] [background-size:16px_16px] opacity-20 pointer-events-none"></div>
-            
-            <div className="relative z-10 max-w-xl">
-              <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-500/20 text-emerald-300 text-xs font-semibold mb-4 border border-emerald-500/30">
-                <Sparkles className="w-3.5 h-3.5" /> AI Career & Resume Studio
-              </div>
-              <h2 className="text-2xl sm:text-3xl font-extrabold tracking-tight mb-3">
-                AI CV Builder (Free) with Live Split-Screen Preview.
-              </h2>
-              <p className="text-slate-300 text-sm leading-relaxed mb-6">
-                Generate region-compliant resumes (UAE, USA, Europe) instantly. Watch your resume format live on the left as you type on the right.
-              </p>
-              <Link
-                href="/cv-builder"
-                className="inline-flex items-center gap-2 bg-emerald-600 text-white px-6 py-3 rounded-xl text-sm font-semibold hover:bg-emerald-500 transition shadow-md"
-              >
-                Launch AI CV Builder <ArrowRight className="w-4 h-4" />
-              </Link>
-            </div>
-
-            <div className="relative z-10 bg-white/10 backdrop-blur-md p-6 rounded-2xl border border-white/10 text-center sm:text-left">
-              <div className="text-xs uppercase tracking-widest text-emerald-400 font-bold mb-2">Key Features</div>
-              <ul className="text-xs text-slate-200 space-y-2">
-                <li className="flex items-center gap-2">✓ UAE / GCC & International Templates</li>
-                <li className="flex items-center gap-2">✓ Live Side-by-Side PDF Rendering</li>
-                <li className="flex items-center gap-2">✓ 100% Free & Secure Local Export</li>
-              </ul>
-            </div>
-          </div>
 
         </main>
       </div>
