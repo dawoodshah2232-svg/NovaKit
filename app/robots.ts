@@ -15,7 +15,10 @@ export default function robots(): MetadataRoute.Robots {
       },
     ],
 
-    sitemap: `${BASE_URL}/sitemap.xml`,
+    sitemap: [
+      `${BASE_URL}/sitemap.xml`,
+      `${BASE_URL}/google-sitemap.xml`,
+    ],
     host: BASE_URL,
   };
 }
