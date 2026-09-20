@@ -9,15 +9,65 @@ import {
   Database, 
   ArrowRight, 
   ShieldCheck, 
-  Zap, 
   Search,
   Sparkles,
   Briefcase,
-  FileCheck,
-  Cpu
+  Lock,
+  Unlock,
+  RotateCw,
+  FileSpreadsheet,
+  Image as ImageIcon,
+  QrCode,
+  Calculator,
+  FileCode,
+  KeyRound,
+  SlidersHorizontal,
+  Stamp
 } from "lucide-react";
 
-export default function MasterHomepage() {
+// Complete catalog of all tools categorized like top-tier enterprise platforms
+const toolCategories = [
+  {
+    categoryName: "Organize & Structure PDFs",
+    description: "Merge, split, rotate, and reorder document pages effortlessly.",
+    tools: [
+      { title: "Batch PDF Suite", description: "Merge, compress, or process multiple files in queue.", href: "/batch-pdf", icon: Layers, color: "bg-blue-600" },
+      { title: "Slide & Page Splitter", description: "Extract individual presentation slides or page ranges.", href: "/split-pdf", icon: Scissors, color: "bg-amber-600" },
+      { title: "Rotate PDF Pages", description: "Rotate portrait or landscape documents instantly.", href: "/studio", icon: RotateCw, color: "bg-indigo-600" },
+    ]
+  },
+  {
+    categoryName: "Edit, Sign & Secure",
+    description: "Add digital signatures, fill forms, and protect confidential files.",
+    tools: [
+      { title: "Master PDF Studio", description: "Full Word-style editor for text, stamps, and signatures.", href: "/studio", icon: Sparkles, color: "bg-blue-700" },
+      { title: "Form Filler & Signer", description: "Stamp signatures, dates, and text notes securely.", href: "/sign-pdf", icon: FileText, color: "bg-emerald-600" },
+      { title: "Protect PDF (Encrypt)", description: "Secure sensitive documents with strong passwords.", href: "/studio", icon: Lock, color: "bg-rose-600" },
+      { title: "PDF Password Remover", description: "Remove access restrictions from authorized files.", href: "/studio", icon: Unlock, color: "bg-teal-600" },
+    ]
+  },
+  {
+    categoryName: "Conversion & Data Extraction",
+    description: "Convert images to PDF, extract tables, and parse metadata.",
+    tools: [
+      { title: "PDF Data Extractor", description: "Extract text and tables directly into CSV format.", href: "/extract-pdf", icon: Database, color: "bg-purple-600" },
+      { title: "Image to PDF Converter", description: "Transform JPG, PNG images into clean PDF documents.", href: "/studio", icon: ImageIcon, color: "bg-cyan-600" },
+      { title: "PDF to Images", description: "Extract high-resolution image files from any PDF.", href: "/studio", icon: FileSpreadsheet, color: "bg-orange-600" },
+    ]
+  },
+  {
+    categoryName: "Business & Productivity Utilities",
+    description: "Generate invoices, QR codes, calculate taxes, and analyze text.",
+    tools: [
+      { title: "QR Code Generator", description: "Create scannable custom QR codes for URLs and Wi-Fi.", href: "/studio", icon: QrCode, color: "bg-violet-600" },
+      { title: "Invoice Generator", description: "Create professional business invoices and export to PDF.", href: "/studio", icon: FileCode, color: "bg-emerald-700" },
+      { title: "Tax Calculator", description: "Calculate regional corporate and service taxes instantly.", href: "/studio", icon: Calculator, color: "bg-blue-500" },
+      { title: "Secure Password Generator", description: "Generate robust cryptographic credentials.", href: "/studio", icon: KeyRound, color: "bg-slate-700" },
+    ]
+  }
+];
+
+export default function MasterCorporateHomepage() {
   const [searchQuery, setSearchQuery] = useState("");
 
   return (
@@ -46,7 +96,7 @@ export default function MasterHomepage() {
                 href="/studio" 
                 className="bg-blue-600 text-white px-5 py-2.5 rounded-xl text-sm font-semibold hover:bg-blue-700 transition shadow-sm flex items-center gap-2"
               >
-                <Sparkles className="w-4 h-4" /> Launch Master Studio
+                <Sparkles className="w-4 h-4" /> Master Studio
               </Link>
             </div>
           </div>
@@ -66,7 +116,7 @@ export default function MasterHomepage() {
             </h1>
             
             <p className="text-base sm:text-lg text-slate-600 mb-8 max-w-2xl mx-auto leading-relaxed">
-              Professional, software-grade document utilities. Edit, sign, convert, split, and manage files securely in your browser.
+              Fast, secure, and professional browser utilities. All your document tools organized cleanly by category.
             </p>
 
             {/* Global Search Bar */}
@@ -78,169 +128,93 @@ export default function MasterHomepage() {
                 type="text"
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                placeholder="Search for any tool (e.g., merge, signature, splitter)..."
+                placeholder="Search across all tools (e.g., merge, sign, invoice, CV)..."
                 className="w-full pl-12 pr-4 py-3.5 bg-slate-50 border border-slate-300 rounded-2xl text-slate-900 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-600 focus:bg-white transition shadow-sm"
               />
             </div>
           </div>
         </section>
 
-        {/* Category Sections */}
+        {/* CATEGORIZED TOOLS SECTIONS (Sejda / iLovePDF Style) */}
         <main className="max-w-7xl mx-auto px-6 py-12 space-y-16">
           
-          {/* SECTION 1: Flagship Software & Editors */}
-          <div>
-            <div className="border-b border-slate-200 pb-4 mb-6">
-              <h2 className="text-2xl font-bold text-slate-900 flex items-center gap-2">
-                <Sparkles className="w-6 h-6 text-blue-600" /> Flagship Workspaces & Editors
-              </h2>
-              <p className="text-sm text-slate-500">Full desktop-style application suites running locally in your browser.</p>
+          {toolCategories.map((cat, idx) => (
+            <div key={idx}>
+              <div className="border-b border-slate-200 pb-3 mb-6">
+                <h2 className="text-xl font-bold text-slate-900 tracking-tight">{cat.categoryName}</h2>
+                <p className="text-xs text-slate-500 mt-0.5">{cat.description}</p>
+              </div>
+
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
+                {cat.tools.map((tool, tIdx) => {
+                  const Icon = tool.icon;
+                  // If search is active, filter out tools that don't match
+                  if (searchQuery && !tool.title.toLowerCase().includes(searchQuery.toLowerCase()) && !tool.description.toLowerCase().includes(searchQuery.toLowerCase())) {
+                    return null;
+                  }
+
+                  return (
+                    <Link
+                      key={tIdx}
+                      href={tool.href}
+                      className="group bg-white rounded-2xl p-5 border border-slate-200 hover:border-blue-500 hover:shadow-md transition flex flex-col justify-between"
+                    >
+                      <div>
+                        <div className="flex items-center justify-between mb-3">
+                          <div className={`${tool.color} text-white p-2.5 rounded-xl shadow-sm group-hover:scale-105 transition`}>
+                            <Icon className="w-5 h-5" />
+                          </div>
+                          <span className="text-[10px] font-semibold uppercase tracking-wider text-slate-400 group-hover:text-blue-600 transition">
+                            Utility
+                          </span>
+                        </div>
+                        <h3 className="text-sm font-bold text-slate-900 group-hover:text-blue-600 transition mb-1">
+                          {tool.title}
+                        </h3>
+                        <p className="text-slate-600 text-xs leading-relaxed">
+                          {tool.description}
+                        </p>
+                      </div>
+                      <div className="mt-4 pt-3 border-t border-slate-100 flex items-center justify-between text-[11px] font-semibold text-slate-400 group-hover:text-blue-600">
+                        <span>Ready</span>
+                        <span className="flex items-center gap-1 group-hover:translate-x-0.5 transition">Open <ArrowRight className="w-3 h-3" /></span>
+                      </div>
+                    </Link>
+                  );
+                })}
+              </div>
             </div>
+          ))}
 
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              {/* Master Studio Card */}
-              <Link
-                href="/studio"
-                className="group bg-gradient-to-br from-blue-900 to-slate-900 text-white rounded-2xl p-8 border border-blue-800 shadow-lg hover:shadow-xl transition flex flex-col justify-between"
-              >
-                <div>
-                  <div className="w-12 h-12 bg-blue-600 text-white rounded-xl flex items-center justify-center mb-6 shadow-md group-hover:scale-105 transition">
-                    <Cpu className="w-6 h-6" />
-                  </div>
-                  <h3 className="text-xl font-bold mb-3 group-hover:text-blue-300 transition">
-                    PDFEdit Master Studio (Word-Style Editor)
-                  </h3>
-                  <p className="text-slate-300 text-sm leading-relaxed mb-6">
-                    A fully functional document powerhouse. Upload documents, edit native text with matching fonts, apply custom digital signatures, insert letterheads, and export instantly.
-                  </p>
-                </div>
-                <div className="flex items-center justify-between pt-4 border-t border-slate-700 text-xs font-semibold text-blue-400">
-                  <span>Full Suite Software</span>
-                  <span className="flex items-center gap-1 group-hover:translate-x-1 transition">Launch Workspace <ArrowRight className="w-4 h-4" /></span>
-                </div>
-              </Link>
-
-              {/* CV Builder Card */}
+          {/* FEATURED BANNER SECTION: Career & CV Builder */}
+          <div className="bg-gradient-to-r from-emerald-900 via-slate-900 to-blue-950 text-white rounded-3xl p-8 sm:p-12 shadow-xl border border-emerald-800/40 relative overflow-hidden flex flex-col md:flex-row items-center justify-between gap-8">
+            <div className="absolute inset-0 bg-[radial-gradient(#334155_1px,transparent_1px)] [background-size:16px_16px] opacity-20 pointer-events-none"></div>
+            
+            <div className="relative z-10 max-w-xl">
+              <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-500/20 text-emerald-300 text-xs font-semibold mb-4 border border-emerald-500/30">
+                <Briefcase className="w-3.5 h-3.5" /> Career & Resume Studio
+              </div>
+              <h2 className="text-2xl sm:text-3xl font-extrabold tracking-tight mb-3">
+                Professional CV Builder with Live Preview.
+              </h2>
+              <p className="text-slate-300 text-sm leading-relaxed mb-6">
+                Generate region-compliant resumes (UAE, USA, Europe) with a live side-by-side preview engine. Instant PDF export with professional layouts.
+              </p>
               <Link
                 href="/cv-builder"
-                className="group bg-gradient-to-br from-emerald-900 to-slate-900 text-white rounded-2xl p-8 border border-emerald-800 shadow-lg hover:shadow-xl transition flex flex-col justify-between"
+                className="inline-flex items-center gap-2 bg-emerald-600 text-white px-6 py-3 rounded-xl text-sm font-semibold hover:bg-emerald-500 transition shadow-md"
               >
-                <div>
-                  <div className="w-12 h-12 bg-emerald-600 text-white rounded-xl flex items-center justify-center mb-6 shadow-md group-hover:scale-105 transition">
-                    <Briefcase className="w-6 h-6" />
-                  </div>
-                  <h3 className="text-xl font-bold mb-3 group-hover:text-emerald-300 transition">
-                    Professional CV Builder Studio
-                  </h3>
-                  <p className="text-slate-300 text-sm leading-relaxed mb-6">
-                    Create region-compliant resumes (UAE, USA, Europe) with a real-time live preview pane on the left and instant PDF export.
-                  </p>
-                </div>
-                <div className="flex items-center justify-between pt-4 border-t border-slate-700 text-xs font-semibold text-emerald-400">
-                  <span>Career Suite</span>
-                  <span className="flex items-center gap-1 group-hover:translate-x-1 transition">Open CV Studio <ArrowRight className="w-4 h-4" /></span>
-                </div>
+                Launch CV Studio <ArrowRight className="w-4 h-4" />
               </Link>
             </div>
-          </div>
 
-          {/* SECTION 2: Core PDF Utilities */}
-          <div>
-            <div className="border-b border-slate-200 pb-4 mb-6">
-              <h2 className="text-2xl font-bold text-slate-900 flex items-center gap-2">
-                <FileCheck className="w-6 h-6 text-indigo-600" /> PDF Document Utilities
-              </h2>
-              <p className="text-sm text-slate-500">Fast, secure tools to merge, split, sign, and extract data.</p>
-            </div>
-
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-              {/* Batch Processing */}
-              <Link
-                href="/batch-pdf"
-                className="group bg-white rounded-2xl p-6 border border-slate-200 hover:border-blue-500 hover:shadow-md transition flex flex-col justify-between"
-              >
-                <div>
-                  <div className="w-10 h-10 bg-indigo-600 text-white rounded-xl flex items-center justify-center mb-4 shadow-sm">
-                    <Layers className="w-5 h-5" />
-                  </div>
-                  <h3 className="text-base font-bold text-slate-900 group-hover:text-blue-600 transition mb-2">
-                    Batch PDF Suite
-                  </h3>
-                  <p className="text-slate-600 text-xs leading-relaxed">
-                    Merge, compress, or process multiple files simultaneously in an optimized queue.
-                  </p>
-                </div>
-                <div className="mt-6 pt-3 border-t border-slate-100 flex items-center justify-between text-xs font-semibold text-slate-400 group-hover:text-blue-600">
-                  <span>Client Engine</span>
-                  <span className="flex items-center gap-1">Open <ArrowRight className="w-3.5 h-3.5" /></span>
-                </div>
-              </Link>
-
-              {/* Form Filler & Signer */}
-              <Link
-                href="/sign-pdf"
-                className="group bg-white rounded-2xl p-6 border border-slate-200 hover:border-blue-500 hover:shadow-md transition flex flex-col justify-between"
-              >
-                <div>
-                  <div className="w-10 h-10 bg-emerald-600 text-white rounded-xl flex items-center justify-center mb-4 shadow-sm">
-                    <FileText className="w-5 h-5" />
-                  </div>
-                  <h3 className="text-base font-bold text-slate-900 group-hover:text-blue-600 transition mb-2">
-                    Form Filler & Signer
-                  </h3>
-                  <p className="text-slate-600 text-xs leading-relaxed">
-                    Securely stamp signatures, dates, and text notes onto agreements.
-                  </p>
-                </div>
-                <div className="mt-6 pt-3 border-t border-slate-100 flex items-center justify-between text-xs font-semibold text-slate-400 group-hover:text-blue-600">
-                  <span>Secure Sign</span>
-                  <span className="flex items-center gap-1">Open <ArrowRight className="w-3.5 h-3.5" /></span>
-                </div>
-              </Link>
-
-              {/* Data Extractor */}
-              <Link
-                href="/extract-pdf"
-                className="group bg-white rounded-2xl p-6 border border-slate-200 hover:border-blue-500 hover:shadow-md transition flex flex-col justify-between"
-              >
-                <div>
-                  <div className="w-10 h-10 bg-purple-600 text-white rounded-xl flex items-center justify-center mb-4 shadow-sm">
-                    <Database className="w-5 h-5" />
-                  </div>
-                  <h3 className="text-base font-bold text-slate-900 group-hover:text-blue-600 transition mb-2">
-                    PDF Data Extractor
-                  </h3>
-                  <p className="text-slate-600 text-xs leading-relaxed">
-                    Extract text content, metadata, and tables directly into CSV format.
-                  </p>
-                </div>
-                <div className="mt-6 pt-3 border-t border-slate-100 flex items-center justify-between text-xs font-semibold text-slate-400 group-hover:text-blue-600">
-                  <span>Data Tool</span>
-                  <span className="flex items-center gap-1">Open <ArrowRight className="w-3.5 h-3.5" /></span>
-                </div>
-              </Link>
-
-              {/* Page Splitter */}
-              <Link
-                href="/split-pdf"
-                className="group bg-white rounded-2xl p-6 border border-slate-200 hover:border-blue-500 hover:shadow-md transition flex flex-col justify-between"
-              >
-                <div>
-                  <div className="w-10 h-10 bg-amber-600 text-white rounded-xl flex items-center justify-center mb-4 shadow-sm">
-                    <Scissors className="w-5 h-5" />
-                  </div>
-                  <h3 className="text-base font-bold text-slate-900 group-hover:text-blue-600 transition mb-2">
-                    Slide & Page Splitter
-                  </h3>
-                  <p className="text-slate-600 text-xs leading-relaxed">
-                    Isolate precise page ranges or presentation slides instantly.
-                  </p>
-                </div>
-                <div className="mt-6 pt-3 border-t border-slate-100 flex items-center justify-between text-xs font-semibold text-slate-400 group-hover:text-blue-600">
-                  <span>Organize</span>
-                  <span className="flex items-center gap-1">Open <ArrowRight className="w-3.5 h-3.5" /></span>
-                </div>
-              </Link>
+            <div className="relative z-10 bg-white/10 backdrop-blur-md p-6 rounded-2xl border border-white/10 text-center sm:text-left">
+              <div className="text-xs uppercase tracking-widest text-emerald-400 font-bold mb-2">Built-in Templates</div>
+              <ul className="text-xs text-slate-200 space-y-2">
+                <li className="flex items-center gap-2">✓ UAE / GCC Corporate Format</li>
+                <li className="flex items-center gap-2">✓ Modern Creative Executive</li>
+                <li className="flex items-center gap-2">✓ Real-time Split-Screen Rendering</li>
+              </ul>
             </div>
           </div>
 
