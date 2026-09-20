@@ -527,8 +527,9 @@ export function InvoiceGenerator() {
       // Save PDF directly to user's device
       const fileName = `Invoice-${invoiceNumber.trim() || 'draft'}.pdf`;
       doc.save(fileName);
-      trackToolExecution('invoice-generator');
+      trackToolExecution('invoice-generator', true);
     } catch (err) {
+      trackToolExecution('invoice-generator', false);
       console.error('Failed to generate PDF:', err);
       alert('An error occurred while generating your invoice PDF. Please try again.');
     } finally {

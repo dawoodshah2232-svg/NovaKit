@@ -218,9 +218,10 @@ export function OrganizePdf() {
       const baseName = file?.name.replace(/\.[^/.]+$/, '') || 'document';
       saveAs(blob, `${baseName}-reorganized.pdf`);
 
-      trackToolExecution('organize-pdf');
+      trackToolExecution('organize-pdf', true);
       setSuccessMessage(`Successfully exported reorganized PDF with ${pages.length} pages!`);
     } catch (err: unknown) {
+      trackToolExecution('organize-pdf', false);
       console.error('Error exporting reorganized PDF:', err);
       const msg = err instanceof Error ? err.message : 'Failed to export reorganized PDF.';
       setErrorMessage(msg);

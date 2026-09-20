@@ -194,9 +194,10 @@ export function RotatePdf() {
       const baseName = file?.name.replace(/\.[^/.]+$/, '') || 'document';
       saveAs(blob, `${baseName}-rotated.pdf`);
 
-      trackToolExecution('rotate-pdf');
+      trackToolExecution('rotate-pdf', true);
       setSuccessMessage('Successfully applied page rotations and downloaded updated PDF!');
     } catch (err: unknown) {
+      trackToolExecution('rotate-pdf', false);
       console.error('Error saving rotated PDF:', err);
       const msg = err instanceof Error ? err.message : 'Failed to save rotated PDF.';
       setErrorMessage(msg);

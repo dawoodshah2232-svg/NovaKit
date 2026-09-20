@@ -174,7 +174,7 @@ Take-Home Ratio: ${takeHomePercentage.toFixed(1)}%
     try {
       await navigator.clipboard.writeText(text);
       setCopied(true);
-      trackToolExecution('tax-calculator');
+      trackToolExecution('tax-calculator', true);
       setTimeout(() => setCopied(false), 2500);
     } catch (err) {
       console.error('Failed to copy to clipboard:', err);
@@ -298,7 +298,7 @@ Take-Home Ratio: ${takeHomePercentage.toFixed(1)}%
 
       // Save PDF
       doc.save(`PDFEdit-Studio-Tax-Breakdown-${new Date().toISOString().slice(0, 10)}.pdf`);
-      trackToolExecution('tax-calculator');
+      trackToolExecution('tax-calculator', true);
     } catch (err) {
       console.error('Failed to export PDF:', err);
       alert('Unable to generate PDF document. Please try again.');
@@ -318,7 +318,7 @@ Take-Home Ratio: ${takeHomePercentage.toFixed(1)}%
           </span>
           <ShieldCheck className="w-4 h-4 text-amber-600 dark:text-amber-400 shrink-0" />
           <span>
-            <strong>100% In-Browser Computation:</strong> Your salary and financial parameters never leave your browser RAM. Zero analytics or server logging.
+            <strong>100% In-Browser Computation:</strong> Your salary and financial parameters never leave your browser RAM. Anonymous tool usage is recorded without your financial inputs.
           </span>
         </div>
         <span className="hidden sm:inline-block text-[11px] font-black px-2.5 py-1 rounded-full bg-amber-100 dark:bg-amber-900/60 text-amber-800 dark:text-amber-200 border border-amber-200 dark:border-amber-800">

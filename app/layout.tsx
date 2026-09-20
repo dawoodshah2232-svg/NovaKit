@@ -1,3 +1,5 @@
+import { Suspense } from 'react';
+import { AnalyticsTracker } from '@/components/analytics-tracker';
 import type { Metadata, Viewport } from 'next';
 import { Inter, JetBrains_Mono } from 'next/font/google';
 import './globals.css';
@@ -118,6 +120,7 @@ export default function RootLayout({
           disableTransitionOnChange
         >
           <div className="flex min-h-screen flex-col">
+            <Suspense fallback={null}><AnalyticsTracker /></Suspense>
             <Header />
 
             <main className="mx-auto w-full max-w-7xl flex-1 px-4 py-5 sm:px-6 sm:py-7 lg:px-8">

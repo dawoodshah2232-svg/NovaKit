@@ -1,36 +1,26 @@
 import { NextResponse } from 'next/server';
-
+import { ADMIN_COOKIE, adminConfigured, adminCookieOptions, adminPassword, equalSecret, issueAdminSession } from '@/lib/admin-auth';
+import { analyticsRpc } from '@/lib/analytics-db';
+import { InputError, requireSameOrigin, smallJson } from '@/lib/analytics-input';
 export async function POST(req: Request) {
   try {
-    const body = await req.json();
-    const passcode = typeof body?.passcode === 'string' ? body.passcode.trim() : '';
-
-    // Server-side environment variable only - never exposed to client bundles
-    const serverPasscode =
-      process.env.ADMIN_PASS ||
-      process.env.ADMIN_PASSCODE ||
-      process.env.ADMIN_PASSWORD ||
-      process.env.NEXT_PUBLIC_ADMIN_PASS;
-
-    if (!serverPasscode) {
-      return NextResponse.json(
-        { success: false, error: 'Admin passcode is not configured on the server.' },
-        { status: 500 }
-      );
-    }
-
-    if (passcode && passcode === serverPasscode.trim()) {
-      return NextResponse.json({ success: true });
-    }
-
-    return NextResponse.json(
-      { success: false, error: 'Incorrect admin passcode. Please verify your credentials.' },
-      { status: 401 }
-    );
-  } catch {
-    return NextResponse.json(
-      { success: false, error: 'Authentication verification failed.' },
-      { status: 500 }
-    );
+    requireSameOrigin(req);
+    const body = await smallJson(req);
+    if (!adminConfigured()) return NextResponse.json({ error: 'Set ADMIN_PASS and ADMIN_SESSION_SECRET on the server.' }, { status: 503 });
+    if (typeof body.passcode !== 'string' || body.passcode.length > 256) throw new InputError(400, 'Invalid passcode.');
+    // A persistent, global attempt budget works across serverless instances without storing IPs.
+    if (!await analyticsRpc<boolean>('analytics_admin_attempt', {})) return NextResponse.json({ error: 'Too many attempts. Try again in 15 minutes.' }, { status: 429 });
+    if (!equalSecret(body.passcode, adminPassword()!)) return NextResponse.json({ error: 'Incorrect passcode.' }, { status: 401 });
+    const response = NextResponse.json({ success: true }, { headers: { 'Cache-Control': 'no-store' } });
+    response.cookies.set(ADMIN_COOKIE, issueAdminSession(), adminCookieOptions);
+    return response;
+  } catch (error) {
+    return NextResponse.json({ error: error instanceof InputError ? error.message : 'Admin storage unavailable. Complete database setup.' }, { status: error instanceof InputError ? error.status : 503 });
   }
+}
+export async function DELETE(req: Request) {
+  try { requireSameOrigin(req); } catch { return new Response(null, { status: 403 }); }
+  const response = NextResponse.json({ success: true });
+  response.cookies.set(ADMIN_COOKIE, '', { ...adminCookieOptions, maxAge: 0 });
+  return response;
 }

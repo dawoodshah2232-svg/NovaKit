@@ -173,9 +173,10 @@ export function UnlockPdf() {
       const baseName = file.name.replace(/\.[^/.]+$/, '');
       saveAs(blob, `${baseName}-unlocked.pdf`);
 
-      trackToolExecution('unlock-pdf');
+      trackToolExecution('unlock-pdf', true);
       setSuccessMessage('PDF unlocked successfully! All password restrictions and encryption have been removed.');
     } catch (err: unknown) {
+      trackToolExecution('unlock-pdf', false);
       console.error('Decryption failed:', err);
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       if ((err as any)?.name === 'PasswordException' || (err as any)?.code === 1 || (err as any)?.code === 2) {

@@ -438,8 +438,9 @@ export function PdfMerger() {
         pageCount: mergedPdf.getPageCount(),
       });
       setSuccessMessage(`Successfully merged ${pdfFiles.length} PDF${pdfFiles.length === 1 ? '' : 's'}.`);
-      trackToolExecution('pdf-merger');
+      trackToolExecution('pdf-merger', true);
     } catch (err) {
+      trackToolExecution('pdf-merger', false);
       console.error('PDF Merge Error:', err);
       if (err instanceof Error) {
         setErrorMessage(err.message);

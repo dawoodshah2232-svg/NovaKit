@@ -259,8 +259,9 @@ export function PdfToImage() {
       setSuccessMessage(
         `Successfully converted all ${totalPages} pages to high-resolution ${format.toUpperCase()} images!`
       );
-      trackToolExecution('pdf-to-image');
+      trackToolExecution('pdf-to-image', true);
     } catch (err: unknown) {
+      trackToolExecution('pdf-to-image', false);
       console.error('PDF Conversion error:', err);
       setErrorMessage(
         err instanceof Error ? err.message : 'An error occurred while converting the PDF.'

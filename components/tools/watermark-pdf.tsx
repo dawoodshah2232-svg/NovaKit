@@ -212,9 +212,10 @@ export function WatermarkPdf() {
       const baseName = file.name.replace(/\.[^/.]+$/, '');
       saveAs(blob, `${baseName}-watermarked.pdf`);
 
-      trackToolExecution('watermark-pdf');
+      trackToolExecution('watermark-pdf', true);
       setSuccessMessage(`Watermark applied across all ${pages.length} pages successfully!`);
     } catch (err: unknown) {
+      trackToolExecution('watermark-pdf', false);
       console.error('Error applying watermark:', err);
       const msg = err instanceof Error ? err.message : 'Failed to apply watermark to PDF.';
       setErrorMessage(msg);

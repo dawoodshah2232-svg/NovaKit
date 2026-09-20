@@ -276,7 +276,7 @@ export function SplitPdf() {
             pages.length === 1 ? 'page' : 'pages'
           } successfully into "${outputFileName}" (${formatBytes(blob.size)})`
         );
-        trackToolExecution('split-pdf');
+        trackToolExecution('split-pdf', true);
       } else {
         // Option B: Extract all individual pages and bundle into ZIP
         const total = loadedPdf.pageCount;
@@ -311,9 +311,10 @@ export function SplitPdf() {
             zipBlob.size
           )})`
         );
-        trackToolExecution('split-pdf');
+        trackToolExecution('split-pdf', true);
       }
     } catch (err: unknown) {
+      trackToolExecution('split-pdf', false);
       console.error('Error during split operation:', err);
       setErrorMessage(
         err instanceof Error

@@ -271,9 +271,10 @@ export function ImageToPdf() {
       const blob = new Blob([pdfBytes as unknown as BlobPart], { type: 'application/pdf' });
       saveAs(blob, `images-compiled-${Date.now().toString().slice(-6)}.pdf`);
 
-      trackToolExecution('image-to-pdf');
+      trackToolExecution('image-to-pdf', true);
       setSuccessMessage(`Successfully compiled ${images.length} image${images.length > 1 ? 's' : ''} into a single PDF!`);
     } catch (err: unknown) {
+      trackToolExecution('image-to-pdf', false);
       console.error('Error compiling PDF:', err);
       const msg = err instanceof Error ? err.message : 'Failed to compile images to PDF.';
       setErrorMessage(msg);

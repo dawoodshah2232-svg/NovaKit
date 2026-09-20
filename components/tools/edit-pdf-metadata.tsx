@@ -171,9 +171,10 @@ export function EditPdfMetadata() {
       const baseName = file.name.replace(/\.[^/.]+$/, '');
       saveAs(blob, `${baseName}-updated-metadata.pdf`);
 
-      trackToolExecution('edit-pdf-metadata');
+      trackToolExecution('edit-pdf-metadata', true);
       setSuccessMessage('Metadata successfully updated and downloaded!');
     } catch (err: unknown) {
+      trackToolExecution('edit-pdf-metadata', false);
       console.error('Error saving metadata:', err);
       const msg = err instanceof Error ? err.message : 'Failed to update PDF metadata.';
       setErrorMessage(msg);

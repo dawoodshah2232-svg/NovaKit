@@ -92,7 +92,7 @@ export function ImageCompressor() {
         const newCompressedUrl = URL.createObjectURL(resultFile);
         prevCompressedUrlRef.current = newCompressedUrl;
         setCompressedUrl(newCompressedUrl);
-        trackToolExecution('image-compressor');
+        trackToolExecution('image-compressor', true);
       } catch (err) {
         console.error('Compression error:', err);
         setErrorMessage('Failed to compress image. Please try a different quality or format.');
@@ -206,7 +206,7 @@ export function ImageCompressor() {
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
-    trackToolExecution('image-compressor');
+    trackToolExecution('image-compressor', true);
   };
 
   // Savings calculation

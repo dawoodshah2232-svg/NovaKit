@@ -130,7 +130,7 @@ export function TextAnalyzer() {
       await navigator.clipboard.writeText(text);
       setCopied(true);
       setTimeout(() => setCopied(false), 2000);
-      trackToolExecution('text-analyzer');
+      trackToolExecution('text-analyzer', true);
     } catch (err) {
       console.error('Failed to copy text:', err);
     }
@@ -144,7 +144,6 @@ export function TextAnalyzer() {
   // Load sample text
   const handleLoadSample = () => {
     setText(SAMPLE_TEXT);
-    trackToolExecution('text-analyzer');
   };
 
   return (
@@ -296,7 +295,7 @@ export function TextAnalyzer() {
                 onChange={(e) => setText(e.target.value)}
                 onBlur={() => {
                   if (text.trim().length > 30) {
-                    trackToolExecution('text-analyzer');
+                    trackToolExecution('text-analyzer', true);
                   }
                 }}
                 placeholder="Paste or write your article, blog post, or SEO copy here..."

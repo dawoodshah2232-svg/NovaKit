@@ -102,7 +102,7 @@ export function QrGenerator() {
       document.body.appendChild(link);
       link.click();
       document.body.removeChild(link);
-      trackToolExecution('qr-generator');
+      trackToolExecution('qr-generator', true);
     } catch (err) {
       console.error('Failed to download PNG:', err);
       alert('Unable to export PNG image.');
@@ -126,7 +126,7 @@ export function QrGenerator() {
       link.click();
       document.body.removeChild(link);
       URL.revokeObjectURL(svgUrl);
-      trackToolExecution('qr-generator');
+      trackToolExecution('qr-generator', true);
     } catch (err) {
       console.error('Failed to download SVG:', err);
       alert('Unable to export SVG vector.');
@@ -146,7 +146,7 @@ export function QrGenerator() {
             }),
           ]);
           setCopiedImage(true);
-          trackToolExecution('qr-generator');
+          trackToolExecution('qr-generator', true);
           setTimeout(() => setCopiedImage(false), 2000);
         } catch (clipErr) {
           console.warn('Direct clipboard image copy not supported:', clipErr);

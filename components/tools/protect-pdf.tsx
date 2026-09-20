@@ -222,8 +222,9 @@ export function ProtectPdf() {
           blob.size
         )}).`
       );
-      trackToolExecution('protect-pdf');
+      trackToolExecution('protect-pdf', true);
     } catch (err: unknown) {
+      trackToolExecution('protect-pdf', false);
       console.error('Encryption failed:', err);
       setErrorMessage(
         err instanceof Error ? err.message : 'An error occurred while encrypting the PDF document.'

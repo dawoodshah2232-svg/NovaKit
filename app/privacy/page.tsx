@@ -12,7 +12,10 @@ export default function PrivacyPolicy() {
         <p>We use Google AdSense to serve ads on our website. Google, as a third-party vendor, uses cookies to serve ads based on your prior visits to our website or other websites. Google&apos;s use of advertising cookies enables it and its partners to serve ads to our users based on their visit to our sites and/or other sites on the Internet.</p>
         <p>Users may opt out of personalized advertising by visiting Ads Settings.</p>
 
-        <h2 className='text-xl font-semibold mt-6'>3. Contact Us</h2>
+        <h2 className='text-xl font-semibold mt-6'>3. Anonymous Website Analytics</h2>
+        <p>We record anonymous browser sessions, public page visits, tool usage, referral domains, campaign labels, general browser and device information, and country when available. A random session identifier is kept in session storage. Analytics do not include your documents, filenames, form contents, raw IP addresses, names, or emails. We use this information to understand traffic and improve our tools.</p>
+
+        <h2 className='text-xl font-semibold mt-6'>4. Contact Us</h2>
         <p>If you have any questions about this Privacy Policy, please contact us via our website.</p>
       </section>
     </main>

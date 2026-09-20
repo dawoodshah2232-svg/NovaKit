@@ -181,7 +181,7 @@ export function ColorExtractor() {
               setPalette(pal);
               setImageMeta(fileMeta);
               setIsProcessing(false);
-              trackToolExecution('color-extractor');
+              trackToolExecution('color-extractor', true);
               return;
             }
           } catch (e) {
@@ -194,7 +194,7 @@ export function ColorExtractor() {
           setPalette(res.palette);
           setImageMeta(fileMeta);
           setIsProcessing(false);
-          trackToolExecution('color-extractor');
+          trackToolExecution('color-extractor', true);
         })
         .catch(() => {
           const res = extractColorsFallback(imgElement, 8);
@@ -202,7 +202,7 @@ export function ColorExtractor() {
           setPalette(res.palette);
           setImageMeta(fileMeta);
           setIsProcessing(false);
-          trackToolExecution('color-extractor');
+          trackToolExecution('color-extractor', true);
         });
     } catch (err) {
       console.error('Failed to process image colors:', err);

@@ -246,8 +246,9 @@ export function CompressPdf() {
 
       // Trigger instant client-side download
       saveAs(blob, outName);
-      trackToolExecution('compress-pdf');
+      trackToolExecution('compress-pdf', true);
     } catch (err: unknown) {
+      trackToolExecution('compress-pdf', false);
       console.error('Compression failed:', err);
       setErrorMessage(
         err instanceof Error ? err.message : 'An error occurred while compressing the PDF file.'
