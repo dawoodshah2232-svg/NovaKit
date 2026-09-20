@@ -370,7 +370,7 @@ export default function HomePage() {
         </div>
 
         <div className="grid gap-5">
-          <div className="group grid overflow-hidden rounded-[24px] border border-blue-200/80 bg-gradient-to-br from-[#061a3a] via-[#0b2d60] to-[#0d4a82] shadow-[0_14px_38px_rgba(8,39,82,0.14)] transition-all hover:-translate-y-1 hover:shadow-[0_20px_45px_rgba(8,39,82,0.22)] dark:border-blue-900/80 dark:from-[#061329] dark:via-[#0a2247] dark:to-[#0c3764] lg:grid-cols-[1.1fr_0.9fr]">
+          <div className="group grid overflow-hidden rounded-[24px] border border-blue-200/80 bg-gradient-to-br from-[#061a3a] via-[#0b2d60] to-[#0d4a82] shadow-[0_14px_38px_rgba(8,39,82,0.14)] transition-all hover:-translate-y-1 hover:shadow-[0_20px_45px_rgba(8,39,82,0.22)] dark:border-blue-900/80 dark:from-[#061329] dark:via-[#0a2247] dark:to-[#0c3764] lg:grid-cols-[0.9fr_1.1fr]">
             <div className="flex flex-col justify-center px-6 py-7 sm:px-9 sm:py-8 lg:px-10 lg:py-9">
               <div className="flex items-center gap-2 text-xs font-bold text-blue-200">
                 <FilePenLine className="h-4 w-4" />
@@ -409,19 +409,19 @@ export default function HomePage() {
               </Link>
             </div>
 
-            <div className="relative flex min-h-0 items-center overflow-hidden border-t border-white/10 bg-[#0a2855]/60 p-4 sm:p-6 lg:border-l lg:border-t-0 lg:p-7">
+            <div className="relative flex min-h-0 items-center justify-center overflow-hidden bg-transparent p-4 sm:p-6 lg:p-7">
               <Image
                 src="/pdf-studio.png"
                 alt="PDFEdit Studio document editor"
                 width={1711}
                 height={919}
-                className="h-auto w-full rounded-xl object-contain shadow-2xl"
+                className="h-auto w-full rounded-xl object-contain object-right shadow-2xl"
                 sizes="(max-width: 1024px) 100vw, 40vw"
               />
             </div>
           </div>
 
-          <div className="grid overflow-hidden rounded-[24px] border border-emerald-200/80 bg-gradient-to-br from-[#063c34] via-[#07594b] to-[#0b7660] shadow-[0_14px_38px_rgba(4,73,60,0.13)] dark:border-emerald-900/80 dark:from-[#062c27] dark:via-[#07443a] dark:to-[#075847] lg:grid-cols-[1.1fr_0.9fr]">
+          <div className="grid overflow-hidden rounded-[24px] border border-emerald-200/80 bg-gradient-to-br from-[#063c34] via-[#07594b] to-[#0b7660] shadow-[0_14px_38px_rgba(4,73,60,0.13)] dark:border-emerald-900/80 dark:from-[#062c27] dark:via-[#07443a] dark:to-[#075847] lg:grid-cols-[0.9fr_1.1fr]">
             <div className="flex flex-col justify-center px-6 py-7 sm:px-9 sm:py-8 lg:px-10 lg:py-9">
               <div className="flex items-center gap-2 text-xs font-bold text-emerald-200">
                 <BriefcaseBusiness className="h-4 w-4" />
@@ -453,17 +453,17 @@ export default function HomePage() {
 
               <div className="mt-6 inline-flex min-h-11 w-full cursor-not-allowed items-center justify-center gap-2 rounded-xl border border-white/20 bg-white/10 px-5 py-3 text-sm font-black text-white/70 sm:w-fit">
                 <Sparkles className="h-4 w-4" />
-                CV Builder - Coming Soon
+                CV Builder &mdash; Coming Soon
               </div>
             </div>
 
-            <div className="relative flex min-h-0 items-center overflow-hidden border-t border-white/10 bg-[#075144]/60 p-4 sm:p-6 lg:border-l lg:border-t-0 lg:p-7">
+            <div className="relative flex min-h-0 items-center justify-center overflow-hidden bg-transparent p-4 sm:p-6 lg:p-7">
               <Image
                 src="/cv-builder.png"
                 alt="Professional CV builder preview"
                 width={1711}
                 height={919}
-                className="h-auto w-full rounded-xl object-contain shadow-2xl"
+                className="h-auto w-full rounded-xl object-contain object-right shadow-2xl"
                 sizes="(max-width: 1024px) 100vw, 40vw"
               />
             </div>
