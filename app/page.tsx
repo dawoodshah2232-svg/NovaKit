@@ -21,11 +21,9 @@ import {
   Calculator,
   FileCode,
   KeyRound,
-  SlidersHorizontal,
-  Stamp
+  FileEdit
 } from "lucide-react";
 
-// Complete catalog of all tools categorized like top-tier enterprise platforms
 const toolCategories = [
   {
     categoryName: "Organize & Structure PDFs",
@@ -40,7 +38,7 @@ const toolCategories = [
     categoryName: "Edit, Sign & Secure",
     description: "Add digital signatures, fill forms, and protect confidential files.",
     tools: [
-      { title: "Master PDF Studio", description: "Full Word-style editor for text, stamps, and signatures.", href: "/studio", icon: Sparkles, color: "bg-blue-700" },
+      { title: "PDF Editor & Creator", description: "Full Word-style editor for text, stamps, and signatures.", href: "/studio", icon: FileEdit, color: "bg-blue-700" },
       { title: "Form Filler & Signer", description: "Stamp signatures, dates, and text notes securely.", href: "/sign-pdf", icon: FileText, color: "bg-emerald-600" },
       { title: "Protect PDF (Encrypt)", description: "Secure sensitive documents with strong passwords.", href: "/studio", icon: Lock, color: "bg-rose-600" },
       { title: "PDF Password Remover", description: "Remove access restrictions from authorized files.", href: "/studio", icon: Unlock, color: "bg-teal-600" },
@@ -73,30 +71,30 @@ export default function MasterCorporateHomepage() {
   return (
     <div className="min-h-screen bg-slate-50 text-slate-900 flex flex-col justify-between selection:bg-blue-600 selection:text-white">
       <div>
-        {/* Navigation Bar */}
-        <header className="bg-white/90 backdrop-blur-md border-b border-slate-200 sticky top-0 z-50">
-          <div className="max-w-7xl mx-auto px-6 h-18 flex justify-between items-center">
+        {/* Navigation Bar with New SVG Logo */}
+        <header className="bg-white/95 backdrop-blur-md border-b border-slate-200 sticky top-0 z-50 shadow-xs">
+          <div className="max-w-7xl mx-auto px-6 h-20 flex justify-between items-center">
             <div className="flex items-center gap-3">
-              <div className="w-10 h-10 rounded-xl bg-blue-600 text-white flex items-center justify-center font-bold text-lg shadow-sm">
-                PDF
-              </div>
-              <div>
-                <span className="text-lg font-bold tracking-tight text-slate-900">PDFEdit</span>
-                <span className="text-xs uppercase font-semibold text-blue-600 block tracking-widest">Enterprise Studio</span>
-              </div>
+              <Link href="/" className="flex items-center gap-2">
+                <img 
+                  src="/pdfedit-light.svg" 
+                  alt="PDFEdit Enterprise Studio" 
+                  className="h-10 w-auto object-contain" 
+                />
+              </Link>
             </div>
             <div className="flex items-center gap-3">
               <Link 
                 href="/cv-builder" 
-                className="hidden sm:flex items-center gap-1.5 bg-emerald-50 text-emerald-700 border border-emerald-200 px-4 py-2 rounded-xl text-sm font-semibold hover:bg-emerald-100 transition"
+                className="flex items-center gap-2 bg-emerald-50 text-emerald-700 border border-emerald-200/80 px-4 py-2.5 rounded-xl text-sm font-semibold hover:bg-emerald-100 transition shadow-2xs"
               >
-                <Briefcase className="w-4 h-4" /> CV Builder
+                <Sparkles className="w-4 h-4 text-emerald-600" /> AI CV Builder (Free)
               </Link>
               <Link 
                 href="/studio" 
                 className="bg-blue-600 text-white px-5 py-2.5 rounded-xl text-sm font-semibold hover:bg-blue-700 transition shadow-sm flex items-center gap-2"
               >
-                <Sparkles className="w-4 h-4" /> Master Studio
+                <FileEdit className="w-4 h-4" /> PDF Editor & Creator
               </Link>
             </div>
           </div>
@@ -129,13 +127,13 @@ export default function MasterCorporateHomepage() {
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
                 placeholder="Search across all tools (e.g., merge, sign, invoice, CV)..."
-                className="w-full pl-12 pr-4 py-3.5 bg-slate-50 border border-slate-300 rounded-2xl text-slate-900 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-600 focus:bg-white transition shadow-sm"
+                className="w-full pl-12 pr-4 py-3.5 bg-slate-50 border border-slate-300 rounded-2xl text-slate-900 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-600 focus:bg-white transition shadow-2xs"
               />
             </div>
           </div>
         </section>
 
-        {/* CATEGORIZED TOOLS SECTIONS (Sejda / iLovePDF Style) */}
+        {/* CATEGORIZED TOOLS SECTIONS */}
         <main className="max-w-7xl mx-auto px-6 py-12 space-y-16">
           
           {toolCategories.map((cat, idx) => (
@@ -148,7 +146,6 @@ export default function MasterCorporateHomepage() {
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
                 {cat.tools.map((tool, tIdx) => {
                   const Icon = tool.icon;
-                  // If search is active, filter out tools that don't match
                   if (searchQuery && !tool.title.toLowerCase().includes(searchQuery.toLowerCase()) && !tool.description.toLowerCase().includes(searchQuery.toLowerCase())) {
                     return null;
                   }
@@ -161,7 +158,7 @@ export default function MasterCorporateHomepage() {
                     >
                       <div>
                         <div className="flex items-center justify-between mb-3">
-                          <div className={`${tool.color} text-white p-2.5 rounded-xl shadow-sm group-hover:scale-105 transition`}>
+                          <div className={`${tool.color} text-white p-2.5 rounded-xl shadow-2xs group-hover:scale-105 transition`}>
                             <Icon className="w-5 h-5" />
                           </div>
                           <span className="text-[10px] font-semibold uppercase tracking-wider text-slate-400 group-hover:text-blue-600 transition">
@@ -186,34 +183,34 @@ export default function MasterCorporateHomepage() {
             </div>
           ))}
 
-          {/* FEATURED BANNER SECTION: Career & CV Builder */}
+          {/* AI CV BUILDER BANNER SECTION */}
           <div className="bg-gradient-to-r from-emerald-900 via-slate-900 to-blue-950 text-white rounded-3xl p-8 sm:p-12 shadow-xl border border-emerald-800/40 relative overflow-hidden flex flex-col md:flex-row items-center justify-between gap-8">
             <div className="absolute inset-0 bg-[radial-gradient(#334155_1px,transparent_1px)] [background-size:16px_16px] opacity-20 pointer-events-none"></div>
             
             <div className="relative z-10 max-w-xl">
               <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-500/20 text-emerald-300 text-xs font-semibold mb-4 border border-emerald-500/30">
-                <Briefcase className="w-3.5 h-3.5" /> Career & Resume Studio
+                <Sparkles className="w-3.5 h-3.5" /> AI Career & Resume Studio
               </div>
               <h2 className="text-2xl sm:text-3xl font-extrabold tracking-tight mb-3">
-                Professional CV Builder with Live Preview.
+                AI CV Builder (Free) with Live Split-Screen Preview.
               </h2>
               <p className="text-slate-300 text-sm leading-relaxed mb-6">
-                Generate region-compliant resumes (UAE, USA, Europe) with a live side-by-side preview engine. Instant PDF export with professional layouts.
+                Generate region-compliant resumes (UAE, USA, Europe) instantly. Watch your resume format live on the left as you type on the right.
               </p>
               <Link
                 href="/cv-builder"
                 className="inline-flex items-center gap-2 bg-emerald-600 text-white px-6 py-3 rounded-xl text-sm font-semibold hover:bg-emerald-500 transition shadow-md"
               >
-                Launch CV Studio <ArrowRight className="w-4 h-4" />
+                Launch AI CV Builder <ArrowRight className="w-4 h-4" />
               </Link>
             </div>
 
             <div className="relative z-10 bg-white/10 backdrop-blur-md p-6 rounded-2xl border border-white/10 text-center sm:text-left">
-              <div className="text-xs uppercase tracking-widest text-emerald-400 font-bold mb-2">Built-in Templates</div>
+              <div className="text-xs uppercase tracking-widest text-emerald-400 font-bold mb-2">Key Features</div>
               <ul className="text-xs text-slate-200 space-y-2">
-                <li className="flex items-center gap-2">✓ UAE / GCC Corporate Format</li>
-                <li className="flex items-center gap-2">✓ Modern Creative Executive</li>
-                <li className="flex items-center gap-2">✓ Real-time Split-Screen Rendering</li>
+                <li className="flex items-center gap-2">✓ UAE / GCC & International Templates</li>
+                <li className="flex items-center gap-2">✓ Live Side-by-Side PDF Rendering</li>
+                <li className="flex items-center gap-2">✓ 100% Free & Secure Local Export</li>
               </ul>
             </div>
           </div>
