@@ -12,77 +12,18 @@ import {
   Zap, 
   Search,
   Sparkles,
-  Briefcase
+  Briefcase,
+  FileCheck,
+  Cpu
 } from "lucide-react";
 
-const allTools = [
-  {
-    title: "Master PDF Studio",
-    description: "All-in-one corporate workspace to edit text, apply signatures, stamp documents, and export seamlessly.",
-    href: "/studio",
-    icon: Sparkles,
-    category: "Edit & Sign",
-    color: "bg-blue-600",
-  },
-  {
-    title: "Professional CV Builder",
-    description: "Create region-compliant resumes (UAE, USA, Europe) with live preview and instant PDF export.",
-    href: "/cv-builder",
-    icon: Briefcase,
-    category: "Career",
-    color: "bg-emerald-600",
-  },
-  {
-    title: "Batch PDF Suite",
-    description: "Merge, compress, or convert multiple documents simultaneously in an optimized client queue.",
-    href: "/batch-pdf",
-    icon: Layers,
-    category: "Organize",
-    color: "bg-indigo-600",
-  },
-  {
-    title: "Form Filler & Signer",
-    description: "Securely stamp signatures, dates, and text notes onto agreements and forms.",
-    href: "/sign-pdf",
-    icon: FileText,
-    category: "Edit & Sign",
-    color: "bg-violet-600",
-  },
-  {
-    title: "PDF Data Extractor",
-    description: "Extract text content, metadata, and tables directly into structured CSV format.",
-    href: "/extract-pdf",
-    icon: Database,
-    category: "Convert",
-    color: "bg-purple-600",
-  },
-  {
-    title: "Slide & Page Splitter",
-    description: "Isolate precise page ranges or presentation slides from large PDF volumes instantly.",
-    href: "/split-pdf",
-    icon: Scissors,
-    category: "Organize",
-    color: "bg-amber-600",
-  },
-];
-
-const categories = ["All", "Organize", "Edit & Sign", "Convert", "Career"];
-
-export default function EnterpriseHomePage() {
-  const [selectedCategory, setSelectedCategory] = useState("All");
+export default function MasterHomepage() {
   const [searchQuery, setSearchQuery] = useState("");
-
-  const filteredTools = allTools.filter(tool => {
-    const matchesCategory = selectedCategory === "All" || tool.category === selectedCategory;
-    const matchesSearch = tool.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-                          tool.description.toLowerCase().includes(searchQuery.toLowerCase());
-    return matchesCategory && matchesSearch;
-  });
 
   return (
     <div className="min-h-screen bg-slate-50 text-slate-900 flex flex-col justify-between selection:bg-blue-600 selection:text-white">
       <div>
-        {/* Top Header */}
+        {/* Navigation Bar */}
         <header className="bg-white/90 backdrop-blur-md border-b border-slate-200 sticky top-0 z-50">
           <div className="max-w-7xl mx-auto px-6 h-18 flex justify-between items-center">
             <div className="flex items-center gap-3">
@@ -105,7 +46,7 @@ export default function EnterpriseHomePage() {
                 href="/studio" 
                 className="bg-blue-600 text-white px-5 py-2.5 rounded-xl text-sm font-semibold hover:bg-blue-700 transition shadow-sm flex items-center gap-2"
               >
-                <Sparkles className="w-4 h-4" /> Master Studio
+                <Sparkles className="w-4 h-4" /> Launch Master Studio
               </Link>
             </div>
           </div>
@@ -121,15 +62,15 @@ export default function EnterpriseHomePage() {
             </div>
             
             <h1 className="text-4xl sm:text-5xl font-extrabold text-slate-900 tracking-tight mb-6">
-              Professional PDF Utilities & Document Suite.
+              Every tool you need to work with PDFs <span className="text-blue-600">in one place.</span>
             </h1>
             
             <p className="text-base sm:text-lg text-slate-600 mb-8 max-w-2xl mx-auto leading-relaxed">
-              Fast, secure, and private browser-based utilities to merge, split, compress, sign, and build documents locally.
+              Professional, software-grade document utilities. Edit, sign, convert, split, and manage files securely in your browser.
             </p>
 
-            {/* Search Input */}
-            <div className="relative max-w-xl mx-auto mb-8">
+            {/* Global Search Bar */}
+            <div className="relative max-w-xl mx-auto">
               <span className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none text-slate-400">
                 <Search className="w-5 h-5" />
               </span>
@@ -137,72 +78,172 @@ export default function EnterpriseHomePage() {
                 type="text"
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                placeholder="Search tools (e.g., merge, signature, CV builder)..."
+                placeholder="Search for any tool (e.g., merge, signature, splitter)..."
                 className="w-full pl-12 pr-4 py-3.5 bg-slate-50 border border-slate-300 rounded-2xl text-slate-900 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-600 focus:bg-white transition shadow-sm"
               />
-            </div>
-
-            {/* Category Filter Pills */}
-            <div className="flex flex-wrap justify-center gap-2">
-              {categories.map((cat, idx) => (
-                <button
-                  key={idx}
-                  onClick={() => setSelectedCategory(cat)}
-                  className={`px-4 py-2 rounded-xl text-xs font-semibold transition ${
-                    selectedCategory === cat
-                      ? "bg-blue-600 text-white shadow-sm"
-                      : "bg-white text-slate-600 border border-slate-200 hover:border-slate-300 hover:bg-slate-50"
-                  }`}
-                >
-                  {cat}
-                </button>
-              ))}
             </div>
           </div>
         </section>
 
-        {/* Tools Grid Section */}
-        <main className="max-w-7xl mx-auto px-6 py-12">
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {filteredTools.map((tool, index) => {
-              const Icon = tool.icon;
-              return (
-                <Link
-                  key={index}
-                  href={tool.href}
-                  className="group bg-white rounded-2xl p-6 border border-slate-200 hover:border-blue-500 hover:shadow-lg hover:shadow-slate-100 transition-all duration-200 flex flex-col justify-between"
-                >
-                  <div>
-                    <div className="flex items-center justify-between mb-5">
-                      <div className={`${tool.color} text-white p-3 rounded-xl shadow-sm group-hover:scale-105 transition-transform`}>
-                        <Icon className="w-6 h-6" />
-                      </div>
-                      <span className="text-xs font-semibold px-3 py-1 bg-slate-100 text-slate-600 rounded-full group-hover:bg-blue-50 group-hover:text-blue-600 transition-colors">
-                        {tool.category}
-                      </span>
-                    </div>
-                    
-                    <h3 className="text-lg font-bold text-slate-900 group-hover:text-blue-600 transition mb-2">
-                      {tool.title}
-                    </h3>
-                    
-                    <p className="text-slate-600 text-sm leading-relaxed">
-                      {tool.description}
-                    </p>
+        {/* Category Sections */}
+        <main className="max-w-7xl mx-auto px-6 py-12 space-y-16">
+          
+          {/* SECTION 1: Flagship Software & Editors */}
+          <div>
+            <div className="border-b border-slate-200 pb-4 mb-6">
+              <h2 className="text-2xl font-bold text-slate-900 flex items-center gap-2">
+                <Sparkles className="w-6 h-6 text-blue-600" /> Flagship Workspaces & Editors
+              </h2>
+              <p className="text-sm text-slate-500">Full desktop-style application suites running locally in your browser.</p>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              {/* Master Studio Card */}
+              <Link
+                href="/studio"
+                className="group bg-gradient-to-br from-blue-900 to-slate-900 text-white rounded-2xl p-8 border border-blue-800 shadow-lg hover:shadow-xl transition flex flex-col justify-between"
+              >
+                <div>
+                  <div className="w-12 h-12 bg-blue-600 text-white rounded-xl flex items-center justify-center mb-6 shadow-md group-hover:scale-105 transition">
+                    <Cpu className="w-6 h-6" />
                   </div>
-                  
-                  <div className="mt-6 pt-4 border-t border-slate-100 flex items-center justify-between text-xs font-semibold text-slate-400 group-hover:text-blue-600 transition-colors">
-                    <span className="flex items-center gap-1">
-                      <Zap className="w-3.5 h-3.5" /> Client Engine
-                    </span>
-                    <span className="flex items-center gap-1">
-                      Launch Tool <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform" />
-                    </span>
+                  <h3 className="text-xl font-bold mb-3 group-hover:text-blue-300 transition">
+                    PDFEdit Master Studio (Word-Style Editor)
+                  </h3>
+                  <p className="text-slate-300 text-sm leading-relaxed mb-6">
+                    A fully functional document powerhouse. Upload documents, edit native text with matching fonts, apply custom digital signatures, insert letterheads, and export instantly.
+                  </p>
+                </div>
+                <div className="flex items-center justify-between pt-4 border-t border-slate-700 text-xs font-semibold text-blue-400">
+                  <span>Full Suite Software</span>
+                  <span className="flex items-center gap-1 group-hover:translate-x-1 transition">Launch Workspace <ArrowRight className="w-4 h-4" /></span>
+                </div>
+              </Link>
+
+              {/* CV Builder Card */}
+              <Link
+                href="/cv-builder"
+                className="group bg-gradient-to-br from-emerald-900 to-slate-900 text-white rounded-2xl p-8 border border-emerald-800 shadow-lg hover:shadow-xl transition flex flex-col justify-between"
+              >
+                <div>
+                  <div className="w-12 h-12 bg-emerald-600 text-white rounded-xl flex items-center justify-center mb-6 shadow-md group-hover:scale-105 transition">
+                    <Briefcase className="w-6 h-6" />
                   </div>
-                </Link>
-              );
-            })}
+                  <h3 className="text-xl font-bold mb-3 group-hover:text-emerald-300 transition">
+                    Professional CV Builder Studio
+                  </h3>
+                  <p className="text-slate-300 text-sm leading-relaxed mb-6">
+                    Create region-compliant resumes (UAE, USA, Europe) with a real-time live preview pane on the left and instant PDF export.
+                  </p>
+                </div>
+                <div className="flex items-center justify-between pt-4 border-t border-slate-700 text-xs font-semibold text-emerald-400">
+                  <span>Career Suite</span>
+                  <span className="flex items-center gap-1 group-hover:translate-x-1 transition">Open CV Studio <ArrowRight className="w-4 h-4" /></span>
+                </div>
+              </Link>
+            </div>
           </div>
+
+          {/* SECTION 2: Core PDF Utilities */}
+          <div>
+            <div className="border-b border-slate-200 pb-4 mb-6">
+              <h2 className="text-2xl font-bold text-slate-900 flex items-center gap-2">
+                <FileCheck className="w-6 h-6 text-indigo-600" /> PDF Document Utilities
+              </h2>
+              <p className="text-sm text-slate-500">Fast, secure tools to merge, split, sign, and extract data.</p>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+              {/* Batch Processing */}
+              <Link
+                href="/batch-pdf"
+                className="group bg-white rounded-2xl p-6 border border-slate-200 hover:border-blue-500 hover:shadow-md transition flex flex-col justify-between"
+              >
+                <div>
+                  <div className="w-10 h-10 bg-indigo-600 text-white rounded-xl flex items-center justify-center mb-4 shadow-sm">
+                    <Layers className="w-5 h-5" />
+                  </div>
+                  <h3 className="text-base font-bold text-slate-900 group-hover:text-blue-600 transition mb-2">
+                    Batch PDF Suite
+                  </h3>
+                  <p className="text-slate-600 text-xs leading-relaxed">
+                    Merge, compress, or process multiple files simultaneously in an optimized queue.
+                  </p>
+                </div>
+                <div className="mt-6 pt-3 border-t border-slate-100 flex items-center justify-between text-xs font-semibold text-slate-400 group-hover:text-blue-600">
+                  <span>Client Engine</span>
+                  <span className="flex items-center gap-1">Open <ArrowRight className="w-3.5 h-3.5" /></span>
+                </div>
+              </Link>
+
+              {/* Form Filler & Signer */}
+              <Link
+                href="/sign-pdf"
+                className="group bg-white rounded-2xl p-6 border border-slate-200 hover:border-blue-500 hover:shadow-md transition flex flex-col justify-between"
+              >
+                <div>
+                  <div className="w-10 h-10 bg-emerald-600 text-white rounded-xl flex items-center justify-center mb-4 shadow-sm">
+                    <FileText className="w-5 h-5" />
+                  </div>
+                  <h3 className="text-base font-bold text-slate-900 group-hover:text-blue-600 transition mb-2">
+                    Form Filler & Signer
+                  </h3>
+                  <p className="text-slate-600 text-xs leading-relaxed">
+                    Securely stamp signatures, dates, and text notes onto agreements.
+                  </p>
+                </div>
+                <div className="mt-6 pt-3 border-t border-slate-100 flex items-center justify-between text-xs font-semibold text-slate-400 group-hover:text-blue-600">
+                  <span>Secure Sign</span>
+                  <span className="flex items-center gap-1">Open <ArrowRight className="w-3.5 h-3.5" /></span>
+                </div>
+              </Link>
+
+              {/* Data Extractor */}
+              <Link
+                href="/extract-pdf"
+                className="group bg-white rounded-2xl p-6 border border-slate-200 hover:border-blue-500 hover:shadow-md transition flex flex-col justify-between"
+              >
+                <div>
+                  <div className="w-10 h-10 bg-purple-600 text-white rounded-xl flex items-center justify-center mb-4 shadow-sm">
+                    <Database className="w-5 h-5" />
+                  </div>
+                  <h3 className="text-base font-bold text-slate-900 group-hover:text-blue-600 transition mb-2">
+                    PDF Data Extractor
+                  </h3>
+                  <p className="text-slate-600 text-xs leading-relaxed">
+                    Extract text content, metadata, and tables directly into CSV format.
+                  </p>
+                </div>
+                <div className="mt-6 pt-3 border-t border-slate-100 flex items-center justify-between text-xs font-semibold text-slate-400 group-hover:text-blue-600">
+                  <span>Data Tool</span>
+                  <span className="flex items-center gap-1">Open <ArrowRight className="w-3.5 h-3.5" /></span>
+                </div>
+              </Link>
+
+              {/* Page Splitter */}
+              <Link
+                href="/split-pdf"
+                className="group bg-white rounded-2xl p-6 border border-slate-200 hover:border-blue-500 hover:shadow-md transition flex flex-col justify-between"
+              >
+                <div>
+                  <div className="w-10 h-10 bg-amber-600 text-white rounded-xl flex items-center justify-center mb-4 shadow-sm">
+                    <Scissors className="w-5 h-5" />
+                  </div>
+                  <h3 className="text-base font-bold text-slate-900 group-hover:text-blue-600 transition mb-2">
+                    Slide & Page Splitter
+                  </h3>
+                  <p className="text-slate-600 text-xs leading-relaxed">
+                    Isolate precise page ranges or presentation slides instantly.
+                  </p>
+                </div>
+                <div className="mt-6 pt-3 border-t border-slate-100 flex items-center justify-between text-xs font-semibold text-slate-400 group-hover:text-blue-600">
+                  <span>Organize</span>
+                  <span className="flex items-center gap-1">Open <ArrowRight className="w-3.5 h-3.5" /></span>
+                </div>
+              </Link>
+            </div>
+          </div>
+
         </main>
       </div>
 
