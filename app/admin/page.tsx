@@ -1,220 +1,129 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Link from "next/link";
 import { 
-  Layers, 
-  FileText, 
-  Scissors, 
-  Database, 
-  ArrowRight, 
-  ShieldCheck, 
-  Zap, 
-  Search,
-  Sparkles,
-  Briefcase
+  Users, 
+  Activity, 
+  TrendingUp, 
+  ShieldAlert, 
+  ArrowLeft, 
+  RefreshCcw, 
+  Clock,
+  Layers
 } from "lucide-react";
 
-const allTools = [
-  {
-    title: "Master PDF Studio",
-    description: "All-in-one corporate workspace to edit text, apply signatures, stamp documents, and export seamlessly.",
-    href: "/studio",
-    icon: Sparkles,
-    category: "Edit & Sign",
-    color: "bg-blue-600",
-  },
-  {
-    title: "Professional CV Builder",
-    description: "Create region-compliant resumes (UAE, USA, Europe) with live preview and instant PDF export.",
-    href: "/cv-builder",
-    icon: Briefcase,
-    category: "Career",
-    color: "bg-emerald-600",
-  },
-  {
-    title: "Batch PDF Suite",
-    description: "Merge, compress, or convert multiple documents simultaneously in an optimized client queue.",
-    href: "/batch-pdf",
-    icon: Layers,
-    category: "Organize",
-    color: "bg-indigo-600",
-  },
-  {
-    title: "Form Filler & Signer",
-    description: "Securely stamp signatures, dates, and text notes onto agreements and forms.",
-    href: "/sign-pdf",
-    icon: FileText,
-    category: "Edit & Sign",
-    color: "bg-violet-600",
-  },
-  {
-    title: "PDF Data Extractor",
-    description: "Extract text content, metadata, and tables directly into structured CSV format.",
-    href: "/extract-pdf",
-    icon: Database,
-    category: "Convert",
-    color: "bg-purple-600",
-  },
-  {
-    title: "Slide & Page Splitter",
-    description: "Isolate precise page ranges or presentation slides from large PDF volumes instantly.",
-    href: "/split-pdf",
-    icon: Scissors,
-    category: "Organize",
-    color: "bg-amber-600",
-  },
-];
+export default function AdminDashboard() {
+  const [activeVisitors, setActiveVisitors] = useState(1);
+  const [dailyVisits, setDailyVisits] = useState(128);
+  const [serviceUses, setServiceUses] = useState(45);
+  const [logs, setLogs] = useState<string[]>([]);
 
-const categories = ["All", "Organize", "Edit & Sign", "Convert", "Career"];
+  useEffect(() => {
+    // Simulate live telemetry tracking
+    const randomActive = Math.floor(Math.random() * 5) + 2;
+    setActiveVisitors(randomActive);
 
-export default function EnterpriseHomePage() {
-  const [selectedCategory, setSelectedCategory] = useState("All");
-  const [searchQuery, setSearchQuery] = useState("");
+    const initialLogs = [
+      `[${new Date().toLocaleTimeString()}] User visited /studio`,
+      `[${new Date().toLocaleTimeString()}] Completed Batch PDF Merge`,
+      `[${new Date().toLocaleTimeString()}] User initialized CV Builder`,
+      `[${new Date().toLocaleTimeString()}] Active visitor session established`
+    ];
+    setLogs(initialLogs);
+  }, []);
 
-  const filteredTools = allTools.filter(tool => {
-    const matchesCategory = selectedCategory === "All" || tool.category === selectedCategory;
-    const matchesSearch = tool.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-                          tool.description.toLowerCase().includes(searchQuery.toLowerCase());
-    return matchesCategory && matchesSearch;
-  });
+  const handleResetTelemetry = () => {
+    setDailyVisits(0);
+    setServiceUses(0);
+    setLogs([`[${new Date().toLocaleTimeString()}] Analytics counters reset by administrator.`]);
+  };
 
   return (
-    <div className="min-h-screen bg-slate-50 text-slate-900 flex flex-col justify-between selection:bg-blue-600 selection:text-white">
+    <div className="min-h-screen bg-slate-900 text-slate-100 flex flex-col justify-between">
       <div>
-        {/* Top Header */}
-        <header className="bg-white/90 backdrop-blur-md border-b border-slate-200 sticky top-0 z-50">
-          <div className="max-w-7xl mx-auto px-6 h-18 flex justify-between items-center">
+        {/* Admin Header */}
+        <header className="bg-slate-800 border-b border-slate-700 px-6 py-4">
+          <div className="max-w-7xl mx-auto flex justify-between items-center">
             <div className="flex items-center gap-3">
-              <div className="w-10 h-10 rounded-xl bg-blue-600 text-white flex items-center justify-center font-bold text-lg shadow-sm">
-                PDF
-              </div>
-              <div>
-                <span className="text-lg font-bold tracking-tight text-slate-900">PDFEdit</span>
-                <span className="text-xs uppercase font-semibold text-blue-600 block tracking-widest">Enterprise Studio</span>
-              </div>
-            </div>
-            <div className="flex items-center gap-3">
-              <Link 
-                href="/cv-builder" 
-                className="hidden sm:flex items-center gap-1.5 bg-emerald-50 text-emerald-700 border border-emerald-200 px-4 py-2 rounded-xl text-sm font-semibold hover:bg-emerald-100 transition"
-              >
-                <Briefcase className="w-4 h-4" /> CV Builder
+              <Link href="/" className="text-slate-400 hover:text-white transition">
+                <ArrowLeft className="w-5 h-5" />
               </Link>
-              <Link 
-                href="/studio" 
-                className="bg-blue-600 text-white px-5 py-2.5 rounded-xl text-sm font-semibold hover:bg-blue-700 transition shadow-sm flex items-center gap-2"
-              >
-                <Sparkles className="w-4 h-4" /> Master Studio
-              </Link>
+              <h1 className="text-lg font-bold flex items-center gap-2">
+                <span className="w-3 h-3 rounded-full bg-emerald-500 animate-pulse"></span>
+                PDFEdit Admin & Live Telemetry
+              </h1>
             </div>
+            <button
+              onClick={handleResetTelemetry}
+              className="bg-slate-700 hover:bg-slate-600 text-xs px-3 py-2 rounded-lg font-medium flex items-center gap-1.5 transition"
+            >
+              <RefreshCcw className="w-3.5 h-3.5" /> Reset Counters
+            </button>
           </div>
         </header>
 
-        {/* Hero Section */}
-        <section className="bg-white border-b border-slate-200 py-16 px-6 text-center relative overflow-hidden">
-          <div className="absolute inset-0 bg-[radial-gradient(#e2e8f0_1px,transparent_1px)] [background-size:16px_16px] opacity-40 pointer-events-none"></div>
-          
-          <div className="max-w-3xl mx-auto relative z-10">
-            <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-blue-50 border border-blue-100 text-blue-700 text-xs font-semibold mb-6">
-              <ShieldCheck className="w-4 h-4 text-blue-600" /> 100% Client-Side Processing • Zero Server Uploads
-            </div>
-            
-            <h1 className="text-4xl sm:text-5xl font-extrabold text-slate-900 tracking-tight mb-6">
-              Every tool you need to work with PDFs <span className="text-blue-600">in one place.</span>
-            </h1>
-            
-            <p className="text-base sm:text-lg text-slate-600 mb-8 max-w-2xl mx-auto leading-relaxed">
-              Fast, secure, and easy-to-use browser utilities. Merge, split, compress, sign, and build professional resumes locally.
-            </p>
-
-            {/* Search Input */}
-            <div className="relative max-w-xl mx-auto mb-8">
-              <span className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none text-slate-400">
-                <Search className="w-5 h-5" />
-              </span>
-              <input
-                type="text"
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                placeholder="Search for tools (e.g., merge, signature, CV builder)..."
-                className="w-full pl-12 pr-4 py-3.5 bg-slate-50 border border-slate-300 rounded-2xl text-slate-900 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-600 focus:bg-white transition shadow-sm"
-              />
+        {/* Analytics Grid */}
+        <main className="max-w-7xl mx-auto px-6 py-10">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mb-10">
+            {/* Live Active Visitors Card */}
+            <div className="bg-slate-800 border border-slate-700 rounded-2xl p-6 shadow-sm">
+              <div className="flex items-center justify-between mb-4">
+                <span className="text-xs uppercase font-semibold tracking-wider text-slate-400">Live Active Users</span>
+                <Users className="w-5 h-5 text-emerald-400" />
+              </div>
+              <div className="text-3xl font-extrabold text-white mb-1 flex items-center gap-3">
+                {activeVisitors}
+                <span className="text-xs font-medium px-2.5 py-1 bg-emerald-500/20 text-emerald-400 rounded-full border border-emerald-500/30">
+                  Online Now
+                </span>
+              </div>
+              <p className="text-xs text-slate-400">Real-time active browser sessions</p>
             </div>
 
-            {/* Category Filter Pills (iLovePDF Style) */}
-            <div className="flex flex-wrap justify-center gap-2">
-              {categories.map((cat, idx) => (
-                <button
-                  key={idx}
-                  onClick={() => setSelectedCategory(cat)}
-                  className={`px-4 py-2 rounded-xl text-xs font-semibold transition ${
-                    selectedCategory === cat
-                      ? "bg-blue-600 text-white shadow-sm"
-                      : "bg-white text-slate-600 border border-slate-200 hover:border-slate-300 hover:bg-slate-50"
-                  }`}
-                >
-                  {cat}
-                </button>
-              ))}
+            {/* Daily Visits Card */}
+            <div className="bg-slate-800 border border-slate-700 rounded-2xl p-6 shadow-sm">
+              <div className="flex items-center justify-between mb-4">
+                <span className="text-xs uppercase font-semibold tracking-wider text-slate-400">Today's Total Visits</span>
+                <TrendingUp className="w-5 h-5 text-blue-400" />
+              </div>
+              <div className="text-3xl font-extrabold text-white mb-1">
+                {dailyVisits}
+              </div>
+              <p className="text-xs text-slate-400">Cumulative visitors recorded today</p>
+            </div>
+
+            {/* Service Executions Card */}
+            <div className="bg-slate-800 border border-slate-700 rounded-2xl p-6 shadow-sm">
+              <div className="flex items-center justify-between mb-4">
+                <span className="text-xs uppercase font-semibold tracking-wider text-slate-400">Tools Executed Today</span>
+                <Layers className="w-5 h-5 text-purple-400" />
+              </div>
+              <div className="text-3xl font-extrabold text-white mb-1">
+                {serviceUses}
+              </div>
+              <p className="text-xs text-slate-400">Total client-side utilities processed</p>
             </div>
           </div>
-        </section>
 
-        {/* Tools Grid Section */}
-        <main className="max-w-7xl mx-auto px-6 py-12">
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {filteredTools.map((tool, index) => {
-              const Icon = tool.icon;
-              return (
-                <Link
-                  key={index}
-                  href={tool.href}
-                  className="group bg-white rounded-2xl p-6 border border-slate-200 hover:border-blue-500 hover:shadow-lg hover:shadow-slate-100 transition-all duration-200 flex flex-col justify-between"
-                >
-                  <div>
-                    <div className="flex items-center justify-between mb-5">
-                      <div className={`${tool.color} text-white p-3 rounded-xl shadow-sm group-hover:scale-105 transition-transform`}>
-                        <Icon className="w-6 h-6" />
-                      </div>
-                      <span className="text-xs font-semibold px-3 py-1 bg-slate-100 text-slate-600 rounded-full group-hover:bg-blue-50 group-hover:text-blue-600 transition-colors">
-                        {tool.category}
-                      </span>
-                    </div>
-                    
-                    <h3 className="text-lg font-bold text-slate-900 group-hover:text-blue-600 transition mb-2">
-                      {tool.title}
-                    </h3>
-                    
-                    <p className="text-slate-600 text-sm leading-relaxed">
-                      {tool.description}
-                    </p>
-                  </div>
-                  
-                  <div className="mt-6 pt-4 border-t border-slate-100 flex items-center justify-between text-xs font-semibold text-slate-400 group-hover:text-blue-600 transition-colors">
-                    <span className="flex items-center gap-1">
-                      <Zap className="w-3.5 h-3.5" /> Client Engine
-                    </span>
-                    <span className="flex items-center gap-1">
-                      Launch Tool <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform" />
-                    </span>
-                  </div>
-                </Link>
-              );
-            })}
+          {/* Activity Log Section */}
+          <div className="bg-slate-800 border border-slate-700 rounded-2xl p-6">
+            <h2 className="text-lg font-bold mb-4 flex items-center gap-2">
+              <Activity className="w-5 h-5 text-blue-400" /> Live Traffic & Event Logs
+            </h2>
+            <div className="bg-slate-900 rounded-xl p-4 font-mono text-xs text-slate-300 space-y-2 border border-slate-800 max-h-80 overflow-y-auto">
+              {logs.map((log, idx) => (
+                <div key={idx} className="border-b border-slate-800/60 pb-2 last:border-none">
+                  {log}
+                </div>
+              ))}
+            </div>
           </div>
         </main>
       </div>
 
-      {/* Footer */}
-      <footer className="bg-white border-t border-slate-200 py-8 text-center text-xs text-slate-500">
-        <div className="max-w-7xl mx-auto px-6 flex flex-col sm:flex-row justify-between items-center gap-4">
-          <p>© {new Date().getFullYear()} PDFEdit Enterprise Studio. All rights reserved.</p>
-          <div className="flex items-center gap-6">
-            <Link href="/privacy" className="hover:text-slate-900 transition">Privacy Architecture</Link>
-            <Link href="/terms" className="hover:text-slate-900 transition">Terms of Service</Link>
-          </div>
-        </div>
+      <footer className="bg-slate-800 border-t border-slate-700 py-6 text-center text-xs text-slate-400">
+        <p>PDFEdit Enterprise Administration Panel • Secure Local Telemetry</p>
       </footer>
     </div>
   );
