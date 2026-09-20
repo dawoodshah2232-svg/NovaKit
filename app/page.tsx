@@ -72,13 +72,13 @@ export default function MasterCorporateHomepage() {
   return (
     <div className="min-h-screen bg-slate-50 text-slate-900 flex flex-col justify-between selection:bg-blue-600 selection:text-white">
       <div>
-        {/* Single Unified Top Header Line */}
-        <header className="bg-white/95 backdrop-blur-md border-b border-slate-200 sticky top-0 z-50">
+        {/* ONE SINGLE UNIFIED STICKY TOP HEADER */}
+        <header className="bg-white/95 backdrop-blur-md border-b border-slate-200 sticky top-0 z-50 shadow-xs">
           <div className="max-w-7xl mx-auto px-6 h-20 flex justify-between items-center gap-4">
             
-            {/* Left: Clean Logo Container */}
-            <div className="flex items-center gap-3 shrink-0">
-              <Link href="/" className="flex items-center gap-2.5">
+            {/* Left: Custom Enterprise Logo */}
+            <div className="flex items-center shrink-0">
+              <Link href="/" className="flex items-center">
                 <img 
                   src="/pdfedit-logo-light-bg.png" 
                   alt="PDFEdit Enterprise Studio" 
@@ -87,7 +87,7 @@ export default function MasterCorporateHomepage() {
               </Link>
             </div>
 
-            {/* Center: Navigation Links */}
+            {/* Middle: Clean Navigation Links */}
             <div className="hidden lg:flex items-center gap-6 text-xs font-semibold text-slate-700">
               <a href="#tools" className="hover:text-blue-600 transition flex items-center gap-1.5">
                 <Layers className="w-3.5 h-3.5 text-blue-600" /> PDF Suite
@@ -125,16 +125,24 @@ export default function MasterCorporateHomepage() {
           </div>
         </header>
 
-        {/* Hero & Search Section */}
-        <section className="bg-white border-b border-slate-200 py-12 px-6 text-center relative overflow-hidden">
-          <div className="max-w-2xl mx-auto relative z-10">
-            <h1 className="text-3xl sm:text-4xl font-extrabold text-slate-900 tracking-tight mb-3">
+        {/* Hero Section (Zero Duplicate Headers / Logos Here) */}
+        <section className="bg-white border-b border-slate-200 py-16 px-6 text-center relative overflow-hidden">
+          <div className="absolute inset-0 bg-[radial-gradient(#e2e8f0_1px,transparent_1px)] [background-size:16px_16px] opacity-40 pointer-events-none"></div>
+          
+          <div className="max-w-3xl mx-auto relative z-10">
+            <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-blue-50 border border-blue-100 text-blue-700 text-xs font-semibold mb-6">
+              <ShieldCheck className="w-4 h-4 text-blue-600" /> 100% Client-Side Processing • Zero Server Uploads
+            </div>
+            
+            <h1 className="text-4xl sm:text-5xl font-extrabold text-slate-900 tracking-tight mb-4">
               Every tool you need to work with PDFs <span className="text-blue-600">in one place.</span>
             </h1>
-            <p className="text-xs sm:text-sm text-slate-500 mb-6">
-              Fast, secure, and professional browser utilities organized cleanly by category.
+            
+            <p className="text-sm sm:text-base text-slate-600 mb-8 max-w-xl mx-auto leading-relaxed">
+              Fast, secure, and professional browser utilities. All your document tools organized cleanly by category.
             </p>
 
+            {/* Global Search Bar */}
             <div className="relative max-w-lg mx-auto">
               <span className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-400">
                 <Search className="w-4 h-4" />
@@ -151,7 +159,7 @@ export default function MasterCorporateHomepage() {
         </section>
 
         {/* CATEGORIZED TOOLS SECTIONS */}
-        <main id="tools" className="max-w-7xl mx-auto px-6 py-10 space-y-12">
+        <main id="tools" className="max-w-7xl mx-auto px-6 py-12 space-y-12">
           {toolCategories.map((cat, idx) => (
             <div key={idx}>
               <div className="border-b border-slate-200 pb-2 mb-5">
