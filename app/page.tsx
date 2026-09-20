@@ -22,7 +22,8 @@ import {
   FileCode,
   KeyRound,
   FileEdit,
-  Cpu
+  Cpu,
+  Moon
 } from "lucide-react";
 
 const toolCategories = [
@@ -72,22 +73,30 @@ export default function MasterCorporateHomepage() {
   return (
     <div className="min-h-screen bg-slate-50 text-slate-900 flex flex-col justify-between selection:bg-blue-600 selection:text-white">
       <div>
-        {/* Navigation Bar */}
+        {/* Navigation Bar Matching Reference Layout */}
         <header className="bg-white/95 backdrop-blur-md border-b border-slate-200 sticky top-0 z-50">
           <div className="max-w-7xl mx-auto px-6 h-20 flex justify-between items-center">
-            {/* Brand Logo */}
+            
+            {/* Left: Logo & Studio Subtitle */}
             <div className="flex items-center gap-3">
-              <Link href="/" className="flex items-center gap-2">
+              <Link href="/" className="flex items-center gap-3">
                 <img 
                   src="/pdfedit-light.svg" 
                   alt="PDFEdit Enterprise Studio" 
-                  className="h-9 w-auto object-contain" 
+                  className="h-10 w-auto object-contain" 
                 />
               </Link>
+              <div className="hidden sm:block">
+                <div className="flex items-center gap-2">
+                  <span className="text-base font-extrabold tracking-tight text-slate-900">PDFEdit <span className="text-blue-600">Studio</span></span>
+                  <span className="text-[10px] font-bold px-2 py-0.5 bg-rose-50 text-rose-600 border border-rose-200 rounded-full uppercase tracking-wider shadow-2xs">Studio Suite</span>
+                </div>
+                <p className="text-[11px] text-slate-500 font-medium">100% Client-Side Private PDF Suite</p>
+              </div>
             </div>
 
-            {/* Header Navigation Links & Action Buttons */}
-            <div className="hidden md:flex items-center gap-6 text-sm font-semibold text-slate-600">
+            {/* Center: Navigation Links with Icons */}
+            <div className="hidden lg:flex items-center gap-6 text-sm font-semibold text-slate-700">
               <a href="#tools" className="hover:text-blue-600 transition flex items-center gap-1.5">
                 <Layers className="w-4 h-4 text-blue-600" /> PDF Suite
               </a>
@@ -99,7 +108,7 @@ export default function MasterCorporateHomepage() {
               </Link>
             </div>
 
-            {/* Header CTAs */}
+            {/* Right: CTAs & Theme Toggle */}
             <div className="flex items-center gap-3">
               <Link 
                 href="/cv-builder" 
@@ -113,7 +122,14 @@ export default function MasterCorporateHomepage() {
               >
                 <FileEdit className="w-3.5 h-3.5" /> PDF Editor & Creator
               </Link>
+              <button 
+                className="p-2.5 rounded-xl border border-slate-200 text-slate-600 hover:bg-slate-100 transition shadow-2xs"
+                title="Toggle Theme"
+              >
+                <Moon className="w-4 h-4" />
+              </button>
             </div>
+
           </div>
         </header>
 
