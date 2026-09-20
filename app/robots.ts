@@ -1,11 +1,21 @@
 import type { MetadataRoute } from 'next';
 
+const BASE_URL = 'https://www.pdfedit.website';
+
 export default function robots(): MetadataRoute.Robots {
   return {
-    rules: {
-      userAgent: '*',
-      allow: '/',
-    },
-    sitemap: 'https://www.pdfedit.website/sitemap.xml',
+    rules: [
+      {
+        userAgent: '*',
+        allow: '/',
+        disallow: [
+          '/admin/',
+          '/api/',
+        ],
+      },
+    ],
+
+    sitemap: `${BASE_URL}/sitemap.xml`,
+    host: BASE_URL,
   };
 }
