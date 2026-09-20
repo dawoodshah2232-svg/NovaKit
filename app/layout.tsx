@@ -1,6 +1,7 @@
 import type { Metadata, Viewport } from 'next';
 import { Inter, JetBrains_Mono } from 'next/font/google';
 import './globals.css';
+
 import { ThemeProvider } from '@/components/theme-provider';
 import { Header } from '@/components/header';
 import { MobileNav } from '@/components/mobile-nav';
@@ -20,59 +21,67 @@ const jetbrainsMono = JetBrains_Mono({
 
 export const metadata: Metadata = {
   metadataBase: new URL('https://www.pdfedit.website'),
+
   title: {
-    default: 'PDFEdit Studio – 100% Free & Private Online PDF Editor & Tools',
-    template: '%s | PDFEdit Studio',
+    default: 'PDFEdit – Free Online PDF Editor & PDF Tools',
+    template: '%s | PDFEdit',
   },
+
   description:
-    'Professional, browser-native PDF utilities. Edit, merge, split, rotate, watermark, convert, reorder, and unlock PDF files with zero server uploads.',
+    'Free online PDF editor and document tools. Edit, merge, split, compress, sign, rotate, watermark, convert and organize PDF files directly in your browser.',
+
   manifest: '/manifest.json',
-  appleWebApp: {
-    capable: true,
-    statusBarStyle: 'default',
-    title: 'PDFEdit Studio',
-  },
+
   icons: {
-    icon: '/icon.svg',
-    shortcut: '/icon.svg',
-    apple: '/icon.svg',
+    icon: [
+      {
+        url: '/pdfedit-favicon.png',
+        type: 'image/png',
+      },
+    ],
+    shortcut: '/pdfedit-favicon.png',
+    apple: '/pdfedit-favicon.png',
   },
+
   keywords: [
-    'pdf editor',
-    'pdf tools',
-    'pdfedit studio',
-    'free pdf editor online',
-    'edit pdf without uploading',
-    'pdf to images converter',
-    'image to pdf converter',
-    'organize pdf pages',
-    'reorder pdf pages',
-    'pdf password remover',
-    'unlock pdf online free',
-    'rotate pdf pages',
-    'watermark pdf in browser',
-    'split pdf pages',
-    'edit pdf metadata',
-    'pdf merger',
-    'compress pdf',
-    'client-side pdf processing',
-    'zero server upload',
-    'privacy-first pdf editor',
+    'PDF editor',
+    'free PDF editor',
+    'edit PDF online',
+    'PDF tools',
+    'merge PDF',
+    'split PDF',
+    'compress PDF',
+    'sign PDF',
+    'rotate PDF',
+    'watermark PDF',
+    'JPG to PDF',
+    'PDF to image',
+    'unlock PDF',
+    'OCR PDF',
+    'online PDF editor',
+    'private PDF editor',
   ],
-  authors: [{ name: 'PDFEdit Studio Team' }],
+
+  authors: [
+    {
+      name: 'PDFEdit',
+    },
+  ],
+
   openGraph: {
-    title: 'PDFEdit Studio – 100% Free & Private Online PDF Editor & Tools',
+    title: 'PDFEdit – Free Online PDF Editor & Tools',
     description:
-      'Professional, browser-native PDF utilities. Edit, merge, split, rotate, watermark, convert, reorder, and unlock PDF files with zero server uploads.',
+      'Edit, convert, organize and sign PDFs with fast browser-based tools.',
     url: 'https://www.pdfedit.website',
-    siteName: 'PDFEdit Studio',
+    siteName: 'PDFEdit',
     type: 'website',
   },
+
   twitter: {
     card: 'summary_large_image',
-    title: 'PDFEdit Studio – 100% Free & Private Online PDF Editor & Tools',
+    title: 'PDFEdit – Free Online PDF Editor & Tools',
     description:
-      'Professional, browser-native PDF utilities with zero server uploads.',
+      'Edit, convert, organize and sign PDFs with fast browser-based tools.',
   },
 };
 
@@ -89,10 +98,14 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en" data-scroll-behavior="smooth" suppressHydrationWarning className="h-full scroll-smooth">
+    <html
+      lang="en"
+      suppressHydrationWarning
+      className="h-full scroll-smooth"
+    >
       <body
         suppressHydrationWarning
-        className={`${inter.variable} ${jetbrainsMono.variable} font-sans min-h-full flex flex-col antialiased bg-[#f8fafc] dark:bg-slate-950 text-slate-900 dark:text-slate-100 selection:bg-blue-600/15 selection:text-blue-700 dark:selection:text-blue-300 transition-colors duration-200`}
+        className={`${inter.variable} ${jetbrainsMono.variable} min-h-full bg-[#f8fafc] font-sans text-slate-900 antialiased dark:bg-slate-950 dark:text-slate-100`}
       >
         <ThemeProvider
           attribute="class"
@@ -100,22 +113,19 @@ export default function RootLayout({
           enableSystem={false}
           disableTransitionOnChange
         >
-          {/* Top Navigation Header */}
-          <Header />
+          <div className="flex min-h-screen flex-col">
+            <Header />
 
-          {/* Main App Content Viewport */}
-          <main className="flex-1 w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8">
-            {children}
-          </main>
+            <main className="mx-auto w-full max-w-7xl flex-1 px-4 py-5 sm:px-6 sm:py-7 lg:px-8">
+              {children}
+            </main>
 
-          {/* Global Footer */}
-          <Footer />
+            <Footer />
 
-          {/* Mobile-only Sticky Bottom Navigation Bar */}
-          <MobileNav />
+            <MobileNav />
+          </div>
         </ThemeProvider>
       </body>
     </html>
   );
 }
-
