@@ -28,7 +28,6 @@ import {
   Sparkles,
   Stamp,
   Unlock,
-  WandSparkles,
 } from 'lucide-react';
 
 import { TOOLS_CONFIG } from '@/lib/tools-config';
@@ -62,7 +61,6 @@ const categoryConfig = {
       'Edit, organize, convert, compress, protect and manage PDF documents.',
     badge: 'bg-blue-50 text-blue-700 dark:bg-blue-950/40 dark:text-blue-300',
   },
-
   Image: {
     title: 'Image & Design Tools',
     description:
@@ -70,7 +68,6 @@ const categoryConfig = {
     badge:
       'bg-violet-50 text-violet-700 dark:bg-violet-950/40 dark:text-violet-300',
   },
-
   Finance: {
     title: 'Business & Finance Tools',
     description:
@@ -78,7 +75,6 @@ const categoryConfig = {
     badge:
       'bg-emerald-50 text-emerald-700 dark:bg-emerald-950/40 dark:text-emerald-300',
   },
-
   Text: {
     title: 'Writing & SEO Tools',
     description:
@@ -86,7 +82,6 @@ const categoryConfig = {
     badge:
       'bg-cyan-50 text-cyan-700 dark:bg-cyan-950/40 dark:text-cyan-300',
   },
-
   Security: {
     title: 'Security Tools',
     description:
@@ -169,7 +164,7 @@ export default function HomePage() {
   return (
     <div className="w-full">
       {/* HERO */}
-      <section className="relative overflow-hidden rounded-[28px] border border-slate-200 bg-white px-5 py-12 text-center shadow-sm sm:px-8 sm:py-16 lg:py-20 dark:border-slate-800 dark:bg-slate-900">
+      <section className="relative overflow-hidden rounded-[26px] border border-slate-200 bg-white px-5 py-9 text-center shadow-sm sm:px-8 sm:py-11 lg:py-12 dark:border-slate-800 dark:bg-slate-900">
         <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(#dbeafe_1px,transparent_1px)] [background-size:18px_18px] opacity-60 dark:opacity-10" />
 
         <div className="pointer-events-none absolute -left-28 -top-28 h-72 w-72 rounded-full bg-blue-100/60 blur-3xl dark:bg-blue-950/20" />
@@ -177,24 +172,18 @@ export default function HomePage() {
         <div className="pointer-events-none absolute -bottom-36 -right-20 h-72 w-72 rounded-full bg-cyan-100/50 blur-3xl dark:bg-cyan-950/20" />
 
         <div className="relative z-10 mx-auto max-w-4xl">
-          <div className="mb-5 inline-flex items-center gap-2 rounded-full border border-emerald-200 bg-emerald-50 px-3.5 py-1.5 text-[11px] font-bold text-emerald-700 dark:border-emerald-900 dark:bg-emerald-950/40 dark:text-emerald-300">
-            <ShieldCheck className="h-4 w-4" />
-            Private • Fast • Browser-based
-          </div>
-
-          <h1 className="text-4xl font-black tracking-[-0.04em] text-slate-950 sm:text-5xl lg:text-[58px] lg:leading-[1.05] dark:text-white">
+          <h1 className="text-4xl font-black tracking-[-0.04em] text-slate-950 sm:text-5xl lg:text-[52px] lg:leading-[1.04] dark:text-white">
             Everything you need
             <br />
             to work with{' '}
             <span className="text-blue-600">documents.</span>
           </h1>
 
-          <p className="mx-auto mt-5 max-w-2xl text-sm leading-7 text-slate-600 sm:text-base dark:text-slate-400">
-            Edit PDFs, organize pages, convert files and use practical
-            productivity tools from one clean workspace.
+          <p className="mx-auto mt-4 max-w-2xl text-sm leading-7 text-slate-600 sm:text-base dark:text-slate-400">
+            Edit PDFs, organize pages, convert files and use practical productivity tools from one clean workspace.
           </p>
 
-          <div className="mt-7 flex flex-col items-center justify-center gap-3 sm:flex-row">
+          <div className="mt-6 flex flex-col items-center justify-center gap-3 sm:flex-row">
             <Link
               href="/studio"
               className="group inline-flex min-h-12 w-full items-center justify-center gap-2 rounded-xl bg-blue-600 px-6 py-3 text-sm font-extrabold text-white shadow-lg shadow-blue-600/20 transition hover:bg-blue-700 sm:w-auto"
@@ -212,13 +201,25 @@ export default function HomePage() {
             </a>
           </div>
 
-          <p className="mt-3 text-[11px] font-medium text-slate-400">
-            No account required for core tools
-          </p>
+          <div className="mt-4 flex flex-wrap items-center justify-center gap-x-5 gap-y-2 text-[11px] font-semibold text-slate-500 dark:text-slate-400">
+            <span className="flex items-center gap-1.5">
+              <Check className="h-3.5 w-3.5 text-emerald-600" />
+              No signup required
+            </span>
 
-          {/* SEARCH INSIDE HERO */}
-          <div className="mx-auto mt-9 max-w-3xl">
-            <div className="rounded-2xl border border-slate-300 bg-white p-2 shadow-[0_12px_35px_rgba(15,23,42,0.12)] dark:border-slate-700 dark:bg-slate-950">
+            <span className="flex items-center gap-1.5">
+              <Check className="h-3.5 w-3.5 text-emerald-600" />
+              Unlimited core tool use
+            </span>
+
+            <span className="flex items-center gap-1.5">
+              <Check className="h-3.5 w-3.5 text-emerald-600" />
+              Download instantly
+            </span>
+          </div>
+
+          <div className="mx-auto mt-7 max-w-3xl">
+            <div className="rounded-2xl border border-slate-300 bg-white p-2 shadow-[0_10px_30px_rgba(15,23,42,0.10)] dark:border-slate-700 dark:bg-slate-950">
               <div className="flex flex-col gap-2 sm:flex-row">
                 <div className="relative flex-1">
                   <Search className="absolute left-4 top-1/2 h-5 w-5 -translate-y-1/2 text-slate-400" />
@@ -354,95 +355,117 @@ export default function HomePage() {
       {/* PRODUCT FEATURE BANNERS */}
       <section className="pb-14 sm:pb-16">
         <div className="mb-7 text-center">
-          <span className="text-[11px] font-black uppercase tracking-[0.22em] text-violet-600">
-            More than utilities
+          <span className="text-[11px] font-black uppercase tracking-[0.22em] text-blue-600">
+            More than quick tools
           </span>
 
           <h2 className="mt-2 text-3xl font-black tracking-tight text-slate-950 dark:text-white">
-            Full document workspaces
+            Professional workspaces for bigger jobs.
           </h2>
 
           <p className="mx-auto mt-3 max-w-xl text-sm leading-6 text-slate-500 dark:text-slate-400">
-            When a quick utility is not enough, move into a complete editing
-            workspace.
+            Move beyond individual utilities when you need complete document
+            creation and editing.
           </p>
         </div>
 
-        <div className="grid gap-5 lg:grid-cols-2">
-          <Link
-            href="/studio"
-            className="group overflow-hidden rounded-[28px] border border-blue-200 bg-[#071b3d] shadow-sm transition-all hover:-translate-y-1 hover:shadow-xl dark:border-blue-950"
-          >
-            <div className="relative aspect-[16/8.6] overflow-hidden">
-              <Image
-                src="/pdf-studio.png"
-                alt="PDFEdit Studio document editor"
-                fill
-                className="object-cover transition-transform duration-500 group-hover:scale-[1.025]"
-                sizes="(max-width: 1024px) 100vw, 50vw"
-              />
-
-              <div className="absolute inset-0 bg-gradient-to-t from-[#071b3d] via-[#071b3d]/15 to-transparent" />
-            </div>
-
-            <div className="px-5 pb-6 pt-1 sm:px-7 sm:pb-7">
-              <div className="flex items-center gap-2 text-xs font-bold text-blue-300">
-                <WandSparkles className="h-4 w-4" />
+        <div className="grid gap-5">
+          <div className="group grid overflow-hidden rounded-[24px] border border-blue-200/80 bg-gradient-to-br from-[#061a3a] via-[#0b2d60] to-[#0d4a82] shadow-[0_14px_38px_rgba(8,39,82,0.14)] transition-all hover:-translate-y-1 hover:shadow-[0_20px_45px_rgba(8,39,82,0.22)] dark:border-blue-900/80 dark:from-[#061329] dark:via-[#0a2247] dark:to-[#0c3764] lg:grid-cols-[1.1fr_0.9fr]">
+            <div className="flex flex-col justify-center px-6 py-7 sm:px-9 sm:py-8 lg:px-10 lg:py-9">
+              <div className="flex items-center gap-2 text-xs font-bold text-blue-200">
+                <FilePenLine className="h-4 w-4" />
                 PDFEdit Studio
               </div>
 
-              <h3 className="mt-2 text-2xl font-black tracking-tight text-white">
+              <h3 className="mt-3 max-w-xl text-2xl font-black tracking-tight text-white sm:text-3xl">
                 Edit documents, not just PDFs.
               </h3>
 
-              <p className="mt-2 max-w-lg text-sm leading-6 text-blue-100/80">
-                Work with text, images, letterheads, signatures, stamps and
-                document layouts inside one visual editor.
+              <p className="mt-3 max-w-xl text-sm leading-6 text-blue-100/80">
+                Create documents or open an existing PDF and continue working
+                in one professional visual workspace.
               </p>
 
-              <div className="mt-5 inline-flex items-center gap-2 rounded-xl bg-white px-4 py-2.5 text-xs font-black text-blue-700">
-                Open Studio
+              <ul className="mt-5 grid gap-2 text-xs font-medium text-blue-50 sm:grid-cols-2 sm:gap-x-5">
+                {[
+                  'Edit text, images and document content',
+                  'Add company logos, letterheads and stamps',
+                  'Insert signatures, shapes and visual elements',
+                  'Export the finished document as PDF',
+                ].map((feature) => (
+                  <li key={feature} className="flex items-start gap-2">
+                    <Check className="mt-0.5 h-3.5 w-3.5 shrink-0 text-cyan-300" />
+                    <span>{feature}</span>
+                  </li>
+                ))}
+              </ul>
+
+              <Link
+                href="/studio"
+                className="mt-6 inline-flex min-h-11 w-full items-center justify-center gap-2 rounded-xl bg-white px-5 py-3 text-sm font-black text-[#08285a] shadow-lg shadow-black/10 transition hover:bg-blue-50 sm:w-fit"
+              >
+                Open PDF Studio
                 <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
-              </div>
+              </Link>
             </div>
-          </Link>
 
-          <div className="group overflow-hidden rounded-[28px] border border-emerald-200 bg-[#073a32] shadow-sm dark:border-emerald-950">
-            <div className="relative aspect-[16/8.6] overflow-hidden">
+            <div className="relative flex min-h-0 items-center overflow-hidden border-t border-white/10 bg-[#0a2855]/60 p-4 sm:p-6 lg:border-l lg:border-t-0 lg:p-7">
               <Image
-                src="/cv-builder.png"
-                alt="Professional CV builder preview"
-                fill
-                className="object-cover"
-                sizes="(max-width: 1024px) 100vw, 50vw"
+                src="/pdf-studio.png"
+                alt="PDFEdit Studio document editor"
+                width={1711}
+                height={919}
+                className="h-auto w-full rounded-xl object-contain shadow-2xl"
+                sizes="(max-width: 1024px) 100vw, 40vw"
               />
-
-              <div className="absolute inset-0 bg-gradient-to-t from-[#073a32] via-[#073a32]/10 to-transparent" />
-
-              <div className="absolute right-4 top-4 rounded-full border border-white/20 bg-black/30 px-3 py-1.5 text-[10px] font-black uppercase tracking-wider text-white backdrop-blur">
-                Coming next
-              </div>
             </div>
+          </div>
 
-            <div className="px-5 pb-6 pt-1 sm:px-7 sm:pb-7">
-              <div className="flex items-center gap-2 text-xs font-bold text-emerald-300">
+          <div className="grid overflow-hidden rounded-[24px] border border-emerald-200/80 bg-gradient-to-br from-[#063c34] via-[#07594b] to-[#0b7660] shadow-[0_14px_38px_rgba(4,73,60,0.13)] dark:border-emerald-900/80 dark:from-[#062c27] dark:via-[#07443a] dark:to-[#075847] lg:grid-cols-[1.1fr_0.9fr]">
+            <div className="flex flex-col justify-center px-6 py-7 sm:px-9 sm:py-8 lg:px-10 lg:py-9">
+              <div className="flex items-center gap-2 text-xs font-bold text-emerald-200">
                 <BriefcaseBusiness className="h-4 w-4" />
                 Professional CV Builder
               </div>
 
-              <h3 className="mt-2 text-2xl font-black tracking-tight text-white">
-                Build a polished CV visually.
+              <h3 className="mt-3 max-w-xl text-2xl font-black tracking-tight text-white sm:text-3xl">
+                Build a professional CV in minutes.
               </h3>
 
-              <p className="mt-2 max-w-lg text-sm leading-6 text-emerald-100/80">
-                Professional templates, editable sections, profile photos,
-                skills and clean PDF export.
+              <p className="mt-3 max-w-xl text-sm leading-6 text-emerald-100/80">
+                Choose a polished resume template, add your information and
+                create a job-ready PDF without designing from scratch.
               </p>
 
-              <div className="mt-5 inline-flex cursor-default items-center gap-2 rounded-xl border border-white/20 bg-white/10 px-4 py-2.5 text-xs font-black text-white">
+              <ul className="mt-5 grid gap-2 text-xs font-medium text-emerald-50 sm:grid-cols-2 sm:gap-x-5">
+                {[
+                  'Professional ready-made CV templates',
+                  'Edit experience, education and skills',
+                  'Upload profile photo and personal details',
+                  'Download a polished PDF resume',
+                ].map((feature) => (
+                  <li key={feature} className="flex items-start gap-2">
+                    <Check className="mt-0.5 h-3.5 w-3.5 shrink-0 text-emerald-300" />
+                    <span>{feature}</span>
+                  </li>
+                ))}
+              </ul>
+
+              <div className="mt-6 inline-flex min-h-11 w-full cursor-not-allowed items-center justify-center gap-2 rounded-xl border border-white/20 bg-white/10 px-5 py-3 text-sm font-black text-white/70 sm:w-fit">
                 <Sparkles className="h-4 w-4" />
-                CV Builder coming next
+                CV Builder - Coming Soon
               </div>
+            </div>
+
+            <div className="relative flex min-h-0 items-center overflow-hidden border-t border-white/10 bg-[#075144]/60 p-4 sm:p-6 lg:border-l lg:border-t-0 lg:p-7">
+              <Image
+                src="/cv-builder.png"
+                alt="Professional CV builder preview"
+                width={1711}
+                height={919}
+                className="h-auto w-full rounded-xl object-contain shadow-2xl"
+                sizes="(max-width: 1024px) 100vw, 40vw"
+              />
             </div>
           </div>
         </div>
