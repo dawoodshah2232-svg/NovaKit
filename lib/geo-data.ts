@@ -1159,6 +1159,44 @@ export const GEO_DATA_MAP: Record<string, GeoToolData> = {
       { question: 'Will the PDF match Word pixel for pixel?', answer: 'No. Complex styles, page layouts, embedded images, and tables may not match.' },
     ],
   },
+  'ocr-pdf': {
+    primaryKeyword: 'OCR PDF online free',
+    seoTitle: 'OCR PDF Online Free | Extract Text from Scanned PDFs | PDFEdit',
+    metaDescription: 'Extract text from scanned PDF pages with browser-based OCR supporting English, Spanish, French, and German. Files are processed locally in your browser and are not uploaded to our servers.',
+    longTailKeywords: ['extract text from scanned pdf', 'free pdf ocr browser', 'ocr pdf to text privately', 'multi language pdf ocr'],
+    highlights: ['Multi-language scanned-page OCR (English, Spanish, French, German)', 'Recognized text preview', 'TXT download', 'Local browser processing'],
+    semanticSubheadings: [{ heading: 'Browser OCR for scanned PDF pages', body: 'Render scanned pages locally and use Tesseract OCR to recognize printed text in currently supported languages: English, Spanish, French, and German. Files are processed locally in your browser and are not uploaded to our servers.' }],
+    howItWorks: [
+      { number: '01', title: 'Select a scanned PDF', description: 'Choose a PDF containing scanned page images.' },
+      { number: '02', title: 'Select language & recognize', description: 'Choose from currently supported languages (English, Spanish, French, German) and run OCR directly in your browser.' },
+      { number: '03', title: 'Review and download', description: 'Edit the recognized text if needed and download it as a TXT file.' },
+    ],
+    faqs: [
+      { question: 'Does OCR PDF work on scanned documents?', answer: 'Yes. It renders scanned pages and recognizes printed text directly in your browser.' },
+      { question: 'Which languages are supported?', answer: 'Currently supported languages are English, Spanish, French, and German.' },
+      { question: 'Can I export a searchable PDF?', answer: 'No. This version exports recognized text as TXT; it does not create a searchable PDF layer.' },
+      { question: 'Does OCR upload my document?', answer: 'Files are processed locally in your browser and are not uploaded to our servers.' },
+    ],
+  },
+  'sign-pdf': {
+    primaryKeyword: 'sign PDF online free',
+    seoTitle: 'Sign PDF Online Free | Draw or Type a Signature | PDFEdit',
+    metaDescription: 'Draw, type, or upload a signature image, place it on a PDF page, and download the signed copy locally in your browser.',
+    longTailKeywords: ['add signature to pdf', 'draw signature on pdf browser', 'sign pdf privately'],
+    highlights: ['Draw, type, or upload a signature image', 'Choose page and placement', 'Resize signature width', 'Local PDF output'],
+    semanticSubheadings: [{ heading: 'Visual PDF signature placement', body: 'Add a signature mark to a selected page and position it with PDF coordinates. This is a visual electronic signature tool, not certificate-based identity verification.' }],
+    howItWorks: [
+      { number: '01', title: 'Upload a PDF', description: 'Choose an unprotected PDF and select the target page.' },
+      { number: '02', title: 'Create a signature', description: 'Draw, type, or upload a signature image, then set its position and width.' },
+      { number: '03', title: 'Download signed PDF', description: 'Apply the visual signature locally and save the resulting PDF.' },
+    ],
+    faqs: [
+      { question: 'Can I draw or type my signature?', answer: 'Yes. You can draw a signature, type one, or upload a PNG/JPEG signature image.' },
+      { question: 'Can I choose where the signature appears?', answer: 'Yes. Select a page and adjust X, Y, and width values in PDF points.' },
+      { question: 'Is this a legally verified digital signature?', answer: 'No. It adds a visual signature mark and does not provide certificate-based identity verification or legal advice.' },
+      { question: 'Does the PDF leave my device?', answer: 'No. The signature is embedded with pdf-lib in browser memory.' },
+    ],
+  },
 };
 
 const GEO_ALIASES: Record<string, string> = {
@@ -1224,7 +1262,7 @@ export function getToolGeoData(slug: string): GeoToolData {
 /**
  * Generate Schema.org FAQPage structured JSON-LD object
  */
-export function generateFaqSchema(faqs: GeoFaqItem[], toolName: string) {
+export function generateFaqSchema(faqs: GeoFaqItem[], _toolName?: string) {
   return {
     '@context': 'https://schema.org',
     '@type': 'FAQPage',

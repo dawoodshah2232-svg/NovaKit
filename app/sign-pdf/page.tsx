@@ -1,5 +1,5 @@
 import type { Metadata } from 'next';
-import { notFound } from 'next/navigation';
+import ToolPage from '../tools/[slug]/page';
 const url = 'https://www.pdfedit.website/sign-pdf';
-export const metadata: Metadata = { title: 'PDF Signer | PDFEdit', robots: { index: false, follow: false }, alternates: { canonical: url }, openGraph: { url } };
-export default function Page() { notFound(); }
+export const metadata: Metadata = { title: 'Sign PDF Online Free | PDFEdit', description: 'Draw, type, or upload a signature image, place it on a PDF page, and download the signed copy locally in your browser.', alternates: { canonical: url }, openGraph: { title: 'Sign PDF Online Free | PDFEdit', description: 'Draw, type, or upload a signature image and place it on a PDF page locally.', url } };
+export default function Page() { return <ToolPage params={Promise.resolve({ slug: 'sign-pdf' })} />; }

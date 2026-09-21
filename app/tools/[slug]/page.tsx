@@ -1,8 +1,8 @@
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import Link from 'next/link';
-import { ArrowLeft, ShieldCheck, UploadCloud, Sparkles, CheckCircle2, Lock, Cpu, Zap } from 'lucide-react';
-import { getToolBySlug, getAllToolSlugs, TOOLS_CONFIG } from '@/lib/tools-config';
+import { ArrowLeft, ShieldCheck, Sparkles, CheckCircle2, Lock, Cpu, Zap } from 'lucide-react';
+import { getToolBySlug, getAllToolSlugs } from '@/lib/tools-config';
 import {
   getToolGeoData,
   generateFaqSchema,
@@ -28,6 +28,8 @@ import { RotatePdf } from '@/components/tools/rotate-pdf';
 import { WatermarkPdf } from '@/components/tools/watermark-pdf';
 import { UnlockPdf } from '@/components/tools/unlock-pdf';
 import { EditPdfMetadata } from '@/components/tools/edit-pdf-metadata';
+import { OcrPdf } from '@/components/tools/ocr-pdf';
+import { SignPdf } from '@/components/tools/sign-pdf';
 import { PdfToWord } from '@/components/tools/pdf-to-word';
 import { WordToPdf } from '@/components/tools/word-to-pdf';
 
@@ -44,6 +46,8 @@ const canonicalPathBySlug: Record<string, string> = {
   'pdf-to-jpg': '/pdf-to-jpg',
   'pdf-to-word': '/pdf-to-word',
   'word-to-pdf': '/word-to-pdf',
+  'ocr-pdf': '/ocr-pdf',
+  'sign-pdf': '/sign-pdf',
 };
 
 const relatedToolsBySlug: Record<string, [string, string][]> = {
@@ -59,6 +63,8 @@ const relatedToolsBySlug: Record<string, [string, string][]> = {
   'pdf-to-jpg': [['/pdf-to-images', 'PDF to Images'], ['/jpg-to-pdf', 'JPG to PDF'], ['/compress-pdf', 'Compress PDF']],
   'pdf-to-word': [['/pdf-to-jpg', 'PDF to JPG'], ['/merge-pdf', 'Merge PDF'], ['/compress-pdf', 'Compress PDF']],
   'word-to-pdf': [['/jpg-to-pdf', 'JPG to PDF'], ['/pdf-to-word', 'PDF to Word'], ['/compress-pdf', 'Compress PDF']],
+  'ocr-pdf': [['/pdf-to-images', 'PDF to Images'], ['/pdf-to-word', 'PDF to Word'], ['/compress-pdf', 'Compress PDF']],
+  'sign-pdf': [['/merge-pdf', 'Merge PDF'], ['/watermark-pdf', 'Watermark PDF'], ['/studio', 'PDF Studio']],
   'edit-pdf-metadata': [['/merge-pdf', 'Merge PDF'], ['/compress-pdf', 'Compress PDF'], ['/studio', 'PDF Studio']],
 };
 
@@ -255,6 +261,10 @@ export default async function ToolPage({ params }: ToolPageProps) {
         <PdfToWord />
       ) : slug === 'word-to-pdf' ? (
         <WordToPdf />
+      ) : slug === 'ocr-pdf' ? (
+        <OcrPdf />
+      ) : slug === 'sign-pdf' ? (
+        <SignPdf />
       ) : slug === 'organize-pdf' || slug === 'pdf-page-reorder' ? (
         <OrganizePdf />
       ) : slug === 'unlock-pdf' || slug === 'pdf-password-remover' ? (
