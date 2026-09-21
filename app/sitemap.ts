@@ -53,6 +53,13 @@ export default function sitemap(): MetadataRoute.Sitemap {
     '/watermark-pdf',
     '/unlock-pdf',
     '/batch-pdf',
+    '/delete-pdf-pages',
+    '/extract-pdf-pages',
+    '/add-page-numbers',
+    '/crop-pdf',
+    '/pdf-to-text',
+    '/flatten-pdf',
+    '/redact-pdf',
   ];
 
   const dedicatedPages: MetadataRoute.Sitemap =
@@ -82,6 +89,13 @@ export default function sitemap(): MetadataRoute.Sitemap {
     'split-pdf',
     'pdf-merger',
     'compress-pdf',
+    'delete-pdf-pages',
+    'extract-pdf-pages',
+    'add-page-numbers',
+    'crop-pdf',
+    'pdf-to-text',
+    'flatten-pdf',
+    'redact-pdf',
   ]);
 
   const dynamicTools: MetadataRoute.Sitemap =

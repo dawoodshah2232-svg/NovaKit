@@ -29,6 +29,11 @@ import {
   Stamp,
   Unlock,
   FilePenLine,
+  Trash2,
+  FolderOutput,
+  Hash,
+  Crop,
+  EyeOff,
 } from 'lucide-react';
 import { TOOLS_CONFIG, ToolConfig, ToolCategory } from '@/lib/tools-config';
 
@@ -51,6 +56,11 @@ const ICON_MAP: Record<string, React.ElementType> = {
   Layers: Layers,
   Unlock: Unlock,
   FilePenLine: FilePenLine,
+  Trash2: Trash2,
+  FolderOutput: FolderOutput,
+  Hash: Hash,
+  Crop: Crop,
+  EyeOff: EyeOff,
 };
 
 const CATEGORIES: { id: ToolCategory; label: string }[] = [

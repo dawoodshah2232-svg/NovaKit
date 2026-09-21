@@ -24,7 +24,12 @@ export interface ToolConfig {
     | 'Stamp'
     | 'Layers'
     | 'Unlock'
-    | 'FilePenLine';
+    | 'FilePenLine'
+    | 'Trash2'
+    | 'FolderOutput'
+    | 'Hash'
+    | 'Crop'
+    | 'EyeOff';
   tags: string[];
   gradient: string;
   accentColor: string;
@@ -244,6 +249,99 @@ export const TOOLS_CONFIG: ToolConfig[] = [
     processingNote: 'Local encryption • Passwords never leave device',
   },
 
+  // --- Extended Power PDF Suite ---
+  {
+    id: 'delete-pdf-pages',
+    name: 'Delete PDF Pages',
+    description: 'Remove unwanted, blank, or sensitive pages from your PDF with visual thumbnail selection and instant download.',
+    slug: 'delete-pdf-pages',
+    category: 'PDF',
+    badge: 'New',
+    iconName: 'Trash2',
+    tags: ['Delete Pages', 'Remove Pages', 'Trim PDF', 'Clean PDF', 'PDF Editor'],
+    gradient: 'from-rose-600 to-red-700',
+    accentColor: 'text-rose-500 dark:text-rose-400',
+    processingNote: '100% In-Browser • Fast In-Memory Page Removal',
+  },
+  {
+    id: 'extract-pdf-pages',
+    name: 'Extract PDF Pages',
+    description: 'Extract specific pages or page ranges into a single consolidated PDF or download as individual PDFs in a ZIP archive.',
+    slug: 'extract-pdf-pages',
+    category: 'PDF',
+    badge: 'New',
+    iconName: 'FolderOutput',
+    tags: ['Extract Pages', 'Save Pages', 'Split Selection', 'Page Range', 'ZIP Archive'],
+    gradient: 'from-amber-600 to-orange-700',
+    accentColor: 'text-amber-500 dark:text-amber-400',
+    processingNote: 'Zero Uploads • Instant Client-Side Extraction & ZIP Packaging',
+  },
+  {
+    id: 'add-page-numbers',
+    name: 'Add Page Numbers to PDF',
+    description: 'Stamp customizable page numbers, Roman numerals, or Page X of Y pagination with live position preview.',
+    slug: 'add-page-numbers',
+    category: 'PDF',
+    badge: 'New',
+    iconName: 'Hash',
+    tags: ['Page Numbers', 'Pagination', 'Bates Numbering', 'Header Footer', 'Stamp Numbers'],
+    gradient: 'from-blue-600 to-indigo-700',
+    accentColor: 'text-blue-500 dark:text-blue-400',
+    processingNote: 'Vector Inscription • 6 Alignment Positions & Custom Formats',
+  },
+  {
+    id: 'crop-pdf',
+    name: 'Crop PDF Margins',
+    description: 'Trim white margins, standardize sheet dimensions, and crop PDF bounding boxes with live visual margin guides.',
+    slug: 'crop-pdf',
+    category: 'PDF',
+    badge: 'New',
+    iconName: 'Crop',
+    tags: ['Crop PDF', 'Trim Margins', 'Remove White Borders', 'Resize PDF', 'CropBox'],
+    gradient: 'from-teal-600 to-emerald-700',
+    accentColor: 'text-teal-500 dark:text-teal-400',
+    processingNote: 'Lossless Vector CropBox Modification • 100% Private',
+  },
+  {
+    id: 'pdf-to-text',
+    name: 'PDF to Text Converter',
+    description: 'Extract selectable digital text from PDF files into plain text, inspect per-page content, and download as TXT.',
+    slug: 'pdf-to-text',
+    category: 'PDF',
+    badge: 'Popular',
+    iconName: 'FileText',
+    tags: ['PDF to Text', 'Extract Text', 'TXT Export', 'Text Analyzer', 'Copy Text'],
+    gradient: 'from-emerald-600 to-teal-700',
+    accentColor: 'text-emerald-500 dark:text-emerald-400',
+    processingNote: 'Fast In-Browser Text Layer Extraction • Word & Character Counter',
+  },
+  {
+    id: 'flatten-pdf',
+    name: 'Flatten PDF Forms & Layers',
+    description: 'Convert fillable form fields, comments, signatures, and annotations into permanent uneditable static PDF content.',
+    slug: 'flatten-pdf',
+    category: 'PDF',
+    badge: 'Security',
+    iconName: 'Layers',
+    tags: ['Flatten PDF', 'Lock Form Fields', 'Make Uneditable', 'Raster Freeze', 'Print Ready'],
+    gradient: 'from-violet-600 to-purple-700',
+    accentColor: 'text-violet-500 dark:text-violet-400',
+    processingNote: 'Vector Form Flattening & 2× Print-Quality Visual Baking',
+  },
+  {
+    id: 'redact-pdf',
+    name: 'Redact PDF (Blackout Text)',
+    description: 'Permanently blackout or whiteout sensitive PII, SSNs, financial figures, and sanitize document catalog metadata.',
+    slug: 'redact-pdf',
+    category: 'PDF',
+    badge: 'Security',
+    iconName: 'EyeOff',
+    tags: ['Redact PDF', 'Blackout Text', 'Hide Sensitive Data', 'Sanitize Metadata', 'PII Removal'],
+    gradient: 'from-rose-600 to-pink-700',
+    accentColor: 'text-rose-500 dark:text-rose-400',
+    processingNote: 'Interactive Canvas Blackout • Coordinate Inscription • Metadata Scrubbing',
+  },
+
   // --- Complementary Suite Utilities ---
   {
     id: 'image-compressor',
@@ -347,6 +445,13 @@ const SLUG_ALIASES: Record<string, string> = {
   'pdf-watermarker': 'watermark-pdf',
   'pdf-page-reorder': 'organize-pdf',
   'pdf-metadata-editor': 'edit-pdf-metadata',
+  'pdf-page-delete': 'delete-pdf-pages',
+  'pdf-page-extractor': 'extract-pdf-pages',
+  'pdf-number-pages': 'add-page-numbers',
+  'pdf-cropper': 'crop-pdf',
+  'pdf-text-extractor': 'pdf-to-text',
+  'pdf-flattener': 'flatten-pdf',
+  'pdf-redaction': 'redact-pdf',
 };
 
 export function getToolBySlug(slug: string): ToolConfig | undefined {

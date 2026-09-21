@@ -1197,6 +1197,126 @@ export const GEO_DATA_MAP: Record<string, GeoToolData> = {
       { question: 'Does the PDF leave my device?', answer: 'No. The signature is embedded with pdf-lib in browser memory.' },
     ],
   },
+  'delete-pdf-pages': {
+    primaryKeyword: 'delete PDF pages online free',
+    seoTitle: 'Delete PDF Pages Online Free | Remove PDF Pages | PDFEdit',
+    metaDescription: 'Select and remove unwanted, blank, or sensitive pages from your PDF document locally in your browser. Fast, free, and completely private.',
+    longTailKeywords: ['delete pages from pdf', 'remove pdf pages free', 'delete blank pages in pdf', 'private pdf page remover'],
+    highlights: ['Interactive page thumbnail selection', 'Delete single or multiple pages', 'Fast in-memory reconstruction', 'Zero server uploads'],
+    semanticSubheadings: [{ heading: 'Client-Side PDF Page Removal', body: 'Delete confidential sections, blank sheets, or misprinted pages with visual page previews. The remaining pages are seamlessly compiled into a clean PDF in your browser memory.' }],
+    howItWorks: [
+      { number: '01', title: 'Upload PDF', description: 'Select a PDF document to preview visual page thumbnails.' },
+      { number: '02', title: 'Select Pages to Remove', description: 'Click pages or type comma-separated numbers (e.g. 1, 3, 5-8) to mark them for deletion.' },
+      { number: '03', title: 'Download Clean PDF', description: 'Click Delete Pages to generate and download the trimmed document immediately.' },
+    ],
+    faqs: [
+      { question: 'Are deleted pages permanently removed?', answer: 'Yes. The new PDF is constructed excluding the removed pages entirely.' },
+      { question: 'Is my document uploaded to a server?', answer: 'No. Page removal and document assembly happen entirely in your local browser memory using pdf-lib.' },
+      { question: 'Can I delete multiple ranges at once?', answer: 'Yes. You can click individual thumbnails or type ranges like 2-5, 8, 11.' },
+    ],
+  },
+  'extract-pdf-pages': {
+    primaryKeyword: 'extract PDF pages online free',
+    seoTitle: 'Extract PDF Pages Online Free | Save Selected Pages | PDFEdit',
+    metaDescription: 'Extract specific pages or page ranges from PDF files into a single merged document or download individual PDFs in a ZIP archive directly in your browser.',
+    longTailKeywords: ['extract pages from pdf free', 'save specific pdf pages', 'split pdf pages to zip', 'extract pdf page range'],
+    highlights: ['Consolidated PDF or ZIP archive download', 'Visual thumbnail selection & range input', 'Zero server uploads', 'Maintains original vector quality'],
+    semanticSubheadings: [{ heading: 'Fast & Private Page Extraction', body: 'Isolate key chapters, invoices, or exhibits from large documents. Choose between creating a single extracted PDF or bundling individual page PDFs into a compressed ZIP file.' }],
+    howItWorks: [
+      { number: '01', title: 'Load PDF Document', description: 'Choose your PDF file to load visual page cards.' },
+      { number: '02', title: 'Choose Pages & Mode', description: 'Select target pages and choose Single PDF or ZIP Archive mode.' },
+      { number: '03', title: 'Extract & Download', description: 'Download your extracted pages instantly.' },
+    ],
+    faqs: [
+      { question: 'Can I extract pages as separate PDF files?', answer: 'Yes. Choose "Individual PDFs in ZIP" mode to get each extracted page as an isolated PDF file in a ZIP folder.' },
+      { question: 'Will extracted pages lose formatting or text clarity?', answer: 'No. Page extraction preserves exact vector streams, embedded fonts, and layout structures losslessly.' },
+    ],
+  },
+  'add-page-numbers': {
+    primaryKeyword: 'add page numbers to PDF online free',
+    seoTitle: 'Add Page Numbers to PDF Online Free | Number PDF Pages | PDFEdit',
+    metaDescription: 'Stamp customizable page numbers, Roman numerals, or Page X of Y pagination on PDF documents with live position preview in your browser.',
+    longTailKeywords: ['number pdf pages online', 'add pagination to pdf', 'bates numbering pdf free', 'page x of y pdf stamp'],
+    highlights: ['6 placement positions (headers and footers)', 'Multiple number formats (Standard, Page X of Y, Roman)', 'Custom font size, color, and start page', 'Live interactive page preview'],
+    semanticSubheadings: [{ heading: 'Professional PDF Pagination', body: 'Apply clean, vector-rendered page numbers across multi-page reports, briefs, and manuscripts. Adjust margins, skip cover pages, and choose custom start numbers.' }],
+    howItWorks: [
+      { number: '01', title: 'Upload PDF', description: 'Select your PDF document to load pagination options.' },
+      { number: '02', title: 'Configure Numbering', description: 'Choose format, alignment position, font size, margin, and starting page.' },
+      { number: '03', title: 'Stamp & Download', description: 'Apply page numbers across all pages and save the numbered PDF.' },
+    ],
+    faqs: [
+      { question: 'Can I skip numbering on the cover page?', answer: 'Yes. Set "Start numbering on page" to 2 to leave your cover page clean.' },
+      { question: 'Where can page numbers be placed?', answer: 'You can align numbers to top-left, top-center, top-right, bottom-left, bottom-center, or bottom-right.' },
+    ],
+  },
+  'crop-pdf': {
+    primaryKeyword: 'crop PDF online free',
+    seoTitle: 'Crop PDF Margins Online Free | Trim PDF Pages | PDFEdit',
+    metaDescription: 'Trim margins, standardize dimensions, and crop PDF bounding boxes with visual margin guides directly in your browser. 100% private with zero uploads.',
+    longTailKeywords: ['crop pdf pages online', 'trim pdf margins free', 'remove white borders from pdf', 'resize pdf cropbox'],
+    highlights: ['Interactive visual margin adjustment', 'Apply to all pages or specific page', 'Lossless CropBox modification', 'Points or inches unit control'],
+    semanticSubheadings: [{ heading: 'Precision PDF Margin Trimming', body: 'Remove unwanted white borders, header whitespace, and printer crop marks without re-compressing or rasterizing document pages.' }],
+    howItWorks: [
+      { number: '01', title: 'Open PDF', description: 'Select a PDF to view page dimensions and interactive margin overlay.' },
+      { number: '02', title: 'Adjust Margins', description: 'Set Top, Bottom, Left, and Right crop margins in points or inches.' },
+      { number: '03', title: 'Download Cropped PDF', description: 'Apply the crop box boundaries and download the trimmed document.' },
+    ],
+    faqs: [
+      { question: 'Does cropping reduce PDF quality?', answer: 'No. Cropping adjusts the visible bounding box (CropBox) in the PDF specification without re-encoding text or images.' },
+      { question: 'Can I crop only the current page?', answer: 'Yes. You can toggle between applying crops to all pages or only the selected page.' },
+    ],
+  },
+  'pdf-to-text': {
+    primaryKeyword: 'convert PDF to text online free',
+    seoTitle: 'PDF to Text Converter Online Free | Extract TXT from PDF | PDFEdit',
+    metaDescription: 'Extract selectable digital text from PDF documents into clean plain text with word counts, search filter, and TXT download. 100% private in-browser extraction.',
+    longTailKeywords: ['pdf to text converter online', 'extract text from pdf free', 'pdf to txt in browser', 'copy text from pdf'],
+    highlights: ['Page-by-page text inspection', 'Total word, character, and line count statistics', 'In-text search and filter', '1-Click copy and .TXT download'],
+    semanticSubheadings: [{ heading: 'Fast Client-Side Text Layer Extraction', body: 'Read and extract digital text content from contracts, reports, and articles directly in your browser without uploading files to remote servers.' }],
+    howItWorks: [
+      { number: '01', title: 'Select PDF', description: 'Load a PDF document containing selectable text.' },
+      { number: '02', title: 'Inspect & Search', description: 'Review extracted text page-by-page or all together with word count stats.' },
+      { number: '03', title: 'Copy or Download TXT', description: 'Copy text to clipboard or download as a formatted .TXT file.' },
+    ],
+    faqs: [
+      { question: 'Can this tool read scanned image PDFs?', answer: 'This tool extracts selectable digital text. For scanned paper documents or images, use our OCR PDF tool.' },
+      { question: 'Are page numbers included in the TXT export?', answer: 'You can toggle page dividers on or off before copying or downloading.' },
+    ],
+  },
+  'flatten-pdf': {
+    primaryKeyword: 'flatten PDF online free',
+    seoTitle: 'Flatten PDF Online Free | Lock Form Fields & Layers | PDFEdit',
+    metaDescription: 'Lock fillable form fields, comments, signatures, and annotations into permanent uneditable static PDF content. Vector form flattening and full raster baking.',
+    longTailKeywords: ['flatten pdf form fields', 'make pdf uneditable free', 'lock fillable pdf fields', 'raster freeze pdf'],
+    highlights: ['Vector form flattening (preserves font sharpness)', 'High-security 2x visual raster bake', 'Removes interactive AcroForm fields', 'Zero server uploads'],
+    semanticSubheadings: [{ heading: 'Lock Fillable Fields & Make PDFs Unalterable', body: 'Prevent tampering and ensure documents render identically across all PDF viewers by locking form fields into static page content.' }],
+    howItWorks: [
+      { number: '01', title: 'Upload PDF', description: 'Select a PDF with form fields, signatures, or annotations.' },
+      { number: '02', title: 'Choose Flatten Mode', description: 'Select Vector Form Flatten (recommended) or Full Visual Bake (high security).' },
+      { number: '03', title: 'Download Flattened PDF', description: 'Save the locked, uneditable PDF document.' },
+    ],
+    faqs: [
+      { question: 'What is the difference between Vector and Raster flattening?', answer: 'Vector flattening converts interactive forms into static text while preserving font sharpness and small file size. Raster bake turns each page into a high-res image to eliminate all editable layers.' },
+      { question: 'Can flattened form fields be edited later?', answer: 'No. Flattening permanently embeds field values into the document content.' },
+    ],
+  },
+  'redact-pdf': {
+    primaryKeyword: 'redact PDF online free',
+    seoTitle: 'Redact PDF Online Free | Blackout Sensitive Text & PII | PDFEdit',
+    metaDescription: 'Blackout or whiteout sensitive PII, SSNs, financial data, and sanitize metadata permanently from PDF documents client-side. Zero server uploads.',
+    longTailKeywords: ['redact pdf online free', 'blackout text in pdf', 'hide sensitive info in pdf', 'sanitize pdf metadata', 'client side pdf redaction'],
+    highlights: ['Interactive drag-and-drop blackout boxes', 'Blackout, whiteout, or custom text stamps (e.g. [REDACTED])', 'Automatic metadata sanitization', 'Zero server uploads & total privacy'],
+    semanticSubheadings: [{ heading: 'True Client-Side PDF Redaction & PII Protection', body: 'Draw permanent redaction boxes over confidential numbers, names, and account details directly on the canvas. Strips metadata headers for total distribution safety.' }],
+    howItWorks: [
+      { number: '01', title: 'Open Document', description: 'Select your PDF to render high-resolution redaction canvases.' },
+      { number: '02', title: 'Draw Redaction Boxes', description: 'Click and drag over sensitive text or figures. Customize color and stamp label.' },
+      { number: '03', title: 'Apply & Download', description: 'Burn redactions permanently into the PDF and download the sanitized file.' },
+    ],
+    faqs: [
+      { question: 'Is the redacted text completely covered?', answer: 'Yes. Redaction boxes are drawn as solid vector blocks directly onto the PDF page stream.' },
+      { question: 'Does redaction strip metadata?', answer: 'When metadata sanitization is enabled, document title, author, subject, and producer headers are cleared.' },
+    ],
+  },
 };
 
 const GEO_ALIASES: Record<string, string> = {
@@ -1207,6 +1327,13 @@ const GEO_ALIASES: Record<string, string> = {
   'pdf-watermarker': 'watermark-pdf',
   'pdf-page-reorder': 'organize-pdf',
   'pdf-metadata-editor': 'edit-pdf-metadata',
+  'pdf-page-delete': 'delete-pdf-pages',
+  'pdf-page-extractor': 'extract-pdf-pages',
+  'pdf-number-pages': 'add-page-numbers',
+  'pdf-cropper': 'crop-pdf',
+  'pdf-text-extractor': 'pdf-to-text',
+  'pdf-flattener': 'flatten-pdf',
+  'pdf-redaction': 'redact-pdf',
 };
 
 /**
