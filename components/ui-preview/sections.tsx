@@ -431,28 +431,51 @@ export function StudioPromo() {
   );
 }
 
-/* ================= CV BUILDER STRIP — slim, understated, away from Studio ================= */
+/* ================= CV BUILDER STRIP — slim promo, away from Studio ================= */
 
 export function CvPromo() {
   return (
-    <section className="border-y border-[var(--pe-border)] bg-[var(--pe-surface-2)]" aria-label="CV Builder">
-      <div className="mx-auto flex max-w-6xl flex-wrap items-center justify-center gap-x-4 gap-y-2 px-4 py-4 sm:px-6">
-        <span className="grid h-8 w-8 shrink-0 place-items-center rounded-lg bg-[var(--pe-accent-soft)] text-[var(--pe-accent)]" aria-hidden="true">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.8} strokeLinecap="round" strokeLinejoin="round" className="h-4 w-4">
-            <path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z" />
-            <path d="M14 3v5h5" />
-            <path d="M9 13h6M9 17h4" />
-          </svg>
-        </span>
-        <p className="text-sm text-[var(--pe-text-2)]">
-          <span className="font-bold text-[var(--pe-text)]">Build your CV</span>
-          {' '}— professional templates, free forever, no sign-up.
-        </p>
+    <section
+      className="border-y-2 border-[#1c1a16] bg-[var(--pe-surface)] dark:border-[rgba(248,113,113,0.45)] dark:bg-[#1d1417]"
+      aria-label="CV Builder"
+    >
+      <div className="mx-auto flex max-w-6xl flex-wrap items-center justify-center gap-x-5 gap-y-3 px-4 py-4 sm:justify-between sm:px-6">
+        <div className="flex min-w-0 items-center gap-4">
+          {/* mini professional CV illustration with AI sparkles badge */}
+          <span className="relative shrink-0" aria-hidden="true">
+            <svg
+              width="42"
+              height="54"
+              viewBox="0 0 42 54"
+              className="rounded-md shadow-[var(--pe-shadow-sm)] ring-1 ring-[var(--pe-border-strong)]"
+            >
+              <rect width="42" height="54" rx="4" fill="#ffffff" />
+              <rect x="5" y="5" width="20" height="4" rx="2" fill="#1c1a16" />
+              <rect x="5" y="11" width="12" height="2.5" rx="1.25" fill="#b91c1c" />
+              <rect x="5" y="17" width="32" height="2" rx="1" fill="#d9d2c2" />
+              <rect x="5" y="21.5" width="28" height="2" rx="1" fill="#e7e2d8" />
+              <rect x="5" y="26" width="30" height="2" rx="1" fill="#e7e2d8" />
+              <rect x="5" y="32" width="14" height="2.5" rx="1.25" fill="#1c1a16" />
+              <rect x="5" y="37" width="32" height="2" rx="1" fill="#e7e2d8" />
+              <rect x="5" y="41.5" width="26" height="2" rx="1" fill="#e7e2d8" />
+              <rect x="5" y="46" width="30" height="2" rx="1" fill="#e7e2d8" />
+            </svg>
+            <span className="absolute -right-2 -top-2 grid h-6 w-6 place-items-center rounded-full bg-[var(--pe-accent)] text-[var(--pe-accent-ink)] shadow-[var(--pe-shadow-sm)]">
+              <svg viewBox="0 0 24 24" fill="currentColor" className="h-3.5 w-3.5" aria-hidden="true">
+                <path d="M12 2l1.9 5.7 5.7 1.9-5.7 1.9L12 17.2l-1.9-5.7-5.7-1.9 5.7-1.9L12 2zm7 11l.9 2.6 2.6.9-2.6.9-.9 2.6-.9-2.6-2.6-.9 2.6-.9.9-2.6zM5 14l.7 2 2 .7-2 .7-.7 2-.7-2-2-.7 2-.7.7-2z" />
+              </svg>
+            </span>
+          </span>
+          <p className="text-sm text-[var(--pe-text-2)]">
+            <span className="font-bold text-[var(--pe-text)]">Build your CV</span>
+            {' '}— professional templates, free forever, no sign-up.
+          </p>
+        </div>
         <Link
           href="/cv-builder"
-          className="pe-lift text-sm font-bold text-[var(--pe-accent)] hover:underline"
+          className="pe-lift shrink-0 rounded-full bg-[var(--pe-accent)] px-6 py-2.5 text-sm font-bold text-[var(--pe-accent-ink)] shadow-[var(--pe-shadow-accent)] hover:bg-[var(--pe-accent-hover)]"
         >
-          Create CV →
+          Create CV
         </Link>
       </div>
     </section>
