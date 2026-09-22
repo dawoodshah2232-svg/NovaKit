@@ -25,8 +25,8 @@ type LogoProps = {
   alt?: string;
 };
 
-const DEFAULT_LIGHT_SRC = '/pdfedit-logo-light-bg.png';
-const DEFAULT_DARK_SRC = '/pdfedit-logo-dark-bg.png';
+const DEFAULT_LIGHT_SRC = '/pdfedit-logo-red-light.png';
+const DEFAULT_DARK_SRC = '/pdfedit-logo-red-dark.png';
 
 export function Logo({
   href,
