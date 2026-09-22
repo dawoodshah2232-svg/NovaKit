@@ -104,7 +104,7 @@ function SortablePdfItem({
       style={style}
       className={`group relative flex items-center justify-between gap-1.5 sm:gap-2 p-2.5 sm:p-4 rounded-2xl border transition-all duration-150 ${
         isDragging
-          ? 'bg-emerald-50/90 dark:bg-emerald-950/70 border-emerald-500 shadow-xl ring-2 ring-emerald-500/30 opacity-95 scale-[1.01]'
+ ? 'bg-[var(--pe-accent-soft)] border-[var(--pe-accent)] shadow-xl ring-2 ring-[var(--pe-accent-ring)] opacity-95 scale-[1.01]'
           : 'bg-white dark:bg-slate-900 border-slate-200/80 dark:border-slate-800/80 hover:border-slate-300 dark:hover:border-slate-700 shadow-xs'
       }`}
     >
@@ -122,13 +122,13 @@ function SortablePdfItem({
         </button>
 
         {/* Order index badge */}
-        <div className="w-7 h-7 sm:w-8 sm:h-8 rounded-lg sm:rounded-xl bg-emerald-50 dark:bg-emerald-950/80 border border-emerald-200/70 dark:border-emerald-800/60 text-emerald-700 dark:text-emerald-300 flex items-center justify-center text-xs font-black shrink-0">
+ <div className="w-7 h-7 sm:w-8 sm:h-8 rounded-lg sm:rounded-xl bg-[var(--pe-accent-soft)] border border-[var(--pe-border)] text-[var(--pe-accent)] flex items-center justify-center text-xs font-black shrink-0">
           {index + 1}
         </div>
 
         {/* File icon */}
         <div className="w-9 h-9 sm:w-10 sm:h-10 rounded-xl bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 items-center justify-center shrink-0 hidden xs:flex">
-          <FileText className="w-5 h-5 text-emerald-600 dark:text-emerald-400" />
+ <FileText className="w-5 h-5 text-[var(--pe-accent)] " />
         </div>
 
         {/* File name and metadata */}
@@ -143,7 +143,7 @@ function SortablePdfItem({
             <span>{formatBytes(item.size)}</span>
             <span className="text-slate-300 dark:text-slate-700">•</span>
             {item.pageCount !== undefined ? (
-              <span className="inline-flex items-center gap-0.5 font-semibold text-emerald-600 dark:text-emerald-400">
+ <span className="inline-flex items-center gap-0.5 font-semibold text-[var(--pe-accent)] ">
                 <Layers className="w-3 h-3" />
                 <span>{item.pageCount} {item.pageCount === 1 ? 'pg' : 'pgs'}</span>
               </span>
@@ -303,7 +303,7 @@ export function PdfMerger() {
         });
       }
     },
-    [inspectPdf]
+    [inspectPdf, pdfFiles]
   );
 
   // React-dropzone config
@@ -456,14 +456,14 @@ export function PdfMerger() {
   return (
     <div className="w-full space-y-6">
       {/* Privacy guarantee banner */}
-      <div className="flex items-center justify-between p-3.5 rounded-2xl bg-emerald-50/90 dark:bg-emerald-950/40 border border-emerald-200/80 dark:border-emerald-800/60 text-xs font-medium text-emerald-800 dark:text-emerald-300 shadow-xs">
+ <div className="flex items-center justify-between p-3.5 rounded-2xl bg-[var(--pe-accent-soft)] border border-[var(--pe-border)] text-xs font-medium text-[var(--pe-accent)] shadow-xs">
         <div className="flex items-center gap-2">
-          <ShieldCheck className="w-4 h-4 text-emerald-600 dark:text-emerald-400 shrink-0" />
+ <ShieldCheck className="w-4 h-4 text-[var(--pe-accent)] shrink-0" />
           <span>
             <strong>Zero Server Uploads:</strong> PDF merging executes 100% locally in your browser memory. Your documents never touch a remote server.
           </span>
         </div>
-        <span className="hidden sm:inline-block text-[11px] font-semibold px-2 py-0.5 rounded-full bg-emerald-100 dark:bg-emerald-900/60 text-emerald-700 dark:text-emerald-300">
+ <span className="hidden sm:inline-block text-[11px] font-semibold px-2 py-0.5 rounded-full bg-[var(--pe-accent-soft)] text-[var(--pe-accent)] ">
           pdf-lib In-Memory
         </span>
       </div>
@@ -491,7 +491,7 @@ export function PdfMerger() {
               <a
                 href={mergeResult.url}
                 download={mergeResult.name}
-                className="inline-flex min-h-11 w-full items-center justify-center gap-2 rounded-xl bg-emerald-600 px-4 py-2.5 text-sm font-bold text-white transition hover:bg-emerald-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-600 focus-visible:ring-offset-2 sm:w-auto"
+ className="inline-flex min-h-11 w-full items-center justify-center gap-2 rounded-xl bg-[var(--pe-accent)] px-4 py-2.5 text-sm font-bold text-[var(--pe-accent-ink)] transition hover:bg-[var(--pe-accent-hover)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--pe-focus)] focus-visible:ring-offset-2 sm:w-auto"
               >
                 <Download className="h-4 w-4" />
                 Download Merged PDF
@@ -499,7 +499,7 @@ export function PdfMerger() {
               <button
                 type="button"
                 onClick={handleReset}
-                className="inline-flex min-h-11 w-full items-center justify-center gap-2 rounded-xl border border-emerald-300 px-4 py-2.5 text-sm font-bold text-emerald-800 transition hover:bg-emerald-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-600 focus-visible:ring-offset-2 dark:border-emerald-700 dark:text-emerald-200 dark:hover:bg-emerald-950/60 sm:w-auto"
+ className="inline-flex min-h-11 w-full items-center justify-center gap-2 rounded-xl border border-[var(--pe-border-strong)] px-4 py-2.5 text-sm font-bold text-[var(--pe-accent)] transition hover:bg-[var(--pe-accent-soft)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--pe-focus)] focus-visible:ring-offset-2 sm:w-auto"
               >
                 <RotateCcw className="h-4 w-4" />
                 Start Again
@@ -515,13 +515,13 @@ export function PdfMerger() {
           {...getRootProps()}
           className={`group relative rounded-3xl border-2 sm:border-3 border-dashed transition-all duration-200 p-6 sm:p-14 text-center cursor-pointer min-h-[320px] sm:min-h-[380px] flex flex-col items-center justify-center bg-white dark:bg-slate-900 shadow-[0_4px_24px_rgba(0,0,0,0.03)] hover:shadow-[0_16px_40px_rgba(16,185,129,0.12)] active:scale-[0.98] select-none touch-manipulation ${
             isDragActive
-              ? 'border-emerald-500 bg-emerald-50/70 dark:bg-emerald-950/50 scale-[0.99] ring-4 ring-emerald-500/20'
-              : 'border-emerald-300/80 dark:border-emerald-900/60 hover:border-emerald-600 dark:hover:border-emerald-400'
+ ? 'border-[var(--pe-accent)] bg-[var(--pe-accent-soft)] scale-[0.99] ring-4 ring-[var(--pe-accent-ring)]'
+ : 'border-[var(--pe-border-strong)] hover:border-[var(--pe-accent)] '
           }`}
         >
           <input {...getInputProps()} aria-label="Select PDF files to merge" />
           <div className="max-w-md mx-auto space-y-4 sm:space-y-5">
-            <div className="w-16 h-16 sm:w-24 sm:h-24 rounded-3xl bg-emerald-50 dark:bg-emerald-950/80 text-emerald-600 dark:text-emerald-400 flex items-center justify-center mx-auto shadow-inner group-hover:scale-110 transition-transform duration-200">
+ <div className="w-16 h-16 sm:w-24 sm:h-24 rounded-3xl bg-[var(--pe-accent-soft)] text-[var(--pe-accent)] flex items-center justify-center mx-auto shadow-inner group-hover:scale-110 transition-transform duration-200">
               <UploadCloud className="w-8 h-8 sm:w-12 sm:h-12" />
             </div>
             <div className="space-y-1 sm:space-y-1.5">
@@ -537,7 +537,7 @@ export function PdfMerger() {
             </div>
             <button
               type="button"
-              className="w-full sm:w-auto min-h-[50px] sm:min-h-[52px] px-8 py-3.5 rounded-2xl bg-emerald-600 hover:bg-emerald-700 text-white text-sm sm:text-base font-bold shadow-lg shadow-emerald-500/25 active:scale-95 transition-all inline-flex items-center justify-center gap-2.5 cursor-pointer touch-manipulation"
+ className="w-full sm:w-auto min-h-[50px] sm:min-h-[52px] px-8 py-3.5 rounded-2xl bg-[var(--pe-accent)] hover:bg-[var(--pe-accent-hover)] text-[var(--pe-accent-ink)] text-sm sm:text-base font-bold shadow-lg shadow-[var(--pe-shadow-accent)] active:scale-95 transition-all inline-flex items-center justify-center gap-2.5 cursor-pointer touch-manipulation"
             >
               <FileText className="w-5 h-5" />
               <span>Choose PDF Files</span>
@@ -552,7 +552,7 @@ export function PdfMerger() {
             <div>
               <h3 className="text-sm font-bold text-slate-900 dark:text-white flex items-center gap-2">
                 <span>Merge Sequence</span>
-                <span className="text-[11px] font-semibold px-2 py-0.5 rounded-full bg-emerald-50 dark:bg-emerald-950/80 text-emerald-700 dark:text-emerald-300 border border-emerald-200/70 dark:border-emerald-800/60">
+ <span className="text-[11px] font-semibold px-2 py-0.5 rounded-full bg-[var(--pe-accent-soft)] text-[var(--pe-accent)] border border-[var(--pe-border)] ">
                   {pdfFiles.length} {pdfFiles.length === 1 ? 'file' : 'files'}
                 </span>
               </h3>
@@ -636,7 +636,7 @@ export function PdfMerger() {
                 <span className="font-semibold text-slate-700 dark:text-slate-300">
                   {pdfFiles.length} {pdfFiles.length === 1 ? 'file ready' : 'files queued'}
                 </span>
-                <span className="font-mono text-emerald-600 dark:text-emerald-400 font-bold">
+ <span className="font-mono text-[var(--pe-accent)] font-bold">
                   {totalPages > 0 ? `${totalPages} pages` : formatBytes(totalBytes)}
                 </span>
               </div>
@@ -645,7 +645,7 @@ export function PdfMerger() {
                 type="button"
                 onClick={handleMergeAndDownload}
                 disabled={isMerging || pdfFiles.length < 2}
-                className="w-full min-h-[52px] sm:min-h-[56px] px-6 sm:px-8 py-3.5 sm:py-4 rounded-2xl bg-gradient-to-r from-emerald-600 via-teal-600 to-emerald-700 hover:from-emerald-500 hover:to-teal-500 disabled:opacity-50 disabled:cursor-not-allowed text-white text-sm sm:text-base md:text-lg font-black shadow-xl shadow-emerald-600/25 active:scale-[0.98] transition-all flex items-center justify-center gap-2.5 sm:gap-3 cursor-pointer touch-manipulation"
+                className="w-full min-h-[52px] sm:min-h-[56px] px-6 sm:px-8 py-3.5 sm:py-4 rounded-2xl bg-gradient-to-r from-[var(--pe-accent)] to-[var(--pe-accent-hover)] hover:from-[var(--pe-accent-hover)] hover:to-[var(--pe-accent)] disabled:opacity-50 disabled:cursor-not-allowed text-[var(--pe-accent-ink)] text-sm sm:text-base md:text-lg font-black shadow-xl shadow-[var(--pe-shadow-accent)] active:scale-[0.98] transition-all flex items-center justify-center gap-2.5 sm:gap-3 cursor-pointer touch-manipulation"
                 aria-label="Merge and download combined PDF document"
               >
                 {isMerging ? (

@@ -1,237 +1,108 @@
 'use client';
 
-import { useState } from 'react';
-import JSZip from 'jszip';
-import { PDFDocument, StandardFonts, rgb } from 'pdf-lib';
+import { useRef, useState } from 'react';
 import { saveAs } from 'file-saver';
 import { trackToolExecution } from '@/lib/analytics';
+import {
+  WORD_FONT_OPTIONS,
+  parseDocxStructure,
+  renderPdf,
+  type WordFontFamily,
+} from './word-to-pdf-convert';
 
-interface ParsedRun {
-  text: string;
-  bold?: boolean;
-  italic?: boolean;
-  underline?: boolean;
-}
+const MAX_FILE_BYTES = 50 * 1024 * 1024; // 50 MB — larger documents risk running out of browser memory
 
-interface ParsedParagraph {
-  runs: ParsedRun[];
-  isHeading?: boolean;
-  headingLevel?: number;
-  alignment?: 'left' | 'center' | 'right';
-  isListItem?: boolean;
-  listType?: 'bullet' | 'number';
-}
-
-function decodeXml(value: string) {
-  return value
-    .replace(/<[^>]+>/g, '')
-    .replaceAll('&lt;', '<')
-    .replaceAll('&gt;', '>')
-    .replaceAll('&amp;', '&')
-    .replaceAll('&quot;', '"')
-    .replaceAll('&apos;', "'")
-    .trim();
-}
-
-async function parseDocxStructure(file: File): Promise<ParsedParagraph[]> {
-  const zip = await JSZip.loadAsync(await file.arrayBuffer());
-  const documentXml = await zip.file('word/document.xml')?.async('text');
-  if (!documentXml) throw new Error('This DOCX file does not contain a readable document.');
-
-  const paragraphs: ParsedParagraph[] = [];
-  const paraMatches = [...documentXml.matchAll(/<w:p[\s\S]*?<\/w:p>/g)];
-
-  for (const paraMatch of paraMatches) {
-    const paraXml = paraMatch[0];
-
-    // Check if heading
-    const headingMatch = paraXml.match(/<w:pStyle w:val="Heading(\d+)"\/>/);
-    const isHeading = !!headingMatch;
-    const headingLevel = headingMatch ? parseInt(headingMatch[1]) : undefined;
-
-    // Check alignment
-    let alignment: 'left' | 'center' | 'right' = 'left';
-    if (paraXml.includes('<w:jc w:val="center"/>')) alignment = 'center';
-    else if (paraXml.includes('<w:jc w:val="right"/>')) alignment = 'right';
-
-    // Check if list item
-    const isListItem = paraXml.includes('<w:numPr>');
-    const listType: 'bullet' | 'number' = paraXml.includes('<w:ilvl w:val="0"/>') ? 'bullet' : 'bullet';
-
-    // Parse runs
-    const runs: ParsedRun[] = [];
-    const runMatches = [...paraXml.matchAll(/<w:r[\s\S]*?<\/w:r>/g)];
-
-    for (const runMatch of runMatches) {
-      const runXml = runMatch[0];
-      const textMatch = runXml.match(/<w:t[^>]*>([\s\S]*?)<\/w:t>/);
-      if (!textMatch) continue;
-
-      const text = decodeXml(textMatch[1]).replace(/<w:tab\s*\/?>/g, ' ');
-      if (!text) continue;
-
-      runs.push({
-        text,
-        bold: runXml.includes('<w:b/>') || runXml.includes('<w:b '),
-        italic: runXml.includes('<w:i/>') || runXml.includes('<w:i '),
-        underline: runXml.includes('<w:u ') && !runXml.includes('<w:u w:val="none"/>'),
-      });
-    }
-
-    if (runs.length > 0) {
-      paragraphs.push({ runs, isHeading, headingLevel, alignment, isListItem, listType });
-    }
-  }
-
-  if (!paragraphs.length) {
-    throw new Error('No readable text was found in this DOCX file.');
-  }
-
-  return paragraphs;
-}
+const LIMITATIONS = [
+  'Text only — images, charts, text boxes, headers, footers and footnotes are skipped.',
+  'Tables are flattened: cell text is kept but the table grid and borders are lost.',
+  'Font choice is limited to the options above. Your document\u2019s original fonts, sizes and colors can\u2019t be embedded by this browser converter.',
+  'Only .docx files are supported \u2014 legacy .doc files are not.',
+];
 
 export function WordToPdf() {
   const [file, setFile] = useState<File | null>(null);
+  const [fontFamily, setFontFamily] = useState<WordFontFamily>('helvetica');
   const [busy, setBusy] = useState(false);
+  const [progress, setProgress] = useState(0);
   const [status, setStatus] = useState('');
   const [error, setError] = useState('');
+  const inputRef = useRef<HTMLInputElement>(null);
+
+  function selectFile(next: File | null) {
+    setError('');
+    setStatus('');
+    setProgress(0);
+    if (!next) {
+      setFile(null);
+      return;
+    }
+    if (!next.name.toLowerCase().endsWith('.docx')) {
+      setFile(null);
+      setError(
+        'Only .docx files are supported. Legacy .doc files use a different format and need a desktop or server converter.'
+      );
+      if (inputRef.current) inputRef.current.value = '';
+      return;
+    }
+    setFile(next);
+  }
 
   async function convert() {
-    if (!file) return;
+    if (!file || busy) return;
     setBusy(true);
     setError('');
-    setStatus('Reading document structure...');
+    setStatus('');
+    setProgress(2);
 
     try {
-      if (!file.name.toLowerCase().endsWith('.docx')) {
-        throw new Error('Only .docx files are supported in this browser converter. Legacy .doc files require a desktop or server converter.');
+      if (file.size === 0) {
+        throw new Error('This file is empty (0 bytes). Please choose a valid .docx file.');
+      }
+      if (file.size > MAX_FILE_BYTES) {
+        throw new Error(
+          `This file is ${(file.size / 1024 / 1024).toFixed(1)} MB \u2014 the browser converter supports files up to 50 MB. Try a smaller document.`
+        );
       }
 
-      const paragraphs = await parseDocxStructure(file);
-      setStatus('Creating PDF with formatting...');
+      setStatus('Reading the Word document\u2026');
+      setProgress(10);
+      await new Promise((resolve) => setTimeout(resolve, 0));
 
-      const pdf = await PDFDocument.create();
-      const helvetica = await pdf.embedFont(StandardFonts.Helvetica);
-      const helveticaBold = await pdf.embedFont(StandardFonts.HelveticaBold);
-      const helveticaOblique = await pdf.embedFont(StandardFonts.HelveticaOblique);
-      const helveticaBoldOblique = await pdf.embedFont(StandardFonts.HelveticaBoldOblique);
-
-      const margin = 54;
-      const width = 612;
-      const height = 792;
-
-      let page = pdf.addPage([width, height]);
-      let y = height - margin;
-
-      for (const para of paragraphs) {
-        // Determine font size and spacing based on paragraph type
-        let fontSize = 11;
-        let spaceAfter = 8;
-
-        if (para.isHeading) {
-          fontSize = para.headingLevel === 1 ? 18 : para.headingLevel === 2 ? 16 : 14;
-          spaceAfter = 12;
+      let paragraphs;
+      try {
+        paragraphs = await parseDocxStructure(await file.arrayBuffer());
+      } catch (parseError) {
+        // JSZip throws generic errors for non-zip/corrupt files \u2014 translate to something actionable.
+        const message = parseError instanceof Error ? parseError.message : '';
+        if (/end of central directory|invalid signature|not a zip|corrupt/i.test(message)) {
+          throw new Error(
+            'This file doesn\u2019t look like a valid .docx document. It may be corrupted, renamed from another format, or password-protected.'
+          );
         }
-
-        const effectiveLineHeight = fontSize * 1.4;
-
-        // Add list prefix if needed
-        let linePrefix = '';
-        if (para.isListItem) {
-          linePrefix = para.listType === 'bullet' ? '• ' : '1. ';
-        }
-
-        // Process each run in the paragraph
-        let lineText = linePrefix;
-
-        for (const run of para.runs) {
-          const words = run.text.split(/\s+/);
-
-          for (const word of words) {
-            // Select font based on formatting
-            let font = helvetica;
-            if (run.bold && run.italic) font = helveticaBoldOblique;
-            else if (run.bold) font = helveticaBold;
-            else if (run.italic) font = helveticaOblique;
-
-            const testText = lineText ? `${lineText} ${word}` : word;
-            const testWidth = font.widthOfTextAtSize(testText, fontSize);
-
-            if (testWidth > width - margin * 2 && lineText) {
-              // Draw current line
-              if (y < margin + effectiveLineHeight) {
-                page = pdf.addPage([width, height]);
-                y = height - margin;
-              }
-
-              let drawX = margin;
-              if (para.alignment === 'center') {
-                const lineWidth = font.widthOfTextAtSize(lineText, fontSize);
-                drawX = (width - lineWidth) / 2;
-              } else if (para.alignment === 'right') {
-                const lineWidth = font.widthOfTextAtSize(lineText, fontSize);
-                drawX = width - margin - lineWidth;
-              }
-
-              page.drawText(lineText, {
-                x: drawX,
-                y,
-                size: fontSize,
-                font,
-                color: rgb(0.1, 0.1, 0.1),
-              });
-
-              y -= effectiveLineHeight;
-              lineText = word;
-            } else {
-              lineText = testText;
-            }
-          }
-        }
-
-        // Draw remaining text
-        if (lineText) {
-          if (y < margin + effectiveLineHeight) {
-            page = pdf.addPage([width, height]);
-            y = height - margin;
-          }
-
-          let drawX = margin;
-          const finalFont = para.runs[0]?.bold && para.runs[0]?.italic ? helveticaBoldOblique :
-                           para.runs[0]?.bold ? helveticaBold :
-                           para.runs[0]?.italic ? helveticaOblique : helvetica;
-
-          if (para.alignment === 'center') {
-            const lineWidth = finalFont.widthOfTextAtSize(lineText, fontSize);
-            drawX = (width - lineWidth) / 2;
-          } else if (para.alignment === 'right') {
-            const lineWidth = finalFont.widthOfTextAtSize(lineText, fontSize);
-            drawX = width - margin - lineWidth;
-          }
-
-          page.drawText(lineText, {
-            x: drawX,
-            y,
-            size: fontSize,
-            font: finalFont,
-            color: rgb(0.1, 0.1, 0.1),
-          });
-
-          y -= effectiveLineHeight;
-        }
-
-        y -= spaceAfter;
+        throw parseError;
       }
 
-      saveAs(
-        new Blob([await pdf.save() as unknown as BlobPart], { type: 'application/pdf' }),
-        `${file.name.replace(/\.docx$/i, '')}.pdf`
-      );
-      setStatus(`Converted ${paragraphs.length} paragraphs to PDF with formatting.`);
+      setStatus(`Parsed ${paragraphs.length} paragraphs \u2014 building PDF pages\u2026`);
+      setProgress(35);
+      await new Promise((resolve) => setTimeout(resolve, 0));
+
+      const { bytes, pageCount, paragraphCount } = await renderPdf(paragraphs, fontFamily, (fraction) => {
+        setProgress(35 + Math.round(fraction * 55));
+      });
+
+      setStatus('Saving your PDF\u2026');
+      setProgress(97);
+      await new Promise((resolve) => setTimeout(resolve, 0));
+
+      saveAs(new Blob([bytes as unknown as BlobPart], { type: 'application/pdf' }), `${file.name.replace(/\.docx$/i, '')}.pdf`);
+
+      setProgress(100);
+      setStatus(`Done \u2014 converted ${paragraphCount} paragraphs into a ${pageCount}-page PDF.`);
       trackToolExecution('word-to-pdf', true);
     } catch (conversionError) {
-      setError(conversionError instanceof Error ? conversionError.message : 'Could not convert this document.');
+      setError(conversionError instanceof Error ? conversionError.message : 'Could not convert this document. Please try another file.');
       setStatus('');
+      setProgress(0);
       trackToolExecution('word-to-pdf', false);
     } finally {
       setBusy(false);
@@ -243,47 +114,105 @@ export function WordToPdf() {
       <div>
         <h2 className="text-lg font-black text-slate-950 dark:text-white">Word to PDF</h2>
         <p className="mt-2 text-sm leading-6 text-slate-600 dark:text-slate-300">
-          Convert a DOCX document into a PDF with support for basic formatting including bold, italic, headings, and lists.
+          Convert a DOCX document into a PDF in your browser. Keeps paragraphs, headings, bold, italic, underline,
+          alignment and simple lists.
         </p>
       </div>
+
       <div>
         <label htmlFor="docx-input" className="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-2">
           Select DOCX Document
         </label>
         <input
           id="docx-input"
+          ref={inputRef}
           type="file"
           accept=".docx,application/vnd.openxmlformats-officedocument.wordprocessingml.document"
-          onChange={(event) => {
-            setFile(event.target.files?.[0] || null);
-            setError('');
-            setStatus('');
-          }}
+          onChange={(event) => selectFile(event.target.files?.[0] || null)}
           className="block w-full rounded-xl border border-slate-300 p-3 text-sm dark:border-slate-700 dark:bg-slate-950 focus:outline-none focus:ring-2 focus:ring-blue-500"
           disabled={busy}
         />
+        {file && !busy && (
+          <p className="mt-2 text-xs text-slate-500 dark:text-slate-400">
+            {file.name} \u00b7 {(file.size / 1024).toFixed(0)} KB
+          </p>
+        )}
       </div>
-      <p className="text-xs text-slate-500">
-        Supports: paragraphs, headings (H1-H3), bold, italic, underline, center/right alignment, and bullet lists.
-        Legacy .doc files, images, tables, and complex layouts are not supported by this browser-only implementation.
-      </p>
+
+      <fieldset disabled={busy}>
+        <legend className="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-2">PDF font</legend>
+        <div className="grid grid-cols-3 gap-2">
+          {WORD_FONT_OPTIONS.map((option) => (
+            <button
+              key={option.value}
+              type="button"
+              onClick={() => setFontFamily(option.value)}
+              aria-pressed={fontFamily === option.value}
+              className={`rounded-xl border px-3 py-2.5 text-sm font-semibold transition focus:outline-none focus:ring-2 focus:ring-blue-500 ${
+                fontFamily === option.value
+                  ? 'border-blue-600 bg-blue-50 text-blue-700 dark:border-blue-500 dark:bg-blue-950 dark:text-blue-300'
+                  : 'border-slate-300 text-slate-600 hover:border-slate-400 dark:border-slate-700 dark:text-slate-300'
+              }`}
+            >
+              {option.label}
+            </button>
+          ))}
+        </div>
+        <p className="mt-2 text-xs text-slate-500 dark:text-slate-400">
+          Bold and italic are supported for every option. These are standard built-in PDF fonts \u2014 fonts from your
+          Word file can\u2019t be embedded by a browser converter, so the output always uses the font you pick here.
+        </p>
+      </fieldset>
+
+      <div className="rounded-xl bg-slate-50 p-3 dark:bg-slate-950">
+        <p className="text-xs font-semibold text-slate-700 dark:text-slate-300">What this converter can\u2019t do</p>
+        <ul className="mt-1.5 list-disc space-y-1 pl-5 text-xs leading-5 text-slate-500 dark:text-slate-400">
+          {LIMITATIONS.map((item) => (
+            <li key={item}>{item}</li>
+          ))}
+        </ul>
+      </div>
+
       {error && (
         <p role="alert" className="rounded-xl bg-rose-50 p-3 text-sm text-rose-700 dark:bg-rose-950 dark:text-rose-300">
           {error}
         </p>
       )}
-      {status && (
+
+      {busy && (
+        <div className="space-y-2">
+          <div
+            role="progressbar"
+            aria-valuemin={0}
+            aria-valuemax={100}
+            aria-valuenow={progress}
+            aria-label="Conversion progress"
+            className="h-2.5 w-full overflow-hidden rounded-full bg-slate-200 dark:bg-slate-800"
+          >
+            <div
+              className="h-full rounded-full bg-blue-600 transition-[width] duration-300"
+              style={{ width: `${progress}%` }}
+            />
+          </div>
+          <p role="status" className="text-sm text-slate-600 dark:text-slate-300">
+            {status} <span className="font-semibold tabular-nums">{progress}%</span>
+          </p>
+        </div>
+      )}
+
+      {!busy && status && (
         <p role="status" className="rounded-xl bg-emerald-50 p-3 text-sm text-emerald-700 dark:bg-emerald-950 dark:text-emerald-300">
           {status}
         </p>
       )}
+
       <button
         type="button"
         onClick={() => void convert()}
         disabled={!file || busy}
         className="min-h-12 w-full rounded-xl bg-blue-600 px-5 py-3 text-sm font-bold text-white transition hover:bg-blue-700 disabled:opacity-50 focus:outline-none focus:ring-2 focus:ring-blue-500"
       >
-        {busy ? 'Converting...' : 'Download PDF'}
+        {busy ? 'Converting\u2026' : 'Download PDF'}
       </button>
     </div>
   );

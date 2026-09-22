@@ -14,8 +14,8 @@ export function ThemeToggle() {
 
   if (!mounted) {
     return (
-      <div 
-        className="w-9 h-9 rounded-xl bg-slate-100 dark:bg-slate-800/80 border border-slate-200/80 dark:border-slate-700/80 animate-pulse"
+      <div
+        className="h-11 w-11 animate-pulse rounded-xl border border-[var(--pe-border)] bg-[var(--pe-surface-2)]"
         aria-hidden="true"
       />
     );
@@ -27,14 +27,14 @@ export function ThemeToggle() {
     <button
       type="button"
       onClick={() => setTheme(isDark ? 'light' : 'dark')}
-      className="relative p-2 rounded-xl text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white bg-slate-100 hover:bg-slate-200/80 dark:bg-slate-800/80 dark:hover:bg-slate-700/80 border border-slate-200/80 dark:border-slate-700/80 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-blue-500/40 active:scale-95 shadow-sm"
+      className="relative grid h-11 w-11 place-items-center rounded-xl border border-[var(--pe-border)] bg-[var(--pe-surface-2)] text-[var(--pe-text-2)] shadow-sm transition-all duration-200 hover:bg-[var(--pe-surface-3)] hover:text-[var(--pe-text)] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--pe-focus)] active:scale-95"
       aria-label={`Switch to ${isDark ? 'light' : 'dark'} mode`}
       title={`Switch to ${isDark ? 'light' : 'dark'} mode`}
     >
       {isDark ? (
-        <Sun className="w-5 h-5 text-amber-400 transition-transform duration-300 rotate-0 hover:rotate-45" />
+        <Sun className="h-5 w-5 text-amber-400 transition-transform duration-300 rotate-0 hover:rotate-45" aria-hidden="true" />
       ) : (
-        <Moon className="w-5 h-5 text-slate-700 transition-transform duration-300 -rotate-12 hover:rotate-0" />
+        <Moon className="h-5 w-5 transition-transform duration-300 -rotate-12 hover:rotate-0" aria-hidden="true" />
       )}
     </button>
   );

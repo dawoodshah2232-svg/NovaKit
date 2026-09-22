@@ -11,11 +11,132 @@ if (typeof window !== 'undefined') pdfjsLib.GlobalWorkerOptions.workerSrc = '/pd
 
 type SignatureMode = 'draw' | 'type' | 'upload';
 
-interface Position {
+/** Signature placement box in pdf.js CSS pixels at scale 1 (1 unit = 1 PDF point), top-left origin. */
+export interface SignatureBox {
   x: number;
   y: number;
   width: number;
   height: number;
+}
+
+/**
+ * Convert a top-left-origin signature box (pdf.js scale-1 pixels) into
+ * bottom-left-origin PDF points for pdf-lib's drawImage.
+ */
+export function signatureBoxToPdfRect(box: SignatureBox, pageHeight: number) {
+  return {
+    x: box.x,
+    y: pageHeight - box.y - box.height,
+    width: box.width,
+    height: box.height,
+  };
+}
+
+/** Clamp a signature box so it stays fully inside the page (all values in scale-1 units). */
+export function clampSignatureBox(
+  box: SignatureBox,
+  pageWidth: number,
+  pageHeight: number,
+  minWidth = 50,
+  minHeight = 30
+): SignatureBox {
+  const width = Math.min(Math.max(box.width, minWidth), pageWidth);
+  const height = Math.min(Math.max(box.height, minHeight), pageHeight);
+  return {
+    x: Math.min(Math.max(box.x, 0), Math.max(0, pageWidth - width)),
+    y: Math.min(Math.max(box.y, 0), Math.max(0, pageHeight - height)),
+    width,
+    height,
+  };
+}
+
+/** Minimal structural type for a pdf.js page render task (avoids version-specific type imports). */
+interface PageRenderTask {
+  promise: Promise<unknown>;
+  cancel: () => void;
+}
+
+/** Lazily-rendered page thumbnail for the visual page selector. */
+function PageThumbnail({
+  pdfDoc,
+  pageNumber,
+  selected,
+  onSelect,
+}: {
+  pdfDoc: PDFDocumentProxy;
+  pageNumber: number;
+  selected: boolean;
+  onSelect: () => void;
+}) {
+  const canvasRef = useRef<HTMLCanvasElement>(null);
+  const renderedRef = useRef(false);
+
+  useEffect(() => {
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+
+    let cancelled = false;
+    let renderTask: PageRenderTask | null = null;
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        if (!entries[0]?.isIntersecting || renderedRef.current) return;
+        renderedRef.current = true;
+
+        (async () => {
+          try {
+            const page = await pdfDoc.getPage(pageNumber);
+            if (cancelled) return;
+            const viewport = page.getViewport({ scale: 1 });
+            // Render at 2x the displayed 72px width for crisp thumbnails.
+            const scale = 144 / viewport.width;
+            const scaledViewport = page.getViewport({ scale });
+            canvas.width = Math.ceil(scaledViewport.width);
+            canvas.height = Math.ceil(scaledViewport.height);
+            const ctx = canvas.getContext('2d');
+            if (!ctx) return;
+            renderTask = page.render({ canvas, canvasContext: ctx, viewport: scaledViewport }) as PageRenderTask;
+            await renderTask.promise;
+          } catch (err) {
+            if (!cancelled) console.error(`Error rendering thumbnail for page ${pageNumber}:`, err);
+          }
+        })();
+      },
+      { rootMargin: '240px' }
+    );
+
+    observer.observe(canvas);
+    return () => {
+      cancelled = true;
+      try {
+        renderTask?.cancel();
+      } catch {
+        // Ignore cancellation errors.
+      }
+      observer.disconnect();
+    };
+  }, [pdfDoc, pageNumber]);
+
+  return (
+    <button
+      type="button"
+      onClick={onSelect}
+      aria-label={`Go to page ${pageNumber}`}
+      aria-current={selected ? 'page' : undefined}
+      className={`flex min-h-[88px] w-[88px] shrink-0 flex-col items-center gap-1 rounded-xl border-2 p-1.5 transition focus:outline-none focus:ring-2 focus:ring-blue-500 ${
+        selected
+          ? 'border-blue-500 bg-blue-50 dark:bg-blue-950'
+          : 'border-slate-200 hover:border-slate-400 dark:border-slate-700 dark:hover:border-slate-500'
+      }`}
+    >
+      <span className="flex h-[72px] w-[72px] items-center justify-center overflow-hidden rounded bg-slate-100 dark:bg-slate-800">
+        <canvas ref={canvasRef} className="h-auto w-[72px]" aria-hidden="true" />
+      </span>
+      <span className={`text-xs font-bold ${selected ? 'text-blue-700 dark:text-blue-300' : 'text-slate-500 dark:text-slate-400'}`}>
+        {pageNumber}
+      </span>
+    </button>
+  );
 }
 
 export function SignPdf() {
@@ -29,35 +150,86 @@ export function SignPdf() {
   const [currentPage, setCurrentPage] = useState(1);
   const [pageScale, setPageScale] = useState(1);
   const [pdfPageDimensions, setPdfPageDimensions] = useState({ width: 0, height: 0 });
+  const [pageRendering, setPageRendering] = useState(false);
 
   const [mode, setMode] = useState<SignatureMode>('draw');
   const [typedText, setTypedText] = useState('');
   const [uploadedImage, setUploadedImage] = useState<string | null>(null);
   const [imageType, setImageType] = useState<'png' | 'jpg'>('png');
+  const [sigPreview, setSigPreview] = useState<string | null>(null);
 
-  const [signaturePosition, setSignaturePosition] = useState<Position>({ x: 100, y: 100, width: 200, height: 60 });
-  const [isDragging, setIsDragging] = useState(false);
-  const [isResizing, setIsResizing] = useState(false);
-  const [dragStart, setDragStart] = useState({ x: 0, y: 0 });
+  const [signaturePosition, setSignaturePosition] = useState<SignatureBox>({ x: 100, y: 100, width: 200, height: 60 });
 
-  const [busy, setBusy] = useState(false);
+  // Refs used by pointer handlers so they never read stale state.
+  const sigBoxRef = useRef<SignatureBox>(signaturePosition);
+  const renderTaskRef = useRef<PageRenderTask | null>(null);
+  const renderTokenRef = useRef(0);
+  const dragRef = useRef<null | { kind: 'move' | 'resize'; grabX: number; grabY: number }>(null);
+  const objectUrlsRef = useRef<Set<string>>(new Set());
+  const [dragKind, setDragKind] = useState<null | 'move' | 'resize'>(null);
+
+  const [progress, setProgress] = useState<{ label: string } | null>(null);
   const [status, setStatus] = useState('');
   const [error, setError] = useState('');
 
-  // Cleanup object URLs on unmount
+  const busy = progress !== null;
+
+  // Keep the ref mirror of the signature box in sync for pointer handlers.
   useEffect(() => {
+    sigBoxRef.current = signaturePosition;
+  });
+
+  // --- Object URL bookkeeping (no memory leaks) ---
+  const trackObjectUrl = useCallback((url: string) => {
+    objectUrlsRef.current.add(url);
+    return url;
+  }, []);
+
+  const revokeObjectUrl = useCallback((url: string | null) => {
+    if (!url) return;
+    objectUrlsRef.current.delete(url);
+    try {
+      URL.revokeObjectURL(url);
+    } catch {
+      // Ignore cleanup errors.
+    }
+  }, []);
+
+  // Unmount cleanup: revoke every tracked object URL and cancel any in-flight
+  // page render so no stale work touches an unmounted component.
+  useEffect(() => {
+    const trackedUrls = objectUrlsRef.current;
     return () => {
-      if (uploadedImage) {
+      renderTokenRef.current += 1;
+      try {
+        renderTaskRef.current?.cancel();
+      } catch {
+        // Ignore cancellation errors.
+      }
+      for (const url of trackedUrls) {
         try {
-          URL.revokeObjectURL(uploadedImage);
+          URL.revokeObjectURL(url);
         } catch {
-          // Ignore cleanup errors
+          // Ignore cleanup errors.
         }
       }
+      trackedUrls.clear();
     };
-  }, [uploadedImage]);
+  }, []);
 
-  // Render typed signature to canvas
+  // Snapshot the draw-canvas as a preview image for the WYSIWYG overlay.
+  const refreshDrawPreview = useCallback(() => {
+    const canvas = canvasRef.current;
+    if (canvas && mode === 'draw') {
+      try {
+        setSigPreview(canvas.toDataURL('image/png'));
+      } catch {
+        // Canvas may be tainted/unavailable; overlay falls back to the box outline.
+      }
+    }
+  }, [mode]);
+
+  // Render typed signature to canvas (+ live overlay preview)
   useEffect(() => {
     const canvas = canvasRef.current;
     if (!canvas || mode !== 'type') return;
@@ -70,40 +242,68 @@ export function SignPdf() {
     ctx.fillStyle = '#111827';
     ctx.textBaseline = 'middle';
     ctx.fillText(typedText || 'Your signature', 16, canvas.height / 2);
+    try {
+      setSigPreview(canvas.toDataURL('image/png'));
+    } catch {
+      // Ignore snapshot failures.
+    }
   }, [typedText, mode]);
 
+  // When returning to draw mode, restore the overlay preview from the canvas.
+  useEffect(() => {
+    if (mode === 'draw') refreshDrawPreview();
+  }, [mode, refreshDrawPreview]);
+
   // Load PDF and render preview
-  const loadPdfFile = useCallback(async (selectedFile: File) => {
-    setBusy(true);
-    setError('');
-    setStatus('Loading PDF...');
-
-    try {
-      const arrayBuffer = await selectedFile.arrayBuffer();
-      const pdf = await pdfjsLib.getDocument({ data: new Uint8Array(arrayBuffer) }).promise;
-
-      setPdfDoc(pdf);
-      setFile(selectedFile);
-      setPageCount(pdf.numPages);
-      setCurrentPage(1);
+  const loadPdfFile = useCallback(
+    async (selectedFile: File) => {
+      setProgress({ label: 'Reading document…' });
+      setError('');
       setStatus('');
-    } catch {
-      setError('Could not load PDF. It may be corrupted or password-protected.');
-    } finally {
-      setBusy(false);
-    }
-  }, []);
 
-  // Render current page preview
+      try {
+        const arrayBuffer = await selectedFile.arrayBuffer();
+        const pdf = await pdfjsLib.getDocument({ data: new Uint8Array(arrayBuffer) }).promise;
+
+        setPdfDoc(pdf);
+        setFile(selectedFile);
+        setPageCount(pdf.numPages);
+        setCurrentPage(1);
+        setStatus('');
+      } catch {
+        setError('Could not load PDF. It may be corrupted or password-protected.');
+      } finally {
+        setProgress(null);
+      }
+    },
+    []
+  );
+
+  // Render current page preview (cancellable; stale renders never overwrite the canvas)
   useEffect(() => {
     if (!pdfDoc || !previewCanvasRef.current || !containerRef.current) return;
 
-    const renderPage = async () => {
+    const token = ++renderTokenRef.current;
+    try {
+      renderTaskRef.current?.cancel();
+    } catch {
+      // Ignore cancellation errors.
+    }
+
+    const canvas = previewCanvasRef.current;
+    const ctx = canvas.getContext('2d');
+    if (!ctx) return;
+
+    setPageRendering(true);
+
+    (async () => {
       try {
         const page = await pdfDoc.getPage(currentPage);
+        if (token !== renderTokenRef.current) return;
+
         const viewport = page.getViewport({ scale: 1 });
 
-        // Store PDF page dimensions for coordinate conversion
+        // Store PDF page dimensions for coordinate conversion (scale 1 === PDF points).
         setPdfPageDimensions({ width: viewport.width, height: viewport.height });
 
         // Calculate scale to fit container
@@ -112,19 +312,22 @@ export function SignPdf() {
         setPageScale(scale);
 
         const scaledViewport = page.getViewport({ scale });
-        const canvas = previewCanvasRef.current!;
-        const ctx = canvas.getContext('2d')!;
+        canvas.width = Math.floor(scaledViewport.width);
+        canvas.height = Math.floor(scaledViewport.height);
 
-        canvas.width = scaledViewport.width;
-        canvas.height = scaledViewport.height;
-
-        await page.render({ canvas, canvasContext: ctx, viewport: scaledViewport }).promise;
+        const task = page.render({ canvas, canvasContext: ctx, viewport: scaledViewport }) as PageRenderTask;
+        renderTaskRef.current = task;
+        await task.promise;
       } catch (err) {
-        console.error('Error rendering page:', err);
+        const name = err instanceof Error ? err.name : '';
+        if (name !== 'RenderingCancelledException') console.error('Error rendering page:', err);
+      } finally {
+        if (token === renderTokenRef.current) {
+          setPageRendering(false);
+          renderTaskRef.current = null;
+        }
       }
-    };
-
-    renderPage();
+    })();
   }, [pdfDoc, currentPage]);
 
   // Drawing signature
@@ -139,7 +342,11 @@ export function SignPdf() {
       (e.clientX - rect.left) * canvas.width / rect.width,
       (e.clientY - rect.top) * canvas.height / rect.height
     );
-    canvas.setPointerCapture(e.pointerId);
+    try {
+      canvas.setPointerCapture(e.pointerId);
+    } catch {
+      // Pointer capture is best-effort.
+    }
   };
 
   const draw = (e: React.PointerEvent<HTMLCanvasElement>) => {
@@ -158,16 +365,25 @@ export function SignPdf() {
     ctx.stroke();
   };
 
+  const endDraw = (e: React.PointerEvent<HTMLCanvasElement>) => {
+    if (mode !== 'draw') return;
+    try {
+      canvasRef.current?.releasePointerCapture(e.pointerId);
+    } catch {
+      // Ignore release errors.
+    }
+    refreshDrawPreview();
+  };
+
   const clearSignature = () => {
     const canvas = canvasRef.current;
     if (canvas) {
       canvas.getContext('2d')?.clearRect(0, 0, canvas.width, canvas.height);
     }
     setTypedText('');
-    if (uploadedImage) {
-      URL.revokeObjectURL(uploadedImage);
-      setUploadedImage(null);
-    }
+    setSigPreview(null);
+    revokeObjectUrl(uploadedImage);
+    setUploadedImage(null);
   };
 
   // Handle image upload
@@ -175,94 +391,108 @@ export function SignPdf() {
     const imageFile = e.target.files?.[0];
     if (!imageFile) return;
 
-    // Revoke previous URL
-    if (uploadedImage) {
-      URL.revokeObjectURL(uploadedImage);
-    }
+    // Revoke previous URL before creating a new one.
+    revokeObjectUrl(uploadedImage);
 
-    const url = URL.createObjectURL(imageFile);
+    const url = trackObjectUrl(URL.createObjectURL(imageFile));
     setUploadedImage(url);
+    setSigPreview(url);
     setImageType(imageFile.type === 'image/jpeg' ? 'jpg' : 'png');
     setMode('upload');
+    // Allow re-selecting the same file.
+    e.target.value = '';
   };
 
-  // Drag signature on preview
-  const handlePreviewPointerDown = (e: React.PointerEvent<HTMLDivElement>) => {
-    if (!previewCanvasRef.current) return;
-
-    const canvas = previewCanvasRef.current;
+  // --- Visual placement: drag/move, resize, tap-to-place ---
+  const previewPoint = (clientX: number, clientY: number) => {
+    const canvas = previewCanvasRef.current!;
     const rect = canvas.getBoundingClientRect();
-    const x = (e.clientX - rect.left) / pageScale;
-    const y = (e.clientY - rect.top) / pageScale;
+    return {
+      x: (clientX - rect.left) / pageScale,
+      y: (clientY - rect.top) / pageScale,
+    };
+  };
 
-    // Check if clicking on signature box
-    const sig = signaturePosition;
-    const clickOnSignature = x >= sig.x && x <= sig.x + sig.width && y >= sig.y && y <= sig.y + sig.height;
+  const handlePreviewPointerDown = (e: React.PointerEvent<HTMLDivElement>) => {
+    if (!previewCanvasRef.current || busy || pageScale <= 0) return;
 
-    // Check if clicking on resize handle (bottom-right corner)
-    const handleSize = 20;
-    const clickOnHandle =
-      x >= sig.x + sig.width - handleSize/pageScale &&
-      x <= sig.x + sig.width + handleSize/pageScale &&
-      y >= sig.y + sig.height - handleSize/pageScale &&
-      y <= sig.y + sig.height + handleSize/pageScale;
+    const { x, y } = previewPoint(e.clientX, e.clientY);
+    const box = sigBoxRef.current;
 
-    if (clickOnHandle) {
-      setIsResizing(true);
-      setDragStart({ x: sig.x + sig.width, y: sig.y + sig.height });
+    // Resize handle hit zone: fixed ~28 CSS px on screen for comfortable touch.
+    const tol = 28 / pageScale;
+    const onHandle =
+      x >= box.x + box.width - tol &&
+      x <= box.x + box.width + tol &&
+      y >= box.y + box.height - tol &&
+      y <= box.y + box.height + tol;
+
+    const onBox = x >= box.x && x <= box.x + box.width && y >= box.y && y <= box.y + box.height;
+
+    try {
       e.currentTarget.setPointerCapture(e.pointerId);
-    } else if (clickOnSignature) {
-      setIsDragging(true);
-      setDragStart({ x: x - sig.x, y: y - sig.y });
-      e.currentTarget.setPointerCapture(e.pointerId);
+    } catch {
+      // Pointer capture is best-effort.
+    }
+
+    if (onHandle) {
+      dragRef.current = { kind: 'resize', grabX: x - box.x, grabY: y - box.y };
+      setDragKind('resize');
+    } else if (onBox) {
+      dragRef.current = { kind: 'move', grabX: x - box.x, grabY: y - box.y };
+      setDragKind('move');
+    } else {
+      // Tap-to-place: center the signature where the user tapped, then keep dragging.
+      const dims = pdfPageDimensions;
+      const placed = clampSignatureBox(
+        { x: x - box.width / 2, y: y - box.height / 2, width: box.width, height: box.height },
+        dims.width,
+        dims.height
+      );
+      setSignaturePosition(placed);
+      dragRef.current = { kind: 'move', grabX: placed.width / 2, grabY: placed.height / 2 };
+      setDragKind('move');
     }
   };
 
   const handlePreviewPointerMove = (e: React.PointerEvent<HTMLDivElement>) => {
-    if (!previewCanvasRef.current) return;
+    const drag = dragRef.current;
+    if (!drag || !previewCanvasRef.current || pageScale <= 0) return;
 
-    const canvas = previewCanvasRef.current;
-    const rect = canvas.getBoundingClientRect();
-    const x = (e.clientX - rect.left) / pageScale;
-    const y = (e.clientY - rect.top) / pageScale;
+    const { x, y } = previewPoint(e.clientX, e.clientY);
+    const dims = pdfPageDimensions;
+    const box = sigBoxRef.current;
 
-    if (isDragging) {
-      const newX = Math.max(0, Math.min(pdfPageDimensions.width - signaturePosition.width, x - dragStart.x));
-      const newY = Math.max(0, Math.min(pdfPageDimensions.height - signaturePosition.height, y - dragStart.y));
-
-      setSignaturePosition(prev => ({
-        ...prev,
-        x: newX,
-        y: newY
-      }));
-    } else if (isResizing) {
-      const newWidth = Math.max(50, Math.min(pdfPageDimensions.width - signaturePosition.x, x - signaturePosition.x));
-      const newHeight = Math.max(30, Math.min(pdfPageDimensions.height - signaturePosition.y, y - signaturePosition.y));
-
-      setSignaturePosition(prev => ({
-        ...prev,
-        width: newWidth,
-        height: newHeight
-      }));
+    if (drag.kind === 'move') {
+      setSignaturePosition(
+        clampSignatureBox({ ...box, x: x - drag.grabX, y: y - drag.grabY }, dims.width, dims.height)
+      );
+    } else {
+      const newWidth = Math.max(50, Math.min(dims.width - box.x, x - box.x));
+      const newHeight = Math.max(30, Math.min(dims.height - box.y, y - box.y));
+      setSignaturePosition((prev) => ({ ...prev, width: newWidth, height: newHeight }));
     }
   };
 
-  const handlePreviewPointerUp = () => {
-    setIsDragging(false);
-    setIsResizing(false);
+  const endPreviewDrag = () => {
+    dragRef.current = null;
+    setDragKind(null);
   };
 
   // Export signed PDF
   const exportSignedPdf = async () => {
-    if (!file) return;
+    if (!file || busy) return;
 
-    setBusy(true);
+    const tick = () => new Promise<void>((resolve) => setTimeout(resolve, 40));
     setError('');
-    setStatus('Creating signed PDF...');
+    setStatus('');
 
     try {
-      const pdfDoc = await PDFDocument.load(await file.arrayBuffer());
+      setProgress({ label: 'Reading document…' });
+      const outDoc = await PDFDocument.load(await file.arrayBuffer());
+      await tick();
 
+      setProgress({ label: 'Preparing signature…' });
       // Get signature image bytes
       let imageBytes: ArrayBuffer | null = null;
 
@@ -276,30 +506,35 @@ export function SignPdf() {
       if (!imageBytes) {
         throw new Error('Please create a signature first');
       }
+      await tick();
 
+      setProgress({ label: 'Placing signature…' });
       // Embed image
       const image = mode === 'upload' && imageType === 'jpg'
-        ? await pdfDoc.embedJpg(imageBytes)
-        : await pdfDoc.embedPng(imageBytes);
+        ? await outDoc.embedJpg(imageBytes)
+        : await outDoc.embedPng(imageBytes);
 
-      // Get page and convert coordinates
-      const page = pdfDoc.getPage(currentPage - 1);
-      const { height: pageHeight } = page.getSize();
-
-      // Convert from screen coordinates to PDF coordinates (PDF origin is bottom-left)
-      const pdfX = signaturePosition.x;
-      const pdfY = pageHeight - signaturePosition.y - signaturePosition.height;
+      // Get page and convert the visual box (top-left origin) to PDF coordinates (bottom-left origin).
+      const page = outDoc.getPage(currentPage - 1);
+      const { height: pageHeight, width: pageWidth } = page.getSize();
+      const rect = signatureBoxToPdfRect(
+        clampSignatureBox(sigBoxRef.current, pageWidth, pageHeight),
+        pageHeight
+      );
 
       // Draw signature
       page.drawImage(image, {
-        x: pdfX,
-        y: pdfY,
-        width: signaturePosition.width,
-        height: signaturePosition.height
+        x: rect.x,
+        y: rect.y,
+        width: rect.width,
+        height: rect.height,
       });
+      await tick();
 
-      // Save
-      const pdfBytes = await pdfDoc.save();
+      setProgress({ label: 'Building signed PDF…' });
+      const pdfBytes = await outDoc.save();
+
+      setProgress({ label: 'Preparing download…' });
       const blob = new Blob([pdfBytes as BlobPart], { type: 'application/pdf' });
       saveAs(blob, `${file.name.replace(/\.pdf$/i, '')}_signed.pdf`);
 
@@ -311,7 +546,7 @@ export function SignPdf() {
       setStatus('');
       trackToolExecution('sign-pdf', false);
     } finally {
-      setBusy(false);
+      setProgress(null);
     }
   };
 
@@ -320,13 +555,13 @@ export function SignPdf() {
       <div>
         <h2 className="text-lg font-black text-slate-950 dark:text-white">Sign PDF</h2>
         <p className="mt-2 text-sm leading-6 text-slate-600 dark:text-slate-300">
-          Upload a PDF, create your signature, then drag it to position visually on the page.
+          Upload a PDF, create your signature, then place it visually on the page.
         </p>
       </div>
 
       {/* File Upload */}
       <div>
-        <label htmlFor="pdf-file-input" className="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-2">
+        <label htmlFor="pdf-file-input" className="mb-2 block text-sm font-semibold text-slate-700 dark:text-slate-300">
           Select PDF Document
         </label>
         <input
@@ -340,45 +575,25 @@ export function SignPdf() {
           className="block w-full rounded-xl border border-slate-300 p-3 text-sm dark:border-slate-700 dark:bg-slate-950"
           disabled={busy}
         />
+        {file && (
+          <p className="mt-2 text-xs text-slate-500 dark:text-slate-400">
+            {file.name} · {pageCount} {pageCount === 1 ? 'page' : 'pages'}
+          </p>
+        )}
       </div>
 
       {file && (
         <>
-          {/* Page Navigation */}
-          <div className="flex flex-wrap items-center gap-3">
-            <button
-              type="button"
-              onClick={() => setCurrentPage(p => Math.max(1, p - 1))}
-              disabled={currentPage === 1 || busy}
-              className="rounded-lg border border-slate-300 px-4 py-2 text-sm font-semibold disabled:opacity-50 dark:border-slate-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
-              aria-label="Previous page"
-            >
-              Previous
-            </button>
-            <span className="text-sm text-slate-600 dark:text-slate-300">
-              Page {currentPage} of {pageCount}
-            </span>
-            <button
-              type="button"
-              onClick={() => setCurrentPage(p => Math.min(pageCount, p + 1))}
-              disabled={currentPage === pageCount || busy}
-              className="rounded-lg border border-slate-300 px-4 py-2 text-sm font-semibold disabled:opacity-50 dark:border-slate-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
-              aria-label="Next page"
-            >
-              Next
-            </button>
-          </div>
-
           {/* Signature Creation */}
           <div>
-            <label className="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-2">
+            <label className="mb-2 block text-sm font-semibold text-slate-700 dark:text-slate-300">
               Create Signature
             </label>
-            <div className="flex flex-wrap gap-2 mb-3">
+            <div className="mb-3 flex flex-wrap gap-2">
               <button
                 type="button"
                 onClick={() => setMode('draw')}
-                className={`rounded-lg border px-4 py-2 text-sm font-semibold transition focus:outline-none focus:ring-2 focus:ring-blue-500 ${
+                className={`min-h-[44px] rounded-lg border px-4 py-2 text-sm font-semibold transition focus:outline-none focus:ring-2 focus:ring-blue-500 ${
                   mode === 'draw'
                     ? 'border-blue-500 bg-blue-50 text-blue-700 dark:bg-blue-950 dark:text-blue-300'
                     : 'border-slate-300 dark:border-slate-700'
@@ -389,7 +604,7 @@ export function SignPdf() {
               <button
                 type="button"
                 onClick={() => setMode('type')}
-                className={`rounded-lg border px-4 py-2 text-sm font-semibold transition focus:outline-none focus:ring-2 focus:ring-blue-500 ${
+                className={`min-h-[44px] rounded-lg border px-4 py-2 text-sm font-semibold transition focus:outline-none focus:ring-2 focus:ring-blue-500 ${
                   mode === 'type'
                     ? 'border-blue-500 bg-blue-50 text-blue-700 dark:bg-blue-950 dark:text-blue-300'
                     : 'border-slate-300 dark:border-slate-700'
@@ -398,7 +613,7 @@ export function SignPdf() {
                 Type
               </button>
               <label
-                className={`rounded-lg border px-4 py-2 text-sm font-semibold cursor-pointer transition focus-within:ring-2 focus-within:ring-blue-500 ${
+                className={`inline-flex min-h-[44px] cursor-pointer items-center rounded-lg border px-4 py-2 text-sm font-semibold transition focus-within:ring-2 focus-within:ring-blue-500 ${
                   mode === 'upload'
                     ? 'border-blue-500 bg-blue-50 text-blue-700 dark:bg-blue-950 dark:text-blue-300'
                     : 'border-slate-300 dark:border-slate-700'
@@ -421,7 +636,7 @@ export function SignPdf() {
                 value={typedText}
                 onChange={(e) => setTypedText(e.target.value)}
                 placeholder="Type your name"
-                className="w-full rounded-lg border border-slate-300 p-3 text-sm mb-3 dark:border-slate-700 dark:bg-slate-950 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="mb-3 w-full rounded-lg border border-slate-300 p-3 text-sm dark:border-slate-700 dark:bg-slate-950 focus:outline-none focus:ring-2 focus:ring-blue-500"
                 aria-label="Type signature text"
               />
             )}
@@ -433,7 +648,9 @@ export function SignPdf() {
                 height={100}
                 onPointerDown={startDraw}
                 onPointerMove={draw}
-                className="w-full h-28 touch-none rounded-xl border border-dashed border-slate-300 bg-white dark:border-slate-700 dark:bg-slate-950"
+                onPointerUp={endDraw}
+                onPointerCancel={endDraw}
+                className="h-28 w-full touch-none rounded-xl border border-dashed border-slate-300 bg-white dark:border-slate-700 dark:bg-slate-950"
                 aria-label="Signature canvas - draw your signature here"
               />
             )}
@@ -442,114 +659,130 @@ export function SignPdf() {
               <img
                 src={uploadedImage}
                 alt="Uploaded signature preview"
-                className="max-h-28 max-w-full rounded border p-2 bg-white dark:bg-slate-950"
+                className="max-h-28 max-w-full rounded border bg-white p-2 dark:bg-slate-950"
               />
             )}
 
             <button
               type="button"
               onClick={clearSignature}
-              className="mt-2 text-sm font-semibold text-slate-600 hover:text-slate-900 dark:text-slate-400 dark:hover:text-slate-200 focus:outline-none focus:underline"
+              className="mt-2 min-h-[44px] text-sm font-semibold text-slate-600 hover:text-slate-900 dark:text-slate-400 dark:hover:text-slate-200 focus:outline-none focus:underline"
             >
               Clear Signature
             </button>
           </div>
 
+          {/* Visual page selector */}
+          <div>
+            <div className="flex flex-wrap items-center gap-3">
+              <button
+                type="button"
+                onClick={() => setCurrentPage((p) => Math.max(1, p - 1))}
+                disabled={currentPage === 1 || busy}
+                className="min-h-[44px] rounded-lg border border-slate-300 px-4 py-2 text-sm font-semibold disabled:opacity-50 dark:border-slate-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                aria-label="Previous page"
+              >
+                Previous
+              </button>
+              <span className="text-sm text-slate-600 dark:text-slate-300">
+                Page {currentPage} of {pageCount}
+              </span>
+              <button
+                type="button"
+                onClick={() => setCurrentPage((p) => Math.min(pageCount, p + 1))}
+                disabled={currentPage === pageCount || busy}
+                className="min-h-[44px] rounded-lg border border-slate-300 px-4 py-2 text-sm font-semibold disabled:opacity-50 dark:border-slate-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                aria-label="Next page"
+              >
+                Next
+              </button>
+            </div>
+            {pageCount > 1 && (
+              <div className="mt-3">
+                <p id="page-thumbnails-label" className="mb-2 text-xs font-semibold text-slate-500 dark:text-slate-400">
+                  Choose a page
+                </p>
+                <div
+                  role="group"
+                  aria-labelledby="page-thumbnails-label"
+                  className="flex gap-2 overflow-x-auto pb-2"
+                  style={{ touchAction: 'pan-x pan-y' }}
+                >
+                  {Array.from({ length: pageCount }, (_, i) => i + 1).map((pageNum) => (
+                    <PageThumbnail
+                      key={pageNum}
+                      pdfDoc={pdfDoc!}
+                      pageNumber={pageNum}
+                      selected={pageNum === currentPage}
+                      onSelect={() => setCurrentPage(pageNum)}
+                    />
+                  ))}
+                </div>
+              </div>
+            )}
+          </div>
+
           {/* PDF Preview with Signature Overlay */}
           <div ref={containerRef}>
-            <label className="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-2">
-              Position Signature (drag to move, drag corner to resize)
+            <label className="mb-2 block text-sm font-semibold text-slate-700 dark:text-slate-300">
+              Place Signature
             </label>
             <div
-              className="relative inline-block"
+              className="relative inline-block max-w-full"
               onPointerDown={handlePreviewPointerDown}
               onPointerMove={handlePreviewPointerMove}
-              onPointerUp={handlePreviewPointerUp}
-              style={{ touchAction: 'none', cursor: isDragging ? 'grabbing' : 'default' }}
+              onPointerUp={endPreviewDrag}
+              onPointerCancel={endPreviewDrag}
+              style={{
+                touchAction: 'none',
+                cursor: dragKind === 'move' ? 'grabbing' : dragKind === 'resize' ? 'nwse-resize' : 'crosshair',
+              }}
+              role="application"
+              aria-label="Signature placement preview. Tap to place the signature, drag to move it, drag the bottom-right handle to resize."
             >
               <canvas
                 ref={previewCanvasRef}
-                className="border border-slate-300 rounded-lg dark:border-slate-700"
+                className="max-w-full rounded-lg border border-slate-300 dark:border-slate-700"
               />
-              {/* Signature overlay */}
+              {pageRendering && (
+                <div className="absolute inset-0 flex items-center justify-center rounded-lg bg-white/60 dark:bg-slate-900/60">
+                  <p className="rounded-full bg-slate-900/80 px-4 py-2 text-xs font-semibold text-white">
+                    Rendering page…
+                  </p>
+                </div>
+              )}
+              {/* Signature overlay (WYSIWYG) */}
               <div
-                className="absolute border-2 border-blue-500 bg-blue-500/10 rounded pointer-events-none"
+                className="pointer-events-none absolute rounded border-2 border-blue-500 bg-blue-500/10"
                 style={{
                   left: `${signaturePosition.x * pageScale}px`,
                   top: `${signaturePosition.y * pageScale}px`,
                   width: `${signaturePosition.width * pageScale}px`,
                   height: `${signaturePosition.height * pageScale}px`,
-                  cursor: 'move'
                 }}
+                aria-hidden="true"
               >
-                {/* Resize handle */}
-                <div
-                  className="absolute bottom-0 right-0 w-4 h-4 bg-blue-500 rounded-full transform translate-x-1/2 translate-y-1/2"
-                  style={{ cursor: 'nwse-resize' }}
-                />
+                {sigPreview && (
+                  <img
+                    src={sigPreview}
+                    alt=""
+                    draggable={false}
+                    className="absolute inset-0 h-full w-full object-fill"
+                  />
+                )}
+                {/* Resize handle: large touch target */}
+                <div className="absolute bottom-0 right-0 flex h-6 w-6 translate-x-1/2 translate-y-1/2 items-center justify-center rounded-full border-2 border-white bg-blue-600 shadow-md">
+                  <svg width="12" height="12" viewBox="0 0 12 12" fill="none" aria-hidden="true">
+                    <path d="M7 2l3 3M5 4l5 5M3 6l5 5" stroke="white" strokeWidth="1.5" strokeLinecap="round" />
+                  </svg>
+                </div>
               </div>
             </div>
-            <p className="mt-2 text-xs text-slate-500">
-              Drag the blue box to position your signature. Drag the corner to resize. This is a visual signature mark, not a certificate-based digital signature.
+            <p className="mt-2 text-xs leading-5 text-slate-500 dark:text-slate-400">
+              Tap anywhere on the page to place your signature there. Drag the box to move it, or drag the
+              bottom-right handle to resize. What you see is exactly where the signature will appear in the
+              exported PDF. This is a visual signature mark, not a certificate-based digital signature.
             </p>
-          </div>
-
-          {/* Size Controls */}
-          <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
-            <label className="text-xs">
-              Width (px)
-              <input
-                type="number"
-                min="50"
-                max="500"
-                value={Math.round(signaturePosition.width)}
-                onChange={(e) => setSignaturePosition(prev => ({
-                  ...prev,
-                  width: Math.max(50, Number(e.target.value))
-                }))}
-                className="mt-1 w-full rounded border border-slate-300 p-2 text-sm dark:border-slate-700 dark:bg-slate-950 focus:outline-none focus:ring-2 focus:ring-blue-500"
-              />
-            </label>
-            <label className="text-xs">
-              Height (px)
-              <input
-                type="number"
-                min="30"
-                max="300"
-                value={Math.round(signaturePosition.height)}
-                onChange={(e) => setSignaturePosition(prev => ({
-                  ...prev,
-                  height: Math.max(30, Number(e.target.value))
-                }))}
-                className="mt-1 w-full rounded border border-slate-300 p-2 text-sm dark:border-slate-700 dark:bg-slate-950 focus:outline-none focus:ring-2 focus:ring-blue-500"
-              />
-            </label>
-            <label className="text-xs">
-              X Position
-              <input
-                type="number"
-                min="0"
-                value={Math.round(signaturePosition.x)}
-                onChange={(e) => setSignaturePosition(prev => ({
-                  ...prev,
-                  x: Math.max(0, Number(e.target.value))
-                }))}
-                className="mt-1 w-full rounded border border-slate-300 p-2 text-sm dark:border-slate-700 dark:bg-slate-950 focus:outline-none focus:ring-2 focus:ring-blue-500"
-              />
-            </label>
-            <label className="text-xs">
-              Y Position
-              <input
-                type="number"
-                min="0"
-                value={Math.round(signaturePosition.y)}
-                onChange={(e) => setSignaturePosition(prev => ({
-                  ...prev,
-                  y: Math.max(0, Number(e.target.value))
-                }))}
-                className="mt-1 w-full rounded border border-slate-300 p-2 text-sm dark:border-slate-700 dark:bg-slate-950 focus:outline-none focus:ring-2 focus:ring-blue-500"
-              />
-            </label>
           </div>
 
           {/* Status Messages */}
@@ -558,7 +791,15 @@ export function SignPdf() {
               {error}
             </p>
           )}
-          {status && (
+          {progress && (
+            <div role="status" className="space-y-2 rounded-xl bg-slate-50 p-3 dark:bg-slate-800">
+              <div className="h-1.5 overflow-hidden rounded-full bg-slate-200 dark:bg-slate-700">
+ <div className="h-full w-full animate-pulse rounded-full bg-[var(--pe-accent-soft)]0" />
+              </div>
+              <p className="text-sm font-medium text-slate-700 dark:text-slate-200">{progress.label}</p>
+            </div>
+          )}
+          {status && !progress && (
             <p role="status" className="rounded-xl bg-emerald-50 p-3 text-sm text-emerald-700 dark:bg-emerald-950 dark:text-emerald-300">
               {status}
             </p>
@@ -569,9 +810,9 @@ export function SignPdf() {
             type="button"
             onClick={exportSignedPdf}
             disabled={busy}
-            className="min-h-12 w-full rounded-xl bg-emerald-600 px-5 py-3 text-sm font-bold text-white transition hover:bg-emerald-700 disabled:opacity-50 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:ring-offset-2"
+ className="min-h-12 w-full rounded-xl bg-[var(--pe-accent)] px-5 py-3 text-sm font-bold text-[var(--pe-accent-ink)] transition hover:bg-[var(--pe-accent-hover)] disabled:opacity-50 focus:outline-none focus:ring-2 focus:ring-[var(--pe-focus)] focus:ring-offset-2"
           >
-            {busy ? 'Signing PDF...' : 'Download Signed PDF'}
+            {progress ? progress.label : 'Download Signed PDF'}
           </button>
         </>
       )}

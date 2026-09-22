@@ -10,16 +10,10 @@ import {
   Minimize2,
   FileText,
   ShieldCheck,
-  UploadCloud,
   Check,
   RefreshCw,
   AlertCircle,
   FileCheck2,
-  Zap,
-  TrendingDown,
-  Sparkles,
-  Layers,
-  ArrowRight,
   Download,
 } from 'lucide-react';
 
@@ -476,10 +470,16 @@ export function CompressPdf() {
                 </div>
 
                 {/* Download Again Button */}
+                {summary.bytesSaved === 0 && (
+                  <p className="text-[11px] font-semibold text-amber-700 dark:text-amber-300 flex items-center gap-1.5">
+                    <AlertCircle className="w-3.5 h-3.5 shrink-0" />
+                    <span>This PDF is already well optimized — no further size reduction was possible.</span>
+                  </p>
+                )}
                 <button
                   type="button"
                   onClick={() => saveAs(summary.blob, summary.fileName)}
-                  className="w-full min-h-[48px] px-4 py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs sm:text-sm font-bold shadow-md transition-all flex items-center justify-center gap-2 cursor-pointer active:scale-95 touch-manipulation"
+ className="w-full min-h-[48px] px-4 py-2.5 rounded-xl bg-[var(--pe-accent)] hover:bg-[var(--pe-accent-hover)] text-[var(--pe-accent-ink)] text-xs sm:text-sm font-bold shadow-md transition-all flex items-center justify-center gap-2 cursor-pointer active:scale-95 touch-manipulation"
                 >
                   <Download className="w-4 h-4" />
                   <span>Download Compressed PDF Again</span>

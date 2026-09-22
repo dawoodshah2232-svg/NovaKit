@@ -9,13 +9,11 @@ import { trackToolExecution } from '@/lib/analytics';
 import {
   RotateCw,
   RotateCcw,
-  UploadCloud,
   Check,
   AlertCircle,
   RefreshCw,
   Download,
   FileText,
-  Compass,
 } from 'lucide-react';
 
 if (typeof window !== 'undefined') {
@@ -77,21 +75,22 @@ export function RotatePdf() {
     const pdfFile = acceptedFiles[0];
     if (!pdfFile) return;
 
-    if (pdfFile.type !== 'application/pdf' && !pdfFile.name.endsWith('.pdf')) {
+    if (pdfFile.type !== 'application/pdf' && !pdfFile.name.toLowerCase().endsWith('.pdf')) {
       setErrorMessage('Please upload a valid PDF document.');
       return;
     }
 
-    setFile(pdfFile);
     setIsLoading(true);
     cleanupPreviews();
 
     try {
       const buffer = await pdfFile.arrayBuffer();
+      // pdf.js transfers (detaches) the buffer it receives, so hand it a copy
+      // and keep the canonical buffer intact for the save step below.
       setArrayBuffer(buffer);
 
       setLoadingProgress('Reading PDF structure...');
-      const loadingTask = pdfjsLib.getDocument({ data: new Uint8Array(buffer) });
+      const loadingTask = pdfjsLib.getDocument({ data: new Uint8Array(buffer.slice(0)) });
       const pdf = await loadingTask.promise;
       const totalPages = pdf.numPages;
 
@@ -128,6 +127,11 @@ export function RotatePdf() {
 
       setThumbnails(thumbs);
       setRotations(rots);
+      if (thumbs.length > 0) {
+        setFile(pdfFile);
+      } else {
+        throw new Error('No pages could be rendered from this PDF.');
+      }
     } catch (err: unknown) {
       console.error('Error loading PDF for rotation:', err);
       const msg = err instanceof Error ? err.message : 'Failed to load PDF.';
@@ -322,8 +326,11 @@ export function RotatePdf() {
                 type="button"
                 onClick={() => {
                   setFile(null);
+                  setArrayBuffer(null);
                   setThumbnails([]);
                   setRotations([]);
+                  setErrorMessage(null);
+                  setSuccessMessage(null);
                   cleanupPreviews();
                 }}
                 className="px-3 py-1.5 rounded-xl text-xs font-semibold text-rose-600 hover:bg-rose-50 transition-colors"

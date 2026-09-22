@@ -8,13 +8,11 @@ import { saveAs } from 'file-saver';
 import { trackToolExecution } from '@/lib/analytics';
 import {
   Stamp,
-  UploadCloud,
   Check,
   AlertCircle,
   RefreshCw,
   Download,
   FileText,
-  Sliders,
   Type,
 } from 'lucide-react';
 
@@ -63,7 +61,6 @@ export function WatermarkPdf() {
 
   // Preview Page 1
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);
-  const [previewDims, setPreviewDims] = useState<{ width: number; height: number }>({ width: 400, height: 550 });
 
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [isWatermarking, setIsWatermarking] = useState<boolean>(false);
@@ -90,27 +87,27 @@ export function WatermarkPdf() {
     const pdfFile = acceptedFiles[0];
     if (!pdfFile) return;
 
-    if (pdfFile.type !== 'application/pdf' && !pdfFile.name.endsWith('.pdf')) {
+    if (pdfFile.type !== 'application/pdf' && !pdfFile.name.toLowerCase().endsWith('.pdf')) {
       setErrorMessage('Please upload a valid PDF document.');
       return;
     }
 
-    setFile(pdfFile);
     setIsLoading(true);
     cleanupPreview();
 
     try {
       const buffer = await pdfFile.arrayBuffer();
+      // pdf.js transfers (detaches) the buffer it receives, so hand it a copy
+      // and keep the canonical buffer intact for the watermarking step below.
       setArrayBuffer(buffer);
 
-      const loadingTask = pdfjsLib.getDocument({ data: new Uint8Array(buffer) });
+      const loadingTask = pdfjsLib.getDocument({ data: new Uint8Array(buffer.slice(0)) });
       const pdf = await loadingTask.promise;
       setPageCount(pdf.numPages);
 
       // Render first page as live preview
       const page1 = await pdf.getPage(1);
       const viewport = page1.getViewport({ scale: 0.8 });
-      setPreviewDims({ width: viewport.width, height: viewport.height });
 
       const canvas = document.createElement('canvas');
       canvas.width = viewport.width;
@@ -127,6 +124,8 @@ export function WatermarkPdf() {
           setPreviewUrl(url);
         }
       }
+
+      setFile(pdfFile);
     } catch (err: unknown) {
       console.error('Error loading PDF preview:', err);
       const msg = err instanceof Error ? err.message : 'Failed to inspect PDF.';
@@ -173,8 +172,8 @@ export function WatermarkPdf() {
         let rotationAngle = 0;
 
         if (position === 'diagonal') {
-          // Angle in degrees
-          rotationAngle = 45;
+          // -45° matches the live preview overlay (CSS rotate(-45deg))
+          rotationAngle = -45;
           // Approximate center taking rotation into account
           const rad = (rotationAngle * Math.PI) / 180;
           x = width / 2 - (textWidth * Math.cos(rad)) / 2;

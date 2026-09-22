@@ -7,17 +7,12 @@ import { saveAs } from 'file-saver';
 import { trackToolExecution } from '@/lib/analytics';
 import {
   FilePenLine,
-  UploadCloud,
   Check,
   AlertCircle,
   RefreshCw,
   Download,
   FileText,
-  Shield,
   Trash2,
-  Sparkles,
-  Info,
-  Layers,
 } from 'lucide-react';
 
 interface MetadataState {
@@ -68,12 +63,11 @@ export function EditPdfMetadata() {
     const pdfFile = acceptedFiles[0];
     if (!pdfFile) return;
 
-    if (pdfFile.type !== 'application/pdf' && !pdfFile.name.endsWith('.pdf')) {
+    if (pdfFile.type !== 'application/pdf' && !pdfFile.name.toLowerCase().endsWith('.pdf')) {
       setErrorMessage('Please upload a valid PDF document.');
       return;
     }
 
-    setFile(pdfFile);
     setIsReading(true);
 
     try {
@@ -96,6 +90,7 @@ export function EditPdfMetadata() {
 
       setMetadata(readMeta);
       setInitialMetadata({ ...readMeta });
+      setFile(pdfFile);
     } catch (err: unknown) {
       console.error('Error reading PDF metadata:', err);
       const msg = err instanceof Error ? err.message : 'Failed to parse PDF metadata.';
@@ -138,7 +133,8 @@ export function EditPdfMetadata() {
     setSuccessMessage(null);
 
     try {
-      const pdfDoc = await PDFDocument.load(arrayBuffer);
+      // ignoreEncryption matches the upload probe so password-protected PDFs save consistently
+      const pdfDoc = await PDFDocument.load(arrayBuffer, { ignoreEncryption: true });
 
       if (metadata.title.trim()) {
         pdfDoc.setTitle(metadata.title.trim());
@@ -274,6 +270,17 @@ export function EditPdfMetadata() {
                   setFile(null);
                   setArrayBuffer(null);
                   setInitialMetadata(null);
+                  setPageCount(0);
+                  setMetadata({
+                    title: '',
+                    author: '',
+                    subject: '',
+                    keywords: '',
+                    creator: '',
+                    producer: '',
+                  });
+                  setErrorMessage(null);
+                  setSuccessMessage(null);
                 }}
                 className="px-3 py-1.5 rounded-xl border border-slate-200 dark:border-slate-800 text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800 text-xs font-semibold transition-colors"
               >

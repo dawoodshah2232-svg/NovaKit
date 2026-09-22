@@ -8,12 +8,8 @@ import { saveAs } from 'file-saver';
 import { trackToolExecution } from '@/lib/analytics';
 import {
   Lock,
-  Unlock,
   ShieldCheck,
-  ShieldAlert,
-  Shield,
   FileText,
-  UploadCloud,
   Eye,
   EyeOff,
   Printer,
@@ -23,7 +19,6 @@ import {
   AlertCircle,
   FileCheck2,
   RefreshCw,
-  Zap,
   Check,
   KeyRound,
   Sliders,
@@ -145,7 +140,7 @@ export function ProtectPdf() {
           pageCount,
           arrayBuffer,
         });
-      } catch (err: unknown) {
+      } catch {
         // Test if error is due to encryption
         try {
           await PDFDocument.load(arrayBuffer, { ignoreEncryption: true });
@@ -171,7 +166,10 @@ export function ProtectPdf() {
   const handleResetFile = () => {
     setLoadedPdf(null);
     setPassword('');
+    setShowPassword(false);
     setOwnerPassword('');
+    setShowOwnerPassword(false);
+    setEnableOwnerPassword(false);
     setErrorMessage(null);
     setSuccessMessage(null);
   };
@@ -420,7 +418,7 @@ export function ProtectPdf() {
                   <div>
                     <div className="text-xs font-bold text-slate-900 dark:text-white flex items-center gap-1.5">
                       <span>AES-256 (PDF 2.0 Standard)</span>
-                      <span className="text-[10px] px-2 py-0.2 rounded-full bg-emerald-100 dark:bg-emerald-950 text-emerald-700 dark:text-emerald-300 font-bold">
+ <span className="text-[10px] px-2 py-0.2 rounded-full bg-[var(--pe-accent-soft)] text-[var(--pe-accent)] font-bold">
                         Recommended
                       </span>
                     </div>

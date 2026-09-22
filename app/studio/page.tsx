@@ -4,14 +4,14 @@ import { PdfStudio } from '@/components/pdf-studio';
 const url = 'https://www.pdfedit.website/studio';
 
 export const metadata: Metadata = {
-  title: { absolute: 'PDF Studio Online Free | Edit PDF Pages in Your Browser | PDFEdit' },
+  title: { absolute: 'PDF Studio Online Free | Edit PDF in Your Browser | PDFEdit' },
   description:
-    'Open, preview, and edit PDFs in a full browser studio: reorder, rotate, delete, and duplicate pages, add text, shapes, images, signatures, page numbers, watermarks, and redactions. 100% private, client-side processing with zero server uploads.',
+    'Open and edit PDFs in a full browser studio: add text, draw, highlight, insert shapes, images, signatures and stamps, reorder, rotate, duplicate, delete and extract pages, and apply redaction overlays. 100% private — files are processed in your browser and never uploaded to our servers.',
   alternates: { canonical: url },
   openGraph: {
     title: 'PDF Studio Online Free | PDFEdit',
     description:
-      'Edit PDF pages in your browser: reorder, rotate, annotate, sign, watermark, and redact. 100% private, no uploads.',
+      'Edit PDFs in your browser: annotate, sign, stamp, manage pages, and redact. 100% private — your files never leave your browser.',
     url,
   },
 };

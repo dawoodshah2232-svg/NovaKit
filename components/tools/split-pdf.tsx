@@ -15,12 +15,7 @@ import {
   FileCheck2,
   Check,
   RefreshCw,
-  Layers,
   Archive,
-  ArrowRight,
-  FileSpreadsheet,
-  HelpCircle,
-  Sparkles,
 } from 'lucide-react';
 
 interface LoadedPdf {
@@ -245,7 +240,8 @@ export function SplitPdf() {
     setIsProcessing(true);
 
     try {
-      const srcDoc = await PDFDocument.load(loadedPdf.arrayBuffer);
+      // ignoreEncryption matches the upload probe so password-protected PDFs behave consistently
+      const srcDoc = await PDFDocument.load(loadedPdf.arrayBuffer, { ignoreEncryption: true });
       const baseName = loadedPdf.name.replace(/\.[^/.]+$/, '');
 
       if (splitMode === 'range') {
@@ -600,7 +596,7 @@ export function SplitPdf() {
                   </div>
                 ) : (
                   <div className="text-xs font-medium text-slate-600 dark:text-slate-300 flex items-center gap-1.5 pt-1">
-                    <Check className="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400 shrink-0" />
+ <Check className="w-3.5 h-3.5 text-[var(--pe-accent)] shrink-0" />
                     <span>
                       Ready to extract{' '}
                       <strong className="text-slate-900 dark:text-white">
@@ -654,8 +650,8 @@ export function SplitPdf() {
                   </code>
                   ). All {loadedPdf.pageCount} files will be bundled into a compressed ZIP archive for single-click download.
                 </p>
-                <div className="inline-flex items-center gap-1.5 text-xs font-semibold text-emerald-700 dark:text-emerald-300">
-                  <Check className="w-3.5 h-3.5 text-emerald-600" />
+ <div className="inline-flex items-center gap-1.5 text-xs font-semibold text-[var(--pe-accent)] ">
+ <Check className="w-3.5 h-3.5 text-[var(--pe-accent)]" />
                   <span>{loadedPdf.pageCount} individual PDF documents will be generated</span>
                 </div>
               </div>

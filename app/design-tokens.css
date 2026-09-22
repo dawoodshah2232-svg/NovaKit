@@ -1,0 +1,229 @@
+/* ============================================================
+   PDFEdit Design Tokens — production theme system
+   Imported globally via app/globals.css.
+   Light = :root defaults · Dark = .dark overrides (next-themes,
+   class strategy). Every shared-chrome and homepage component
+   must use these vars — no hardcoded theme-breaking colors.
+
+   Variable map (task spec):
+   background → --pe-bg · surface → --pe-surface / --pe-surface-2
+   surface-elevated → --pe-elevated · border → --pe-border(-strong)
+   text → --pe-text · muted text → --pe-text-2 / --pe-text-3
+   accent red → --pe-accent · accent soft → --pe-accent-soft
+   hover → --pe-accent-hover · focus → --pe-focus
+   danger → --pe-danger · success → --pe-success
+   shadow → --pe-shadow-sm/md/lg
+   ============================================================ */
+
+:root {
+  /* ---- background & surfaces ---- */
+  --pe-bg: #faf9f7;
+  --pe-bg-glow: #f3efe7;
+  --pe-surface: #ffffff;
+  --pe-surface-2: #f4f2ed;
+  --pe-surface-3: #edeae3;
+  --pe-elevated: #ffffff;
+
+  /* ---- text ---- */
+  --pe-text: #1c1a16;
+  --pe-text-2: #66615a;
+  --pe-text-3: #8a8478;
+
+  /* ---- borders & dividers ---- */
+  --pe-border: #e7e2d8;
+  --pe-border-strong: #d9d2c2;
+  --pe-divider: #efece4;
+
+  /* ---- brand accent (deep crimson red — premium, never neon) ---- */
+  --pe-accent: #b91c1c;
+  --pe-accent-hover: #991b1b;
+  --pe-accent-ink: #ffffff;
+  --pe-accent-soft: #fbe4e4;
+  --pe-accent-ring: rgba(185, 28, 28, 0.28);
+  --pe-focus: #b91c1c;
+
+  /* ---- status ---- */
+  --pe-danger: #dc2626;
+  --pe-danger-soft: #fee2e2;
+  --pe-success: #059669;
+  --pe-success-soft: #d1fae5;
+
+  /* ---- studio / ink panel (dark in both themes) ---- */
+  --pe-ink-bg: #0f151c;
+  --pe-ink-surface: #161e28;
+  --pe-ink-border: rgba(255, 255, 255, 0.1);
+  --pe-ink-text: #f4f6f8;
+  --pe-ink-text-2: #a7b2bf;
+
+  /* ---- shadows ---- */
+  --pe-shadow-sm: 0 1px 2px rgba(28, 26, 22, 0.05);
+  --pe-shadow-md: 0 6px 18px -6px rgba(28, 26, 22, 0.12);
+  --pe-shadow-lg: 0 18px 44px -14px rgba(28, 26, 22, 0.22);
+  --pe-shadow-accent: 0 10px 26px -10px rgba(185, 28, 28, 0.55);
+
+  /* ---- category tints (translucent: theme-safe) ---- */
+  --pe-tint-organize: rgba(99, 102, 241, 0.12);
+  --pe-tint-from: rgba(37, 99, 235, 0.12);
+  --pe-tint-to: rgba(13, 148, 136, 0.12);
+  --pe-tint-optimize: rgba(217, 119, 6, 0.13);
+  --pe-tint-edit: rgba(185, 28, 28, 0.12);
+  --pe-tint-security: rgba(225, 29, 72, 0.1);
+  --pe-tint-advanced: rgba(139, 92, 246, 0.12);
+
+  /* ---- shape ---- */
+  --pe-radius-sm: 10px;
+  --pe-radius-md: 16px;
+  --pe-radius-lg: 24px;
+  --pe-radius-pill: 999px;
+
+  color-scheme: light;
+}
+
+.dark {
+  --pe-bg: #090c10;
+  --pe-bg-glow: #0d1319;
+  --pe-surface: #0f141b;
+  --pe-surface-2: #141b25;
+  --pe-surface-3: #1c2532;
+  --pe-elevated: #131a23;
+
+  --pe-text: #f1f4f7;
+  --pe-text-2: #9aa5b1;
+  --pe-text-3: #6b7684;
+
+  --pe-border: rgba(255, 255, 255, 0.09);
+  --pe-border-strong: rgba(255, 255, 255, 0.16);
+  --pe-divider: rgba(255, 255, 255, 0.06);
+
+  --pe-accent: #f87171;
+  --pe-accent-hover: #fca5a5;
+  --pe-accent-ink: #450a0a;
+  --pe-accent-soft: rgba(248, 113, 113, 0.12);
+  --pe-accent-ring: rgba(248, 113, 113, 0.32);
+  --pe-focus: #f87171;
+
+  --pe-danger: #f87171;
+  --pe-danger-soft: rgba(248, 113, 113, 0.12);
+  --pe-success: #34d399;
+  --pe-success-soft: rgba(52, 211, 153, 0.12);
+
+  --pe-ink-bg: #0c1117;
+  --pe-ink-surface: #131a23;
+  --pe-ink-border: rgba(255, 255, 255, 0.09);
+
+  --pe-shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.4);
+  --pe-shadow-md: 0 8px 22px -8px rgba(0, 0, 0, 0.55);
+  --pe-shadow-lg: 0 22px 50px -16px rgba(0, 0, 0, 0.7);
+  --pe-shadow-accent: 0 10px 28px -10px rgba(248, 113, 113, 0.4);
+
+  color-scheme: dark;
+}
+
+/* ============================================================
+   Design-system scope hook.
+   `.pe-preview` is the shared hook for homepage + /ui-preview
+   components (animations, focus, scrollbars). It carries NO
+   preview-only chrome — the route-hiding hack lives only in
+   app/ui-preview/preview-tokens.css and never applies here.
+   ============================================================ */
+.pe-preview {
+  background: var(--pe-bg);
+  color: var(--pe-text);
+  -webkit-font-smoothing: antialiased;
+}
+
+.pe-preview ::selection {
+  background: var(--pe-accent-soft);
+}
+
+/* ---------- micro-interactions (subtle, fast) ---------- */
+@media (prefers-reduced-motion: no-preference) {
+  .pe-preview .pe-lift {
+    transition: transform 0.18s ease, box-shadow 0.18s ease,
+      border-color 0.18s ease, background-color 0.18s ease;
+  }
+  .pe-preview .pe-lift:hover {
+    transform: translateY(-3px);
+  }
+  .pe-preview .pe-fade-up {
+    animation: pe-fade-up 0.55s cubic-bezier(0.22, 0.8, 0.32, 1) both;
+  }
+  .pe-preview .pe-fade-up-1 { animation-delay: 0.06s; }
+  .pe-preview .pe-fade-up-2 { animation-delay: 0.12s; }
+  .pe-preview .pe-fade-up-3 { animation-delay: 0.18s; }
+  .pe-preview .pe-tab-pill {
+    transition: transform 0.25s cubic-bezier(0.22, 0.8, 0.32, 1),
+      width 0.25s cubic-bezier(0.22, 0.8, 0.32, 1);
+  }
+  .pe-preview .pe-search-pop {
+    animation: pe-pop 0.16s ease-out both;
+    transform-origin: top center;
+  }
+  .pe-preview .pe-float-slow {
+    animation: pe-float 7s ease-in-out infinite;
+  }
+  .pe-preview .pe-float-slower {
+    animation: pe-float 9s ease-in-out 1.2s infinite;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .pe-preview *,
+  .pe-preview *::before,
+  .pe-preview *::after {
+    animation: none !important;
+    transition: none !important;
+  }
+}
+
+@keyframes pe-fade-up {
+  from { opacity: 0; transform: translateY(14px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes pe-pop {
+  from { opacity: 0; transform: scaleY(0.96) translateY(-4px); }
+  to { opacity: 1; transform: scaleY(1) translateY(0); }
+}
+
+@keyframes pe-float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-10px); }
+}
+
+/* ---------- focus visibility (accent red, both themes) ---------- */
+.pe-preview :focus-visible {
+  outline: 2px solid var(--pe-accent);
+  outline-offset: 2px;
+  border-radius: 6px;
+}
+
+/* ---------- thin scrollbars for horizontal chip rows ---------- */
+.pe-preview .pe-no-scrollbar {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+.pe-preview .pe-no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+/* ---------- intentional-feeling horizontal tab scrolling ---------- */
+.pe-preview .pe-tabs-scroll {
+  scroll-snap-type: x proximity;
+  -webkit-overflow-scrolling: touch;
+}
+.pe-preview .pe-tabs-scroll > [role="tab"] {
+  scroll-snap-align: start;
+}
+
+/* ---------- soft pulse for ambient glows (studio etc.) ---------- */
+@media (prefers-reduced-motion: no-preference) {
+  .pe-preview .pe-pulse-soft {
+    animation: pe-pulse-soft 6s ease-in-out infinite;
+  }
+}
+
+@keyframes pe-pulse-soft {
+  0%, 100% { opacity: 0.55; }
+  50% { opacity: 1; }
+}

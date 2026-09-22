@@ -327,7 +327,7 @@ Q3 2026,AI Workspace,Asia Pacific,24500,"$2,450,000",+26.9%,Projected`;
       {/* Upload & Dropzone */}
       {!sheetData ? (
         <div className="border-2 border-dashed border-gray-300 dark:border-gray-700 hover:border-blue-500 rounded-3xl p-10 bg-white dark:bg-gray-900 text-center transition">
-          <div className="w-16 h-16 rounded-2xl bg-emerald-50 dark:bg-emerald-950/40 text-emerald-600 dark:text-emerald-400 flex items-center justify-center mx-auto mb-4 border border-emerald-200 dark:border-emerald-800">
+ <div className="w-16 h-16 rounded-2xl bg-[var(--pe-accent-soft)] text-[var(--pe-accent)] flex items-center justify-center mx-auto mb-4 border border-[var(--pe-border)] ">
             <FileSpreadsheet className="w-8 h-8" />
           </div>
           <h2 className="text-xl font-bold text-gray-900 dark:text-white mb-2">
@@ -338,7 +338,7 @@ Q3 2026,AI Workspace,Asia Pacific,24500,"$2,450,000",+26.9%,Projected`;
           </p>
 
           <div className="flex items-center gap-3 justify-center flex-wrap">
-            <label className="px-6 py-3 bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl font-semibold text-sm shadow-md cursor-pointer transition">
+ <label className="px-6 py-3 bg-[var(--pe-accent)] hover:bg-[var(--pe-accent-hover)] text-[var(--pe-accent-ink)] rounded-xl font-semibold text-sm shadow-md cursor-pointer transition">
               <span>Select Spreadsheet File</span>
               <input
                 type="file"
@@ -362,7 +362,7 @@ Q3 2026,AI Workspace,Asia Pacific,24500,"$2,450,000",+26.9%,Projected`;
           </div>
 
           <div className="mt-8 flex items-center justify-center gap-4 text-xs text-gray-400">
-            <span className="flex items-center gap-1 text-emerald-600 dark:text-emerald-400">
+ <span className="flex items-center gap-1 text-[var(--pe-accent)] ">
               <ShieldCheck className="w-3.5 h-3.5" /> 100% In-Browser Parsing
             </span>
             <span>•</span>
@@ -380,7 +380,7 @@ Q3 2026,AI Workspace,Asia Pacific,24500,"$2,450,000",+26.9%,Projected`;
                 errorMsg
                   ? 'bg-rose-50 dark:bg-rose-950/40 text-rose-700 dark:text-rose-300 border-rose-200 dark:border-rose-800'
                   : successMsg
-                  ? 'bg-emerald-50 dark:bg-emerald-950/40 text-emerald-700 dark:text-emerald-300 border-emerald-200 dark:border-emerald-800'
+ ? 'bg-[var(--pe-accent-soft)] text-[var(--pe-accent)] border-[var(--pe-border)] '
                   : 'bg-blue-50 dark:bg-blue-950/40 text-blue-700 dark:text-blue-300 border-blue-200 dark:border-blue-800'
               }`}
             >
@@ -407,7 +407,7 @@ Q3 2026,AI Workspace,Asia Pacific,24500,"$2,450,000",+26.9%,Projected`;
           <div className="bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-2xl p-6 shadow-sm">
             <div className="flex items-center justify-between mb-4 pb-3 border-b border-gray-100 dark:border-gray-800">
               <h3 className="text-base font-bold text-gray-900 dark:text-white flex items-center gap-2">
-                <Sliders className="w-4 h-4 text-emerald-600 dark:text-emerald-400" />
+ <Sliders className="w-4 h-4 text-[var(--pe-accent)] " />
                 PDF Table Formatting & Styling
               </h3>
               <label className="text-xs text-blue-600 dark:text-blue-400 hover:underline cursor-pointer">
@@ -433,7 +433,7 @@ Q3 2026,AI Workspace,Asia Pacific,24500,"$2,450,000",+26.9%,Projected`;
                   type="text"
                   value={docTitle}
                   onChange={(e) => setDocTitle(e.target.value)}
-                  className="w-full px-3 py-2 bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl text-sm focus:outline-none focus:border-emerald-500 text-gray-900 dark:text-white"
+ className="w-full px-3 py-2 bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl text-sm focus:outline-none focus:border-[var(--pe-accent)] text-gray-900 dark:text-[var(--pe-accent-ink)]"
                 />
               </div>
 
@@ -447,7 +447,7 @@ Q3 2026,AI Workspace,Asia Pacific,24500,"$2,450,000",+26.9%,Projected`;
                     onClick={() => setOrientation('l')}
                     className={`flex-1 py-1.5 text-xs font-semibold rounded-lg transition ${
                       orientation === 'l'
-                        ? 'bg-white dark:bg-gray-700 text-emerald-600 dark:text-emerald-400 shadow-sm'
+ ? 'bg-white dark:bg-gray-700 text-[var(--pe-accent)] shadow-sm'
                         : 'text-gray-500'
                     }`}
                   >
@@ -458,7 +458,7 @@ Q3 2026,AI Workspace,Asia Pacific,24500,"$2,450,000",+26.9%,Projected`;
                     onClick={() => setOrientation('p')}
                     className={`flex-1 py-1.5 text-xs font-semibold rounded-lg transition ${
                       orientation === 'p'
-                        ? 'bg-white dark:bg-gray-700 text-emerald-600 dark:text-emerald-400 shadow-sm'
+ ? 'bg-white dark:bg-gray-700 text-[var(--pe-accent)] shadow-sm'
                         : 'text-gray-500'
                     }`}
                   >
@@ -495,7 +495,7 @@ Q3 2026,AI Workspace,Asia Pacific,24500,"$2,450,000",+26.9%,Projected`;
                   step="1"
                   value={fontSize}
                   onChange={(e) => setFontSize(parseInt(e.target.value, 10))}
-                  className="w-full accent-emerald-600 mt-2"
+ className="w-full accent-red-600 mt-2"
                 />
               </div>
             </div>
@@ -507,7 +507,7 @@ Q3 2026,AI Workspace,Asia Pacific,24500,"$2,450,000",+26.9%,Projected`;
                     type="checkbox"
                     checked={showGridlines}
                     onChange={(e) => setShowGridlines(e.target.checked)}
-                    className="rounded accent-emerald-600"
+ className="rounded accent-red-600"
                   />
                   <span>Table Gridlines</span>
                 </label>
@@ -516,7 +516,7 @@ Q3 2026,AI Workspace,Asia Pacific,24500,"$2,450,000",+26.9%,Projected`;
                     type="checkbox"
                     checked={showStripes}
                     onChange={(e) => setShowStripes(e.target.checked)}
-                    className="rounded accent-emerald-600"
+ className="rounded accent-red-600"
                   />
                   <span>Zebra Striping</span>
                 </label>
@@ -526,7 +526,7 @@ Q3 2026,AI Workspace,Asia Pacific,24500,"$2,450,000",+26.9%,Projected`;
                 type="button"
                 onClick={generatePdf}
                 disabled={busy}
-                className="px-6 py-2.5 bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 text-white font-bold text-sm rounded-xl shadow-lg shadow-emerald-600/20 flex items-center gap-2 transition"
+                className="px-6 py-2.5 bg-gradient-to-r from-[var(--pe-accent)] to-[var(--pe-accent-hover)] hover:from-[var(--pe-accent-hover)] hover:to-[var(--pe-accent)] text-[var(--pe-accent-ink)] font-bold text-sm rounded-xl shadow-lg shadow-[var(--pe-shadow-accent)] flex items-center gap-2 transition"
               >
                 <Download className="w-4 h-4" />
                 <span>Export & Download PDF</span>
@@ -538,7 +538,7 @@ Q3 2026,AI Workspace,Asia Pacific,24500,"$2,450,000",+26.9%,Projected`;
           <div className="bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-2xl p-6 shadow-sm overflow-hidden">
             <div className="flex items-center justify-between mb-4">
               <h3 className="text-sm font-bold text-gray-900 dark:text-white flex items-center gap-2">
-                <Table className="w-4 h-4 text-emerald-600 dark:text-emerald-400" />
+ <Table className="w-4 h-4 text-[var(--pe-accent)] " />
                 Data Preview ({sheetData.rows.length} rows, {sheetData.headers.length} columns)
               </h3>
               <span className="text-xs text-gray-400 font-mono">

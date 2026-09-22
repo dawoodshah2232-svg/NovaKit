@@ -240,8 +240,8 @@ export function PdfToExcel() {
     <div className="space-y-6">
       {/* Upload Zone */}
       {!tableData ? (
-        <div className="border-2 border-dashed border-gray-300 dark:border-gray-700 hover:border-emerald-500 rounded-3xl p-10 bg-white dark:bg-gray-900 text-center transition">
-          <div className="w-16 h-16 rounded-2xl bg-emerald-50 dark:bg-emerald-950/40 text-emerald-600 dark:text-emerald-400 flex items-center justify-center mx-auto mb-4 border border-emerald-200 dark:border-emerald-800">
+ <div className="border-2 border-dashed border-gray-300 dark:border-gray-700 hover:border-[var(--pe-accent)] rounded-3xl p-10 bg-white dark:bg-gray-900 text-center transition">
+ <div className="w-16 h-16 rounded-2xl bg-[var(--pe-accent-soft)] text-[var(--pe-accent)] flex items-center justify-center mx-auto mb-4 border border-[var(--pe-border)] ">
             <FileSpreadsheet className="w-8 h-8" />
           </div>
           <h2 className="text-xl font-bold text-gray-900 dark:text-white mb-2">
@@ -251,7 +251,7 @@ export function PdfToExcel() {
             Extract structured tabular data, invoices, statements, and spreadsheets from PDF documents directly into Excel-compatible CSV and TSV formats.
           </p>
 
-          <label className="px-6 py-3 bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl font-semibold text-sm shadow-md cursor-pointer transition inline-flex items-center gap-2">
+ <label className="px-6 py-3 bg-[var(--pe-accent)] hover:bg-[var(--pe-accent-hover)] text-[var(--pe-accent-ink)] rounded-xl font-semibold text-sm shadow-md cursor-pointer transition inline-flex items-center gap-2">
             <Upload className="w-4 h-4" />
             <span>Select PDF Document</span>
             <input
@@ -266,7 +266,7 @@ export function PdfToExcel() {
           </label>
 
           <div className="mt-8 flex items-center justify-center gap-4 text-xs text-gray-400">
-            <span className="flex items-center gap-1 text-emerald-600 dark:text-emerald-400">
+ <span className="flex items-center gap-1 text-[var(--pe-accent)] ">
               <ShieldCheck className="w-3.5 h-3.5" /> 100% In-Browser Extraction
             </span>
             <span>•</span>
@@ -311,7 +311,7 @@ export function PdfToExcel() {
           <div className="bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-2xl p-6 shadow-sm flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
             <div>
               <h3 className="text-base font-bold text-gray-900 dark:text-white flex items-center gap-2">
-                <Table className="w-4 h-4 text-emerald-600 dark:text-emerald-400" />
+ <Table className="w-4 h-4 text-[var(--pe-accent)] " />
                 Extracted Data Table ({tableData.rows.length} rows, {tableData.headers.length} columns)
               </h3>
               <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">
@@ -341,7 +341,7 @@ export function PdfToExcel() {
               <button
                 type="button"
                 onClick={downloadCsv}
-                className="px-5 py-2 bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs rounded-xl shadow-md transition flex items-center gap-1.5"
+ className="px-5 py-2 bg-[var(--pe-accent)] hover:bg-[var(--pe-accent-hover)] text-[var(--pe-accent-ink)] font-bold text-xs rounded-xl shadow-md transition flex items-center gap-1.5"
               >
                 <Download className="w-3.5 h-3.5" />
                 <span>Download Excel CSV</span>
@@ -374,7 +374,7 @@ export function PdfToExcel() {
                     {tableData.headers.map((h, i) => (
                       <th
                         key={i}
-                        className="p-2.5 font-bold text-gray-900 dark:text-white border-r border-gray-200 dark:border-gray-700 last:border-r-0 whitespace-nowrap bg-emerald-50/40 dark:bg-emerald-950/20"
+ className="p-2.5 font-bold text-gray-900 dark:text-[var(--pe-accent-ink)] border-r border-gray-200 dark:border-gray-700 last:border-r-0 whitespace-nowrap bg-[var(--pe-accent-soft)] "
                       >
                         {h}
                       </th>

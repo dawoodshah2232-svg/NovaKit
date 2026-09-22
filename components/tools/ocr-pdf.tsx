@@ -200,9 +200,9 @@ export function OcrPdf() {
             </p>
           )}
           {busy && progress > 0 && (
-            <div className="mt-2 h-2 bg-emerald-200 rounded-full overflow-hidden dark:bg-emerald-900">
+ <div className="mt-2 h-2 bg-[var(--pe-accent-soft)] rounded-full overflow-hidden ">
               <div
-                className="h-full bg-emerald-600 transition-all duration-300 dark:bg-emerald-500"
+ className="h-full bg-[var(--pe-accent)] transition-all duration-300 "
                 style={{ width: `${progress}%` }}
               />
             </div>

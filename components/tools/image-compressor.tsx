@@ -223,18 +223,18 @@ export function ImageCompressor() {
   return (
     <div className="w-full space-y-6">
       {/* Privacy guarantee banner */}
-      <div className="flex items-center justify-between p-4 rounded-2xl bg-emerald-50/90 dark:bg-emerald-950/40 border border-emerald-200/90 dark:border-emerald-800/70 text-xs font-semibold text-emerald-800 dark:text-emerald-300 shadow-xs">
+ <div className="flex items-center justify-between p-4 rounded-2xl bg-[var(--pe-accent-soft)] border border-[var(--pe-border)] text-xs font-semibold text-[var(--pe-accent)] shadow-xs">
         <div className="flex items-center gap-2.5">
           <span className="relative flex h-2 w-2">
-            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
-            <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
+ <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[var(--pe-accent)] opacity-75"></span>
+ <span className="relative inline-flex rounded-full h-2 w-2 bg-[var(--pe-accent-soft)]0"></span>
           </span>
-          <ShieldCheck className="w-4 h-4 text-emerald-600 dark:text-emerald-400 shrink-0" />
+ <ShieldCheck className="w-4 h-4 text-[var(--pe-accent)] shrink-0" />
           <span>
             <strong>100% In-Browser Compression:</strong> Your photos are processed exclusively inside local memory. Zero bytes leave your browser.
           </span>
         </div>
-        <span className="hidden sm:inline-block text-[11px] font-black px-2.5 py-1 rounded-full bg-emerald-100 dark:bg-emerald-900/60 text-emerald-700 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-800">
+ <span className="hidden sm:inline-block text-[11px] font-black px-2.5 py-1 rounded-full bg-[var(--pe-accent-soft)] text-[var(--pe-accent)] border border-[var(--pe-border)] ">
           Client-Side Web Worker
         </span>
       </div>

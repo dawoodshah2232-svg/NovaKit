@@ -95,7 +95,10 @@ export const viewport: Viewport = {
   width: 'device-width',
   initialScale: 1,
   maximumScale: 5,
-  themeColor: '#f8fafc',
+  themeColor: [
+    { media: '(prefers-color-scheme: light)', color: '#faf9f7' },
+    { media: '(prefers-color-scheme: dark)', color: '#090c10' },
+  ],
 };
 
 export default function RootLayout({
@@ -121,9 +124,12 @@ export default function RootLayout({
         >
           <div className="flex min-h-screen flex-col">
             <Suspense fallback={null}><AnalyticsTracker /></Suspense>
+            <a href="#main-content" className="skip-to-content">
+              Skip to content
+            </a>
             <Header />
 
-            <main className="mx-auto w-full max-w-7xl flex-1 px-4 py-5 sm:px-6 sm:py-7 lg:px-8">
+            <main id="main-content" className="mx-auto w-full max-w-7xl flex-1 px-4 py-5 sm:px-6 sm:py-7 lg:px-8">
               {children}
             </main>
 

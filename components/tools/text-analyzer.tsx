@@ -149,14 +149,14 @@ export function TextAnalyzer() {
   return (
     <div className="w-full space-y-6">
       {/* Privacy Guarantee Header Banner */}
-      <div className="flex items-center justify-between p-3.5 rounded-2xl bg-emerald-50/90 dark:bg-emerald-950/40 border border-emerald-200/80 dark:border-emerald-800/60 text-xs font-medium text-emerald-800 dark:text-emerald-300 shadow-xs">
+ <div className="flex items-center justify-between p-3.5 rounded-2xl bg-[var(--pe-accent-soft)] border border-[var(--pe-border)] text-xs font-medium text-[var(--pe-accent)] shadow-xs">
         <div className="flex items-center gap-2">
-          <ShieldCheck className="w-4 h-4 text-emerald-600 dark:text-emerald-400 shrink-0" />
+ <ShieldCheck className="w-4 h-4 text-[var(--pe-accent)] shrink-0" />
           <span>
             <strong>Zero Server Uploads:</strong> Text analysis and keyword counting are 100% private in local memory.
           </span>
         </div>
-        <span className="hidden sm:inline-block text-[11px] font-semibold px-2 py-0.5 rounded-full bg-emerald-100 dark:bg-emerald-900/60 text-emerald-700 dark:text-emerald-300">
+ <span className="hidden sm:inline-block text-[11px] font-semibold px-2 py-0.5 rounded-full bg-[var(--pe-accent-soft)] text-[var(--pe-accent)] ">
           Client-Side Pure JS
         </span>
       </div>
@@ -167,7 +167,7 @@ export function TextAnalyzer() {
         <div className="p-4 sm:p-5 rounded-3xl bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800 shadow-xs space-y-1">
           <div className="flex items-center justify-between text-slate-500 dark:text-slate-400">
             <span className="text-xs font-bold uppercase tracking-wider">Words</span>
-            <div className="w-7 h-7 rounded-lg bg-emerald-50 dark:bg-emerald-950/60 text-emerald-600 dark:text-emerald-400 flex items-center justify-center">
+ <div className="w-7 h-7 rounded-lg bg-[var(--pe-accent-soft)] text-[var(--pe-accent)] flex items-center justify-center">
               <Type className="w-4 h-4" />
             </div>
           </div>
@@ -239,7 +239,7 @@ export function TextAnalyzer() {
           <div className="rounded-3xl bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800 p-5 sm:p-6 shadow-xs space-y-3.5">
             <div className="flex flex-wrap items-center justify-between gap-2 pb-3 border-b border-slate-100 dark:border-slate-800">
               <div className="flex items-center gap-2">
-                <FileSearch className="w-4 h-4 text-emerald-600 dark:text-emerald-400" />
+ <FileSearch className="w-4 h-4 text-[var(--pe-accent)] " />
                 <h3 className="text-xs font-bold uppercase tracking-wider text-slate-900 dark:text-white">
                   Content Editor
                 </h3>
@@ -250,7 +250,7 @@ export function TextAnalyzer() {
                 <button
                   type="button"
                   onClick={handleLoadSample}
-                  className="min-h-[36px] px-3 py-1.5 rounded-xl text-xs font-semibold text-emerald-700 dark:text-emerald-300 bg-emerald-50 dark:bg-emerald-950/60 hover:bg-emerald-100 dark:hover:bg-emerald-900/60 border border-emerald-200/80 dark:border-emerald-800/60 transition-colors inline-flex items-center gap-1.5 active:scale-95 cursor-pointer"
+ className="min-h-[36px] px-3 py-1.5 rounded-xl text-xs font-semibold text-[var(--pe-accent)] bg-[var(--pe-accent-soft)] hover:bg-[var(--pe-accent-soft)] border border-[var(--pe-border)] transition-colors inline-flex items-center gap-1.5 active:scale-95 cursor-pointer"
                 >
                   <Sparkles className="w-3.5 h-3.5" />
                   <span>Sample Text</span>
@@ -299,7 +299,7 @@ export function TextAnalyzer() {
                   }
                 }}
                 placeholder="Paste or write your article, blog post, or SEO copy here..."
-                className="w-full p-4 text-sm sm:text-base rounded-2xl border border-slate-200 dark:border-slate-700 bg-slate-50/50 dark:bg-slate-800/40 text-slate-900 dark:text-white placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-emerald-500/40 focus:border-emerald-500 transition-all resize-y leading-relaxed font-sans"
+ className="w-full p-4 text-sm sm:text-base rounded-2xl border border-slate-200 dark:border-slate-700 bg-slate-50/50 dark:bg-slate-800/40 text-slate-900 dark:text-[var(--pe-accent-ink)] placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-[var(--pe-focus)] focus:border-[var(--pe-accent)] transition-all resize-y leading-relaxed font-sans"
               />
             </div>
 
@@ -310,7 +310,7 @@ export function TextAnalyzer() {
                 <span>•</span>
                 <span>Avg Word: <strong>{stats.avgCharsPerWord} characters</strong></span>
               </div>
-              <div className="text-emerald-600 dark:text-emerald-400 font-semibold">
+ <div className="text-[var(--pe-accent)] font-semibold">
                 Real-Time Analysis Active
               </div>
             </div>
@@ -322,12 +322,12 @@ export function TextAnalyzer() {
           <div className="rounded-3xl bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800 p-5 sm:p-6 shadow-xs space-y-4">
             <div className="flex items-center justify-between pb-3 border-b border-slate-100 dark:border-slate-800">
               <div className="flex items-center gap-2">
-                <BarChart3 className="w-4 h-4 text-emerald-600 dark:text-emerald-400" />
+ <BarChart3 className="w-4 h-4 text-[var(--pe-accent)] " />
                 <h3 className="text-xs font-bold uppercase tracking-wider text-slate-900 dark:text-white">
                   Top SEO Keywords
                 </h3>
               </div>
-              <span className="text-[10px] font-extrabold px-2 py-0.5 rounded-full bg-emerald-100 dark:bg-emerald-900/60 text-emerald-800 dark:text-emerald-300">
+ <span className="text-[10px] font-extrabold px-2 py-0.5 rounded-full bg-[var(--pe-accent-soft)] text-[var(--pe-accent)] ">
                 Stop-words Filtered
               </span>
             </div>
@@ -343,7 +343,7 @@ export function TextAnalyzer() {
                   return (
                     <div
                       key={kw.word}
-                      className="p-2.5 rounded-xl bg-slate-50 dark:bg-slate-800/60 border border-slate-200/70 dark:border-slate-700/60 space-y-1.5 transition-all hover:border-emerald-300 dark:hover:border-emerald-800"
+ className="p-2.5 rounded-xl bg-slate-50 dark:bg-slate-800/60 border border-slate-200/70 dark:border-slate-700/60 space-y-1.5 transition-all hover:border-[var(--pe-border-strong)] dark:hover:border-emerald-800"
                     >
                       <div className="flex items-center justify-between gap-2">
                         <div className="flex items-center gap-2 min-w-0">
@@ -396,7 +396,7 @@ export function TextAnalyzer() {
             {/* SEO Keyword Guidelines Note */}
             <div className="pt-3 border-t border-slate-100 dark:border-slate-800 text-[11px] text-slate-500 dark:text-slate-400 leading-relaxed space-y-1">
               <div className="font-bold text-slate-700 dark:text-slate-300 flex items-center gap-1">
-                <Percent className="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400" />
+ <Percent className="w-3.5 h-3.5 text-[var(--pe-accent)] " />
                 <span>SEO Density Guidance</span>
               </div>
               <p>

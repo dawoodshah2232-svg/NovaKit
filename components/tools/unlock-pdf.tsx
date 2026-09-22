@@ -10,15 +10,11 @@ import {
   Lock,
   Unlock,
   KeyRound,
-  ShieldCheck,
-  UploadCloud,
   Eye,
   EyeOff,
   AlertCircle,
   Check,
   RefreshCw,
-  Download,
-  FileCheck2,
   FileText,
 } from 'lucide-react';
 
@@ -55,21 +51,22 @@ export function UnlockPdf() {
     const pdfFile = acceptedFiles[0];
     if (!pdfFile) return;
 
-    if (pdfFile.type !== 'application/pdf' && !pdfFile.name.endsWith('.pdf')) {
+    if (pdfFile.type !== 'application/pdf' && !pdfFile.name.toLowerCase().endsWith('.pdf')) {
       setErrorMessage('Please upload a valid PDF document.');
       return;
     }
 
-    setFile(pdfFile);
-
     try {
       const buffer = await pdfFile.arrayBuffer();
+      // pdf.js transfers (detaches) the buffer it receives, so hand it a copy
+      // and keep the canonical buffer intact for the unlock step below.
+      const probeData = new Uint8Array(buffer.slice(0));
       setArrayBuffer(buffer);
 
       // Probe encryption with pdfjs-dist
       let encrypted = false;
       const loadingTask = pdfjsLib.getDocument({
-        data: new Uint8Array(buffer),
+        data: probeData,
       });
 
       loadingTask.onPassword = () => {
@@ -79,11 +76,13 @@ export function UnlockPdf() {
       try {
         await loadingTask.promise;
         setIsEncrypted(false);
+        setFile(pdfFile);
       } catch (err: unknown) {
         // Password exception code 1 or 2
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
         if (encrypted || (err as any)?.name === 'PasswordException' || (err as any)?.code === 1 || (err as any)?.code === 2) {
           setIsEncrypted(true);
+          setFile(pdfFile);
         } else {
           throw err;
         }
@@ -116,9 +115,9 @@ export function UnlockPdf() {
     setProgressText('Verifying security credentials & decrypting streams...');
 
     try {
-      // 1. Verify and decrypt with PDF.js
+      // 1. Verify and decrypt with PDF.js (hand it a copy: it detaches the buffer it receives)
       const loadingTask = pdfjsLib.getDocument({
-        data: new Uint8Array(arrayBuffer),
+        data: new Uint8Array(arrayBuffer.slice(0)),
         password: password.trim(),
       });
 
@@ -199,13 +198,13 @@ export function UnlockPdf() {
           {...getRootProps()}
           className={`relative rounded-3xl border-2 border-dashed p-8 sm:p-12 text-center transition-all cursor-pointer select-none ${
             isDragActive
-              ? 'border-emerald-500 bg-emerald-50/60 dark:bg-emerald-950/20 scale-[1.01]'
-              : 'border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900/60 hover:border-emerald-400 dark:hover:border-emerald-500 hover:bg-slate-50/50'
+ ? 'border-[var(--pe-accent)] bg-[var(--pe-accent-soft)] scale-[1.01]'
+ : 'border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900/60 hover:border-[var(--pe-accent)] hover:bg-slate-50/50'
           }`}
         >
           <input {...getInputProps()} />
           <div className="max-w-md mx-auto space-y-3">
-            <div className="w-16 h-16 rounded-2xl bg-emerald-50 dark:bg-emerald-950/60 text-emerald-600 dark:text-emerald-400 flex items-center justify-center mx-auto shadow-sm">
+ <div className="w-16 h-16 rounded-2xl bg-[var(--pe-accent-soft)] text-[var(--pe-accent)] flex items-center justify-center mx-auto shadow-sm">
               <Unlock className="w-8 h-8" />
             </div>
             <div>
@@ -251,7 +250,7 @@ export function UnlockPdf() {
                 {isEncrypted ? (
                   <Lock className="w-6 h-6 text-rose-600 dark:text-rose-400" />
                 ) : (
-                  <FileText className="w-6 h-6 text-emerald-600 dark:text-emerald-400" />
+ <FileText className="w-6 h-6 text-[var(--pe-accent)] " />
                 )}
               </div>
               <div>
@@ -267,7 +266,7 @@ export function UnlockPdf() {
                       <span>Password Protected</span>
                     </span>
                   ) : (
-                    <span className="font-bold text-emerald-600 dark:text-emerald-400 flex items-center gap-1">
+ <span className="font-bold text-[var(--pe-accent)] flex items-center gap-1">
                       <Check className="w-3 h-3" />
                       <span>Already Unlocked (No Password)</span>
                     </span>
@@ -283,6 +282,8 @@ export function UnlockPdf() {
                 setArrayBuffer(null);
                 setIsEncrypted(null);
                 setPassword('');
+                setErrorMessage(null);
+                setSuccessMessage(null);
               }}
               className="px-3 py-1.5 rounded-xl border border-slate-200 dark:border-slate-800 text-xs font-semibold text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors self-start sm:self-center"
             >
@@ -304,7 +305,7 @@ export function UnlockPdf() {
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
                     placeholder="Type the document password..."
-                    className="w-full h-12 pl-4 pr-11 rounded-2xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-800/80 text-slate-900 dark:text-white font-mono text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 transition-all placeholder:font-sans placeholder:text-slate-400"
+ className="w-full h-12 pl-4 pr-11 rounded-2xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-800/80 text-slate-900 dark:text-[var(--pe-accent-ink)] font-mono text-sm focus:outline-none focus:ring-2 focus:ring-[var(--pe-focus)] focus:border-[var(--pe-accent)] transition-all placeholder:font-sans placeholder:text-slate-400"
                     autoFocus
                   />
                   <button
@@ -328,7 +329,7 @@ export function UnlockPdf() {
             <button
               type="submit"
               disabled={isDecrypting}
-              className="min-h-[46px] px-8 py-2.5 rounded-2xl bg-emerald-600 hover:bg-emerald-500 text-white text-xs sm:text-sm font-black transition-all shadow-md shadow-emerald-600/20 active:scale-95 flex items-center justify-center gap-2 cursor-pointer disabled:opacity-60"
+ className="min-h-[46px] px-8 py-2.5 rounded-2xl bg-[var(--pe-accent)] hover:bg-[var(--pe-accent-soft)]0 text-[var(--pe-accent-ink)] text-xs sm:text-sm font-black transition-all shadow-md shadow-[var(--pe-shadow-accent)] active:scale-95 flex items-center justify-center gap-2 cursor-pointer disabled:opacity-60"
             >
               {isDecrypting ? (
                 <>

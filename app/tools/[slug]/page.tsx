@@ -10,35 +10,11 @@ import {
   generateHowToSchema,
 } from '@/lib/geo-data';
 import { GeoFaq } from '@/components/geo-faq';
-import { ImageCompressor } from '@/components/tools/image-compressor';
-import { PdfMerger } from '@/components/tools/pdf-merger';
-import { InvoiceGenerator } from '@/components/tools/invoice-generator';
-import { TaxCalculator } from '@/components/tools/tax-calculator';
-import { QrGenerator } from '@/components/tools/qr-generator';
-import { ColorExtractor } from '@/components/tools/color-extractor';
-import { TextAnalyzer } from '@/components/tools/text-analyzer';
-import { PasswordGenerator } from '@/components/tools/password-generator';
-import { SplitPdf } from '@/components/tools/split-pdf';
-import { CompressPdf } from '@/components/tools/compress-pdf';
-import { PdfToImage } from '@/components/tools/pdf-to-image';
-import { ProtectPdf } from '@/components/tools/protect-pdf';
-import { ImageToPdf } from '@/components/tools/image-to-pdf';
-import { OrganizePdf } from '@/components/tools/organize-pdf';
-import { RotatePdf } from '@/components/tools/rotate-pdf';
-import { WatermarkPdf } from '@/components/tools/watermark-pdf';
-import { UnlockPdf } from '@/components/tools/unlock-pdf';
-import { EditPdfMetadata } from '@/components/tools/edit-pdf-metadata';
-import { OcrPdf } from '@/components/tools/ocr-pdf';
-import { SignPdf } from '@/components/tools/sign-pdf';
-import { PdfToWord } from '@/components/tools/pdf-to-word';
-import { WordToPdf } from '@/components/tools/word-to-pdf';
-import { DeletePdfPages } from '@/components/tools/delete-pdf-pages';
-import { ExtractPdfPages } from '@/components/tools/extract-pdf-pages';
-import { AddPageNumbers } from '@/components/tools/add-page-numbers';
-import { CropPdf } from '@/components/tools/crop-pdf';
-import { PdfToText } from '@/components/tools/pdf-to-text';
-import { FlattenPdf } from '@/components/tools/flatten-pdf';
-import { RedactPdf } from '@/components/tools/redact-pdf';
+import { ToolEngine } from './tool-engine';
+
+// Tool engines are code-split: ./tool-engine.tsx is a client boundary that loads
+// ONLY the engine for the current slug via next/dynamic (SSR preserved).
+
 
 const canonicalPathBySlug: Record<string, string> = {
   'image-to-pdf': '/jpg-to-pdf',
@@ -271,70 +247,8 @@ export default async function ToolPage({ params }: ToolPageProps) {
         <p className="mt-2 text-xs font-semibold text-blue-700 dark:text-blue-300">{tool.processingNote}</p>
       </section>
 
-      {/* Render Tool Engine */}
-      {slug === 'image-to-pdf' ? (
-        <ImageToPdf />
-      ) : slug === 'pdf-to-images' || slug === 'pdf-to-image' ? (
-        <PdfToImage />
-      ) : slug === 'pdf-to-jpg' ? (
-        <PdfToImage jpgOnly analyticsSlug="pdf-to-jpg" />
-      ) : slug === 'pdf-to-word' ? (
-        <PdfToWord />
-      ) : slug === 'word-to-pdf' ? (
-        <WordToPdf />
-      ) : slug === 'ocr-pdf' ? (
-        <OcrPdf />
-      ) : slug === 'sign-pdf' ? (
-        <SignPdf />
-      ) : slug === 'delete-pdf-pages' || slug === 'pdf-page-delete' ? (
-        <DeletePdfPages />
-      ) : slug === 'extract-pdf-pages' || slug === 'pdf-page-extractor' ? (
-        <ExtractPdfPages />
-      ) : slug === 'add-page-numbers' || slug === 'pdf-number-pages' ? (
-        <AddPageNumbers />
-      ) : slug === 'crop-pdf' || slug === 'pdf-cropper' ? (
-        <CropPdf />
-      ) : slug === 'pdf-to-text' || slug === 'pdf-text-extractor' ? (
-        <PdfToText />
-      ) : slug === 'flatten-pdf' || slug === 'pdf-flattener' ? (
-        <FlattenPdf />
-      ) : slug === 'redact-pdf' || slug === 'pdf-redaction' ? (
-        <RedactPdf />
-      ) : slug === 'organize-pdf' || slug === 'pdf-page-reorder' ? (
-        <OrganizePdf />
-      ) : slug === 'unlock-pdf' || slug === 'pdf-password-remover' ? (
-        <UnlockPdf />
-      ) : slug === 'rotate-pdf' || slug === 'pdf-page-rotator' ? (
-        <RotatePdf />
-      ) : slug === 'watermark-pdf' || slug === 'pdf-watermarker' ? (
-        <WatermarkPdf />
-      ) : slug === 'split-pdf' || slug === 'pdf-page-splitter' ? (
-        <SplitPdf />
-      ) : slug === 'edit-pdf-metadata' || slug === 'pdf-metadata-editor' ? (
-        <EditPdfMetadata />
-      ) : slug === 'pdf-merger' ? (
-        <PdfMerger />
-      ) : slug === 'compress-pdf' ? (
-        <CompressPdf />
-      ) : slug === 'protect-pdf' ? (
-        <ProtectPdf />
-      ) : slug === 'image-compressor' ? (
-        <ImageCompressor />
-      ) : slug === 'invoice-generator' ? (
-        <InvoiceGenerator />
-      ) : slug === 'tax-calculator' ? (
-        <TaxCalculator />
-      ) : slug === 'qr-generator' ? (
-        <QrGenerator />
-      ) : slug === 'color-extractor' ? (
-        <ColorExtractor />
-      ) : slug === 'text-analyzer' ? (
-        <TextAnalyzer />
-      ) : slug === 'password-generator' ? (
-        <PasswordGenerator />
-      ) : (
-        <div className="text-center py-12 text-slate-400">Tool not found</div>
-      )}
+            {/* Render Tool Engine (code-split client boundary) */}
+      <ToolEngine slug={slug} />
 
       {isMergePdf && (
         <section aria-labelledby="merge-pdf-guide" className="space-y-6 pt-2">

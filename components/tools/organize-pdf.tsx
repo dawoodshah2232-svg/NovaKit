@@ -7,7 +7,6 @@ import * as pdfjsLib from 'pdfjs-dist';
 import { saveAs } from 'file-saver';
 import { trackToolExecution } from '@/lib/analytics';
 import {
-  Layers,
   UploadCloud,
   Check,
   AlertCircle,
@@ -18,7 +17,6 @@ import {
   Download,
   Copy,
   RotateCcw,
-  Sparkles,
   FileText,
 } from 'lucide-react';
 
@@ -82,21 +80,22 @@ export function OrganizePdf() {
     const pdfFile = acceptedFiles[0];
     if (!pdfFile) return;
 
-    if (pdfFile.type !== 'application/pdf' && !pdfFile.name.endsWith('.pdf')) {
+    if (pdfFile.type !== 'application/pdf' && !pdfFile.name.toLowerCase().endsWith('.pdf')) {
       setErrorMessage('Please upload a valid PDF document.');
       return;
     }
 
-    setFile(pdfFile);
     setIsLoadingPages(true);
     cleanupThumbnails();
 
     try {
       const buffer = await pdfFile.arrayBuffer();
+      // pdf.js transfers (detaches) the buffer it receives, so hand it a copy
+      // and keep the canonical buffer intact for the export step below.
       setArrayBuffer(buffer);
 
       setLoadingProgress('Reading PDF pages...');
-      const loadingTask = pdfjsLib.getDocument({ data: new Uint8Array(buffer) });
+      const loadingTask = pdfjsLib.getDocument({ data: new Uint8Array(buffer.slice(0)) });
       const pdf = await loadingTask.promise;
       const totalPages = pdf.numPages;
 
@@ -132,6 +131,11 @@ export function OrganizePdf() {
 
       setPages(pageItems);
       setOriginalOrder([...pageItems]);
+      if (pageItems.length > 0) {
+        setFile(pdfFile);
+      } else {
+        throw new Error('No pages could be rendered from this PDF.');
+      }
     } catch (err: unknown) {
       console.error('Error loading PDF pages:', err);
       const msg = err instanceof Error ? err.message : 'Failed to load PDF pages.';
@@ -326,8 +330,11 @@ export function OrganizePdf() {
                 type="button"
                 onClick={() => {
                   setFile(null);
+                  setArrayBuffer(null);
                   setPages([]);
                   setOriginalOrder([]);
+                  setErrorMessage(null);
+                  setSuccessMessage(null);
                   cleanupThumbnails();
                 }}
                 className="px-3 py-1.5 rounded-xl text-xs font-semibold text-rose-600 hover:bg-rose-50 dark:hover:bg-rose-950/40 transition-colors"

@@ -64,11 +64,11 @@ export default function SplitPdfPage() {
   };
 
   return (
-    <div className="min-h-screen bg-slate-50 text-slate-900 flex flex-col justify-between">
+    <div className="min-h-screen bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-slate-100 flex flex-col justify-between">
       <div>
-        <header className="bg-white border-b border-slate-200 px-6 py-4">
+        <header className="bg-white dark:bg-slate-900 border-b border-slate-200 dark:border-slate-800 px-6 py-4">
           <div className="max-w-4xl mx-auto flex justify-between items-center">
-            <Link href="/" className="text-sm font-semibold text-slate-600 hover:text-blue-600 flex items-center gap-1">
+            <Link href="/" className="text-sm font-semibold text-slate-600 dark:text-slate-400 hover:text-blue-600 flex items-center gap-1">
               <ArrowLeft className="w-4 h-4" /> Back to Home
             </Link>
             <span className="text-xs font-semibold px-3 py-1 bg-amber-50 text-amber-700 rounded-full flex items-center gap-1">
@@ -79,16 +79,16 @@ export default function SplitPdfPage() {
 
         <main className="max-w-4xl mx-auto px-6 py-12">
           <h1 className="text-3xl font-bold mb-3">PDF Slide & Page Splitter</h1>
-          <p className="text-slate-600 mb-8">
+          <p className="text-slate-600 dark:text-slate-400 mb-8">
             Extract individual presentation slides or specific pages from large documents securely in your browser.
           </p>
 
-          <section className="mb-8 rounded-2xl border border-blue-100 bg-blue-50 p-5">
+          <section className="mb-8 rounded-2xl border border-blue-100 dark:border-blue-900/40 bg-blue-50 dark:bg-blue-950/40 p-5">
             <h2 className="text-lg font-bold">What this tool does</h2>
-            <p className="mt-2 text-sm leading-6 text-slate-700">Upload a PDF, choose one page number, and download that page as a new PDF. Processing happens locally in your browser.</p>
+            <p className="mt-2 text-sm leading-6 text-slate-700 dark:text-slate-300">Upload a PDF, choose one page number, and download that page as a new PDF. Processing happens locally in your browser.</p>
           </section>
 
-          <div className="border-2 border-dashed border-slate-300 rounded-2xl p-8 text-center bg-white shadow-sm mb-6">
+          <div className="border-2 border-dashed border-slate-300 dark:border-slate-700 rounded-2xl p-8 text-center bg-white dark:bg-slate-900 shadow-sm mb-6">
             <input
               type="file"
               accept=".pdf"
@@ -103,16 +103,16 @@ export default function SplitPdfPage() {
               Select PDF Document
             </label>
             {file && (
-              <p className="mt-4 text-sm font-medium text-slate-700">
+              <p className="mt-4 text-sm font-medium text-slate-700 dark:text-slate-300">
                 Selected: {file.name} ({totalPages} pages total)
               </p>
             )}
           </div>
 
           {file && (
-            <div className="bg-white rounded-2xl p-6 shadow-sm border border-slate-200 mb-6 space-y-4">
+            <div className="bg-white dark:bg-slate-900 rounded-2xl p-6 shadow-sm border border-slate-200 dark:border-slate-800 mb-6 space-y-4">
               <div>
-                <label className="block text-sm font-medium text-slate-700 mb-2">
+                <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">
                   Extract Page Number (1 to {totalPages}):
                 </label>
                 <input
@@ -121,14 +121,14 @@ export default function SplitPdfPage() {
                   max={totalPages}
                   value={pageNumber}
                   onChange={(e) => setPageNumber(Number(e.target.value))}
-                  className="w-full px-4 py-3 border border-slate-300 rounded-xl focus:ring-2 focus:ring-blue-600 focus:outline-none"
+                  className="w-full px-4 py-3 border border-slate-300 dark:border-slate-700 rounded-xl bg-white dark:bg-slate-800 text-slate-900 dark:text-white focus:ring-2 focus:ring-blue-600 focus:outline-none"
                 />
               </div>
 
               <button
                 onClick={handleSplit}
                 disabled={processing}
-                className="w-full bg-emerald-600 text-white py-3.5 rounded-xl font-semibold hover:bg-emerald-700 transition disabled:opacity-50 flex items-center justify-center gap-2 shadow-sm"
+ className="w-full bg-[var(--pe-accent)] text-[var(--pe-accent-ink)] py-3.5 rounded-xl font-semibold hover:bg-[var(--pe-accent-hover)] transition disabled:opacity-50 flex items-center justify-center gap-2 shadow-sm"
               >
                 <Download className="w-4 h-4" /> {processing ? "Splitting..." : "Extract & Download Page"}
               </button>
@@ -136,24 +136,24 @@ export default function SplitPdfPage() {
           )}
 
           {statusText && (
-            <div className="p-4 bg-blue-50 text-blue-800 rounded-xl text-center font-medium border border-blue-100">
+            <div className="p-4 bg-blue-50 dark:bg-blue-950/40 text-blue-800 dark:text-blue-300 rounded-xl text-center font-medium border border-blue-100 dark:border-blue-900/40">
               {statusText}
             </div>
           )}
 
-          <section className="mt-10 space-y-6 text-slate-700">
-            <div><h2 className="text-xl font-bold text-slate-900">How to use Split PDF</h2><p className="mt-2 text-sm leading-6">Select a PDF, enter the page number to extract, then choose Extract &amp; Download Page. The output contains the selected page only.</p></div>
-            <div><h2 className="text-xl font-bold text-slate-900">Why use this tool?</h2><p className="mt-2 text-sm leading-6">It is useful when you need one page from a presentation, report, application, or scanned document without editing the original file.</p></div>
-            <div><h2 className="text-xl font-bold text-slate-900">Privacy and limitations</h2><p className="mt-2 text-sm leading-6">The PDF stays in browser memory. This version extracts one page at a time and requires a readable, non-password-protected PDF.</p></div>
-            <div><h2 className="text-xl font-bold text-slate-900">Frequently asked questions</h2><div className="mt-3 space-y-3 text-sm"><p><strong>Does it upload my PDF?</strong> No. The file is processed on your device.</p><p><strong>Can I extract several pages?</strong> Use the tool once per page; multi-range extraction is not currently provided here.</p><p><strong>What file type is downloaded?</strong> The selected page is saved as a PDF.</p><p><strong>Can I use a protected PDF?</strong> Password-protected or unreadable files may not open in the browser.</p></div></div>
-            <nav aria-label="Related PDF tools"><h2 className="text-xl font-bold text-slate-900">Related PDF tools</h2><div className="mt-3 flex flex-wrap gap-2"><Link href="/organize-pdf" className="rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm font-semibold text-blue-700">Organize PDF</Link><Link href="/merge-pdf" className="rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm font-semibold text-blue-700">Merge PDF</Link><Link href="/compress-pdf" className="rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm font-semibold text-blue-700">Compress PDF</Link></div></nav>
+          <section className="mt-10 space-y-6 text-slate-700 dark:text-slate-300">
+            <div><h2 className="text-xl font-bold text-slate-900 dark:text-white">How to use Split PDF</h2><p className="mt-2 text-sm leading-6">Select a PDF, enter the page number to extract, then choose Extract &amp; Download Page. The output contains the selected page only.</p></div>
+            <div><h2 className="text-xl font-bold text-slate-900 dark:text-white">Why use this tool?</h2><p className="mt-2 text-sm leading-6">It is useful when you need one page from a presentation, report, application, or scanned document without editing the original file.</p></div>
+            <div><h2 className="text-xl font-bold text-slate-900 dark:text-white">Privacy and limitations</h2><p className="mt-2 text-sm leading-6">The PDF stays in browser memory. This version extracts one page at a time and requires a readable, non-password-protected PDF.</p></div>
+            <div><h2 className="text-xl font-bold text-slate-900 dark:text-white">Frequently asked questions</h2><div className="mt-3 space-y-3 text-sm"><p><strong>Does it upload my PDF?</strong> No. The file is processed on your device.</p><p><strong>Can I extract several pages?</strong> Use the tool once per page; multi-range extraction is not currently provided here.</p><p><strong>What file type is downloaded?</strong> The selected page is saved as a PDF.</p><p><strong>Can I use a protected PDF?</strong> Password-protected or unreadable files may not open in the browser.</p></div></div>
+            <nav aria-label="Related PDF tools"><h2 className="text-xl font-bold text-slate-900 dark:text-white">Related PDF tools</h2><div className="mt-3 flex flex-wrap gap-2"><Link href="/organize-pdf" className="rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 px-3 py-2 text-sm font-semibold text-blue-700 dark:text-blue-400">Organize PDF</Link><Link href="/merge-pdf" className="rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 px-3 py-2 text-sm font-semibold text-blue-700 dark:text-blue-400">Merge PDF</Link><Link href="/compress-pdf" className="rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 px-3 py-2 text-sm font-semibold text-blue-700 dark:text-blue-400">Compress PDF</Link></div></nav>
           </section>
         </main>
       </div>
 
-      <footer className="bg-white border-t border-slate-200 py-6 text-center text-xs text-slate-500">
+      <footer className="bg-white dark:bg-slate-900 border-t border-slate-200 dark:border-slate-800 py-6 text-center text-xs text-slate-500 dark:text-slate-400">
         <p className="flex items-center justify-center gap-1">
-          <ShieldCheck className="w-4 h-4 text-emerald-600" /> 100% Client-Side Processing • Zero Server Uploads
+ <ShieldCheck className="w-4 h-4 text-[var(--pe-accent)]" /> 100% Client-Side Processing • Zero Server Uploads
         </p>
       </footer>
     </div>

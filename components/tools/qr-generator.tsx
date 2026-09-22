@@ -503,7 +503,7 @@ export function QrGenerator() {
               </div>
               <div>
                 <span className="text-[10px] text-slate-400 uppercase font-semibold block">Security</span>
-                <span className="text-xs font-bold text-emerald-600 dark:text-emerald-400">
+ <span className="text-xs font-bold text-[var(--pe-accent)] ">
                   Local RAM
                 </span>
               </div>
