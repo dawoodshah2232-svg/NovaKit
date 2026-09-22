@@ -4,6 +4,7 @@ import {
   PopularTools,
   Categories,
   StudioPromo,
+  CvPromo,
   Trust,
   WhyPdfEdit,
 } from '@/components/ui-preview/sections';
@@ -99,6 +100,7 @@ export default function HomePage() {
           <Categories />
         </div>
         <StudioPromo />
+        <CvPromo />
         <div id="security" className="scroll-mt-24">
           <Trust />
         </div>
