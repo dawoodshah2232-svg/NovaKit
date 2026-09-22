@@ -406,6 +406,19 @@ export function StudioV2Preview() {
     setEditingId(null);
   }, [hist, selection]);
 
+  /** Nudge selected layers by (dx, dy) in normalized page units. */
+  const handleNudge = useCallback((dx: number, dy: number) => {
+    if (selection.length === 0) return;
+    hist.update((d) => ({
+      ...d,
+      layers: d.layers.map((l) =>
+        selection.includes(l.id)
+          ? { ...l, x: Math.min(0.95, Math.max(0, l.x + dx)), y: Math.min(0.95, Math.max(0, l.y + dy)) }
+          : l,
+      ),
+    }), true);
+  }, [hist, selection]);
+
   /** Bring forward (dir=1) / send backward (dir=-1) in paint order. */
   const handleReorder = useCallback((dir: 1 | -1) => {
     const id = selection[0];
@@ -451,6 +464,14 @@ export function StudioV2Preview() {
     hist.update((d) => ({ ...d, layers: [...d.layers, ...clones] }), true);
     setSelection(clones.map((c) => c.id));
   }, [hist, activePage]);
+
+  /** Duplicate the current selection in place (copy + paste). */
+  const handleDuplicate = useCallback(() => {
+    const sel = hist.doc.layers.filter((l) => selection.includes(l.id));
+    if (sel.length === 0) return;
+    clipboardRef.current = sel;
+    handlePaste();
+  }, [hist.doc, selection, handlePaste]);
 
   const handleSelectAll = useCallback(() => {
     setSelection(hist.doc.layers.filter((l) => l.pageIndex === activePage).map((l) => l.id));
@@ -588,7 +609,10 @@ export function StudioV2Preview() {
     .filter((l): l is DocTextLayer => l.type === 'text')
     .reduce((n, l) => n + l.blocks.reduce((m, b) => m + b.runs.reduce((k, r) => k + r.text.trim().split(/\s+/).filter(Boolean).length, 0), 0), 0);
 
-  /* Keyboard shortcuts (skipped while editing text or typing in a field). */
+  /* Keyboard shortcuts (skipped while editing text or typing in a field).
+     Delete/Backspace: delete selection · Esc: deselect · Arrows: nudge (Shift: bigger step)
+     Ctrl/Cmd+S: save · P: print · E: export · A: select all · C/V: copy/paste · D: duplicate
+     Ctrl/Cmd+Z: undo · Ctrl/Cmd+Shift+Z or Ctrl/Cmd+Y: redo */
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
       if (!started) return;
@@ -600,6 +624,17 @@ export function StudioV2Preview() {
         if (e.key === 'Delete' || e.key === 'Backspace') {
           e.preventDefault();
           handleDeleteSelected();
+        } else if (e.key === 'Escape') {
+          e.preventDefault();
+          setSelection([]);
+          setEditingId(null);
+        } else if (e.key.startsWith('Arrow')) {
+          if (selection.length === 0) return;
+          e.preventDefault();
+          const step = e.shiftKey ? 0.02 : 0.005;
+          const dx = e.key === 'ArrowLeft' ? -step : e.key === 'ArrowRight' ? step : 0;
+          const dy = e.key === 'ArrowUp' ? -step : e.key === 'ArrowDown' ? step : 0;
+          handleNudge(dx, dy);
         }
         return;
       }
@@ -622,6 +657,9 @@ export function StudioV2Preview() {
       } else if (key === 'v') {
         e.preventDefault();
         handlePaste();
+      } else if (key === 'd') {
+        e.preventDefault();
+        handleDuplicate();
       } else if (key === 'z' && !e.shiftKey) {
         e.preventDefault();
         hist.undo();
@@ -632,7 +670,7 @@ export function StudioV2Preview() {
     };
     window.addEventListener('keydown', onKey);
     return () => window.removeEventListener('keydown', onKey);
-  }, [started, editingId, handleDeleteSelected, handleSaveNow, handleExport, handleSelectAll, handleCopy, handlePaste, hist]);
+  }, [started, editingId, handleDeleteSelected, handleNudge, handleDuplicate, handleSaveNow, handleExport, handleSelectAll, handleCopy, handlePaste, hist]);
 
   const isBlankDoc =
     started &&
