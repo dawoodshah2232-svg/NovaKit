@@ -208,6 +208,17 @@ export function Hero() {
             Merge, compress, convert, sign and edit PDFs right in your browser —
             fast, private, and free to start. No uploads. No accounts.
           </p>
+          <p className="pe-fade-up pe-fade-up-2 mt-5 flex items-center justify-center gap-2.5 text-[15px] font-semibold text-[var(--pe-text)] sm:text-base lg:justify-start">
+            <span
+              className="grid h-6 w-6 shrink-0 place-items-center rounded-full bg-[var(--pe-accent-soft)] text-[var(--pe-accent)]"
+              aria-hidden="true"
+            >
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={3} strokeLinecap="round" strokeLinejoin="round" className="h-3.5 w-3.5">
+                <path d="m5 13 4 4L19 7" />
+              </svg>
+            </span>
+            No sign-up required — everything is free to use
+          </p>
           <div className="pe-fade-up pe-fade-up-3 mt-7">
             <SearchBar />
           </div>
@@ -420,59 +431,29 @@ export function StudioPromo() {
   );
 }
 
-/* ================= CV BUILDER PROMO — compact product card ================= */
+/* ================= CV BUILDER STRIP — slim, understated, away from Studio ================= */
 
 export function CvPromo() {
   return (
-    <section className="relative mx-auto max-w-6xl px-4 pb-8 sm:px-6 sm:pb-10" aria-label="CV Builder">
-      <div
-        className="pe-lift relative flex items-center gap-4 overflow-hidden rounded-[var(--pe-radius-lg)] p-5 sm:gap-5 sm:p-6"
-        style={{ background: 'var(--pe-ink-bg)', border: '1px solid var(--pe-ink-border)' }}
-      >
-        <div
-          aria-hidden="true"
-          className="pe-pulse-soft pointer-events-none absolute inset-0"
-          style={{ background: 'radial-gradient(45% 60% at 12% 30%, rgba(248,113,113,0.10), transparent 70%)' }}
-        />
-        <span
-          className="relative grid h-12 w-12 shrink-0 place-items-center rounded-2xl"
-          style={{ background: 'rgba(248,113,113,0.14)', color: '#f87171' }}
-        >
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.8} strokeLinecap="round" strokeLinejoin="round" className="h-6 w-6" aria-hidden="true">
+    <section className="border-y border-[var(--pe-border)] bg-[var(--pe-surface-2)]" aria-label="CV Builder">
+      <div className="mx-auto flex max-w-6xl flex-wrap items-center justify-center gap-x-4 gap-y-2 px-4 py-4 sm:px-6">
+        <span className="grid h-8 w-8 shrink-0 place-items-center rounded-lg bg-[var(--pe-accent-soft)] text-[var(--pe-accent)]" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.8} strokeLinecap="round" strokeLinejoin="round" className="h-4 w-4">
             <path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z" />
             <path d="M14 3v5h5" />
             <path d="M9 13h6M9 17h4" />
           </svg>
         </span>
-        <div className="relative min-w-0 flex-1">
-          <p
-            className="inline-flex items-center rounded-full px-2.5 py-1 text-[10px] font-bold uppercase tracking-widest"
-            style={{ background: 'rgba(248,113,113,0.14)', color: '#f87171' }}
-          >
-            New product
-          </p>
-          <h2 className="mt-1.5 text-lg font-bold tracking-tight sm:text-xl" style={{ color: 'var(--pe-ink-text)' }}>
-            CV Builder
-          </h2>
-          <p className="mt-1 text-sm leading-relaxed" style={{ color: 'var(--pe-ink-text-2)' }}>
-            Create professional resumes with modern templates — free forever, no sign-up.
-          </p>
-        </div>
-        <div className="relative flex shrink-0 flex-col items-stretch gap-2 sm:flex-row sm:items-center">
-          <Link
-            href="/cv-builder"
-            className="pe-lift rounded-full bg-[var(--pe-accent)] px-5 py-2.5 text-center text-sm font-bold text-[var(--pe-accent-ink)] shadow-[var(--pe-shadow-accent)] hover:bg-[var(--pe-accent-hover)]"
-          >
-            Create CV
-          </Link>
-          <Link
-            href="/cv-builder#templates"
-            className="pe-lift rounded-full px-4 py-2.5 text-center text-sm font-semibold"
-            style={{ border: '1px solid var(--pe-ink-border)', color: 'var(--pe-ink-text)' }}
-          >
-            Templates
-          </Link>
-        </div>
+        <p className="text-sm text-[var(--pe-text-2)]">
+          <span className="font-bold text-[var(--pe-text)]">Build your CV</span>
+          {' '}— professional templates, free forever, no sign-up.
+        </p>
+        <Link
+          href="/cv-builder"
+          className="pe-lift text-sm font-bold text-[var(--pe-accent)] hover:underline"
+        >
+          Create CV →
+        </Link>
       </div>
     </section>
   );

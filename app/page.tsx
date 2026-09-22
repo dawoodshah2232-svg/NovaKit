@@ -108,10 +108,10 @@ export default function HomePage() {
           <Categories />
         </div>
         <StudioPromo />
-        <CvPromo />
         <div id="security" className="scroll-mt-24">
           <Trust />
         </div>
+        <CvPromo />
         <div id="why" className="scroll-mt-24">
           <WhyPdfEdit />
         </div>
