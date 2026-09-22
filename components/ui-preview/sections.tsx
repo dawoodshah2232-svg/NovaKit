@@ -3,7 +3,7 @@
 import Image from 'next/image';
 import Link from 'next/link';
 import heroBanner from '../../app/ui-preview/hero-banner.png';
-import studioVisual from '../../app/ui-preview/studio-visual.png';
+import studioBanner from '../../app/ui-preview/studio-banner.webp';
 import {
   useEffect,
   useLayoutEffect,
@@ -401,29 +401,17 @@ export function StudioPromo() {
               Free forever · No sign-up · Your files never leave your device
             </p>
           </div>
-          {/* generated Studio artwork — dark editor workspace */}
-          <div className="relative">
-            <div
-              className="overflow-hidden rounded-2xl shadow-[var(--pe-shadow-lg)]"
-              style={{ border: '1px solid var(--pe-ink-border)' }}
-            >
-              <Image
-                src={studioVisual}
-                alt="PDFEdit Studio editor workspace"
-                sizes="(max-width: 1024px) 100vw, 560px"
-                className="h-auto w-full"
-              />
-            </div>
-            {/* floating exported chip */}
-            <div
-              className="pe-float-slow absolute -bottom-3 right-5 flex items-center gap-1.5 rounded-xl px-3.5 py-2 text-xs font-bold shadow-[var(--pe-shadow-lg)]"
-              style={{ background: 'var(--pe-accent)', color: 'var(--pe-accent-ink)' }}
-            >
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={3} strokeLinecap="round" strokeLinejoin="round" className="h-3 w-3" aria-hidden="true">
-                <path d="m5 13 4 4L19 7" />
-              </svg>
-              Exported
-            </div>
+          {/* Studio artwork — dark editor workspace */}
+          <div
+            className="relative aspect-[3/2] w-full overflow-hidden rounded-2xl shadow-[var(--pe-shadow-lg)]"
+            style={{ border: '1px solid var(--pe-ink-border)', background: 'var(--pe-ink-bg)' }}
+          >
+            <Image
+              src={studioBanner}
+              alt="PDF editing workspace illustrating text editing, highlighting, redaction, signatures and page organization."
+              sizes="(max-width: 1024px) 100vw, 560px"
+              className="h-full w-full object-contain"
+            />
           </div>
         </div>
       </div>
