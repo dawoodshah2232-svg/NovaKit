@@ -7,7 +7,7 @@
  * editable; "Flatten & Export" merges overlays and form fields into static
  * page content.
  */
-import { useEffect } from 'react';
+import { useEffect, useRef } from 'react';
 import {
   CheckCircle2,
   Download,
@@ -17,6 +17,7 @@ import {
   TriangleAlert,
   X,
 } from 'lucide-react';
+import { useFocusTrap } from './use-focus-trap';
 
 export interface ExportDialogProps {
   open: boolean;
@@ -53,6 +54,10 @@ export function ExportDialog({
   onNewFile,
 }: ExportDialogProps) {
   const canClose = stage !== 'working';
+  const dialogRef = useRef<HTMLDivElement>(null);
+
+  // Keep keyboard focus inside the modal while open; restore on close.
+  useFocusTrap(dialogRef, open);
 
   useEffect(() => {
     if (!open || !canClose) return;
@@ -74,6 +79,7 @@ export function ExportDialog({
       role="presentation"
     >
       <div
+        ref={dialogRef}
         role="dialog"
         aria-modal="true"
         aria-label="Export PDF"
@@ -85,9 +91,10 @@ export function ExportDialog({
           <button
             type="button"
             title="Close"
+            aria-label="Close export dialog"
             onClick={onClose}
             disabled={!canClose}
-            className="flex h-9 w-9 items-center justify-center rounded-lg text-slate-400 hover:bg-slate-800 hover:text-slate-200 disabled:opacity-40"
+            className="flex h-11 w-11 items-center justify-center rounded-lg text-slate-400 hover:bg-slate-800 hover:text-slate-200 disabled:opacity-40"
           >
             <X size={17} />
           </button>

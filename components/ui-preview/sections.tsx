@@ -228,9 +228,9 @@ export function Hero() {
             Browser-based PDF tools
           </p>
           <h1 className="pe-fade-up pe-fade-up-1 mt-4 text-balance text-[2.6rem] font-bold leading-[1.05] tracking-tight text-[var(--pe-text)] sm:text-6xl lg:text-[3.8rem]">
-            Every PDF task,
+            Free online PDF editor &amp; PDF tools.
             <br />
-            <span className="text-[var(--pe-accent)]">done beautifully.</span>
+            <span className="text-[var(--pe-accent)]">Every PDF task, done beautifully.</span>
           </h1>
           <p className="pe-fade-up pe-fade-up-2 mx-auto mt-4 max-w-xl text-pretty text-base leading-relaxed text-[var(--pe-text-2)] sm:text-lg lg:mx-0">
             Merge, compress, convert, sign and edit PDFs right in your browser —

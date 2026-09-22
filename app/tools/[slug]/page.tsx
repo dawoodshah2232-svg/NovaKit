@@ -38,6 +38,7 @@ const canonicalPathBySlug: Record<string, string> = {
   'pdf-to-text': '/pdf-to-text',
   'flatten-pdf': '/flatten-pdf',
   'redact-pdf': '/redact-pdf',
+  'edit-pdf-metadata': '/edit-pdf',
 };
 
 const relatedToolsBySlug: Record<string, [string, string][]> = {
@@ -61,8 +62,8 @@ const relatedToolsBySlug: Record<string, [string, string][]> = {
   'add-page-numbers': [['/watermark-pdf', 'Watermark PDF'], ['/flatten-pdf', 'Flatten PDF'], ['/studio', 'PDF Studio']],
   'crop-pdf': [['/rotate-pdf', 'Rotate PDF'], ['/compress-pdf', 'Compress PDF'], ['/flatten-pdf', 'Flatten PDF']],
   'pdf-to-text': [['/ocr-pdf', 'OCR PDF'], ['/pdf-to-word', 'PDF to Word'], ['/pdf-to-jpg', 'PDF to JPG']],
-  'flatten-pdf': [['/sign-pdf', 'Sign PDF'], ['/protect-pdf', 'Protect PDF'], ['/redact-pdf', 'Redact PDF']],
-  'redact-pdf': [['/flatten-pdf', 'Flatten PDF'], ['/edit-pdf-metadata', 'Edit Metadata'], ['/protect-pdf', 'Protect PDF']],
+  'flatten-pdf': [['/sign-pdf', 'Sign PDF'], ['/unlock-pdf', 'Unlock PDF'], ['/redact-pdf', 'Redact PDF']],
+  'redact-pdf': [['/flatten-pdf', 'Flatten PDF'], ['/edit-pdf', 'Edit Metadata'], ['/studio', 'PDF Studio']],
 };
 
 interface ToolPageProps {
@@ -205,6 +206,19 @@ export default async function ToolPage({ params }: ToolPageProps) {
       />
       {/* Back button & tool header */}
       <div>
+        <nav aria-label="Breadcrumb" className="mb-3">
+          <ol className="flex flex-wrap items-center gap-1.5 text-xs font-medium text-slate-500 dark:text-slate-400">
+            <li>
+              <Link href="/" className="hover:text-slate-900 dark:hover:text-white transition-colors">
+                Home
+              </Link>
+            </li>
+            <li aria-hidden="true" className="text-slate-300 dark:text-slate-600">/</li>
+            <li aria-current="page" className="text-slate-900 dark:text-white font-semibold">
+              {tool.name}
+            </li>
+          </ol>
+        </nav>
         <Link
           href="/"
           className="inline-flex items-center gap-2 text-xs font-bold text-slate-500 hover:text-slate-900 dark:text-slate-400 dark:hover:text-white transition-all mb-5 px-3 py-1.5 rounded-full bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800 shadow-[0_1px_3px_rgba(0,0,0,0.03)] active:scale-95"
@@ -397,7 +411,7 @@ export default async function ToolPage({ params }: ToolPageProps) {
             </h3>
           </div>
           <span className="text-[11px] font-bold px-2.5 py-0.5 rounded-full bg-emerald-100 dark:bg-emerald-900/60 text-emerald-800 dark:text-emerald-200 self-start sm:self-auto">
-            GDPR & HIPAA Data Isolation Compliant
+            Zero-server architecture
           </span>
         </div>
 

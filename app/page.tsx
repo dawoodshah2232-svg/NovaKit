@@ -21,7 +21,7 @@ import { PREVIEW_TOOLS } from '@/components/ui-preview/data';
 export const metadata: Metadata = {
   title: 'PDFEdit – Free Online PDF Editor & PDF Tools',
   description:
-    'Free online PDF editor and document tools. Edit, merge, split, compress, sign, rotate, watermark, convert and organize PDF files directly in your browser.',
+    'Free online PDF editor and PDF tools. Merge, split, compress, sign, convert and watermark PDF files directly in your browser — no uploads, no accounts.',
   alternates: {
     canonical: 'https://www.pdfedit.website/',
   },
@@ -53,7 +53,7 @@ function jsonLd() {
         url: `${BASE_URL}/`,
         name: 'PDFEdit',
         description:
-          'Free online PDF editor and document tools. Edit, merge, split, compress, sign, rotate, watermark, convert and organize PDF files directly in your browser.',
+          'Free online PDF editor and PDF tools. Merge, split, compress, sign, convert and watermark PDF files directly in your browser — no uploads, no accounts.',
         potentialAction: {
           '@type': 'SearchAction',
           target: {
@@ -92,13 +92,19 @@ export default function HomePage() {
 
       <div>
         <Hero />
-        <PopularTools />
-        <Categories />
+        <div id="tools" className="scroll-mt-24">
+          <PopularTools />
+        </div>
+        <div id="categories" className="scroll-mt-24">
+          <Categories />
+        </div>
         <StudioPromo />
         <div id="security" className="scroll-mt-24">
           <Trust />
         </div>
-        <WhyPdfEdit />
+        <div id="why" className="scroll-mt-24">
+          <WhyPdfEdit />
+        </div>
         <HomeIndex />
       </div>
     </div>

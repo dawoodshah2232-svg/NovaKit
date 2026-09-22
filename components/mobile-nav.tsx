@@ -7,8 +7,10 @@ import { Home, Layers, ShieldCheck } from 'lucide-react';
 export function MobileNav() {
   const pathname = usePathname();
 
-  // Inside active tool workspaces or admin console, the tool's sticky action bar takes full priority
-  if (pathname.startsWith('/tools') || pathname.startsWith('/admin')) {
+  // Inside active tool workspaces or admin console, the tool's sticky action bar takes full priority.
+  // /studio is also an immersive workspace with its own mobile toolbar and
+  // bottom sheets — the floating pill would overlap them at the same z-index.
+  if (pathname.startsWith('/tools') || pathname.startsWith('/admin') || pathname.startsWith('/studio')) {
     return null;
   }
 

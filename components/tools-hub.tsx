@@ -194,7 +194,7 @@ export function ToolsHub() {
       </section>
 
       {/* AdSense Safe-Zone Banner (Preserving Zero CLS below Search Hero) */}
-      <section className="w-full" aria-label="Sponsored Content">
+      <section className="w-full" aria-label="Advertisement">
         <div className="w-full rounded-3xl border border-dashed border-slate-300 dark:border-slate-800 bg-white dark:bg-slate-900/60 p-4 sm:p-5 text-center shadow-xs">
           <div className="flex items-center justify-center gap-1.5 text-[10px] uppercase font-bold tracking-widest text-slate-400 dark:text-slate-500 mb-2">
             <span>Advertisement Safe-Zone</span>

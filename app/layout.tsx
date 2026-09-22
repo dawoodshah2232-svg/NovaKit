@@ -41,12 +41,18 @@ export const metadata: Metadata = {
   icons: {
     icon: [
       {
-        url: '/pdfedit-favicon.png',
+        url: '/pdfedit-icon-32.png',
+        sizes: '32x32',
+        type: 'image/png',
+      },
+      {
+        url: '/pdfedit-icon-16.png',
+        sizes: '16x16',
         type: 'image/png',
       },
     ],
-    shortcut: '/pdfedit-favicon.png',
-    apple: '/pdfedit-favicon.png',
+    shortcut: '/pdfedit-icon-32.png',
+    apple: '/apple-touch-icon-180.png',
   },
 
   keywords: [

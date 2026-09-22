@@ -1,3 +1,4 @@
+import Image from 'next/image';
 import Link from 'next/link';
 
 /**
@@ -23,6 +24,11 @@ type LogoProps = {
   darkSrc?: string;
   /** Override the logo alt text. */
   alt?: string;
+  /**
+   * Mark the logo as LCP-critical (preload + fetchpriority=high).
+   * Use only for the above-the-fold header instance.
+   */
+  priority?: boolean;
 };
 
 const DEFAULT_LIGHT_SRC = '/pdfedit-logo-red-light.png';
@@ -36,6 +42,7 @@ export function Logo({
   lightSrc = DEFAULT_LIGHT_SRC,
   darkSrc = DEFAULT_DARK_SRC,
   alt = 'PDFEdit',
+  priority = false,
 }: LogoProps) {
   const heightClass = {
     sm: 'h-8 sm:h-9',
@@ -51,17 +58,28 @@ export function Logo({
       data-logo-dark={darkSrc}
     >
       <span aria-label={alt} role="img" className="inline-flex min-w-0 items-center">
-        {/* Logo for light backgrounds */}
-        <img
+        {/* Logo for light backgrounds.
+            next/image serves an optimized WebP/AVIF at display size;
+            width/height match the true asset ratio (1440x424) so there
+            is no layout shift. */}
+        <Image
           src={lightSrc}
           alt={alt}
+          width={1440}
+          height={424}
+          sizes="(max-width: 640px) 150px, 220px"
+          priority={priority}
           className={`${heightClass} w-auto max-w-[150px] sm:max-w-[220px] object-contain dark:hidden`}
         />
 
-        {/* Logo for dark backgrounds */}
-        <img
+        {/* Logo for dark backgrounds (true asset ratio 1440x432) */}
+        <Image
           src={darkSrc}
           alt={alt}
+          width={1440}
+          height={432}
+          sizes="(max-width: 640px) 150px, 220px"
+          priority={priority}
           className={`hidden ${heightClass} w-auto max-w-[150px] sm:max-w-[220px] object-contain dark:block`}
         />
       </span>

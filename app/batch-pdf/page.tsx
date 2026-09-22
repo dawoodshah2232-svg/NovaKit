@@ -1,121 +1,64 @@
-"use client";
+import type { Metadata } from 'next';
+import BatchTool from './batch-tool';
 
-import { useState } from "react";
-import { PDFDocument } from "pdf-lib";
-import Link from "next/link";
+const url = 'https://www.pdfedit.website/batch-pdf';
+
+export const metadata: Metadata = {
+  title: { absolute: 'Batch Merge PDF Online Free | Combine Files | PDFEdit' },
+  description:
+    'Merge multiple PDF files at once in your browser. Batch PDF processing with zero server uploads — free, private, and no sign-up required.',
+  alternates: { canonical: url },
+  openGraph: {
+    title: 'Batch Merge PDF Online Free | PDFEdit',
+    description:
+      'Combine many PDF files into one document at once, locally in your browser. No uploads, no sign-up.',
+    url,
+  },
+};
+
+function jsonLd() {
+  return {
+    '@context': 'https://schema.org',
+    '@graph': [
+      {
+        '@type': 'BreadcrumbList',
+        itemListElement: [
+          { '@type': 'ListItem', position: 1, name: 'Home', item: 'https://www.pdfedit.website/' },
+          { '@type': 'ListItem', position: 2, name: 'Batch PDF Processing', item: url },
+        ],
+      },
+      {
+        '@type': 'FAQPage',
+        mainEntity: [
+          {
+            '@type': 'Question',
+            name: 'Are files sent to a server?',
+            acceptedAnswer: { '@type': 'Answer', text: 'No. The batch merge runs entirely in browser memory; files are never uploaded.' },
+          },
+          {
+            '@type': 'Question',
+            name: 'How many files can I select?',
+            acceptedAnswer: { '@type': 'Answer', text: 'The practical limit depends on available device memory.' },
+          },
+          {
+            '@type': 'Question',
+            name: 'Can I reorder files?',
+            acceptedAnswer: { '@type': 'Answer', text: 'The batch page uses selection order; use Merge PDF for drag-and-drop ordering.' },
+          },
+        ],
+      },
+    ],
+  };
+}
 
 export default function BatchPdfPage() {
-  const [files, setFiles] = useState<File[]>([]);
-  const [processing, setProcessing] = useState(false);
-  const [statusText, setStatusText] = useState("");
-
-  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (e.target.files) {
-      setFiles(Array.from(e.target.files));
-    }
-  };
-
-  const handleBatchMerge = async () => {
-    if (files.length === 0) return;
-    setProcessing(true);
-    setStatusText("Merging PDFs locally...");
-
-    try {
-      const mergedPdf = await PDFDocument.create();
-      for (const file of files) {
-        const arrayBuffer = await file.arrayBuffer();
-        const pdf = await PDFDocument.load(arrayBuffer);
-        const copiedPages = await mergedPdf.copyPages(pdf, pdf.getPages().map((_, i) => i));
-        copiedPages.forEach((page) => mergedPdf.addPage(page));
-      }
-
-      const pdfBytes = await mergedPdf.save();
-      // Explicitly casting as any to bypass strict TS BlobPart union check across environments
-      const blob = new Blob([pdfBytes as unknown as BlobPart], { type: "application/pdf" });
-      const url = URL.createObjectURL(blob);
-      
-      const link = document.createElement("a");
-      link.href = url;
-      link.download = "batch-merged.pdf";
-      link.click();
-      setStatusText("Batch merge completed successfully!");
-    } catch (err) {
-      console.error(err);
-      setStatusText("Error processing batch files.");
-    } finally {
-      setProcessing(false);
-    }
-  };
-
   return (
-    <main className="max-w-4xl mx-auto px-4 py-12">
-      <h1 className="text-3xl font-bold mb-4 text-gray-900">Batch PDF Processing Suite</h1>
-      <p className="text-gray-600 mb-8">
-        Upload multiple PDF documents to process them simultaneously right inside your browser with zero server uploads.
-      </p>
-
-      <section className="mb-8 rounded-xl border border-blue-100 bg-blue-50 p-5">
-        <h2 className="text-lg font-bold text-gray-900">What this tool does</h2>
-        <p className="mt-2 text-sm leading-6 text-gray-700">Select multiple PDF files and combine them into one downloaded PDF. Files are read and merged locally in your browser.</p>
-      </section>
-
-      <div className="border-2 border-dashed border-gray-300 rounded-xl p-8 text-center bg-white shadow-sm mb-6">
-        <input
-          type="file"
-          multiple
-          accept=".pdf"
-          onChange={handleFileChange}
-          className="hidden"
-          id="batch-file-input"
-        />
-        <label
-          htmlFor="batch-file-input"
-          className="cursor-pointer bg-blue-600 text-white px-6 py-3 rounded-lg font-medium hover:bg-blue-700 transition"
-        >
-          Select Multiple PDFs
-        </label>
-        {files.length > 0 && (
-          <p className="mt-4 text-sm font-medium text-gray-700">
-            {files.length} file(s) selected
-          </p>
-        )}
-      </div>
-
-      {files.length > 0 && (
-        <div className="bg-white rounded-xl p-6 shadow-sm mb-6">
-          <h2 className="text-lg font-semibold mb-3">Selected Files:</h2>
-          <ul className="divide-y divide-gray-100 max-h-48 overflow-y-auto mb-6">
-            {files.map((file, idx) => (
-              <li key={idx} className="py-2 text-sm text-gray-600 flex justify-between">
-                <span>{file.name}</span>
-                <span className="text-gray-400">{(file.size / 1024 / 1024).toFixed(2)} MB</span>
-              </li>
-            ))}
-          </ul>
-
-          <button
-            onClick={handleBatchMerge}
-            disabled={processing}
-            className="w-full bg-green-600 text-white py-3 rounded-lg font-semibold hover:bg-green-700 transition disabled:opacity-50"
-          >
-            {processing ? "Processing..." : "Merge All into One PDF"}
-          </button>
-        </div>
-      )}
-
-      {statusText && (
-        <div className="p-4 bg-blue-50 text-blue-800 rounded-lg text-center font-medium">
-          {statusText}
-        </div>
-      )}
-
-      <section className="mt-10 space-y-6 text-gray-700">
-        <div><h2 className="text-xl font-bold text-gray-900">How to use Batch PDF</h2><p className="mt-2 text-sm leading-6">Choose multiple PDF files, confirm the selected list, and select Merge All into One PDF. The files are processed in their displayed selection order.</p></div>
-        <div><h2 className="text-xl font-bold text-gray-900">Why use this tool?</h2><p className="mt-2 text-sm leading-6">Batch processing is useful for combining document packets, reports, invoices, or other PDF groups in one browser session.</p></div>
-        <div><h2 className="text-xl font-bold text-gray-900">Privacy and limitations</h2><p className="mt-2 text-sm leading-6">Selected files are not uploaded by this page. The browser must have enough memory for the source files and this simple batch page does not provide visual page reordering.</p></div>
-        <div><h2 className="text-xl font-bold text-gray-900">Frequently asked questions</h2><div className="mt-3 space-y-3 text-sm"><p><strong>Are files sent to a server?</strong> No. The merge runs in browser memory.</p><p><strong>How many files can I select?</strong> The practical limit depends on available device memory.</p><p><strong>Are pages rasterized?</strong> PDF pages are copied with pdf-lib rather than converted to images.</p><p><strong>Can I reorder files?</strong> This batch page uses selection order; use Merge PDF for drag-and-drop ordering.</p></div></div>
-        <nav aria-label="Related PDF tools"><h2 className="text-xl font-bold text-gray-900">Related PDF tools</h2><div className="mt-3 flex flex-wrap gap-2"><Link href="/merge-pdf" className="rounded-lg border border-gray-200 bg-white px-3 py-2 text-sm font-semibold text-blue-700">Merge PDF</Link><Link href="/compress-pdf" className="rounded-lg border border-gray-200 bg-white px-3 py-2 text-sm font-semibold text-blue-700">Compress PDF</Link><Link href="/split-pdf" className="rounded-lg border border-gray-200 bg-white px-3 py-2 text-sm font-semibold text-blue-700">Split PDF</Link></div></nav>
-      </section>
-    </main>
+    <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd()) }}
+      />
+      <BatchTool />
+    </>
   );
 }

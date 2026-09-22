@@ -12,6 +12,7 @@ const TOOL_LINKS = [
 ];
 
 const COMPANY_LINKS = [
+  { label: 'About', href: '/about' },
   { label: 'Privacy Policy', href: '/privacy' },
   { label: 'Terms of Service', href: '/terms' },
   { label: 'Security', href: '/#security' },

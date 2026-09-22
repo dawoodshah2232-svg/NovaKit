@@ -10,6 +10,7 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import type { ReactNode } from 'react';
 import { Check, PenLine, Trash2, Type as TypeIcon, Upload, X } from 'lucide-react';
+import { useFocusTrap } from './use-focus-trap';
 
 interface SignaturePadProps {
   open: boolean;
@@ -28,8 +29,12 @@ const SCRIPT_STACK = '"Segoe Script", "Brush Script MT", "Snell Roundhand", curs
 export function SignaturePad({ open, onClose, onSave }: SignaturePadProps) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const dialogRef = useRef<HTMLDivElement>(null);
   const drawingRef = useRef(false);
   const lastRef = useRef<{ x: number; y: number } | null>(null);
+
+  // Keep keyboard focus inside the modal while open; restore on close.
+  useFocusTrap(dialogRef, open);
 
   const [tab, setTab] = useState<PadTab>('draw');
   const [typedText, setTypedText] = useState('');
@@ -206,6 +211,7 @@ export function SignaturePad({ open, onClose, onSave }: SignaturePadProps) {
       role="presentation"
     >
       <div
+        ref={dialogRef}
         role="dialog"
         aria-modal="true"
         aria-label="Create signature"
@@ -217,8 +223,9 @@ export function SignaturePad({ open, onClose, onSave }: SignaturePadProps) {
           <button
             type="button"
             title="Close"
+            aria-label="Close signature dialog"
             onClick={onClose}
-            className="flex h-9 w-9 items-center justify-center rounded-lg text-slate-400 hover:bg-slate-800 hover:text-slate-200"
+            className="flex h-11 w-11 items-center justify-center rounded-lg text-slate-400 hover:bg-slate-800 hover:text-slate-200"
           >
             <X size={17} />
           </button>
@@ -231,7 +238,7 @@ export function SignaturePad({ open, onClose, onSave }: SignaturePadProps) {
               type="button"
               onClick={() => switchTab(t.id)}
               aria-pressed={t.id === tab}
-              className={`flex h-9 flex-1 items-center justify-center gap-2 rounded-lg text-sm font-medium ${
+              className={`flex h-11 flex-1 items-center justify-center gap-2 rounded-lg text-sm font-medium ${
                 t.id === tab
                   ? 'bg-slate-800 text-slate-100'
                   : 'text-slate-500 hover:text-slate-300'
@@ -250,7 +257,7 @@ export function SignaturePad({ open, onClose, onSave }: SignaturePadProps) {
             onChange={(e) => setTypedText(e.target.value)}
             placeholder="Type your full name"
             aria-label="Type your name"
-            className="mb-3 h-10 w-full rounded-xl border border-slate-700 bg-slate-950 px-3 text-sm text-slate-100 outline-none focus:border-red-500"
+            className="mb-3 h-11 w-full rounded-xl border border-slate-700 bg-slate-950 px-3 text-sm text-slate-100 outline-none focus:border-red-500"
           />
         )}
 
@@ -267,7 +274,7 @@ export function SignaturePad({ open, onClose, onSave }: SignaturePadProps) {
             <button
               type="button"
               onClick={() => fileInputRef.current?.click()}
-              className="flex h-10 w-full items-center justify-center gap-2 rounded-xl border border-dashed border-slate-700 text-sm font-medium text-slate-300 hover:border-slate-600 hover:bg-slate-800/50"
+              className="flex h-11 w-full items-center justify-center gap-2 rounded-xl border border-dashed border-slate-700 text-sm font-medium text-slate-300 hover:border-slate-600 hover:bg-slate-800/50"
             >
               <Upload size={15} />
               {uploadedName ? uploadedName : 'Choose a PNG or JPG image'}
@@ -306,7 +313,7 @@ export function SignaturePad({ open, onClose, onSave }: SignaturePadProps) {
           <button
             type="button"
             onClick={clearPad}
-            className="flex h-10 items-center gap-2 rounded-xl px-3 text-sm font-medium text-slate-400 hover:bg-slate-800 hover:text-slate-200"
+            className="flex h-11 items-center gap-2 rounded-xl px-3 text-sm font-medium text-slate-400 hover:bg-slate-800 hover:text-slate-200"
           >
             <Trash2 size={15} />
             Clear
@@ -315,7 +322,7 @@ export function SignaturePad({ open, onClose, onSave }: SignaturePadProps) {
             <button
               type="button"
               onClick={onClose}
-              className="h-10 rounded-xl border border-slate-700 px-4 text-sm font-medium text-slate-300 hover:bg-slate-800"
+              className="h-11 rounded-xl border border-slate-700 px-4 text-sm font-medium text-slate-300 hover:bg-slate-800"
             >
               Cancel
             </button>
@@ -323,7 +330,7 @@ export function SignaturePad({ open, onClose, onSave }: SignaturePadProps) {
               type="button"
               onClick={handleSave}
               disabled={!canSave}
-              className="flex h-10 items-center gap-2 rounded-xl bg-red-600 px-4 text-sm font-semibold text-white hover:bg-red-500 disabled:opacity-40"
+              className="flex h-11 items-center gap-2 rounded-xl bg-red-600 px-4 text-sm font-semibold text-white hover:bg-red-500 disabled:opacity-40"
             >
               <Check size={15} />
               Use signature
