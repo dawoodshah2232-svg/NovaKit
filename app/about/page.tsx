@@ -1,5 +1,6 @@
 import Link from 'next/link';
 import { ShieldCheck, Zap, FileText, Lock, Globe } from 'lucide-react';
+import { JsonLd, aboutSchema } from '@/components/schema-jsonld';
 
 const TOOL_GROUPS = [
   { label: 'Merge PDF', href: '/merge-pdf' },
@@ -56,6 +57,7 @@ export const metadata: Metadata = {
 export default function AboutPage() {
   return (
     <main className='max-w-4xl mx-auto px-4 py-12'>
+      <JsonLd schema={aboutSchema} />
       <h1 className='text-3xl font-bold mb-2'>About PDFEdit</h1>
       <p className='text-gray-600 mb-8'>Free PDF tools that respect your privacy.</p>
 
@@ -126,8 +128,10 @@ export default function AboutPage() {
           abuse reports, visit our{' '}
           <Link href='/contact' className='text-blue-600 underline'>contact page</Link>.
         </p>
-        <p className='rounded-lg border border-amber-200 bg-amber-50 px-4 py-3 text-sm font-mono text-amber-800'>
-          [OWNER ACTION REQUIRED: no support email published yet — add one here and on the contact page]
+        <p>
+          A dedicated support email address is coming soon. Until then, please
+          use our <Link href='/contact' className='text-blue-600 underline'>contact page</Link> for
+          support, feedback, business inquiries, or abuse reports.
         </p>
       </section>
     </main>

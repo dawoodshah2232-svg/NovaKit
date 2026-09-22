@@ -1,5 +1,6 @@
 import Link from 'next/link';
 import type { Metadata } from 'next';
+import { JsonLd, cookiesSchema } from '@/components/schema-jsonld';
 
 export const metadata: Metadata = {
   title: { absolute: 'Cookie Policy | PDFEdit' },
@@ -20,6 +21,7 @@ export const metadata: Metadata = {
 export default function CookiePolicy() {
   return (
     <div className='max-w-4xl mx-auto px-4 py-12'>
+      <JsonLd schema={cookiesSchema} />
       <h1 className='text-3xl font-bold mb-6'>Cookie Policy</h1>
       <p className='mb-4 text-gray-600'>Last updated: September 22, 2026</p>
 

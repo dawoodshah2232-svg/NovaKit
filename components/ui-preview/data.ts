@@ -94,7 +94,7 @@ export const PREVIEW_TOOLS: PreviewTool[] = [
   { id: 'sign', name: 'Sign PDF', tagline: 'Draw, type or upload your signature', href: '/sign-pdf', category: 'edit', icon: SignIcon, keywords: ['sign', 'signature', 'esign', 'draw signature'], popular: true },
   { id: 'watermark', name: 'Watermark PDF', tagline: 'Stamp text watermarks with style control', href: '/watermark-pdf', category: 'edit', icon: WatermarkIcon, keywords: ['watermark', 'stamp', 'branding', 'draft'] },
   // ---- Security ----
-  { id: 'protect', name: 'Protect PDF', tagline: 'Encrypt with a password you choose', href: '/tools/protect-pdf', category: 'security', icon: ProtectIcon, keywords: ['protect', 'encrypt', 'password', 'lock pdf'] },
+  { id: 'protect', name: 'Protect PDF', tagline: 'Encrypt with a password you choose', href: '/protect-pdf', category: 'security', icon: ProtectIcon, keywords: ['protect', 'encrypt', 'password', 'lock pdf'] },
   { id: 'unlock', name: 'Unlock PDF', tagline: 'Remove password restrictions you own', href: '/unlock-pdf', category: 'security', icon: UnlockIcon, keywords: ['unlock', 'remove password', 'decrypt'] },
   // ---- Advanced ----
   { id: 'redact', name: 'Redact PDF', tagline: 'Black out sensitive text for good', href: '/redact-pdf', category: 'advanced', icon: RedactIcon, keywords: ['redact', 'blackout', 'censor', 'sensitive', 'hide text'] },

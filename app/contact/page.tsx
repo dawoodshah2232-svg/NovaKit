@@ -10,6 +10,7 @@ import {
   ArrowRight,
   FileText,
 } from 'lucide-react';
+import { JsonLd, contactSchema } from '@/components/schema-jsonld';
 
 export const metadata: Metadata = {
   title: { absolute: 'Contact PDFEdit | Support, Feedback & Business Inquiries' },
@@ -71,6 +72,7 @@ const KEY_TOOLS = [
 export default function ContactPage() {
   return (
     <main className='max-w-4xl mx-auto px-4 py-12'>
+      <JsonLd schema={contactSchema} />
       <nav aria-label='Breadcrumb' className='mb-3'>
         <ol className='flex flex-wrap items-center gap-1.5 text-xs font-medium text-slate-500 dark:text-slate-400'>
           <li>

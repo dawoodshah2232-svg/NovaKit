@@ -1,5 +1,6 @@
 import type { Metadata } from 'next';
 import { PdfStudio } from '@/components/pdf-studio';
+import { JsonLd, studioSchema } from '@/components/schema-jsonld';
 
 const url = 'https://www.pdfedit.website/studio';
 
@@ -17,5 +18,10 @@ export const metadata: Metadata = {
 };
 
 export default function MasterStudioPage() {
-  return <PdfStudio />;
+  return (
+    <>
+      <JsonLd schema={studioSchema} />
+      <PdfStudio />
+    </>
+  );
 }
