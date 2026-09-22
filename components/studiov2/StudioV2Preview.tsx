@@ -750,7 +750,7 @@ export function StudioV2Preview() {
           </div>
           <div>
             <div className="mb-2 text-xs font-semibold uppercase tracking-wide text-[var(--pe-text-3)]">More tools</div>
-            <Link href="/tools" className="text-[var(--pe-accent)] underline underline-offset-2 hover:text-[var(--pe-accent-hover)]">
+            <Link href="/#tools" className="text-[var(--pe-accent)] underline underline-offset-2 hover:text-[var(--pe-accent-hover)]">
               Open the PDF tools hub
             </Link>
           </div>

@@ -65,6 +65,14 @@ function jsonLd() {
         },
       },
       {
+        '@type': 'Organization',
+        '@id': `${BASE_URL}/#organization`,
+        name: 'PDFEdit',
+        url: `${BASE_URL}/`,
+        logo: `${BASE_URL}/og-image.png`,
+        sameAs: [],
+      },
+      {
         '@type': 'ItemList',
         name: 'PDFEdit tool library',
         itemListElement: PREVIEW_TOOLS.map((tool, i) => ({
