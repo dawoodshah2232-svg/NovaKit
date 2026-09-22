@@ -1,4 +1,5 @@
 'use client';
+import { brandedFileName } from '@/lib/branded-filename';
 
 import React, { useState, useCallback, useRef } from 'react';
 import { useDropzone } from 'react-dropzone';
@@ -269,7 +270,7 @@ export function ImageToPdf() {
 
       const pdfBytes = await pdfDoc.save();
       const blob = new Blob([pdfBytes as unknown as BlobPart], { type: 'application/pdf' });
-      saveAs(blob, `images-compiled-${Date.now().toString().slice(-6)}.pdf`);
+      saveAs(blob, brandedFileName(`images-compiled-${Date.now().toString().slice(-6)}`, 'pdf'));
 
       trackToolExecution('image-to-pdf', true);
       setSuccessMessage(`Successfully compiled ${images.length} image${images.length > 1 ? 's' : ''} into a single PDF!`);
@@ -310,7 +311,7 @@ export function ImageToPdf() {
           </div>
           <button
             type="button"
-            className="px-4 py-2 rounded-xl bg-slate-950 hover:bg-slate-900 dark:bg-white dark:hover:bg-slate-100 text-white dark:text-slate-950 text-xs font-bold transition-all shadow-sm active:scale-95"
+            className="inline-flex min-h-[48px] cursor-pointer touch-manipulation items-center justify-center gap-2 rounded-2xl bg-[var(--pe-accent)] px-7 py-3 text-sm font-bold text-white shadow-lg shadow-[var(--pe-shadow-accent)] transition-all hover:bg-[var(--pe-accent-hover)] active:scale-95"
           >
             Select Local Images
           </button>
@@ -401,8 +402,8 @@ export function ImageToPdf() {
                 className="w-full h-10 px-3 rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-800 text-xs font-semibold text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-rose-500/20"
               >
                 <option value="none">No Margin (Full Bleed)</option>
-                <option value="small">Small Margin (10 mm)</option>
-                <option value="standard">Standard Margin (20 mm)</option>
+                <option value="small">Small Margin (7 mm)</option>
+                <option value="standard">Standard Margin (13 mm)</option>
               </select>
             </div>
           </div>

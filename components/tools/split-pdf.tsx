@@ -1,4 +1,5 @@
 'use client';
+import { brandedFileName } from '@/lib/branded-filename';
 
 import React, { useState, useCallback, useMemo } from 'react';
 import { useDropzone } from 'react-dropzone';
@@ -263,7 +264,7 @@ export function SplitPdf() {
 
         const pdfBytes = await newDoc.save();
         const blob = new Blob([pdfBytes as unknown as BlobPart], { type: 'application/pdf' });
-        const outputFileName = `${baseName}_extracted_pages.pdf`;
+        const outputFileName = brandedFileName(`${baseName}_extracted_pages`, 'pdf');
 
         saveAs(blob, outputFileName);
 
@@ -289,7 +290,7 @@ export function SplitPdf() {
 
           const singleBytes = await singleDoc.save();
           const pageStr = String(i + 1).padStart(padding, '0');
-          zip.file(`${baseName}_page_${pageStr}.pdf`, singleBytes);
+          zip.file(brandedFileName(`${baseName}_page_${pageStr}`, 'pdf'), singleBytes);
         }
 
         setProgressText('Bundling ZIP archive...');
@@ -299,7 +300,7 @@ export function SplitPdf() {
           compressionOptions: { level: 6 },
         });
 
-        const zipFileName = `${baseName}_all_${total}_pages.zip`;
+        const zipFileName = brandedFileName(`${baseName}_all_${total}_pages`, 'zip');
         saveAs(zipBlob, zipFileName);
 
         setSuccessMessage(

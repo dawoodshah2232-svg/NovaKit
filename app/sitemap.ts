@@ -1,5 +1,6 @@
 import type { MetadataRoute } from 'next';
 import { TOOLS_CONFIG } from '@/lib/tools-config';
+import { getAllPostSlugs } from '@/lib/blog';
 
 const BASE_URL = 'https://www.pdfedit.website';
 
@@ -143,6 +144,16 @@ export default function sitemap(): MetadataRoute.Sitemap {
     ...corePages,
     ...dedicatedPages,
     ...dynamicTools,
+    {
+      url: `${BASE_URL}/blog`,
+      changeFrequency: 'weekly' as const,
+      priority: 0.8,
+    },
+    ...getAllPostSlugs().map((slug) => ({
+      url: `${BASE_URL}/blog/${slug}`,
+      changeFrequency: 'monthly' as const,
+      priority: 0.7,
+    })),
   ];
 
   return Array.from(

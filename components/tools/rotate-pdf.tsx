@@ -1,4 +1,5 @@
 'use client';
+import { brandedFileName } from '@/lib/branded-filename';
 
 import React, { useState, useCallback, useEffect, useRef } from 'react';
 import { useDropzone } from 'react-dropzone';
@@ -196,7 +197,7 @@ export function RotatePdf() {
       const pdfBytes = await pdfDoc.save();
       const blob = new Blob([pdfBytes as unknown as BlobPart], { type: 'application/pdf' });
       const baseName = file?.name.replace(/\.[^/.]+$/, '') || 'document';
-      saveAs(blob, `${baseName}-rotated.pdf`);
+      saveAs(blob, brandedFileName(`${baseName}-rotated`, 'pdf'));
 
       trackToolExecution('rotate-pdf', true);
       setSuccessMessage('Successfully applied page rotations and downloaded updated PDF!');
@@ -220,13 +221,13 @@ export function RotatePdf() {
           {...getRootProps()}
           className={`relative rounded-3xl border-2 border-dashed p-8 sm:p-12 text-center transition-all cursor-pointer select-none ${
             isDragActive
-              ? 'border-blue-500 bg-blue-50/60 dark:bg-blue-950/20 scale-[1.01]'
-              : 'border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900/60 hover:border-blue-400 dark:hover:border-blue-500 hover:bg-slate-50/50'
+              ? 'border-[var(--pe-accent)] bg-[var(--pe-accent-soft)] dark:bg-[var(--pe-accent-soft)] scale-[1.01]'
+              : 'border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900/60 hover:border-[var(--pe-accent)] dark:hover:border-[var(--pe-accent)] hover:bg-slate-50/50'
           }`}
         >
           <input {...getInputProps()} />
           <div className="max-w-md mx-auto space-y-3">
-            <div className="w-16 h-16 rounded-2xl bg-blue-50 dark:bg-blue-950/60 text-blue-600 dark:text-blue-400 flex items-center justify-center mx-auto shadow-sm">
+            <div className="w-16 h-16 rounded-2xl bg-[var(--pe-accent-soft)] dark:bg-[var(--pe-accent-soft)] text-[var(--pe-accent)] dark:text-[var(--pe-accent)] flex items-center justify-center mx-auto shadow-sm">
               <RotateCw className="w-8 h-8" />
             </div>
             <div>
@@ -239,7 +240,7 @@ export function RotatePdf() {
             </div>
             <button
               type="button"
-              className="px-4 py-2 rounded-xl bg-slate-950 hover:bg-slate-900 dark:bg-white dark:hover:bg-slate-100 text-white dark:text-slate-950 text-xs font-bold transition-all shadow-sm active:scale-95"
+              className="inline-flex min-h-[48px] cursor-pointer touch-manipulation items-center justify-center gap-2 rounded-2xl bg-[var(--pe-accent)] px-7 py-3 text-sm font-bold text-white shadow-lg shadow-[var(--pe-shadow-accent)] transition-all hover:bg-[var(--pe-accent-hover)] active:scale-95"
             >
               Select Local PDF
             </button>
@@ -250,7 +251,7 @@ export function RotatePdf() {
       {/* Loading Progress */}
       {isLoading && (
         <div className="p-8 rounded-3xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-center space-y-3 shadow-sm">
-          <RefreshCw className="w-8 h-8 animate-spin text-blue-600 mx-auto" />
+          <RefreshCw className="w-8 h-8 animate-spin text-[var(--pe-accent)] mx-auto" />
           <h4 className="text-sm font-bold text-slate-900 dark:text-white">{loadingProgress}</h4>
           <p className="text-xs text-slate-400">Rendering high-speed visual page orientation previews...</p>
         </div>
@@ -278,7 +279,7 @@ export function RotatePdf() {
           <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 pb-4 border-b border-slate-100 dark:border-slate-800">
             <div>
               <div className="flex items-center gap-2">
-                <FileText className="w-5 h-5 text-blue-600" />
+                <FileText className="w-5 h-5 text-[var(--pe-accent)]" />
                 <h3 className="text-base sm:text-lg font-black text-slate-950 dark:text-white truncate max-w-sm" title={file.name}>
                   {file.name}
                 </h3>
@@ -293,7 +294,7 @@ export function RotatePdf() {
               <button
                 type="button"
                 onClick={() => rotateAllPages(90)}
-                className="px-3 py-1.5 rounded-xl bg-blue-50 dark:bg-blue-950/50 text-blue-700 dark:text-blue-300 border border-blue-200 dark:border-blue-900 text-xs font-bold hover:bg-blue-100 transition-colors flex items-center gap-1.5"
+                className="px-3 py-1.5 rounded-xl bg-[var(--pe-accent-soft)] dark:bg-[var(--pe-accent-soft)] text-[var(--pe-accent)] dark:text-[var(--pe-accent)] border border-[var(--pe-accent)] dark:border-[var(--pe-accent)] text-xs font-bold hover:bg-[var(--pe-accent-soft)] transition-colors flex items-center gap-1.5"
               >
                 <RotateCw className="w-3.5 h-3.5" />
                 <span>Rotate All +90°</span>
@@ -301,7 +302,7 @@ export function RotatePdf() {
               <button
                 type="button"
                 onClick={() => rotateAllPages(-90)}
-                className="px-3 py-1.5 rounded-xl bg-blue-50 dark:bg-blue-950/50 text-blue-700 dark:text-blue-300 border border-blue-200 dark:border-blue-900 text-xs font-bold hover:bg-blue-100 transition-colors flex items-center gap-1.5"
+                className="px-3 py-1.5 rounded-xl bg-[var(--pe-accent-soft)] dark:bg-[var(--pe-accent-soft)] text-[var(--pe-accent)] dark:text-[var(--pe-accent)] border border-[var(--pe-accent)] dark:border-[var(--pe-accent)] text-xs font-bold hover:bg-[var(--pe-accent-soft)] transition-colors flex items-center gap-1.5"
               >
                 <RotateCcw className="w-3.5 h-3.5" />
                 <span>Rotate All -90°</span>
@@ -348,7 +349,7 @@ export function RotatePdf() {
               return (
                 <div
                   key={thumb.pageIndex}
-                  className="relative rounded-2xl border border-slate-200 dark:border-slate-800 bg-slate-50/80 dark:bg-slate-800/50 p-3 space-y-2 group shadow-2xs hover:border-blue-400 transition-all flex flex-col justify-between"
+                  className="relative rounded-2xl border border-slate-200 dark:border-slate-800 bg-slate-50/80 dark:bg-slate-800/50 p-3 space-y-2 group shadow-2xs hover:border-[var(--pe-accent)] transition-all flex flex-col justify-between"
                 >
                   {/* Page Number & Rotation Badge */}
                   <div className="flex items-center justify-between gap-1">
@@ -358,7 +359,7 @@ export function RotatePdf() {
                     <span
                       className={`text-[9px] font-mono font-bold px-1.5 py-0.5 rounded-md ${
                         currentDelta !== 0
-                          ? 'bg-blue-500 text-white'
+                          ? 'bg-[var(--pe-accent)] text-white'
                           : 'bg-slate-200 dark:bg-slate-700 text-slate-600 dark:text-slate-300'
                       }`}
                     >
@@ -412,7 +413,7 @@ export function RotatePdf() {
               type="button"
               onClick={handleSaveRotatedPdf}
               disabled={isSaving}
-              className="w-full sm:w-auto min-h-[46px] px-7 py-2.5 rounded-2xl bg-blue-600 hover:bg-blue-500 text-white text-xs sm:text-sm font-black transition-all shadow-md shadow-blue-600/20 active:scale-95 flex items-center justify-center gap-2 cursor-pointer disabled:opacity-60"
+              className="w-full sm:w-auto min-h-[46px] px-7 py-2.5 rounded-2xl bg-[var(--pe-accent)] hover:bg-[var(--pe-accent-hover)] text-white text-xs sm:text-sm font-black transition-all shadow-md shadow-[var(--pe-shadow-accent)] active:scale-95 flex items-center justify-center gap-2 cursor-pointer disabled:opacity-60"
             >
               {isSaving ? (
                 <>

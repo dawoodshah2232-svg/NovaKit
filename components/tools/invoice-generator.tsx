@@ -1,4 +1,5 @@
 'use client';
+import { brandedFileName } from '@/lib/branded-filename';
 
 import React, { useState, useMemo } from 'react';
 import { jsPDF } from 'jspdf';
@@ -525,7 +526,7 @@ export function InvoiceGenerator() {
       );
 
       // Save PDF directly to user's device
-      const fileName = `Invoice-${invoiceNumber.trim() || 'draft'}.pdf`;
+      const fileName = brandedFileName(`Invoice-${invoiceNumber.trim() || 'draft'}`, 'pdf');
       doc.save(fileName);
       trackToolExecution('invoice-generator', true);
     } catch (err) {
@@ -540,14 +541,14 @@ export function InvoiceGenerator() {
   return (
     <div className="w-full space-y-6">
       {/* Privacy guarantee banner */}
-      <div className="flex items-center justify-between p-3.5 rounded-2xl bg-violet-50/90 dark:bg-violet-950/40 border border-violet-200/80 dark:border-violet-800/60 text-xs font-medium text-violet-800 dark:text-violet-300 shadow-xs">
+      <div className="flex items-center justify-between p-3.5 rounded-2xl bg-[var(--pe-accent-soft)]/90 dark:bg-[var(--pe-accent-soft)]/40 border border-[var(--pe-accent)]/80 dark:border-[var(--pe-accent)]/60 text-xs font-medium text-[var(--pe-accent)] dark:text-[var(--pe-accent)] shadow-xs">
         <div className="flex items-center gap-2">
-          <ShieldCheck className="w-4 h-4 text-violet-600 dark:text-violet-400 shrink-0" />
+          <ShieldCheck className="w-4 h-4 text-[var(--pe-accent)] dark:text-[var(--pe-accent)] shrink-0" />
           <span>
             <strong>Zero Server Uploads:</strong> Invoice calculations and PDF compiling happen exclusively in local browser memory. No financial data is ever transmitted.
           </span>
         </div>
-        <span className="hidden sm:inline-block text-[11px] font-semibold px-2 py-0.5 rounded-full bg-violet-100 dark:bg-violet-900/60 text-violet-700 dark:text-violet-300">
+        <span className="hidden sm:inline-block text-[11px] font-semibold px-2 py-0.5 rounded-full bg-[var(--pe-accent-soft)] dark:bg-[var(--pe-accent-soft)]/60 text-[var(--pe-accent)] dark:text-[var(--pe-accent)]">
           jsPDF Client Engine
         </span>
       </div>
@@ -561,7 +562,7 @@ export function InvoiceGenerator() {
             onClick={() => setActiveTab('edit')}
             className={`flex-1 sm:flex-initial min-h-[38px] px-4 py-1.5 rounded-lg text-xs font-bold transition-all flex items-center justify-center gap-1.5 active:scale-95 ${
               activeTab === 'edit'
-                ? 'bg-white dark:bg-slate-700 text-violet-700 dark:text-violet-300 shadow-xs'
+                ? 'bg-white dark:bg-slate-700 text-[var(--pe-accent)] dark:text-[var(--pe-accent)] shadow-xs'
                 : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'
             }`}
           >
@@ -573,7 +574,7 @@ export function InvoiceGenerator() {
             onClick={() => setActiveTab('preview')}
             className={`flex-1 sm:flex-initial min-h-[38px] px-4 py-1.5 rounded-lg text-xs font-bold transition-all flex items-center justify-center gap-1.5 active:scale-95 ${
               activeTab === 'preview'
-                ? 'bg-white dark:bg-slate-700 text-violet-700 dark:text-violet-300 shadow-xs'
+                ? 'bg-white dark:bg-slate-700 text-[var(--pe-accent)] dark:text-[var(--pe-accent)] shadow-xs'
                 : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'
             }`}
           >
@@ -587,7 +588,7 @@ export function InvoiceGenerator() {
           <button
             type="button"
             onClick={handleLoadSample}
-            className="min-h-[40px] px-3.5 py-1.5 rounded-xl text-xs font-semibold text-violet-700 dark:text-violet-300 bg-violet-50 dark:bg-violet-950/60 border border-violet-200/80 dark:border-violet-800/60 hover:bg-violet-100 dark:hover:bg-violet-900/60 transition-colors inline-flex items-center gap-1.5 active:scale-95"
+            className="min-h-[40px] px-3.5 py-1.5 rounded-xl text-xs font-semibold text-[var(--pe-accent)] dark:text-[var(--pe-accent)] bg-[var(--pe-accent-soft)] dark:bg-[var(--pe-accent-soft)]/60 border border-[var(--pe-accent)]/80 dark:border-[var(--pe-accent)]/60 hover:bg-[var(--pe-accent-soft)] dark:hover:bg-[var(--pe-accent-soft)]/60 transition-colors inline-flex items-center gap-1.5 active:scale-95"
           >
             <Sparkles className="w-3.5 h-3.5" />
             <span>Load Sample</span>
@@ -604,7 +605,7 @@ export function InvoiceGenerator() {
             type="button"
             onClick={handleDownloadPdf}
             disabled={isDownloading || items.length === 0}
-            className="min-h-[40px] px-4 py-2 rounded-xl bg-gradient-to-r from-violet-600 to-purple-600 hover:from-violet-500 hover:to-purple-500 text-white text-xs sm:text-sm font-bold shadow-md shadow-violet-500/20 active:scale-95 transition-all inline-flex items-center gap-2 disabled:opacity-50"
+            className="min-h-[40px] px-4 py-2 rounded-xl bg-gradient-to-r from-[var(--pe-accent)] to-[var(--pe-accent-hover)] hover:from-[var(--pe-accent-hover)] hover:to-[var(--pe-accent)] text-white text-xs sm:text-sm font-bold shadow-md shadow-[var(--pe-shadow-accent)] active:scale-95 transition-all inline-flex items-center gap-2 disabled:opacity-50"
           >
             <Download className="w-4 h-4" />
             <span>{isDownloading ? 'Generating PDF...' : 'Download Invoice (PDF)'}</span>
@@ -623,7 +624,7 @@ export function InvoiceGenerator() {
           {/* Section 1: Invoice Header Meta */}
           <div className="rounded-2xl bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800/80 p-4 sm:p-5 shadow-xs space-y-4">
             <div className="flex items-center gap-2 pb-2 border-b border-slate-100 dark:border-slate-800">
-              <Receipt className="w-4 h-4 text-violet-600 dark:text-violet-400" />
+              <Receipt className="w-4 h-4 text-[var(--pe-accent)] dark:text-[var(--pe-accent)]" />
               <h3 className="text-xs font-bold uppercase tracking-wider text-slate-900 dark:text-white">
                 Invoice Details
               </h3>
@@ -639,7 +640,7 @@ export function InvoiceGenerator() {
                   value={invoiceNumber}
                   onChange={(e) => setInvoiceNumber(e.target.value)}
                   placeholder="e.g. INV-2026-001"
-                  className="w-full min-h-[44px] px-3.5 py-2 text-sm rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50/50 dark:bg-slate-800/50 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-violet-500/40 focus:border-violet-500"
+                  className="w-full min-h-[44px] px-3.5 py-2 text-sm rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50/50 dark:bg-slate-800/50 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-[var(--pe-accent)]/40 focus:border-[var(--pe-accent)]"
                 />
               </div>
 
@@ -650,7 +651,7 @@ export function InvoiceGenerator() {
                 <select
                   value={currency}
                   onChange={(e) => setCurrency(e.target.value)}
-                  className="w-full min-h-[44px] px-3.5 py-2 text-sm rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50/50 dark:bg-slate-800/50 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-violet-500/40 focus:border-violet-500"
+                  className="w-full min-h-[44px] px-3.5 py-2 text-sm rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50/50 dark:bg-slate-800/50 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-[var(--pe-accent)]/40 focus:border-[var(--pe-accent)]"
                 >
                   <option value="USD">USD ($) - US Dollar</option>
                   <option value="EUR">EUR (€) - Euro</option>
@@ -670,7 +671,7 @@ export function InvoiceGenerator() {
                   type="date"
                   value={invoiceDate}
                   onChange={(e) => setInvoiceDate(e.target.value)}
-                  className="w-full min-h-[44px] px-3.5 py-2 text-sm rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50/50 dark:bg-slate-800/50 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-violet-500/40 focus:border-violet-500"
+                  className="w-full min-h-[44px] px-3.5 py-2 text-sm rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50/50 dark:bg-slate-800/50 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-[var(--pe-accent)]/40 focus:border-[var(--pe-accent)]"
                 />
               </div>
 
@@ -683,7 +684,7 @@ export function InvoiceGenerator() {
                   type="date"
                   value={dueDate}
                   onChange={(e) => setDueDate(e.target.value)}
-                  className="w-full min-h-[44px] px-3.5 py-2 text-sm rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50/50 dark:bg-slate-800/50 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-violet-500/40 focus:border-violet-500"
+                  className="w-full min-h-[44px] px-3.5 py-2 text-sm rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50/50 dark:bg-slate-800/50 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-[var(--pe-accent)]/40 focus:border-[var(--pe-accent)]"
                 />
               </div>
             </div>
@@ -694,7 +695,7 @@ export function InvoiceGenerator() {
             {/* Sender / From */}
             <div className="rounded-2xl bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800/80 p-4 sm:p-5 shadow-xs space-y-3">
               <div className="flex items-center gap-2 pb-2 border-b border-slate-100 dark:border-slate-800">
-                <Building2 className="w-4 h-4 text-violet-600 dark:text-violet-400" />
+                <Building2 className="w-4 h-4 text-[var(--pe-accent)] dark:text-[var(--pe-accent)]" />
                 <h3 className="text-xs font-bold uppercase tracking-wider text-slate-900 dark:text-white">
                   Your Details (From)
                 </h3>
@@ -706,7 +707,7 @@ export function InvoiceGenerator() {
                     value={senderName}
                     onChange={(e) => setSenderName(e.target.value)}
                     placeholder="Your Business / Name"
-                    className="w-full min-h-[44px] px-3 py-2 text-xs sm:text-sm rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50/50 dark:bg-slate-800/50 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-violet-500/40"
+                    className="w-full min-h-[44px] px-3 py-2 text-xs sm:text-sm rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50/50 dark:bg-slate-800/50 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-[var(--pe-accent)]/40"
                   />
                 </div>
                 <div>
@@ -715,7 +716,7 @@ export function InvoiceGenerator() {
                     value={senderEmail}
                     onChange={(e) => setSenderEmail(e.target.value)}
                     placeholder="Your Email"
-                    className="w-full min-h-[44px] px-3 py-2 text-xs sm:text-sm rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50/50 dark:bg-slate-800/50 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-violet-500/40"
+                    className="w-full min-h-[44px] px-3 py-2 text-xs sm:text-sm rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50/50 dark:bg-slate-800/50 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-[var(--pe-accent)]/40"
                   />
                 </div>
                 <div>
@@ -724,7 +725,7 @@ export function InvoiceGenerator() {
                     value={senderPhone}
                     onChange={(e) => setSenderPhone(e.target.value)}
                     placeholder="Phone Number (Optional)"
-                    className="w-full min-h-[44px] px-3 py-2 text-xs sm:text-sm rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50/50 dark:bg-slate-800/50 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-violet-500/40"
+                    className="w-full min-h-[44px] px-3 py-2 text-xs sm:text-sm rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50/50 dark:bg-slate-800/50 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-[var(--pe-accent)]/40"
                   />
                 </div>
                 <div>
@@ -733,7 +734,7 @@ export function InvoiceGenerator() {
                     value={senderAddress}
                     onChange={(e) => setSenderAddress(e.target.value)}
                     placeholder="Address, City, State, ZIP"
-                    className="w-full px-3 py-2 text-xs sm:text-sm rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50/50 dark:bg-slate-800/50 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-violet-500/40 resize-none"
+                    className="w-full px-3 py-2 text-xs sm:text-sm rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50/50 dark:bg-slate-800/50 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-[var(--pe-accent)]/40 resize-none"
                   />
                 </div>
               </div>
@@ -742,7 +743,7 @@ export function InvoiceGenerator() {
             {/* Client / Bill To */}
             <div className="rounded-2xl bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800/80 p-4 sm:p-5 shadow-xs space-y-3">
               <div className="flex items-center gap-2 pb-2 border-b border-slate-100 dark:border-slate-800">
-                <User className="w-4 h-4 text-violet-600 dark:text-violet-400" />
+                <User className="w-4 h-4 text-[var(--pe-accent)] dark:text-[var(--pe-accent)]" />
                 <h3 className="text-xs font-bold uppercase tracking-wider text-slate-900 dark:text-white">
                   Client Details (Bill To)
                 </h3>
@@ -754,7 +755,7 @@ export function InvoiceGenerator() {
                     value={clientName}
                     onChange={(e) => setClientName(e.target.value)}
                     placeholder="Client / Company Name"
-                    className="w-full min-h-[44px] px-3 py-2 text-xs sm:text-sm rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50/50 dark:bg-slate-800/50 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-violet-500/40"
+                    className="w-full min-h-[44px] px-3 py-2 text-xs sm:text-sm rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50/50 dark:bg-slate-800/50 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-[var(--pe-accent)]/40"
                   />
                 </div>
                 <div>
@@ -763,7 +764,7 @@ export function InvoiceGenerator() {
                     value={clientEmail}
                     onChange={(e) => setClientEmail(e.target.value)}
                     placeholder="Client Email"
-                    className="w-full min-h-[44px] px-3 py-2 text-xs sm:text-sm rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50/50 dark:bg-slate-800/50 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-violet-500/40"
+                    className="w-full min-h-[44px] px-3 py-2 text-xs sm:text-sm rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50/50 dark:bg-slate-800/50 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-[var(--pe-accent)]/40"
                   />
                 </div>
                 <div>
@@ -772,7 +773,7 @@ export function InvoiceGenerator() {
                     value={clientAddress}
                     onChange={(e) => setClientAddress(e.target.value)}
                     placeholder="Client Address, City, Country"
-                    className="w-full px-3 py-2 text-xs sm:text-sm rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50/50 dark:bg-slate-800/50 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-violet-500/40 resize-none"
+                    className="w-full px-3 py-2 text-xs sm:text-sm rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50/50 dark:bg-slate-800/50 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-[var(--pe-accent)]/40 resize-none"
                   />
                 </div>
               </div>
@@ -783,7 +784,7 @@ export function InvoiceGenerator() {
           <div className="rounded-2xl bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800/80 p-4 sm:p-5 shadow-xs space-y-4">
             <div className="flex items-center justify-between pb-2 border-b border-slate-100 dark:border-slate-800">
               <div className="flex items-center gap-2">
-                <FileCheck className="w-4 h-4 text-violet-600 dark:text-violet-400" />
+                <FileCheck className="w-4 h-4 text-[var(--pe-accent)] dark:text-[var(--pe-accent)]" />
                 <h3 className="text-xs font-bold uppercase tracking-wider text-slate-900 dark:text-white">
                   Line Items ({items.length})
                 </h3>
@@ -791,7 +792,7 @@ export function InvoiceGenerator() {
               <button
                 type="button"
                 onClick={handleAddItem}
-                className="min-h-[40px] px-3 py-1.5 rounded-xl bg-violet-600 hover:bg-violet-500 text-white text-xs font-semibold inline-flex items-center gap-1.5 shadow-xs transition-colors active:scale-95"
+                className="min-h-[40px] px-3 py-1.5 rounded-xl bg-[var(--pe-accent)] hover:bg-[var(--pe-accent-hover)] text-white text-xs font-semibold inline-flex items-center gap-1.5 shadow-xs transition-colors active:scale-95"
               >
                 <Plus className="w-4 h-4" />
                 <span>Add Item</span>
@@ -834,7 +835,7 @@ export function InvoiceGenerator() {
                         value={item.description}
                         onChange={(e) => handleUpdateItem(item.id, 'description', e.target.value)}
                         placeholder="Description of service or product"
-                        className="w-full min-h-[44px] px-3 py-2 text-xs sm:text-sm rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-violet-500/40"
+                        className="w-full min-h-[44px] px-3 py-2 text-xs sm:text-sm rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-[var(--pe-accent)]/40"
                       />
                     </div>
 
@@ -849,7 +850,7 @@ export function InvoiceGenerator() {
                           step="1"
                           value={item.quantity}
                           onChange={(e) => handleUpdateItem(item.id, 'quantity', Math.max(1, parseFloat(e.target.value) || 0))}
-                          className="w-full min-h-[44px] px-3 py-2 text-xs sm:text-sm rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-violet-500/40"
+                          className="w-full min-h-[44px] px-3 py-2 text-xs sm:text-sm rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-[var(--pe-accent)]/40"
                         />
                       </div>
                       <div className="space-y-1">
@@ -862,7 +863,7 @@ export function InvoiceGenerator() {
                           step="0.01"
                           value={item.price}
                           onChange={(e) => handleUpdateItem(item.id, 'price', Math.max(0, parseFloat(e.target.value) || 0))}
-                          className="w-full min-h-[44px] px-3 py-2 text-xs sm:text-sm rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-violet-500/40"
+                          className="w-full min-h-[44px] px-3 py-2 text-xs sm:text-sm rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-[var(--pe-accent)]/40"
                         />
                       </div>
                     </div>
@@ -886,7 +887,7 @@ export function InvoiceGenerator() {
                   step="0.1"
                   value={taxRate}
                   onChange={(e) => setTaxRate(Math.max(0, parseFloat(e.target.value) || 0))}
-                  className="w-full min-h-[44px] px-3.5 py-2 text-sm rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50/50 dark:bg-slate-800/50 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-violet-500/40"
+                  className="w-full min-h-[44px] px-3.5 py-2 text-sm rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50/50 dark:bg-slate-800/50 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-[var(--pe-accent)]/40"
                 />
               </div>
 
@@ -901,7 +902,7 @@ export function InvoiceGenerator() {
                   step="0.5"
                   value={discountRate}
                   onChange={(e) => setDiscountRate(Math.max(0, parseFloat(e.target.value) || 0))}
-                  className="w-full min-h-[44px] px-3.5 py-2 text-sm rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50/50 dark:bg-slate-800/50 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-violet-500/40"
+                  className="w-full min-h-[44px] px-3.5 py-2 text-sm rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50/50 dark:bg-slate-800/50 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-[var(--pe-accent)]/40"
                 />
               </div>
             </div>
@@ -915,7 +916,7 @@ export function InvoiceGenerator() {
                 value={notes}
                 onChange={(e) => setNotes(e.target.value)}
                 placeholder="Payment due dates, bank transfer details, terms..."
-                className="w-full px-3.5 py-2 text-xs sm:text-sm rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50/50 dark:bg-slate-800/50 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-violet-500/40 resize-none"
+                className="w-full px-3.5 py-2 text-xs sm:text-sm rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50/50 dark:bg-slate-800/50 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-[var(--pe-accent)]/40 resize-none"
               />
             </div>
           </div>
@@ -932,7 +933,7 @@ export function InvoiceGenerator() {
             <div className="p-3.5 sm:p-4 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800 shadow-xs space-y-2.5">
               <div className="flex items-center justify-between">
                 <span className="text-xs font-bold uppercase tracking-wider text-slate-700 dark:text-slate-300 flex items-center gap-1.5">
-                  <Sparkles className="w-3.5 h-3.5 text-blue-600 dark:text-blue-400" />
+                  <Sparkles className="w-3.5 h-3.5 text-[var(--pe-accent)] dark:text-[var(--pe-accent)]" />
                   <span>Design Template</span>
                 </span>
                 <span className="text-[10px] font-extrabold px-2 py-0.5 rounded-full bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 border border-slate-200 dark:border-slate-700">

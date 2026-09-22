@@ -1,8 +1,9 @@
 'use client';
+import { brandedFileName } from '@/lib/branded-filename';
 
 import React, { useState, useCallback, useEffect, useRef } from 'react';
 import { useDropzone } from 'react-dropzone';
-import { PDFDocument, rgb, StandardFonts, RGB } from 'pdf-lib';
+import { PDFDocument } from 'pdf-lib';
 import * as pdfjsLib from 'pdfjs-dist';
 import { saveAs } from 'file-saver';
 import { trackToolExecution } from '@/lib/analytics';
@@ -122,7 +123,7 @@ export function RedactPdf() {
         setArrayBuffer(buffer);
 
         setLoadingProgress('Rendering PDF preview pages...');
-        const loadingTask = pdfjsLib.getDocument({ data: new Uint8Array(buffer) });
+        const loadingTask = pdfjsLib.getDocument({ data: new Uint8Array(buffer.slice(0)) });
         const pdf = await loadingTask.promise;
         const totalPages = pdf.numPages;
 
@@ -256,82 +257,127 @@ export function RedactPdf() {
     setErrorMessage(null);
     setSuccessMessage(null);
 
+    // TRUE redaction: every page carrying redaction boxes is re-rendered to
+    // pixels with the boxes burned in, so the covered text bytes are GONE
+    // from the output file — not merely hidden under a vector rectangle.
+    // Pages without redactions are copied natively at full quality.
+    const REDACT_DPI = 200;
+    const JPEG_QUALITY = 0.92;
+
     try {
-      const pdfDoc = await PDFDocument.load(arrayBuffer);
-      const font = await pdfDoc.embedFont(StandardFonts.HelveticaBold);
+      let srcDoc: PDFDocument;
+      try {
+        srcDoc = await PDFDocument.load(arrayBuffer.slice(0), { ignoreEncryption: true });
+      } catch (loadErr: unknown) {
+        const msg = loadErr instanceof Error ? loadErr.message : '';
+        if (/password|encrypted/i.test(msg)) {
+          throw new Error('This PDF is password-protected. Unlock it with the Unlock PDF tool first, then redact.');
+        }
+        throw new Error('Could not read this PDF. It might be corrupted.');
+      }
 
-      const fillColor = redactColor === 'black' ? rgb(0, 0, 0) : rgb(1, 1, 1);
-      const textColor = redactColor === 'black' ? rgb(1, 1, 1) : rgb(0.8, 0, 0);
+      const totalPages = srcDoc.getPageCount();
+      const pdf = await pdfjsLib.getDocument({ data: arrayBuffer.slice(0) }).promise;
+      const outDoc = await PDFDocument.create();
 
-      // Group redactions by page number
-      const totalPages = pdfDoc.getPageCount();
+      const fillStyle = redactColor === 'black' ? '#000000' : '#ffffff';
+      const labelColor = redactColor === 'black' ? '#ffffff' : '#cc0000';
+      const label = customText.trim();
+      const scale = REDACT_DPI / 72;
 
       for (let i = 0; i < totalPages; i++) {
         const pageNum = i + 1;
         const pageRedactions = redactions.filter((r) => r.pageNumber === pageNum);
 
-        if (pageRedactions.length === 0) continue;
+        if (pageRedactions.length === 0) {
+          // Untouched pages are copied natively — full quality preserved.
+          const [copied] = await outDoc.copyPages(srcDoc, [i]);
+          outDoc.addPage(copied);
+          continue;
+        }
 
-        const page = pdfDoc.getPage(i);
-        const { width, height } = page.getSize();
+        setLoadingProgress(`Permanently redacting page ${pageNum} of ${totalPages}...`);
 
+        const page = await pdf.getPage(pageNum);
+        const viewport = page.getViewport({ scale });
+        const baseViewport = page.getViewport({ scale: 1 });
+
+        const canvas = document.createElement('canvas');
+        canvas.width = Math.max(1, Math.floor(viewport.width));
+        canvas.height = Math.max(1, Math.floor(viewport.height));
+        const ctx = canvas.getContext('2d');
+        if (!ctx) throw new Error('Your browser could not create a rendering surface.');
+
+        ctx.fillStyle = '#ffffff';
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        await page.render({ canvas, canvasContext: ctx, viewport } as any).promise;
+
+        // Burn each redaction box into the pixels — nothing underneath survives.
         for (const box of pageRedactions) {
-          // Convert percentages back to PDF points
-          const boxX = (box.xPercent / 100) * width;
-          const boxWidth = (box.widthPercent / 100) * width;
-          const boxHeight = (box.heightPercent / 100) * height;
-          // In PDF, Y=0 is at bottom!
-          const boxY = height - (box.yPercent / 100) * height - boxHeight;
+          const bx = (box.xPercent / 100) * canvas.width;
+          const by = (box.yPercent / 100) * canvas.height;
+          const bw = (box.widthPercent / 100) * canvas.width;
+          const bh = (box.heightPercent / 100) * canvas.height;
+          ctx.fillStyle = fillStyle;
+          ctx.fillRect(bx, by, bw, bh);
 
-          // Draw opaque rectangle
-          page.drawRectangle({
-            x: boxX,
-            y: boxY,
-            width: boxWidth,
-            height: boxHeight,
-            color: fillColor,
-            opacity: 1.0,
-          });
-
-          // Optional text label e.g. [REDACTED]
-          if (customText.trim()) {
-            const label = customText.trim();
-            const textSz = Math.min(10, Math.max(6, boxHeight * 0.5));
-            const textW = font.widthOfTextAtSize(label, textSz);
-
-            if (boxWidth >= textW + 4 && boxHeight >= textSz) {
-              page.drawText(label, {
-                x: boxX + (boxWidth - textW) / 2,
-                y: boxY + (boxHeight - textSz) / 2,
-                size: textSz,
-                font,
-                color: textColor,
-              });
+          if (label) {
+            const fontPx = Math.max(8, Math.min(bh * 0.5, 28));
+            ctx.fillStyle = labelColor;
+            ctx.font = `bold ${fontPx}px Arial, sans-serif`;
+            ctx.textAlign = 'center';
+            ctx.textBaseline = 'middle';
+            if (bw > ctx.measureText(label).width + 8 && bh > fontPx) {
+              ctx.fillText(label, bx + bw / 2, by + bh / 2);
             }
           }
         }
+
+        const jpegBlob: Blob = await new Promise((resolve, reject) => {
+          canvas.toBlob(
+            (b) => (b ? resolve(b) : reject(new Error(`Failed to render page ${pageNum}.`))),
+            'image/jpeg',
+            JPEG_QUALITY
+          );
+        });
+        const jpegBytes = new Uint8Array(await jpegBlob.arrayBuffer());
+        const embedded = await outDoc.embedJpg(jpegBytes);
+
+        const newPage = outDoc.addPage([baseViewport.width, baseViewport.height]);
+        newPage.drawImage(embedded, {
+          x: 0,
+          y: 0,
+          width: baseViewport.width,
+          height: baseViewport.height,
+        });
+
+        page.cleanup();
+        await new Promise((r) => setTimeout(r, 0));
       }
 
-      // Metadata Sanitization
+      setLoadingProgress('');
+
+      // Metadata sanitization
       if (sanitizeMetadata) {
-        pdfDoc.setTitle('');
-        pdfDoc.setAuthor('');
-        pdfDoc.setSubject('');
-        pdfDoc.setKeywords([]);
-        pdfDoc.setProducer('PDFEdit Studio (pdfedit.website)');
-        pdfDoc.setCreator('PDFEdit Studio Redact PDF (Sanitized)');
+        outDoc.setTitle('');
+        outDoc.setAuthor('');
+        outDoc.setSubject('');
+        outDoc.setKeywords([]);
       }
+      outDoc.setProducer('PDFEdit (pdfedit.website)');
+      outDoc.setCreator('PDFEdit Redact PDF');
 
-      const pdfBytes = await pdfDoc.save();
+      const pdfBytes = await outDoc.save({ useObjectStreams: true });
       const blob = new Blob([pdfBytes as unknown as BlobPart], { type: 'application/pdf' });
       const baseName = file.name.replace(/\.[^/.]+$/, '');
-      saveAs(blob, `${baseName}-redacted.pdf`);
+      saveAs(blob, brandedFileName(`${baseName}-redacted`, 'pdf'));
 
       trackToolExecution('redact-pdf', true);
       setSuccessMessage(
-        `Successfully applied ${redactions.length} redaction(s)${
+        `Permanently redacted ${redactions.length} area(s)${
           sanitizeMetadata ? ' and sanitized document metadata' : ''
-        }!`
+        }. The covered text no longer exists in this file — it cannot be selected, searched, or recovered.`
       );
     } catch (err: unknown) {
       trackToolExecution('redact-pdf', false);
@@ -378,6 +424,14 @@ export function RedactPdf() {
               <p className="text-xs sm:text-sm text-slate-500 dark:text-slate-400 mt-1">
                 Blackout or whiteout confidential text, PII, and sensitive data with full metadata sanitization
               </p>
+            </div>
+            <div>
+              <button
+                type="button"
+                className="inline-flex min-h-[48px] cursor-pointer touch-manipulation items-center justify-center gap-2 rounded-2xl bg-[var(--pe-accent)] px-7 py-3 text-sm font-bold text-white shadow-lg shadow-[var(--pe-shadow-accent)] transition-all hover:bg-[var(--pe-accent-hover)] active:scale-95"
+              >
+                Browse files
+              </button>
             </div>
             <div className="inline-flex items-center gap-1.5 text-xs text-slate-400 bg-slate-50 dark:bg-slate-800/80 px-3 py-1 rounded-full border border-slate-100 dark:border-slate-700">
               <Sparkles className="w-3.5 h-3.5 text-amber-500" />
@@ -691,9 +745,11 @@ export function RedactPdf() {
                 </>
               )}
             </button>
-            <p className="mt-2 text-[11px] leading-relaxed text-amber-700 dark:text-amber-400">
-              Note: this covers text visually with opaque boxes. The underlying text remains
-              in the PDF file — for certified true redaction, use dedicated desktop software.
+            <p className="mt-2 text-[11px] leading-relaxed text-emerald-700 dark:text-emerald-400">
+              True redaction: pages with boxes are permanently re-rendered with the covered
+              areas burned in — the hidden text is removed from the file and cannot be
+              selected, searched, or recovered. Redaction boxes can be placed on the first
+              20 pages.
             </p>
           </div>
         </div>

@@ -1,4 +1,5 @@
 'use client';
+import { brandedFileName } from '@/lib/branded-filename';
 
 import React, { useState, useEffect, useCallback, useRef } from 'react';
 import { useDropzone } from 'react-dropzone';
@@ -198,7 +199,7 @@ export function ImageCompressor() {
     if (format === 'image/png') extension = 'png';
 
     const baseName = originalImage.name.substring(0, originalImage.name.lastIndexOf('.')) || originalImage.name;
-    const fileName = `${baseName}-compressed.${extension}`;
+    const fileName = brandedFileName(`${baseName}-compressed`, extension);
 
     const link = document.createElement('a');
     link.href = compressedUrl;
@@ -212,13 +213,11 @@ export function ImageCompressor() {
   // Savings calculation
   const savingsPercent =
     originalImage && compressedFile
-      ? Math.max(0, Math.round(((originalImage.size - compressedFile.size) / originalImage.size) * 100))
+      ? Math.round(((originalImage.size - compressedFile.size) / originalImage.size) * 100)
       : 0;
 
   const savingsBytes =
-    originalImage && compressedFile
-      ? Math.max(0, originalImage.size - compressedFile.size)
-      : 0;
+    originalImage && compressedFile ? originalImage.size - compressedFile.size : 0;
 
   return (
     <div className="w-full space-y-6">
@@ -252,13 +251,13 @@ export function ImageCompressor() {
           {...getRootProps()}
           className={`group relative rounded-3xl border-3 border-dashed transition-all duration-200 p-8 sm:p-16 text-center cursor-pointer min-h-[340px] sm:min-h-[380px] flex flex-col items-center justify-center bg-white dark:bg-slate-900 shadow-[0_4px_24px_rgba(0,0,0,0.03)] hover:shadow-[0_16px_40px_rgba(59,130,246,0.12)] ${
             isDragActive
-              ? 'border-blue-500 bg-blue-50/70 dark:bg-blue-950/50 scale-[0.99] ring-4 ring-blue-500/20'
-              : 'border-blue-300/80 dark:border-blue-900/60 hover:border-blue-600 dark:hover:border-blue-400'
+              ? 'border-[var(--pe-accent)] bg-[var(--pe-accent-soft)] dark:bg-[var(--pe-accent-soft)] scale-[0.99] ring-4 ring-[var(--pe-accent-ring)]'
+              : 'border-[var(--pe-border)] dark:border-[var(--pe-border)] hover:border-[var(--pe-accent)] dark:hover:border-[var(--pe-accent)]'
           }`}
         >
           <input {...getInputProps()} aria-label="Select an image file to compress" />
           <div className="max-w-md mx-auto space-y-5">
-            <div className="w-20 h-20 sm:w-24 sm:h-24 rounded-3xl bg-blue-50 dark:bg-blue-950/80 text-blue-600 dark:text-blue-400 flex items-center justify-center mx-auto shadow-inner group-hover:scale-110 transition-transform duration-200">
+            <div className="w-20 h-20 sm:w-24 sm:h-24 rounded-3xl bg-[var(--pe-accent-soft)] dark:bg-[var(--pe-accent-soft)] text-[var(--pe-accent)] dark:text-[var(--pe-accent)] flex items-center justify-center mx-auto shadow-inner group-hover:scale-110 transition-transform duration-200">
               <UploadCloud className="w-10 h-10 sm:w-12 sm:h-12" />
             </div>
             <div className="space-y-1.5">
@@ -274,7 +273,7 @@ export function ImageCompressor() {
             </div>
             <button
               type="button"
-              className="min-h-[52px] px-8 py-3.5 rounded-2xl bg-blue-600 hover:bg-blue-700 text-white text-sm sm:text-base font-bold shadow-lg shadow-blue-500/25 active:scale-95 transition-all inline-flex items-center gap-2.5"
+              className="min-h-[52px] px-8 py-3.5 rounded-2xl bg-[var(--pe-accent)] hover:bg-[var(--pe-accent-hover)] text-white text-sm sm:text-base font-bold shadow-lg shadow-[var(--pe-shadow-accent)] active:scale-95 transition-all inline-flex items-center gap-2.5"
             >
               <ImageIcon className="w-5 h-5" />
               <span>Choose Image File</span>
@@ -288,7 +287,7 @@ export function ImageCompressor() {
           <div className="rounded-2xl bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800/80 p-4 sm:p-6 shadow-xs space-y-5">
             <div className="flex items-center justify-between gap-2 border-b border-slate-100 dark:border-slate-800 pb-3">
               <div className="flex items-center gap-2">
-                <Sliders className="w-4 h-4 text-blue-600 dark:text-blue-400" />
+                <Sliders className="w-4 h-4 text-[var(--pe-accent)] dark:text-[var(--pe-accent)]" />
                 <h3 className="text-sm font-bold text-slate-900 dark:text-white">Compression Settings</h3>
               </div>
               <button
@@ -307,7 +306,7 @@ export function ImageCompressor() {
                 <label htmlFor="quality-slider" className="text-xs font-bold text-slate-700 dark:text-slate-300">
                   Target Quality
                 </label>
-                <span className="text-xs font-extrabold px-2.5 py-0.5 rounded-lg bg-blue-50 dark:bg-blue-950/80 text-blue-600 dark:text-blue-400 border border-blue-200/80 dark:border-blue-900/60">
+                <span className="text-xs font-extrabold px-2.5 py-0.5 rounded-lg bg-[var(--pe-accent-soft)] dark:bg-[var(--pe-accent-soft)] text-[var(--pe-accent)] dark:text-[var(--pe-accent)] border border-[var(--pe-border)] dark:border-[var(--pe-border)]">
                   {quality}%
                 </span>
               </div>
@@ -321,7 +320,7 @@ export function ImageCompressor() {
                   step="1"
                   value={quality}
                   onChange={(e) => handleQualityChange(Number(e.target.value))}
-                  className="w-full h-2.5 bg-slate-200 dark:bg-slate-700 rounded-lg appearance-none cursor-pointer accent-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500/40"
+                  className="w-full h-2.5 bg-slate-200 dark:bg-slate-700 rounded-lg appearance-none cursor-pointer accent-[var(--pe-accent)] focus:outline-none focus:ring-2 focus:ring-[var(--pe-accent-ring)]"
                   aria-label="Compression quality slider"
                 />
               </div>
@@ -340,7 +339,7 @@ export function ImageCompressor() {
                     onClick={() => handleQualityChange(preset.val)}
                     className={`min-h-[32px] px-2.5 py-1 text-[11px] font-semibold rounded-lg transition-all active:scale-95 ${
                       quality === preset.val
-                        ? 'bg-blue-600 text-white shadow-xs'
+                        ? 'bg-[var(--pe-accent)] text-white shadow-xs'
                         : 'bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'
                     }`}
                   >
@@ -367,7 +366,7 @@ export function ImageCompressor() {
                     onClick={() => handleFormatChange(f.id)}
                     className={`min-h-[44px] p-2.5 rounded-xl text-center border transition-all active:scale-95 flex flex-col items-center justify-center ${
                       format === f.id
-                        ? 'border-blue-600 bg-blue-50 dark:bg-blue-950/60 text-blue-700 dark:text-blue-300 shadow-xs'
+                        ? 'border-[var(--pe-accent)] bg-[var(--pe-accent-soft)] dark:bg-[var(--pe-accent-soft)] text-[var(--pe-accent)] dark:text-[var(--pe-accent)] shadow-xs'
                         : 'border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-900 text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800'
                     }`}
                   >
@@ -398,11 +397,11 @@ export function ImageCompressor() {
               </div>
 
               {/* Compressed */}
-              <div className="p-3.5 rounded-xl bg-blue-50/70 dark:bg-blue-950/40 border border-blue-200/60 dark:border-blue-900/50">
-                <span className="text-[11px] font-bold uppercase tracking-wider text-blue-600 dark:text-blue-400">
+              <div className="p-3.5 rounded-xl bg-[var(--pe-accent-soft)] dark:bg-[var(--pe-accent-soft)] border border-[var(--pe-border)] dark:border-[var(--pe-border)]">
+                <span className="text-[11px] font-bold uppercase tracking-wider text-[var(--pe-accent)] dark:text-[var(--pe-accent)]">
                   Compressed File
                 </span>
-                <div className="text-lg sm:text-xl font-black text-blue-600 dark:text-blue-400 mt-0.5">
+                <div className="text-lg sm:text-xl font-black text-[var(--pe-accent)] dark:text-[var(--pe-accent)] mt-0.5">
                   {isProcessing ? (
                     <span className="animate-pulse">Optimizing...</span>
                   ) : compressedFile ? (
@@ -411,7 +410,7 @@ export function ImageCompressor() {
                     '—'
                   )}
                 </div>
-                <p className="text-[11px] text-blue-500/80 dark:text-blue-400/80 mt-0.5">
+                <p className="text-[11px] text-[var(--pe-accent)]/80 dark:text-[var(--pe-accent)]/80 mt-0.5">
                   {format.replace('image/', '').toUpperCase()} format
                 </p>
               </div>
@@ -423,10 +422,10 @@ export function ImageCompressor() {
                 </span>
                 <div className="text-lg sm:text-xl font-black text-emerald-600 dark:text-emerald-400 mt-0.5 flex items-center justify-center sm:justify-start gap-1">
                   <CheckCircle2 className="w-5 h-5" />
-                  <span>{savingsPercent}% Saved</span>
+                  <span>{savingsPercent >= 0 ? `${savingsPercent}% Saved` : `${-savingsPercent}% Larger`}</span>
                 </div>
                 <p className="text-[11px] text-emerald-600/80 dark:text-emerald-400/80 mt-0.5">
-                  {formatBytes(savingsBytes)} reduced
+                  {formatBytes(Math.abs(savingsBytes))} {savingsBytes >= 0 ? 'reduced' : 'larger'}
                 </p>
               </div>
             </div>
@@ -453,17 +452,17 @@ export function ImageCompressor() {
             {/* Compressed Preview */}
             <div className="rounded-2xl bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800/80 p-3 sm:p-4 space-y-2">
               <div className="flex items-center justify-between text-xs font-bold text-slate-700 dark:text-slate-300">
-                <span className="text-blue-600 dark:text-blue-400">Compressed Output</span>
+                <span className="text-[var(--pe-accent)] dark:text-[var(--pe-accent)]">Compressed Output</span>
                 {compressedFile && (
                   <span className="text-emerald-600 dark:text-emerald-400 font-semibold">
-                    {formatBytes(compressedFile.size)} ({savingsPercent}% smaller)
+                    {formatBytes(compressedFile.size)} ({savingsPercent >= 0 ? `${savingsPercent}% smaller` : `${-savingsPercent}% larger`})
                   </span>
                 )}
               </div>
               <div className="relative aspect-video sm:aspect-square max-h-72 w-full rounded-xl overflow-hidden bg-slate-100 dark:bg-slate-950 flex items-center justify-center border border-slate-200/60 dark:border-slate-800">
                 {isProcessing ? (
                   <div className="flex flex-col items-center gap-2 text-slate-400">
-                    <div className="w-8 h-8 border-3 border-blue-600 border-t-transparent rounded-full animate-spin" />
+                    <div className="w-8 h-8 border-3 border-[var(--pe-accent)] border-t-transparent rounded-full animate-spin" />
                     <span className="text-xs font-medium">Compressing in memory...</span>
                   </div>
                 ) : compressedUrl ? (
@@ -484,7 +483,7 @@ export function ImageCompressor() {
               type="button"
               onClick={handleDownload}
               disabled={isProcessing || !compressedFile}
-              className="w-full min-h-[56px] px-8 py-4 rounded-2xl bg-gradient-to-r from-blue-600 via-indigo-600 to-blue-700 hover:from-blue-500 hover:to-indigo-500 disabled:opacity-50 disabled:cursor-not-allowed text-white text-base sm:text-lg font-black shadow-xl shadow-blue-500/25 active:scale-[0.98] transition-all flex items-center justify-center gap-3 cursor-pointer"
+              className="w-full min-h-[56px] px-8 py-4 rounded-2xl bg-gradient-to-r from-[var(--pe-accent)] to-[var(--pe-accent-hover)] hover:from-[var(--pe-accent-hover)] hover:to-[var(--pe-accent)] disabled:opacity-50 disabled:cursor-not-allowed text-white text-base sm:text-lg font-black shadow-xl shadow-[var(--pe-shadow-accent)] active:scale-[0.98] transition-all flex items-center justify-center gap-3 cursor-pointer"
               aria-label="Download compressed image"
             >
               <Download className="w-5 h-5 sm:w-6 sm:h-6" />

@@ -1,13 +1,14 @@
 'use client';
 
 import Link from 'next/link';
-import { FileText, LayoutGrid, ShieldCheck, Sparkles } from 'lucide-react';
+import { FileText, LayoutGrid, Newspaper, ShieldCheck, Sparkles } from 'lucide-react';
 import { ThemeToggle } from './theme-toggle';
 import { Logo } from './logo';
 
 const NAV_LINKS = [
   { label: 'PDF Tools', href: '/#tools', icon: FileText },
   { label: 'Categories', href: '/#categories', icon: LayoutGrid },
+  { label: 'Blog', href: '/blog', icon: Newspaper },
   { label: 'Why PDFEdit', href: '/#why', icon: Sparkles },
   { label: 'Privacy', href: '/#security', icon: ShieldCheck },
 ];

@@ -1,4 +1,5 @@
 'use client';
+import { brandedFileName } from '@/lib/branded-filename';
 
 import React, { useState, useCallback, useEffect, useRef } from 'react';
 import { useDropzone } from 'react-dropzone';
@@ -220,7 +221,7 @@ export function OrganizePdf() {
       const pdfBytes = await newDoc.save();
       const blob = new Blob([pdfBytes as unknown as BlobPart], { type: 'application/pdf' });
       const baseName = file?.name.replace(/\.[^/.]+$/, '') || 'document';
-      saveAs(blob, `${baseName}-reorganized.pdf`);
+      saveAs(blob, brandedFileName(`${baseName}-reorganized`, 'pdf'));
 
       trackToolExecution('organize-pdf', true);
       setSuccessMessage(`Successfully exported reorganized PDF with ${pages.length} pages!`);
@@ -242,13 +243,13 @@ export function OrganizePdf() {
           {...getRootProps()}
           className={`relative rounded-3xl border-2 border-dashed p-8 sm:p-12 text-center transition-all cursor-pointer select-none ${
             isDragActive
-              ? 'border-indigo-500 bg-indigo-50/60 dark:bg-indigo-950/20 scale-[1.01]'
-              : 'border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900/60 hover:border-indigo-400 dark:hover:border-indigo-500 hover:bg-slate-50/50'
+              ? 'border-[var(--pe-accent)] bg-[var(--pe-accent-soft)] dark:bg-[var(--pe-accent-soft)] scale-[1.01]'
+              : 'border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900/60 hover:border-[var(--pe-accent)] dark:hover:border-[var(--pe-accent)] hover:bg-slate-50/50'
           }`}
         >
           <input {...getInputProps()} />
           <div className="max-w-md mx-auto space-y-3">
-            <div className="w-16 h-16 rounded-2xl bg-indigo-50 dark:bg-indigo-950/60 text-indigo-600 dark:text-indigo-400 flex items-center justify-center mx-auto shadow-sm">
+            <div className="w-16 h-16 rounded-2xl bg-[var(--pe-accent-soft)] dark:bg-[var(--pe-accent-soft)] text-[var(--pe-accent)] dark:text-[var(--pe-accent)] flex items-center justify-center mx-auto shadow-sm">
               <UploadCloud className="w-8 h-8" />
             </div>
             <div>
@@ -261,7 +262,7 @@ export function OrganizePdf() {
             </div>
             <button
               type="button"
-              className="px-4 py-2 rounded-xl bg-slate-950 hover:bg-slate-900 dark:bg-white dark:hover:bg-slate-100 text-white dark:text-slate-950 text-xs font-bold transition-all shadow-sm active:scale-95"
+              className="inline-flex min-h-[48px] cursor-pointer touch-manipulation items-center justify-center gap-2 rounded-2xl bg-[var(--pe-accent)] px-7 py-3 text-sm font-bold text-white shadow-lg shadow-[var(--pe-shadow-accent)] transition-all hover:bg-[var(--pe-accent-hover)] active:scale-95"
             >
               Select Local PDF
             </button>
@@ -272,7 +273,7 @@ export function OrganizePdf() {
       {/* Loading Progress */}
       {isLoadingPages && (
         <div className="p-8 rounded-3xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-center space-y-3 shadow-sm">
-          <RefreshCw className="w-8 h-8 animate-spin text-indigo-600 mx-auto" />
+          <RefreshCw className="w-8 h-8 animate-spin text-[var(--pe-accent)] mx-auto" />
           <h4 className="text-sm font-bold text-slate-900 dark:text-white">{loadingProgress}</h4>
           <p className="text-xs text-slate-400">Rendering high-speed client-side page previews...</p>
         </div>
@@ -300,7 +301,7 @@ export function OrganizePdf() {
           <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 pb-4 border-b border-slate-100 dark:border-slate-800">
             <div>
               <div className="flex items-center gap-2">
-                <FileText className="w-5 h-5 text-indigo-600" />
+                <FileText className="w-5 h-5 text-[var(--pe-accent)]" />
                 <h3 className="text-base sm:text-lg font-black text-slate-950 dark:text-white truncate max-w-sm" title={file.name}>
                   {file.name}
                 </h3>
@@ -349,7 +350,7 @@ export function OrganizePdf() {
             {pages.map((p, idx) => (
               <div
                 key={p.id}
-                className="relative rounded-2xl border border-slate-200 dark:border-slate-800 bg-slate-50/80 dark:bg-slate-800/50 p-2.5 space-y-2 group shadow-2xs hover:border-indigo-400 transition-all"
+                className="relative rounded-2xl border border-slate-200 dark:border-slate-800 bg-slate-50/80 dark:bg-slate-800/50 p-2.5 space-y-2 group shadow-2xs hover:border-[var(--pe-accent)] transition-all"
               >
                 {/* Page Sequence Number */}
                 <div className="absolute top-2 left-2 z-10 w-6 h-6 rounded-full bg-slate-950/80 text-white text-[10px] font-black flex items-center justify-center backdrop-blur-xs shadow-xs">
@@ -386,7 +387,7 @@ export function OrganizePdf() {
                   <button
                     type="button"
                     onClick={() => duplicatePage(idx)}
-                    className="p-1 rounded-lg hover:bg-indigo-50 dark:hover:bg-indigo-950/40 text-slate-400 hover:text-indigo-600 transition-colors"
+                    className="p-1 rounded-lg hover:bg-[var(--pe-accent-soft)] dark:hover:bg-[var(--pe-accent-soft)] text-slate-400 hover:text-[var(--pe-accent)] transition-colors"
                     title="Duplicate Page"
                   >
                     <Copy className="w-3 h-3" />
@@ -424,7 +425,7 @@ export function OrganizePdf() {
               type="button"
               onClick={handleExportPdf}
               disabled={isExporting}
-              className="w-full sm:w-auto min-h-[46px] px-7 py-2.5 rounded-2xl bg-indigo-600 hover:bg-indigo-500 text-white text-xs sm:text-sm font-black transition-all shadow-md shadow-indigo-600/20 active:scale-95 flex items-center justify-center gap-2 cursor-pointer disabled:opacity-60"
+              className="w-full sm:w-auto min-h-[46px] px-7 py-2.5 rounded-2xl bg-[var(--pe-accent)] hover:bg-[var(--pe-accent-hover)] text-white text-xs sm:text-sm font-black transition-all shadow-md shadow-[var(--pe-shadow-accent)] active:scale-95 flex items-center justify-center gap-2 cursor-pointer disabled:opacity-60"
             >
               {isExporting ? (
                 <>

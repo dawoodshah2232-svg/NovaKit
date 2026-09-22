@@ -1,6 +1,8 @@
 'use client';
+import { brandedFileName } from '@/lib/branded-filename';
 
 import { useEffect, useRef, useState, useCallback } from 'react';
+import { ToolFilePicker } from '@/components/tool-file-picker';
 import { PDFDocument } from 'pdf-lib';
 import * as pdfjsLib from 'pdfjs-dist';
 import type { PDFDocumentProxy } from 'pdfjs-dist';
@@ -123,16 +125,16 @@ function PageThumbnail({
       onClick={onSelect}
       aria-label={`Go to page ${pageNumber}`}
       aria-current={selected ? 'page' : undefined}
-      className={`flex min-h-[88px] w-[88px] shrink-0 flex-col items-center gap-1 rounded-xl border-2 p-1.5 transition focus:outline-none focus:ring-2 focus:ring-blue-500 ${
+      className={`flex min-h-[88px] w-[88px] shrink-0 flex-col items-center gap-1 rounded-xl border-2 p-1.5 transition focus:outline-none focus:ring-2 focus:ring-[var(--pe-accent)] ${
         selected
-          ? 'border-blue-500 bg-blue-50 dark:bg-blue-950'
+          ? 'border-[var(--pe-accent)] bg-[var(--pe-accent-soft)] dark:bg-[var(--pe-accent-soft)]'
           : 'border-slate-200 hover:border-slate-400 dark:border-slate-700 dark:hover:border-slate-500'
       }`}
     >
       <span className="flex h-[72px] w-[72px] items-center justify-center overflow-hidden rounded bg-slate-100 dark:bg-slate-800">
         <canvas ref={canvasRef} className="h-auto w-[72px]" aria-hidden="true" />
       </span>
-      <span className={`text-xs font-bold ${selected ? 'text-blue-700 dark:text-blue-300' : 'text-slate-500 dark:text-slate-400'}`}>
+      <span className={`text-xs font-bold ${selected ? 'text-[var(--pe-accent)] dark:text-[var(--pe-accent)]' : 'text-slate-500 dark:text-slate-400'}`}>
         {pageNumber}
       </span>
     </button>
@@ -536,7 +538,7 @@ export function SignPdf() {
 
       setProgress({ label: 'Preparing download…' });
       const blob = new Blob([pdfBytes as BlobPart], { type: 'application/pdf' });
-      saveAs(blob, `${file.name.replace(/\.pdf$/i, '')}_signed.pdf`);
+      saveAs(blob, brandedFileName(`${file.name.replace(/\.pdf$/i, '')}_signed`, 'pdf'));
 
       setStatus('PDF signed and downloaded successfully');
       trackToolExecution('sign-pdf', true);
@@ -560,27 +562,35 @@ export function SignPdf() {
       </div>
 
       {/* File Upload */}
-      <div>
-        <label htmlFor="pdf-file-input" className="mb-2 block text-sm font-semibold text-slate-700 dark:text-slate-300">
-          Select PDF Document
-        </label>
-        <input
-          id="pdf-file-input"
-          type="file"
-          accept="application/pdf,.pdf"
-          onChange={(e) => {
-            const selectedFile = e.target.files?.[0];
-            if (selectedFile) loadPdfFile(selectedFile);
-          }}
-          className="block w-full rounded-xl border border-slate-300 p-3 text-sm dark:border-slate-700 dark:bg-slate-950"
-          disabled={busy}
-        />
-        {file && (
-          <p className="mt-2 text-xs text-slate-500 dark:text-slate-400">
-            {file.name} · {pageCount} {pageCount === 1 ? 'page' : 'pages'}
-          </p>
-        )}
-      </div>
+      <ToolFilePicker
+        accept={{ 'application/pdf': ['.pdf'] }}
+        multiple={false}
+        files={file ? [file] : []}
+        onAdd={(picked) => {
+          const selectedFile = picked[0];
+          if (selectedFile) loadPdfFile(selectedFile);
+        }}
+        onRemove={() => {
+          setFile(null);
+          setPdfDoc(null);
+          setPageCount(0);
+          setCurrentPage(1);
+          setError('');
+          setStatus('');
+        }}
+        emptyTitle="Drag & drop your PDF here"
+        browseLabel="Browse PDF"
+        hint="PDF only · your signature is applied locally in your browser"
+        disabled={busy}
+        ariaLabel="Select PDF document to sign"
+        extraFileMeta={() =>
+          pageCount > 0 ? (
+            <span className="rounded-md bg-[var(--pe-accent-soft)] px-2 py-0.5 font-bold text-[var(--pe-accent)]">
+              {pageCount} {pageCount === 1 ? 'page' : 'pages'}
+            </span>
+          ) : null
+        }
+      />
 
       {file && (
         <>
@@ -593,9 +603,9 @@ export function SignPdf() {
               <button
                 type="button"
                 onClick={() => setMode('draw')}
-                className={`min-h-[44px] rounded-lg border px-4 py-2 text-sm font-semibold transition focus:outline-none focus:ring-2 focus:ring-blue-500 ${
+                className={`min-h-[44px] rounded-lg border px-4 py-2 text-sm font-semibold transition focus:outline-none focus:ring-2 focus:ring-[var(--pe-accent)] ${
                   mode === 'draw'
-                    ? 'border-blue-500 bg-blue-50 text-blue-700 dark:bg-blue-950 dark:text-blue-300'
+                    ? 'border-[var(--pe-accent)] bg-[var(--pe-accent-soft)] text-[var(--pe-accent)] dark:bg-[var(--pe-accent-soft)] dark:text-[var(--pe-accent)]'
                     : 'border-slate-300 dark:border-slate-700'
                 }`}
               >
@@ -604,18 +614,18 @@ export function SignPdf() {
               <button
                 type="button"
                 onClick={() => setMode('type')}
-                className={`min-h-[44px] rounded-lg border px-4 py-2 text-sm font-semibold transition focus:outline-none focus:ring-2 focus:ring-blue-500 ${
+                className={`min-h-[44px] rounded-lg border px-4 py-2 text-sm font-semibold transition focus:outline-none focus:ring-2 focus:ring-[var(--pe-accent)] ${
                   mode === 'type'
-                    ? 'border-blue-500 bg-blue-50 text-blue-700 dark:bg-blue-950 dark:text-blue-300'
+                    ? 'border-[var(--pe-accent)] bg-[var(--pe-accent-soft)] text-[var(--pe-accent)] dark:bg-[var(--pe-accent-soft)] dark:text-[var(--pe-accent)]'
                     : 'border-slate-300 dark:border-slate-700'
                 }`}
               >
                 Type
               </button>
               <label
-                className={`inline-flex min-h-[44px] cursor-pointer items-center rounded-lg border px-4 py-2 text-sm font-semibold transition focus-within:ring-2 focus-within:ring-blue-500 ${
+                className={`inline-flex min-h-[44px] cursor-pointer items-center rounded-lg border px-4 py-2 text-sm font-semibold transition focus-within:ring-2 focus-within:ring-[var(--pe-accent)] ${
                   mode === 'upload'
-                    ? 'border-blue-500 bg-blue-50 text-blue-700 dark:bg-blue-950 dark:text-blue-300'
+                    ? 'border-[var(--pe-accent)] bg-[var(--pe-accent-soft)] text-[var(--pe-accent)] dark:bg-[var(--pe-accent-soft)] dark:text-[var(--pe-accent)]'
                     : 'border-slate-300 dark:border-slate-700'
                 }`}
               >
@@ -636,7 +646,7 @@ export function SignPdf() {
                 value={typedText}
                 onChange={(e) => setTypedText(e.target.value)}
                 placeholder="Type your name"
-                className="mb-3 w-full rounded-lg border border-slate-300 p-3 text-sm dark:border-slate-700 dark:bg-slate-950 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="mb-3 w-full rounded-lg border border-slate-300 p-3 text-sm dark:border-slate-700 dark:bg-slate-950 focus:outline-none focus:ring-2 focus:ring-[var(--pe-accent)]"
                 aria-label="Type signature text"
               />
             )}
@@ -679,7 +689,7 @@ export function SignPdf() {
                 type="button"
                 onClick={() => setCurrentPage((p) => Math.max(1, p - 1))}
                 disabled={currentPage === 1 || busy}
-                className="min-h-[44px] rounded-lg border border-slate-300 px-4 py-2 text-sm font-semibold disabled:opacity-50 dark:border-slate-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="min-h-[44px] rounded-lg border border-slate-300 px-4 py-2 text-sm font-semibold disabled:opacity-50 dark:border-slate-700 focus:outline-none focus:ring-2 focus:ring-[var(--pe-accent)]"
                 aria-label="Previous page"
               >
                 Previous
@@ -691,7 +701,7 @@ export function SignPdf() {
                 type="button"
                 onClick={() => setCurrentPage((p) => Math.min(pageCount, p + 1))}
                 disabled={currentPage === pageCount || busy}
-                className="min-h-[44px] rounded-lg border border-slate-300 px-4 py-2 text-sm font-semibold disabled:opacity-50 dark:border-slate-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="min-h-[44px] rounded-lg border border-slate-300 px-4 py-2 text-sm font-semibold disabled:opacity-50 dark:border-slate-700 focus:outline-none focus:ring-2 focus:ring-[var(--pe-accent)]"
                 aria-label="Next page"
               >
                 Next
@@ -753,7 +763,7 @@ export function SignPdf() {
               )}
               {/* Signature overlay (WYSIWYG) */}
               <div
-                className="pointer-events-none absolute rounded border-2 border-blue-500 bg-blue-500/10"
+                className="pointer-events-none absolute rounded border-2 border-[var(--pe-accent)] bg-[var(--pe-accent-soft)]"
                 style={{
                   left: `${signaturePosition.x * pageScale}px`,
                   top: `${signaturePosition.y * pageScale}px`,
@@ -771,7 +781,7 @@ export function SignPdf() {
                   />
                 )}
                 {/* Resize handle: large touch target */}
-                <div className="absolute bottom-0 right-0 flex h-6 w-6 translate-x-1/2 translate-y-1/2 items-center justify-center rounded-full border-2 border-white bg-blue-600 shadow-md">
+                <div className="absolute bottom-0 right-0 flex h-6 w-6 translate-x-1/2 translate-y-1/2 items-center justify-center rounded-full border-2 border-white bg-[var(--pe-accent)] shadow-md">
                   <svg width="12" height="12" viewBox="0 0 12 12" fill="none" aria-hidden="true">
                     <path d="M7 2l3 3M5 4l5 5M3 6l5 5" stroke="white" strokeWidth="1.5" strokeLinecap="round" />
                   </svg>
@@ -794,7 +804,7 @@ export function SignPdf() {
           {progress && (
             <div role="status" className="space-y-2 rounded-xl bg-slate-50 p-3 dark:bg-slate-800">
               <div className="h-1.5 overflow-hidden rounded-full bg-slate-200 dark:bg-slate-700">
- <div className="h-full w-full animate-pulse rounded-full bg-[var(--pe-accent-soft)]0" />
+ <div className="h-full w-full animate-pulse rounded-full bg-[var(--pe-accent)]" />
               </div>
               <p className="text-sm font-medium text-slate-700 dark:text-slate-200">{progress.label}</p>
             </div>

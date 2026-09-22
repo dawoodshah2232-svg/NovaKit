@@ -1,4 +1,5 @@
 'use client';
+import { brandedFileName } from '@/lib/branded-filename';
 
 import React, { useState, useRef } from 'react';
 import { QRCodeCanvas, QRCodeSVG } from 'qrcode.react';
@@ -97,7 +98,7 @@ export function QrGenerator() {
     try {
       const dataUrl = canvasRef.current.toDataURL('image/png');
       const link = document.createElement('a');
-      link.download = 'pdfedit-qrcode.png';
+      link.download = brandedFileName('pdfedit-qrcode', 'png');
       link.href = dataUrl;
       document.body.appendChild(link);
       link.click();
@@ -120,7 +121,7 @@ export function QrGenerator() {
       const svgBlob = new Blob([svgData], { type: 'image/svg+xml;charset=utf-8' });
       const svgUrl = URL.createObjectURL(svgBlob);
       const link = document.createElement('a');
-      link.download = 'pdfedit-qrcode.svg';
+      link.download = brandedFileName('pdfedit-qrcode', 'svg');
       link.href = svgUrl;
       document.body.appendChild(link);
       link.click();
@@ -164,14 +165,14 @@ export function QrGenerator() {
   return (
     <div className="w-full space-y-6">
       {/* Privacy Guarantee Header Banner */}
-      <div className="flex items-center justify-between p-3.5 rounded-2xl bg-blue-50/90 dark:bg-blue-950/40 border border-blue-200/80 dark:border-blue-800/60 text-xs font-medium text-blue-800 dark:text-blue-300 shadow-xs">
+      <div className="flex items-center justify-between p-3.5 rounded-2xl bg-[var(--pe-accent-soft)]/90 dark:bg-[var(--pe-accent-soft)]/40 border border-[var(--pe-accent)]/80 dark:border-[var(--pe-accent)]/60 text-xs font-medium text-[var(--pe-accent)] dark:text-[var(--pe-accent)] shadow-xs">
         <div className="flex items-center gap-2">
-          <ShieldCheck className="w-4 h-4 text-blue-600 dark:text-blue-400 shrink-0" />
+          <ShieldCheck className="w-4 h-4 text-[var(--pe-accent)] dark:text-[var(--pe-accent)] shrink-0" />
           <span>
             <strong>Zero Server Uploads:</strong> QR generation executes strictly within your browser&apos;s HTML5 Canvas hardware.
           </span>
         </div>
-        <span className="hidden sm:inline-block text-[11px] font-semibold px-2 py-0.5 rounded-full bg-blue-100 dark:bg-blue-900/60 text-blue-700 dark:text-blue-300">
+        <span className="hidden sm:inline-block text-[11px] font-semibold px-2 py-0.5 rounded-full bg-[var(--pe-accent-soft)] dark:bg-[var(--pe-accent-soft)]/60 text-[var(--pe-accent)] dark:text-[var(--pe-accent)]">
           Client-Side Canvas
         </span>
       </div>
@@ -184,7 +185,7 @@ export function QrGenerator() {
           <div className="rounded-3xl bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800 p-5 sm:p-6 shadow-xs space-y-4">
             <div className="flex items-center justify-between pb-2 border-b border-slate-100 dark:border-slate-800">
               <div className="flex items-center gap-2">
-                <QrCode className="w-4 h-4 text-blue-600 dark:text-blue-400" />
+                <QrCode className="w-4 h-4 text-[var(--pe-accent)] dark:text-[var(--pe-accent)]" />
                 <h3 className="text-xs font-bold uppercase tracking-wider text-slate-900 dark:text-white">
                   QR Content & Destination
                 </h3>
@@ -205,7 +206,7 @@ export function QrGenerator() {
                     onClick={() => setText(item.value)}
                     className="min-h-[34px] px-2.5 py-1 rounded-xl bg-slate-50 dark:bg-slate-800/70 border border-slate-200/80 dark:border-slate-700 text-[11px] font-semibold text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 hover:border-slate-300 dark:hover:border-slate-600 transition-all inline-flex items-center gap-1.5 active:scale-95 cursor-pointer"
                   >
-                    <Icon className="w-3.5 h-3.5 text-blue-600 dark:text-blue-400" />
+                    <Icon className="w-3.5 h-3.5 text-[var(--pe-accent)] dark:text-[var(--pe-accent)]" />
                     <span>{item.label}</span>
                   </button>
                 );
@@ -222,7 +223,7 @@ export function QrGenerator() {
                 value={text}
                 onChange={(e) => setText(e.target.value)}
                 placeholder="Enter URL or any text to encode into the QR code..."
-                className="w-full p-3.5 text-sm rounded-2xl border border-slate-200 dark:border-slate-700 bg-slate-50/50 dark:bg-slate-800/50 text-slate-900 dark:text-white placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500/40 focus:border-blue-500 transition-all resize-none font-mono text-xs sm:text-sm"
+                className="w-full p-3.5 text-sm rounded-2xl border border-slate-200 dark:border-slate-700 bg-slate-50/50 dark:bg-slate-800/50 text-slate-900 dark:text-white placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-[var(--pe-accent)]/40 focus:border-[var(--pe-accent)] transition-all resize-none font-mono text-xs sm:text-sm"
               />
             </div>
           </div>
@@ -231,7 +232,7 @@ export function QrGenerator() {
           <div className="rounded-3xl bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800 p-5 sm:p-6 shadow-xs space-y-4">
             <div className="flex items-center justify-between pb-2 border-b border-slate-100 dark:border-slate-800">
               <div className="flex items-center gap-2">
-                <Palette className="w-4 h-4 text-blue-600 dark:text-blue-400" />
+                <Palette className="w-4 h-4 text-[var(--pe-accent)] dark:text-[var(--pe-accent)]" />
                 <h3 className="text-xs font-bold uppercase tracking-wider text-slate-900 dark:text-white">
                   Color Styling
                 </h3>
@@ -256,7 +257,7 @@ export function QrGenerator() {
                       onClick={() => handleApplyPreset(preset)}
                       className={`min-h-[44px] p-2 rounded-2xl border text-left transition-all flex items-center gap-2.5 cursor-pointer active:scale-95 ${
                         isSelected
-                          ? 'border-blue-600 bg-blue-50/40 dark:bg-blue-950/40 ring-2 ring-blue-500/30'
+                          ? 'border-[var(--pe-accent)] bg-[var(--pe-accent-soft)]/40 dark:bg-[var(--pe-accent-soft)]/40 ring-2 ring-[var(--pe-accent)]/30'
                           : 'border-slate-200/80 dark:border-slate-800 bg-slate-50/60 dark:bg-slate-800/50 hover:bg-slate-100 dark:hover:bg-slate-800 hover:border-slate-300'
                       }`}
                     >
@@ -335,7 +336,7 @@ export function QrGenerator() {
           <div className="rounded-3xl bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800 p-5 sm:p-6 shadow-xs space-y-4">
             <div className="flex items-center justify-between pb-2 border-b border-slate-100 dark:border-slate-800">
               <div className="flex items-center gap-2">
-                <Sliders className="w-4 h-4 text-blue-600 dark:text-blue-400" />
+                <Sliders className="w-4 h-4 text-[var(--pe-accent)] dark:text-[var(--pe-accent)]" />
                 <h3 className="text-xs font-bold uppercase tracking-wider text-slate-900 dark:text-white">
                   Dimensions & Reliability
                 </h3>
@@ -357,7 +358,7 @@ export function QrGenerator() {
                   <span className="font-semibold text-slate-700 dark:text-slate-300">
                     Export Resolution
                   </span>
-                  <span className="font-mono font-bold text-blue-600 dark:text-blue-400">
+                  <span className="font-mono font-bold text-[var(--pe-accent)] dark:text-[var(--pe-accent)]">
                     {size} × {size} px
                   </span>
                 </div>
@@ -368,7 +369,7 @@ export function QrGenerator() {
                   step="16"
                   value={size}
                   onChange={(e) => setSize(parseInt(e.target.value, 10))}
-                  className="w-full accent-blue-600 h-2 bg-slate-200 dark:bg-slate-700 rounded-lg cursor-pointer"
+                  className="w-full accent-[var(--pe-accent)] h-2 bg-slate-200 dark:bg-slate-700 rounded-lg cursor-pointer"
                 />
                 <div className="flex justify-between text-[10px] text-slate-400">
                   <span>160px (Compact)</span>
@@ -382,7 +383,7 @@ export function QrGenerator() {
                   <span className="font-semibold text-slate-700 dark:text-slate-300">
                     Margin (Quiet Zone)
                   </span>
-                  <span className="font-mono font-bold text-blue-600 dark:text-blue-400">
+                  <span className="font-mono font-bold text-[var(--pe-accent)] dark:text-[var(--pe-accent)]">
                     {marginSize} modules
                   </span>
                 </div>
@@ -393,7 +394,7 @@ export function QrGenerator() {
                   step="1"
                   value={marginSize}
                   onChange={(e) => setMarginSize(parseInt(e.target.value, 10))}
-                  className="w-full accent-blue-600 h-2 bg-slate-200 dark:bg-slate-700 rounded-lg cursor-pointer"
+                  className="w-full accent-[var(--pe-accent)] h-2 bg-slate-200 dark:bg-slate-700 rounded-lg cursor-pointer"
                 />
                 <div className="flex justify-between text-[10px] text-slate-400">
                   <span>0 (Flush)</span>
@@ -449,7 +450,7 @@ export function QrGenerator() {
             {/* Top Preview Badge */}
             <div className="flex items-center justify-between">
               <span className="text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400 flex items-center gap-1.5">
-                <Sparkles className="w-3.5 h-3.5 text-blue-600 dark:text-blue-400" />
+                <Sparkles className="w-3.5 h-3.5 text-[var(--pe-accent)] dark:text-[var(--pe-accent)]" />
                 <span>Live Canvas Preview</span>
               </span>
               <span className="text-[10px] font-extrabold px-2.5 py-0.5 rounded-full bg-emerald-100 dark:bg-emerald-900/60 text-emerald-800 dark:text-emerald-300">
@@ -466,7 +467,7 @@ export function QrGenerator() {
                 <QRCodeCanvas
                   ref={canvasRef}
                   value={effectiveValue}
-                  size={Math.min(size, 300)}
+                  size={size}
                   fgColor={fgColor}
                   bgColor={bgColor}
                   level={level}
@@ -515,7 +516,7 @@ export function QrGenerator() {
               <button
                 type="button"
                 onClick={handleDownloadPng}
-                className="w-full min-h-[52px] px-6 py-3 rounded-2xl bg-gradient-to-r from-blue-600 via-indigo-600 to-blue-700 hover:from-blue-500 hover:to-indigo-500 text-white text-sm sm:text-base font-black shadow-lg shadow-blue-500/25 active:scale-[0.98] transition-all flex items-center justify-center gap-2.5 cursor-pointer"
+                className="w-full min-h-[52px] px-6 py-3 rounded-2xl bg-gradient-to-r from-[var(--pe-accent)] to-[var(--pe-accent-hover)] hover:from-[var(--pe-accent-hover)] hover:to-[var(--pe-accent)] text-white text-sm sm:text-base font-black shadow-lg shadow-[var(--pe-shadow-accent)] active:scale-[0.98] transition-all flex items-center justify-center gap-2.5 cursor-pointer"
               >
                 <Download className="w-5 h-5" />
                 <span>Download QR Code (PNG)</span>
@@ -528,7 +529,7 @@ export function QrGenerator() {
                   onClick={handleDownloadSvg}
                   className="min-h-[44px] px-3 py-2 rounded-xl bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-800 dark:text-slate-200 text-xs font-bold transition-all flex items-center justify-center gap-1.5 active:scale-95 cursor-pointer"
                 >
-                  <FileCode className="w-4 h-4 text-blue-600 dark:text-blue-400" />
+                  <FileCode className="w-4 h-4 text-[var(--pe-accent)] dark:text-[var(--pe-accent)]" />
                   <span>Download SVG</span>
                 </button>
 

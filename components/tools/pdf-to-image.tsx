@@ -1,4 +1,5 @@
 'use client';
+import { brandedFileName } from '@/lib/branded-filename';
 
 import React, { useState, useCallback, useEffect, useRef } from 'react';
 import { useDropzone } from 'react-dropzone';
@@ -278,7 +279,7 @@ export function PdfToImage({ jpgOnly = false, analyticsSlug = 'pdf-to-image' }: 
     const baseName = loadedPdf.name.replace(/\.[^/.]+$/, '');
     const pageStr = String(page.pageNumber).padStart(2, '0');
     const ext = format === 'png' ? 'png' : 'jpg';
-    const fileName = `${baseName}_page_${pageStr}.${ext}`;
+    const fileName = brandedFileName(`${baseName}_page_${pageStr}`, ext);
     saveAs(page.blob, fileName);
   };
 
@@ -295,7 +296,7 @@ export function PdfToImage({ jpgOnly = false, analyticsSlug = 'pdf-to-image' }: 
 
       convertedPages.forEach((page) => {
         const pageStr = String(page.pageNumber).padStart(Math.max(2, padLen), '0');
-        const fileName = `${baseName}_page_${pageStr}.${ext}`;
+        const fileName = brandedFileName(`${baseName}_page_${pageStr}`, ext);
         zip.file(fileName, page.blob);
       });
 
@@ -305,7 +306,7 @@ export function PdfToImage({ jpgOnly = false, analyticsSlug = 'pdf-to-image' }: 
         compressionOptions: { level: 6 },
       });
 
-      const zipFileName = `${baseName}_${format.toUpperCase()}_images.zip`;
+      const zipFileName = brandedFileName(`${baseName}_${format.toUpperCase()}_images`, 'zip');
       saveAs(zipBlob, zipFileName);
     } catch (err: unknown) {
       console.error('Error generating ZIP archive:', err);
@@ -498,8 +499,8 @@ export function PdfToImage({ jpgOnly = false, analyticsSlug = 'pdf-to-image' }: 
                 <div className="grid grid-cols-3 gap-2">
                   {[
                     { scale: 1 as const, label: '1x Standard', dpi: '72 DPI' },
-                    { scale: 2 as const, label: '2x High-Res', dpi: '150 DPI' },
-                    { scale: 3 as const, label: '3x Ultra', dpi: '300 DPI' },
+                    { scale: 2 as const, label: '2x High-Res', dpi: '144 DPI' },
+                    { scale: 3 as const, label: '3x Ultra', dpi: '216 DPI' },
                   ].map((res) => (
                     <button
                       key={res.scale}

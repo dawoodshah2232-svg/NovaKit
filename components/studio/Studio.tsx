@@ -1,4 +1,5 @@
 'use client';
+import { brandedFileName } from '@/lib/branded-filename';
 
 /**
  * PDFEdit Studio — main editor shell.
@@ -609,7 +610,7 @@ export function Studio() {
         srcBytes: pdfBytes,
         pages: subPages,
         layers: subLayers,
-        fileName: file.name.replace(/\.pdf$/i, '') + '-extracted',
+        fileName: brandedFileName(file.name.replace(/\.pdf$/i, '') + '-extracted', 'pdf'),
         flatten: false,
       });
       saveAs(new Blob([res.bytes.buffer as ArrayBuffer], { type: 'application/pdf' }), res.fileName);
@@ -638,7 +639,7 @@ export function Studio() {
           srcBytes: pdfBytes,
           pages: d.pages,
           layers: d.layers,
-          fileName: file.name,
+          fileName: brandedFileName(file.name.replace(/\.pdf$/i, ''), 'pdf'),
           flatten,
           onProgress: (msg) => setExportDlg((s) => ({ ...s, progress: msg })),
         });
@@ -667,7 +668,7 @@ export function Studio() {
 
   const downloadExport = useCallback(() => {
     const bytes = exportBytesRef.current;
-    const name = exportDlg.result?.fileName ?? 'PDFEdit-Studio.pdf';
+    const name = exportDlg.result?.fileName ?? brandedFileName('PDFEdit-Studio', 'pdf');
     if (!bytes) return;
     saveAs(new Blob([bytes.buffer as ArrayBuffer], { type: 'application/pdf' }), name);
     trackToolExecution('pdf-studio', true);
@@ -683,8 +684,8 @@ export function Studio() {
         setExportDlg((s) => ({ ...s, progress: msg }))
       );
       const base = file.name.replace(/\.pdf$/i, '');
-      saveAs(blob, `${base}.docx`);
-      setExportDlg((s) => ({ ...s, stage: 'done', progress: '', result: { fileName: `${base}.docx`, sizeBytes: blob.size, pageCount: pdfDocRef.current?.numPages ?? 0 }, error: '' }));
+      saveAs(blob, brandedFileName(base, 'docx'));
+      setExportDlg((s) => ({ ...s, stage: 'done', progress: '', result: { fileName: brandedFileName(base, 'docx'), sizeBytes: blob.size, pageCount: pdfDocRef.current?.numPages ?? 0 }, error: '' }));
       trackToolExecution('pdf-studio', true);
     } catch (err) {
       setExportDlg((s) => ({

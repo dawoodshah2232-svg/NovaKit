@@ -1,4 +1,5 @@
 'use client';
+import { brandedFileName } from '@/lib/branded-filename';
 
 import React, { useState, useCallback, useEffect, useId } from 'react';
 import { useDropzone } from 'react-dropzone';
@@ -27,6 +28,7 @@ import {
   GripVertical,
   Trash2,
   Download,
+  Check,
   RotateCcw,
   ShieldCheck,
   Plus,
@@ -201,6 +203,7 @@ export function PdfMerger() {
   const [successMessage, setSuccessMessage] = useState<string | null>(null);
   const [mergeResult, setMergeResult] = useState<MergeResult | null>(null);
   const [mergeProgress, setMergeProgress] = useState<string | null>(null);
+  const [downloadClicked, setDownloadClicked] = useState(false);
   const dndContextId = useId();
 
   // Configure drag sensors
@@ -430,7 +433,7 @@ export function PdfMerger() {
       // 4. Keep the result available for an explicit download.
       const blob = new Blob([mergedPdfBytes as unknown as BlobPart], { type: 'application/pdf' });
       const downloadUrl = URL.createObjectURL(blob);
-      const downloadName = 'merged-pdf.pdf';
+      const downloadName = brandedFileName('merged-pdf', 'pdf');
       setMergeResult({
         url: downloadUrl,
         name: downloadName,
@@ -438,6 +441,7 @@ export function PdfMerger() {
         pageCount: mergedPdf.getPageCount(),
       });
       setSuccessMessage(`Successfully merged ${pdfFiles.length} PDF${pdfFiles.length === 1 ? '' : 's'}.`);
+      setDownloadClicked(false);
       trackToolExecution('pdf-merger', true);
     } catch (err) {
       trackToolExecution('pdf-merger', false);
@@ -491,10 +495,20 @@ export function PdfMerger() {
               <a
                 href={mergeResult.url}
                 download={mergeResult.name}
+                onClick={() => setDownloadClicked(true)}
  className="inline-flex min-h-11 w-full items-center justify-center gap-2 rounded-xl bg-[var(--pe-accent)] px-4 py-2.5 text-sm font-bold text-[var(--pe-accent-ink)] transition hover:bg-[var(--pe-accent-hover)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--pe-focus)] focus-visible:ring-offset-2 sm:w-auto"
               >
-                <Download className="h-4 w-4" />
-                Download Merged PDF
+                {downloadClicked ? (
+                  <>
+                    <Check className="h-4 w-4" />
+                    Downloaded — check your downloads
+                  </>
+                ) : (
+                  <>
+                    <Download className="h-4 w-4" />
+                    Download Merged PDF
+                  </>
+                )}
               </a>
               <button
                 type="button"

@@ -6,29 +6,31 @@ import { PDFDocument, StandardFonts, rgb, type PDFFont } from 'pdf-lib';
  *
  * Verified capabilities of this pipeline (do not advertise more than this):
  * - Reads word/document.xml from the .docx zip and extracts paragraphs/runs.
- * - Supports: paragraphs, headings H1-H6 (size scaled), bold, italic, underline,
+ * - Supports: paragraphs, headings H1-H6, bold, italic, underline,
  *   left/center/right alignment, bullet lists, and simple decimal numbered lists.
- * - Fonts: pdf-lib can only embed its built-in StandardFonts families. This
- *   converter therefore renders with ONE chosen family (normal/bold/italic/
- *   bold-italic variants genuinely embedded). The document's original fonts,
- *   sizes and colors are NOT preserved.
+ * - Fonts: each run's font name, size and color are read from the document.
+ *   Font names are mapped to metric-compatible open fonts (Calibri -> Carlito,
+ *   Cambria -> Caladea, Arial -> Arimo, Times New Roman -> Tinos,
+ *   Courier New -> Cousine), fetched on demand from the jsDelivr fontsource CDN
+ *   and embedded with pdf-lib. Unknown fonts fall back to a close equivalent;
+ *   if the CDN is unreachable the converter falls back to built-in Helvetica.
+ * - Sizes come from the document (half-points -> pt); heading styles without an
+ *   explicit size use 18/16/14 pt; body default is 11 pt.
  * - Images, charts, text boxes, headers/footers, footnotes: not parsed.
- * - Tables: cell text is extracted (w:p inside w:tc matches the paragraph
- *   regex) but the table grid/borders/structure are lost.
+ * - Tables: cell text is extracted but the table grid/borders/structure are lost.
  */
-export type WordFontFamily = 'helvetica' | 'times' | 'courier';
-
-export const WORD_FONT_OPTIONS: { value: WordFontFamily; label: string }[] = [
-  { value: 'helvetica', label: 'Helvetica' },
-  { value: 'times', label: 'Times' },
-  { value: 'courier', label: 'Courier' },
-];
 
 export interface ParsedRun {
   text: string;
   bold?: boolean;
   italic?: boolean;
   underline?: boolean;
+  /** Font name as declared in the DOCX (e.g. "Calibri"). */
+  fontName?: string;
+  /** Font size in points (converted from half-points). */
+  fontSize?: number;
+  /** Text color as 6-digit hex (e.g. "FF0000"). */
+  color?: string;
 }
 
 export interface ParsedParagraph {
@@ -44,9 +46,65 @@ export interface ParsedParagraph {
 
 interface StyledWord {
   text: string;
-  bold: boolean;
-  italic: boolean;
+  fontKey: string;
+  size: number;
+  color: { r: number; g: number; b: number };
   underline: boolean;
+}
+
+type FontId = 'carlito' | 'caladea' | 'arimo' | 'tinos' | 'cousine';
+
+/** Common Word fonts -> metric-compatible open-font replacements. */
+const FONT_ID_MAP: Record<string, FontId> = {
+  calibri: 'carlito',
+  carlito: 'carlito',
+  cambria: 'caladea',
+  caladea: 'caladea',
+  arial: 'arimo',
+  arimo: 'arimo',
+  helvetica: 'arimo',
+  'liberation sans': 'arimo',
+  'times new roman': 'tinos',
+  times: 'tinos',
+  tinos: 'tinos',
+  'liberation serif': 'tinos',
+  georgia: 'tinos',
+  'courier new': 'cousine',
+  courier: 'cousine',
+  cousine: 'cousine',
+  'liberation mono': 'cousine',
+  consolas: 'cousine',
+  verdana: 'arimo',
+  tahoma: 'arimo',
+  'segoe ui': 'arimo',
+  'trebuchet ms': 'arimo',
+};
+
+const DEFAULT_FONT_ID: FontId = 'carlito'; // Word's own default body font is Calibri
+const DEFAULT_BODY_PT = 11;
+
+function mapFontId(name: string | undefined): FontId {
+  if (!name) return DEFAULT_FONT_ID;
+  return FONT_ID_MAP[name.trim().toLowerCase()] ?? DEFAULT_FONT_ID;
+}
+
+const FONT_CDN = 'https://cdn.jsdelivr.net/fontsource/fonts';
+const fontBytesCache = new Map<string, ArrayBuffer>();
+
+async function fetchFontBytes(id: FontId, weight: 400 | 700, style: 'normal' | 'italic'): Promise<ArrayBuffer> {
+  const key = `${id}/${weight}/${style}`;
+  const hit = fontBytesCache.get(key);
+  if (hit) return hit;
+  const res = await fetch(`${FONT_CDN}/${id}@latest/latin-${weight}-${style}.ttf`);
+  if (!res.ok) throw new Error(`Font download failed (${res.status}) for ${key}.`);
+  const buf = await res.arrayBuffer();
+  fontBytesCache.set(key, buf);
+  return buf;
+}
+
+function hexToRgb(hex: string): { r: number; g: number; b: number } {
+  const n = parseInt(hex, 16);
+  return { r: ((n >> 16) & 255) / 255, g: ((n >> 8) & 255) / 255, b: (n & 255) / 255 };
 }
 
 function decodeXml(value: string): string {
@@ -156,12 +214,24 @@ export async function parseDocxStructure(input: ArrayBuffer): Promise<ParsedPara
       const text = decodeXml(raw);
       if (!text) continue;
 
+      // Font name from run properties (w:rPr may appear before the w:t nodes).
+      const rPr = runXml.match(/<w:rPr>[\s\S]*?<\/w:rPr>/)?.[0] ?? '';
+      const fontName =
+        rPr.match(/<w:rFonts[^>]*?\bw:ascii="([^"]+)"/)?.[1] ??
+        rPr.match(/<w:rFonts[^>]*?\bw:hAnsi="([^"]+)"/)?.[1] ??
+        undefined;
+      const sizeHalfPt = rPr.match(/<w:sz\s+w:val="(\d+)"\s*\/>/)?.[1];
+      const colorHex = rPr.match(/<w:color\s+w:val="([0-9A-Fa-f]{6})"\s*\/>/)?.[1];
+
       runs.push({
         text,
         bold: runXml.includes('<w:b/>') || runXml.includes('<w:b ') || runXml.includes('<w:b>'),
         italic: runXml.includes('<w:i/>') || runXml.includes('<w:i ') || runXml.includes('<w:i>'),
         underline:
           /<w:u(\s|\/|>)/.test(runXml) && !runXml.includes('w:val="none"'),
+        fontName,
+        fontSize: sizeHalfPt ? parseInt(sizeHalfPt, 10) / 2 : undefined,
+        color: colorHex,
       });
     }
 
@@ -177,33 +247,6 @@ export async function parseDocxStructure(input: ArrayBuffer): Promise<ParsedPara
   return paragraphs;
 }
 
-const FONT_VARIANTS: Record<WordFontFamily, [normal: StandardFonts, bold: StandardFonts, italic: StandardFonts, boldItalic: StandardFonts]> = {
-  helvetica: [
-    StandardFonts.Helvetica,
-    StandardFonts.HelveticaBold,
-    StandardFonts.HelveticaOblique,
-    StandardFonts.HelveticaBoldOblique,
-  ],
-  times: [StandardFonts.TimesRoman, StandardFonts.TimesRomanBold, StandardFonts.TimesRomanItalic, StandardFonts.TimesRomanBoldItalic],
-  courier: [
-    StandardFonts.Courier,
-    StandardFonts.CourierBold,
-    StandardFonts.CourierOblique,
-    StandardFonts.CourierBoldOblique,
-  ],
-};
-
-function pickFont(
-  embedded: { normal: PDFFont; bold: PDFFont; italic: PDFFont; boldItalic: PDFFont },
-  bold: boolean,
-  italic: boolean
-): PDFFont {
-  if (bold && italic) return embedded.boldItalic;
-  if (bold) return embedded.bold;
-  if (italic) return embedded.italic;
-  return embedded.normal;
-}
-
 export interface RenderResult {
   bytes: Uint8Array;
   pageCount: number;
@@ -212,23 +255,56 @@ export interface RenderResult {
 
 export async function renderPdf(
   paragraphs: ParsedParagraph[],
-  fontFamily: WordFontFamily,
   onProgress?: (fraction: number) => void
 ): Promise<RenderResult> {
-  const [normal, bold, italic, boldItalic] = FONT_VARIANTS[fontFamily];
   const pdf = await PDFDocument.create();
-  const embedded = {
-    normal: await pdf.embedFont(normal),
-    bold: await pdf.embedFont(bold),
-    italic: await pdf.embedFont(italic),
-    boldItalic: await pdf.embedFont(boldItalic),
+
+  // Collect every (family, weight, style) combination the document actually uses.
+  const neededKeys = new Set<string>();
+  for (const para of paragraphs) {
+    for (const run of para.runs) {
+      const id = mapFontId(run.fontName);
+      const weight = run.bold ? 700 : 400;
+      const style = run.italic ? 'italic' : 'normal';
+      neededKeys.add(`${id}|${weight}|${style}`);
+    }
+  }
+
+  // Embed each needed variant; fall back to built-in Helvetica if the CDN fails.
+  const embedded = new Map<string, PDFFont>();
+  let fallback: Record<string, PDFFont> | null = null;
+  const getFallback = async (weight: number, style: string): Promise<PDFFont> => {
+    if (!fallback) {
+      fallback = {
+        '400|normal': await pdf.embedFont(StandardFonts.Helvetica),
+        '700|normal': await pdf.embedFont(StandardFonts.HelveticaBold),
+        '400|italic': await pdf.embedFont(StandardFonts.HelveticaOblique),
+        '700|italic': await pdf.embedFont(StandardFonts.HelveticaBoldOblique),
+      };
+    }
+    return fallback[`${weight}|${style}`];
+  };
+  for (const key of neededKeys) {
+    const [id, weightStr, style] = key.split('|');
+    try {
+      const bytes = await fetchFontBytes(id as FontId, Number(weightStr) as 400 | 700, style as 'normal' | 'italic');
+      embedded.set(key, await pdf.embedFont(bytes));
+    } catch {
+      embedded.set(key, await getFallback(Number(weightStr), style));
+    }
+  }
+
+  const fontFor = (key: string): PDFFont => {
+    const f = embedded.get(key);
+    if (!f) throw new Error('Internal error: font was not embedded.');
+    return f;
   };
 
   const margin = 54;
   const width = 612;
   const height = 792;
   const maxWidth = width - margin * 2;
-  const textColor = rgb(0.1, 0.1, 0.1);
+  const defaultColor = { r: 0.1, g: 0.1, b: 0.1 };
 
   let page = pdf.addPage([width, height]);
   let y = height - margin;
@@ -244,47 +320,49 @@ export async function renderPdf(
 
   for (let p = 0; p < paragraphs.length; p++) {
     const para = paragraphs[p];
-    const fontSize = para.isHeading
-      ? para.headingLevel === 1
-        ? 18
-        : para.headingLevel === 2
-          ? 16
-          : 14
-      : 11;
-    const lineHeight = fontSize * 1.4;
-    const spaceAfter = para.isHeading ? 12 : 8;
 
     // Flatten runs into styled words, preserving each run's formatting.
     const words: StyledWord[] = [];
     if (para.isListItem) {
       words.push({
         text: para.listType === 'decimal' ? `${para.listNumber ?? 1}.` : '•',
-        bold: false,
-        italic: false,
+        fontKey: `${DEFAULT_FONT_ID}|400|normal`,
+        size: DEFAULT_BODY_PT,
+        color: defaultColor,
         underline: false,
       });
     }
     for (const run of para.runs) {
+      const id = mapFontId(run.fontName);
+      const fontKey = `${id}|${run.bold ? 700 : 400}|${run.italic ? 'italic' : 'normal'}`;
+      const size =
+        run.fontSize ??
+        (para.isHeading
+          ? para.headingLevel === 1
+            ? 18
+            : para.headingLevel === 2
+              ? 16
+              : 14
+          : DEFAULT_BODY_PT);
+      const color = run.color ? hexToRgb(run.color) : defaultColor;
       for (const w of run.text.split(/\s+/)) {
         if (!w) continue;
-        words.push({ text: w, bold: !!run.bold, italic: !!run.italic, underline: !!run.underline });
+        words.push({ text: w, fontKey, size, color, underline: !!run.underline });
       }
     }
 
-    // Greedy word wrap, measuring each word with its own font.
+    // Greedy word wrap, measuring each word with its own font and size.
     let line: StyledWord[] = [];
     let lineWidth = 0;
-    const spaceWidth = embedded.normal.widthOfTextAtSize(' ', fontSize);
 
     const drawLine = () => {
       if (!line.length) return;
+      const lineHeight = Math.max(...line.map((w) => w.size)) * 1.35;
       newPageIfNeeded(lineHeight);
-      // line width incl. single spaces between words
+
+      const widths = line.map((w) => fontFor(w.fontKey).widthOfTextAtSize(w.text, w.size));
+      const spaceWidth = fontFor(line[0].fontKey).widthOfTextAtSize(' ', line[0].size);
       let total = 0;
-      const widths = line.map((w) => {
-        const f = pickFont(embedded, w.bold, w.italic);
-        return f.widthOfTextAtSize(w.text, fontSize);
-      });
       for (let i = 0; i < widths.length; i++) total += widths[i] + (i > 0 ? spaceWidth : 0);
 
       let x = margin;
@@ -294,13 +372,15 @@ export async function renderPdf(
       // Underline segments: merge consecutive underlined words.
       let segStart: number | null = null;
       let segEnd = 0;
+      let segColor = defaultColor;
+      let segSize = 11;
       const strokeSegment = () => {
         if (segStart !== null) {
           page.drawLine({
             start: { x: segStart, y: y - 2 },
             end: { x: segEnd, y: y - 2 },
-            thickness: Math.max(0.75, fontSize / 16),
-            color: textColor,
+            thickness: Math.max(0.75, segSize / 16),
+            color: rgb(segColor.r, segColor.g, segColor.b),
           });
           segStart = null;
         }
@@ -308,10 +388,20 @@ export async function renderPdf(
 
       for (let i = 0; i < line.length; i++) {
         const w = line[i];
-        const font = pickFont(embedded, w.bold, w.italic);
-        page.drawText(w.text, { x, y, size: fontSize, font, color: textColor });
+        const font = fontFor(w.fontKey);
+        page.drawText(w.text, {
+          x,
+          y,
+          size: w.size,
+          font,
+          color: rgb(w.color.r, w.color.g, w.color.b),
+        });
         if (w.underline) {
-          if (segStart === null) segStart = x;
+          if (segStart === null) {
+            segStart = x;
+            segColor = w.color;
+            segSize = w.size;
+          }
           segEnd = x + widths[i];
         } else {
           strokeSegment();
@@ -323,7 +413,8 @@ export async function renderPdf(
     };
 
     for (const word of words) {
-      const wordWidth = pickFont(embedded, word.bold, word.italic).widthOfTextAtSize(word.text, fontSize);
+      const wordWidth = fontFor(word.fontKey).widthOfTextAtSize(word.text, word.size);
+      const spaceWidth = fontFor(word.fontKey).widthOfTextAtSize(' ', word.size);
       const needed = line.length === 0 ? wordWidth : lineWidth + spaceWidth + wordWidth;
       if (line.length > 0 && needed > maxWidth) {
         drawLine();
@@ -336,7 +427,7 @@ export async function renderPdf(
     }
     drawLine();
 
-    y -= spaceAfter;
+    y -= 8;
 
     if (p % 25 === 0) {
       onProgress?.(p / paragraphs.length);

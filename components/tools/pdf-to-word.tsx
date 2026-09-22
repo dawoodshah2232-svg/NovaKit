@@ -1,6 +1,8 @@
 'use client';
+import { brandedFileName } from '@/lib/branded-filename';
 
 import { useState } from 'react';
+import { ToolFilePicker } from '@/components/tool-file-picker';
 import * as pdfjsLib from 'pdfjs-dist';
 import JSZip from 'jszip';
 import { saveAs } from 'file-saver';
@@ -127,7 +129,7 @@ export function PdfToWord() {
       zip.file('_rels/.rels', '<?xml version="1.0" encoding="UTF-8"?><Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships"><Relationship Id="rId1" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/officeDocument" Target="word/document.xml"/></Relationships>');
       zip.file('word/document.xml', `<?xml version="1.0" encoding="UTF-8"?><w:document xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main"><w:body>${body}<w:sectPr/></w:body></w:document>`);
 
-      saveAs(await zip.generateAsync({ type: 'blob' }), `${file.name.replace(/\.pdf$/i, '')}.docx`);
+      saveAs(await zip.generateAsync({ type: 'blob' }), brandedFileName(file.name.replace(/\.pdf$/i, ''), 'docx'));
       setStatus(`Converted ${paragraphs.filter(p => p !== '__PAGE_BREAK__').length} paragraphs to DOCX with page breaks.`);
       trackToolExecution('pdf-to-word', true);
     } catch (conversionError) {
@@ -148,23 +150,26 @@ export function PdfToWord() {
           Extract selectable PDF text into a downloadable DOCX file with improved paragraph detection and page breaks.
         </p>
       </div>
-      <div>
-        <label htmlFor="pdf-input" className="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-2">
-          Select PDF
-        </label>
-        <input
-          id="pdf-input"
-          type="file"
-          accept="application/pdf,.pdf"
-          onChange={(event) => {
-            setFile(event.target.files?.[0] || null);
-            setError('');
-            setStatus('');
-          }}
-          className="block w-full rounded-xl border border-slate-300 p-3 text-sm dark:border-slate-700 dark:bg-slate-950 focus:outline-none focus:ring-2 focus:ring-blue-500"
-          disabled={busy}
-        />
-      </div>
+      <ToolFilePicker
+        accept={{ 'application/pdf': ['.pdf'] }}
+        multiple={false}
+        files={file ? [file] : []}
+        onAdd={(picked) => {
+          setFile(picked[0] || null);
+          setError('');
+          setStatus('');
+        }}
+        onRemove={() => {
+          setFile(null);
+          setError('');
+          setStatus('');
+        }}
+        emptyTitle="Drag & drop your PDF here"
+        browseLabel="Browse PDF"
+        hint="PDF only · text is extracted locally in your browser"
+        disabled={busy}
+        ariaLabel="Select PDF file to convert to Word"
+      />
       <p className="text-xs text-slate-500">
         Text extraction uses coordinate-based paragraph detection. Complex layouts, tables, images, fonts, and scanned pages are not reconstructed. Scanned PDFs require OCR.
       </p>
@@ -182,7 +187,7 @@ export function PdfToWord() {
         type="button"
         onClick={() => void convert()}
         disabled={!file || busy}
-        className="min-h-12 w-full rounded-xl bg-blue-600 px-5 py-3 text-sm font-bold text-white transition hover:bg-blue-700 disabled:opacity-50 focus:outline-none focus:ring-2 focus:ring-blue-500"
+        className="min-h-12 w-full rounded-xl bg-[var(--pe-accent)] px-5 py-3 text-sm font-bold text-white transition hover:bg-[var(--pe-accent-hover)] disabled:opacity-50 focus:outline-none focus:ring-2 focus:ring-[var(--pe-accent)]"
       >
         {busy ? 'Converting...' : 'Download Word Document'}
       </button>

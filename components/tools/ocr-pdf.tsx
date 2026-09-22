@@ -1,6 +1,8 @@
 'use client';
+import { brandedFileName } from '@/lib/branded-filename';
 
 import { useEffect, useRef, useState } from 'react';
+import { ToolFilePicker } from '@/components/tool-file-picker';
 import * as pdfjsLib from 'pdfjs-dist';
 import { createWorker } from 'tesseract.js';
 import { saveAs } from 'file-saver';
@@ -144,21 +146,29 @@ export function OcrPdf() {
 
       <div className="flex flex-col sm:flex-row gap-3">
         <div className="flex-1">
-          <label className="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-2">
-            Select PDF
-          </label>
-          <input
-            type="file"
-            accept="application/pdf,.pdf"
-            onChange={(event) => {
-              setFile(event.target.files?.[0] || null);
+          <ToolFilePicker
+            accept={{ 'application/pdf': ['.pdf'] }}
+            multiple={false}
+            files={file ? [file] : []}
+            onAdd={(picked) => {
+              setFile(picked[0] || null);
               setText('');
               setError('');
               setStatus('');
               setProgress(0);
             }}
-            className="block w-full rounded-xl border border-slate-300 p-3 text-sm dark:border-slate-700 dark:bg-slate-950"
+            onRemove={() => {
+              setFile(null);
+              setText('');
+              setError('');
+              setStatus('');
+              setProgress(0);
+            }}
+            emptyTitle="Drag & drop your PDF here"
+            browseLabel="Browse PDF"
+            hint="PDF only · processed 100% locally in your browser"
             disabled={busy}
+            ariaLabel="Select PDF file for OCR"
           />
         </div>
 
@@ -215,7 +225,7 @@ export function OcrPdf() {
           type="button"
           onClick={() => void recognize()}
           disabled={!file || busy}
-          className="flex-1 min-h-12 rounded-xl bg-blue-600 px-5 py-3 text-sm font-bold text-white transition hover:bg-blue-700 disabled:opacity-50 focus:outline-none focus:ring-2 focus:ring-blue-500"
+          className="flex-1 min-h-12 rounded-xl bg-[var(--pe-accent)] px-5 py-3 text-sm font-bold text-white transition hover:bg-[var(--pe-accent-hover)] disabled:opacity-50 focus:outline-none focus:ring-2 focus:ring-[var(--pe-accent)]"
         >
           {busy ? 'Recognizing...' : 'Recognize Text'}
         </button>
@@ -247,10 +257,10 @@ export function OcrPdf() {
             onClick={() =>
               saveAs(
                 new Blob([text], { type: 'text/plain;charset=utf-8' }),
-                `${file?.name.replace(/\.pdf$/i, '') || 'ocr-result'}.txt`
+                brandedFileName(file?.name.replace(/\.pdf$/i, '') || 'ocr-result', 'txt')
               )
             }
-            className="w-full min-h-12 rounded-xl border-2 border-blue-600 px-5 py-3 text-sm font-bold text-blue-700 hover:bg-blue-50 dark:border-blue-500 dark:text-blue-400 dark:hover:bg-blue-950 focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="w-full min-h-12 rounded-xl border-2 border-[var(--pe-accent)] px-5 py-3 text-sm font-bold text-[var(--pe-accent)] hover:bg-[var(--pe-accent-soft)] dark:border-[var(--pe-accent)] dark:text-[var(--pe-accent)] dark:hover:bg-[var(--pe-accent-soft)] focus:outline-none focus:ring-2 focus:ring-[var(--pe-accent)]"
           >
             Download TXT
           </button>

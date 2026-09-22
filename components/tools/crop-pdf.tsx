@@ -1,4 +1,5 @@
 'use client';
+import { brandedFileName } from '@/lib/branded-filename';
 
 import React, { useState, useCallback, useEffect, useRef } from 'react';
 import { useDropzone } from 'react-dropzone';
@@ -105,7 +106,7 @@ export function CropPdf() {
         setArrayBuffer(buffer);
 
         setLoadingProgress('Loading PDF pages...');
-        const loadingTask = pdfjsLib.getDocument({ data: new Uint8Array(buffer) });
+        const loadingTask = pdfjsLib.getDocument({ data: new Uint8Array(buffer.slice(0)) });
         const pdf = await loadingTask.promise;
         const totalPages = pdf.numPages;
 
@@ -237,7 +238,7 @@ export function CropPdf() {
       const pdfBytes = await pdfDoc.save();
       const blob = new Blob([pdfBytes as unknown as BlobPart], { type: 'application/pdf' });
       const baseName = file.name.replace(/\.[^/.]+$/, '');
-      saveAs(blob, `${baseName}-cropped.pdf`);
+      saveAs(blob, brandedFileName(`${baseName}-cropped`, 'pdf'));
 
       trackToolExecution('crop-pdf', true);
       setSuccessMessage(
@@ -293,6 +294,14 @@ export function CropPdf() {
               <p className="text-xs sm:text-sm text-slate-500 dark:text-slate-400 mt-1">
                 Trim margins, remove white space, or crop page boundaries with live visual feedback
               </p>
+            </div>
+            <div>
+              <button
+                type="button"
+                className="inline-flex min-h-[48px] cursor-pointer touch-manipulation items-center justify-center gap-2 rounded-2xl bg-[var(--pe-accent)] px-7 py-3 text-sm font-bold text-white shadow-lg shadow-[var(--pe-shadow-accent)] transition-all hover:bg-[var(--pe-accent-hover)] active:scale-95"
+              >
+                Browse files
+              </button>
             </div>
             <div className="inline-flex items-center gap-1.5 text-xs text-slate-400 bg-slate-50 dark:bg-slate-800/80 px-3 py-1 rounded-full border border-slate-100 dark:border-slate-700">
               <Sparkles className="w-3.5 h-3.5 text-amber-500" />

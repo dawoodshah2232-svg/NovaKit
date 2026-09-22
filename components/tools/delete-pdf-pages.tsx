@@ -1,4 +1,5 @@
 'use client';
+import { brandedFileName } from '@/lib/branded-filename';
 
 import React, { useState, useCallback, useEffect, useRef } from 'react';
 import { useDropzone } from 'react-dropzone';
@@ -96,7 +97,7 @@ export function DeletePdfPages() {
         setArrayBuffer(buffer);
 
         setLoadingProgress('Reading PDF pages...');
-        const loadingTask = pdfjsLib.getDocument({ data: new Uint8Array(buffer) });
+        const loadingTask = pdfjsLib.getDocument({ data: new Uint8Array(buffer.slice(0)) });
         const pdf = await loadingTask.promise;
         const totalPages = pdf.numPages;
 
@@ -247,7 +248,7 @@ export function DeletePdfPages() {
       const pdfBytes = await newDoc.save();
       const blob = new Blob([pdfBytes as unknown as BlobPart], { type: 'application/pdf' });
       const baseName = file?.name.replace(/\.[^/.]+$/, '') || 'document';
-      saveAs(blob, `${baseName}-deleted-pages.pdf`);
+      saveAs(blob, brandedFileName(`${baseName}-deleted-pages`, 'pdf'));
 
       trackToolExecution('delete-pdf-pages', true);
       setSuccessMessage(
@@ -298,6 +299,14 @@ export function DeletePdfPages() {
               <p className="text-xs sm:text-sm text-slate-500 dark:text-slate-400 mt-1">
                 Drag & drop your document here, or click to browse files
               </p>
+            </div>
+            <div>
+              <button
+                type="button"
+                className="inline-flex min-h-[48px] cursor-pointer touch-manipulation items-center justify-center gap-2 rounded-2xl bg-[var(--pe-accent)] px-7 py-3 text-sm font-bold text-white shadow-lg shadow-[var(--pe-shadow-accent)] transition-all hover:bg-[var(--pe-accent-hover)] active:scale-95"
+              >
+                Browse files
+              </button>
             </div>
             <div className="inline-flex items-center gap-1.5 text-xs text-slate-400 bg-slate-50 dark:bg-slate-800/80 px-3 py-1 rounded-full border border-slate-100 dark:border-slate-700">
               <Sparkles className="w-3.5 h-3.5 text-amber-500" />

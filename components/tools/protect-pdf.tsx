@@ -1,4 +1,5 @@
 'use client';
+import { brandedFileName } from '@/lib/branded-filename';
 
 import React, { useState, useCallback, useMemo } from 'react';
 import { useDropzone } from 'react-dropzone';
@@ -211,7 +212,7 @@ export function ProtectPdf() {
 
       const blob = new Blob([encryptedBytes as unknown as BlobPart], { type: 'application/pdf' });
       const baseName = loadedPdf.name.replace(/\.[^/.]+$/, '');
-      const protectedFileName = `${baseName}_protected.pdf`;
+      const protectedFileName = brandedFileName(`${baseName}_protected`, 'pdf');
 
       saveAs(blob, protectedFileName);
 
@@ -235,14 +236,14 @@ export function ProtectPdf() {
   return (
     <div className="w-full space-y-6">
       {/* Privacy Guarantee Header Banner */}
-      <div className="flex items-center justify-between p-3.5 rounded-2xl bg-violet-50/90 dark:bg-violet-950/40 border border-violet-200/80 dark:border-violet-800/60 text-xs font-medium text-violet-800 dark:text-violet-300 shadow-xs">
+      <div className="flex items-center justify-between p-3.5 rounded-2xl bg-[var(--pe-accent-soft)] dark:bg-[var(--pe-accent-soft)] border border-[var(--pe-border)] dark:border-[var(--pe-border)] text-xs font-medium text-[var(--pe-accent)] dark:text-[var(--pe-accent)] shadow-xs">
         <div className="flex items-center gap-2">
-          <ShieldCheck className="w-4 h-4 text-violet-600 dark:text-violet-400 shrink-0" />
+          <ShieldCheck className="w-4 h-4 text-[var(--pe-accent)] dark:text-[var(--pe-accent)] shrink-0" />
           <span>
             <strong>Zero Server Uploads:</strong> In-browser AES-256 standard encryption. Your document and passwords never leave local device memory.
           </span>
         </div>
-        <span className="hidden sm:inline-block text-[11px] font-semibold px-2 py-0.5 rounded-full bg-violet-100 dark:bg-violet-900/60 text-violet-700 dark:text-violet-300">
+        <span className="hidden sm:inline-block text-[11px] font-semibold px-2 py-0.5 rounded-full bg-[var(--pe-accent-soft)] dark:bg-[var(--pe-accent-soft)] text-[var(--pe-accent)] dark:text-[var(--pe-accent)]">
           Hardware Web Crypto
         </span>
       </div>
@@ -269,13 +270,13 @@ export function ProtectPdf() {
           {...getRootProps()}
           className={`group relative rounded-3xl border-3 border-dashed transition-all duration-200 p-8 sm:p-16 text-center cursor-pointer min-h-[340px] sm:min-h-[380px] flex flex-col items-center justify-center bg-white dark:bg-slate-900 shadow-[0_4px_24px_rgba(0,0,0,0.03)] hover:shadow-[0_16px_40px_rgba(124,58,237,0.12)] ${
             isDragActive
-              ? 'border-violet-500 bg-violet-50/70 dark:bg-violet-950/50 scale-[0.99] ring-4 ring-violet-500/20'
-              : 'border-violet-300/80 dark:border-violet-900/60 hover:border-violet-600 dark:hover:border-violet-400'
+              ? 'border-[var(--pe-accent)] bg-[var(--pe-accent-soft)] dark:bg-[var(--pe-accent-soft)] scale-[0.99] ring-4 ring-[var(--pe-accent-ring)]'
+              : 'border-[var(--pe-border)] dark:border-[var(--pe-border)] hover:border-[var(--pe-accent)] dark:hover:border-[var(--pe-accent)]'
           }`}
         >
           <input {...getInputProps()} aria-label="Select PDF file to protect" />
           <div className="max-w-md mx-auto space-y-5">
-            <div className="w-20 h-20 sm:w-24 sm:h-24 rounded-3xl bg-violet-50 dark:bg-violet-950/80 text-violet-600 dark:text-violet-400 flex items-center justify-center mx-auto shadow-inner group-hover:scale-110 transition-transform duration-200">
+            <div className="w-20 h-20 sm:w-24 sm:h-24 rounded-3xl bg-[var(--pe-accent-soft)] dark:bg-[var(--pe-accent-soft)] text-[var(--pe-accent)] dark:text-[var(--pe-accent)] flex items-center justify-center mx-auto shadow-inner group-hover:scale-110 transition-transform duration-200">
               <Lock className="w-10 h-10 sm:w-12 sm:h-12" />
             </div>
             <div className="space-y-1.5">
@@ -291,7 +292,7 @@ export function ProtectPdf() {
             </div>
             <button
               type="button"
-              className="min-h-[52px] px-8 py-3.5 rounded-2xl bg-violet-600 hover:bg-violet-700 text-white text-sm sm:text-base font-bold shadow-lg shadow-violet-500/25 active:scale-95 transition-all inline-flex items-center gap-2.5 cursor-pointer"
+              className="min-h-[52px] px-8 py-3.5 rounded-2xl bg-[var(--pe-accent)] hover:bg-[var(--pe-accent-hover)] text-white text-sm sm:text-base font-bold shadow-lg shadow-[var(--pe-shadow-accent)] active:scale-95 transition-all inline-flex items-center gap-2.5 cursor-pointer"
             >
               <FileText className="w-5 h-5" />
               <span>Choose PDF File</span>
@@ -304,7 +305,7 @@ export function ProtectPdf() {
           {/* Active File Toolbar */}
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 p-5 rounded-3xl bg-white dark:bg-slate-900 border border-slate-200/90 dark:border-slate-800 shadow-sm">
             <div className="flex items-center gap-3.5 min-w-0">
-              <div className="w-12 h-12 rounded-2xl bg-violet-100 dark:bg-violet-950/70 text-violet-600 dark:text-violet-400 flex items-center justify-center shrink-0">
+              <div className="w-12 h-12 rounded-2xl bg-[var(--pe-accent-soft)] dark:bg-[var(--pe-accent-soft)] text-[var(--pe-accent)] dark:text-[var(--pe-accent)] flex items-center justify-center shrink-0">
                 <FileText className="w-6 h-6" />
               </div>
               <div className="min-w-0 space-y-0.5">
@@ -314,7 +315,7 @@ export function ProtectPdf() {
                 <div className="flex items-center gap-2 text-xs text-slate-500 dark:text-slate-400">
                   <span className="font-semibold">{formatBytes(loadedPdf.size)}</span>
                   <span>•</span>
-                  <span className="font-extrabold px-2 py-0.5 rounded-md bg-violet-50 dark:bg-violet-950/80 text-violet-700 dark:text-violet-300 border border-violet-200/80 dark:border-violet-900/60">
+                  <span className="font-extrabold px-2 py-0.5 rounded-md bg-[var(--pe-accent-soft)] dark:bg-[var(--pe-accent-soft)] text-[var(--pe-accent)] dark:text-[var(--pe-accent)] border border-[var(--pe-border)] dark:border-[var(--pe-border)]">
                     {loadedPdf.pageCount} {loadedPdf.pageCount === 1 ? 'Page' : 'Pages'}
                   </span>
                 </div>
@@ -336,14 +337,14 @@ export function ProtectPdf() {
             {/* Header */}
             <div className="flex items-center justify-between pb-3 border-b border-slate-100 dark:border-slate-800">
               <div>
-                <span className="text-xs font-bold uppercase tracking-wider text-violet-600 dark:text-violet-400 block mb-0.5">
+                <span className="text-xs font-bold uppercase tracking-wider text-[var(--pe-accent)] dark:text-[var(--pe-accent)] block mb-0.5">
                   Security Settings
                 </span>
                 <h4 className="text-lg sm:text-xl font-black text-slate-950 dark:text-white tracking-tight">
                   Document Password & Encryption
                 </h4>
               </div>
-              <span className="text-[11px] font-mono font-bold px-2.5 py-1 rounded-full bg-violet-50 dark:bg-violet-950/80 text-violet-700 dark:text-violet-300 border border-violet-200/80 dark:border-violet-900/60">
+              <span className="text-[11px] font-mono font-bold px-2.5 py-1 rounded-full bg-[var(--pe-accent-soft)] dark:bg-[var(--pe-accent-soft)] text-[var(--pe-accent)] dark:text-[var(--pe-accent)] border border-[var(--pe-border)] dark:border-[var(--pe-border)]">
                 {algorithm} Standard
               </span>
             </div>
@@ -355,7 +356,7 @@ export function ProtectPdf() {
                   htmlFor="doc-password"
                   className="text-xs font-bold uppercase tracking-wider text-slate-700 dark:text-slate-300 flex items-center gap-1.5"
                 >
-                  <KeyRound className="w-3.5 h-3.5 text-violet-600" />
+                  <KeyRound className="w-3.5 h-3.5 text-[var(--pe-accent)]" />
                   <span>Document Open Password (Required)</span>
                 </label>
                 {password && (
@@ -372,7 +373,7 @@ export function ProtectPdf() {
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   placeholder="Enter a strong password to lock this PDF..."
-                  className="w-full min-h-[50px] pl-4 pr-12 rounded-2xl bg-slate-50 dark:bg-slate-800/60 border border-slate-200/80 dark:border-slate-700 text-slate-900 dark:text-white text-sm sm:text-base font-mono font-semibold focus:outline-none focus:ring-2 focus:ring-violet-500/40 focus:border-violet-500 transition-all"
+                  className="w-full min-h-[50px] pl-4 pr-12 rounded-2xl bg-slate-50 dark:bg-slate-800/60 border border-slate-200/80 dark:border-slate-700 text-slate-900 dark:text-white text-sm sm:text-base font-mono font-semibold focus:outline-none focus:ring-2 focus:ring-[var(--pe-accent-ring)] focus:border-[var(--pe-accent)] transition-all"
                 />
                 <button
                   type="button"
@@ -411,7 +412,7 @@ export function ProtectPdf() {
                   onClick={() => setAlgorithm('AES-256')}
                   className={`p-4 rounded-2xl border text-left transition-all cursor-pointer flex items-center justify-between ${
                     algorithm === 'AES-256'
-                      ? 'border-violet-600 bg-violet-50/50 dark:bg-violet-950/40 ring-2 ring-violet-500/20'
+                      ? 'border-[var(--pe-accent)] bg-[var(--pe-accent-soft)] dark:bg-[var(--pe-accent-soft)] ring-2 ring-[var(--pe-accent-ring)]'
                       : 'border-slate-200/80 dark:border-slate-800 bg-slate-50/40 dark:bg-slate-800/40 opacity-70'
                   }`}
                 >
@@ -429,7 +430,7 @@ export function ProtectPdf() {
                   <div
                     className={`w-5 h-5 rounded-full border flex items-center justify-center shrink-0 ml-2 ${
                       algorithm === 'AES-256'
-                        ? 'border-violet-600 bg-violet-600 text-white'
+                        ? 'border-[var(--pe-accent)] bg-[var(--pe-accent)] text-white'
                         : 'border-slate-300 dark:border-slate-600'
                     }`}
                   >
@@ -442,7 +443,7 @@ export function ProtectPdf() {
                   onClick={() => setAlgorithm('RC4')}
                   className={`p-4 rounded-2xl border text-left transition-all cursor-pointer flex items-center justify-between ${
                     algorithm === 'RC4'
-                      ? 'border-violet-600 bg-violet-50/50 dark:bg-violet-950/40 ring-2 ring-violet-500/20'
+                      ? 'border-[var(--pe-accent)] bg-[var(--pe-accent-soft)] dark:bg-[var(--pe-accent-soft)] ring-2 ring-[var(--pe-accent-ring)]'
                       : 'border-slate-200/80 dark:border-slate-800 bg-slate-50/40 dark:bg-slate-800/40 opacity-70'
                   }`}
                 >
@@ -457,7 +458,7 @@ export function ProtectPdf() {
                   <div
                     className={`w-5 h-5 rounded-full border flex items-center justify-center shrink-0 ml-2 ${
                       algorithm === 'RC4'
-                        ? 'border-violet-600 bg-violet-600 text-white'
+                        ? 'border-[var(--pe-accent)] bg-[var(--pe-accent)] text-white'
                         : 'border-slate-300 dark:border-slate-600'
                     }`}
                   >
@@ -472,7 +473,7 @@ export function ProtectPdf() {
               <div className="flex items-center justify-between">
                 <div>
                   <h5 className="text-xs font-bold uppercase tracking-wider text-slate-900 dark:text-white flex items-center gap-1.5">
-                    <Sliders className="w-3.5 h-3.5 text-violet-600" />
+                    <Sliders className="w-3.5 h-3.5 text-[var(--pe-accent)]" />
                     <span>Granular Document Permissions</span>
                   </h5>
                   <p className="text-[11px] text-slate-500 dark:text-slate-400">
@@ -488,7 +489,7 @@ export function ProtectPdf() {
                   onClick={() => togglePermission('allowPrinting')}
                   className={`min-h-[50px] p-3.5 rounded-2xl border transition-all flex items-center justify-between text-left cursor-pointer ${
                     permissions.allowPrinting
-                      ? 'border-violet-500/80 bg-violet-50/40 dark:bg-violet-950/30'
+                      ? 'border-[var(--pe-accent)] bg-[var(--pe-accent-soft)] dark:bg-[var(--pe-accent-soft)]'
                       : 'border-slate-200/80 dark:border-slate-800 bg-slate-50/30 dark:bg-slate-800/30 opacity-70'
                   }`}
                 >
@@ -496,7 +497,7 @@ export function ProtectPdf() {
                     <div
                       className={`w-8 h-8 rounded-xl flex items-center justify-center ${
                         permissions.allowPrinting
-                          ? 'bg-violet-100 dark:bg-violet-900/60 text-violet-700 dark:text-violet-300'
+                          ? 'bg-[var(--pe-accent-soft)] dark:bg-[var(--pe-accent-soft)] text-[var(--pe-accent)] dark:text-[var(--pe-accent)]'
                           : 'bg-slate-200 dark:bg-slate-700 text-slate-500'
                       }`}
                     >
@@ -514,7 +515,7 @@ export function ProtectPdf() {
                   <div
                     className={`w-5 h-5 rounded-lg flex items-center justify-center ${
                       permissions.allowPrinting
-                        ? 'bg-violet-600 text-white'
+                        ? 'bg-[var(--pe-accent)] text-white'
                         : 'border-2 border-slate-300 dark:border-slate-600'
                     }`}
                   >
@@ -528,7 +529,7 @@ export function ProtectPdf() {
                   onClick={() => togglePermission('allowCopying')}
                   className={`min-h-[50px] p-3.5 rounded-2xl border transition-all flex items-center justify-between text-left cursor-pointer ${
                     permissions.allowCopying
-                      ? 'border-violet-500/80 bg-violet-50/40 dark:bg-violet-950/30'
+                      ? 'border-[var(--pe-accent)] bg-[var(--pe-accent-soft)] dark:bg-[var(--pe-accent-soft)]'
                       : 'border-slate-200/80 dark:border-slate-800 bg-slate-50/30 dark:bg-slate-800/30 opacity-70'
                   }`}
                 >
@@ -536,7 +537,7 @@ export function ProtectPdf() {
                     <div
                       className={`w-8 h-8 rounded-xl flex items-center justify-center ${
                         permissions.allowCopying
-                          ? 'bg-violet-100 dark:bg-violet-900/60 text-violet-700 dark:text-violet-300'
+                          ? 'bg-[var(--pe-accent-soft)] dark:bg-[var(--pe-accent-soft)] text-[var(--pe-accent)] dark:text-[var(--pe-accent)]'
                           : 'bg-slate-200 dark:bg-slate-700 text-slate-500'
                       }`}
                     >
@@ -554,7 +555,7 @@ export function ProtectPdf() {
                   <div
                     className={`w-5 h-5 rounded-lg flex items-center justify-center ${
                       permissions.allowCopying
-                        ? 'bg-violet-600 text-white'
+                        ? 'bg-[var(--pe-accent)] text-white'
                         : 'border-2 border-slate-300 dark:border-slate-600'
                     }`}
                   >
@@ -568,7 +569,7 @@ export function ProtectPdf() {
                   onClick={() => togglePermission('allowModifying')}
                   className={`min-h-[50px] p-3.5 rounded-2xl border transition-all flex items-center justify-between text-left cursor-pointer ${
                     permissions.allowModifying
-                      ? 'border-violet-500/80 bg-violet-50/40 dark:bg-violet-950/30'
+                      ? 'border-[var(--pe-accent)] bg-[var(--pe-accent-soft)] dark:bg-[var(--pe-accent-soft)]'
                       : 'border-slate-200/80 dark:border-slate-800 bg-slate-50/30 dark:bg-slate-800/30 opacity-70'
                   }`}
                 >
@@ -576,7 +577,7 @@ export function ProtectPdf() {
                     <div
                       className={`w-8 h-8 rounded-xl flex items-center justify-center ${
                         permissions.allowModifying
-                          ? 'bg-violet-100 dark:bg-violet-900/60 text-violet-700 dark:text-violet-300'
+                          ? 'bg-[var(--pe-accent-soft)] dark:bg-[var(--pe-accent-soft)] text-[var(--pe-accent)] dark:text-[var(--pe-accent)]'
                           : 'bg-slate-200 dark:bg-slate-700 text-slate-500'
                       }`}
                     >
@@ -594,7 +595,7 @@ export function ProtectPdf() {
                   <div
                     className={`w-5 h-5 rounded-lg flex items-center justify-center ${
                       permissions.allowModifying
-                        ? 'bg-violet-600 text-white'
+                        ? 'bg-[var(--pe-accent)] text-white'
                         : 'border-2 border-slate-300 dark:border-slate-600'
                     }`}
                   >
@@ -608,7 +609,7 @@ export function ProtectPdf() {
                   onClick={() => togglePermission('allowAnnotating')}
                   className={`min-h-[50px] p-3.5 rounded-2xl border transition-all flex items-center justify-between text-left cursor-pointer ${
                     permissions.allowAnnotating
-                      ? 'border-violet-500/80 bg-violet-50/40 dark:bg-violet-950/30'
+                      ? 'border-[var(--pe-accent)] bg-[var(--pe-accent-soft)] dark:bg-[var(--pe-accent-soft)]'
                       : 'border-slate-200/80 dark:border-slate-800 bg-slate-50/30 dark:bg-slate-800/30 opacity-70'
                   }`}
                 >
@@ -616,7 +617,7 @@ export function ProtectPdf() {
                     <div
                       className={`w-8 h-8 rounded-xl flex items-center justify-center ${
                         permissions.allowAnnotating
-                          ? 'bg-violet-100 dark:bg-violet-900/60 text-violet-700 dark:text-violet-300'
+                          ? 'bg-[var(--pe-accent-soft)] dark:bg-[var(--pe-accent-soft)] text-[var(--pe-accent)] dark:text-[var(--pe-accent)]'
                           : 'bg-slate-200 dark:bg-slate-700 text-slate-500'
                       }`}
                     >
@@ -634,7 +635,7 @@ export function ProtectPdf() {
                   <div
                     className={`w-5 h-5 rounded-lg flex items-center justify-center ${
                       permissions.allowAnnotating
-                        ? 'bg-violet-600 text-white'
+                        ? 'bg-[var(--pe-accent)] text-white'
                         : 'border-2 border-slate-300 dark:border-slate-600'
                     }`}
                   >
@@ -649,7 +650,7 @@ export function ProtectPdf() {
               <button
                 type="button"
                 onClick={() => setEnableOwnerPassword(!enableOwnerPassword)}
-                className="text-xs font-bold text-violet-600 dark:text-violet-400 hover:text-violet-700 flex items-center gap-2 cursor-pointer"
+                className="text-xs font-bold text-[var(--pe-accent)] dark:text-[var(--pe-accent)] hover:text-[var(--pe-accent-hover)] flex items-center gap-2 cursor-pointer"
               >
                 <span>{enableOwnerPassword ? '− Remove Master Admin Password' : '+ Set Separate Master Owner Password (Optional)'}</span>
               </button>
@@ -669,7 +670,7 @@ export function ProtectPdf() {
                       value={ownerPassword}
                       onChange={(e) => setOwnerPassword(e.target.value)}
                       placeholder="Admin password to override permission restrictions..."
-                      className="w-full min-h-[46px] pl-4 pr-12 rounded-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 text-slate-900 dark:text-white text-xs sm:text-sm font-mono focus:outline-none focus:ring-2 focus:ring-violet-500/40"
+                      className="w-full min-h-[46px] pl-4 pr-12 rounded-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 text-slate-900 dark:text-white text-xs sm:text-sm font-mono focus:outline-none focus:ring-2 focus:ring-[var(--pe-accent-ring)]"
                     />
                     <button
                       type="button"
@@ -693,7 +694,7 @@ export function ProtectPdf() {
                 className={`w-full min-h-[54px] px-6 py-3.5 rounded-2xl font-black text-sm sm:text-base transition-all flex items-center justify-center gap-2.5 shadow-lg active:scale-[0.98] cursor-pointer ${
                   isProcessing || !password.trim()
                     ? 'bg-slate-200 dark:bg-slate-800 text-slate-400 cursor-not-allowed shadow-none'
-                    : 'bg-gradient-to-r from-violet-600 via-indigo-600 to-violet-700 hover:from-violet-500 hover:to-indigo-600 text-white shadow-violet-600/25'
+                    : 'bg-gradient-to-r from-[var(--pe-accent)] to-[var(--pe-accent-hover)] hover:from-[var(--pe-accent-hover)] hover:to-[var(--pe-accent)] text-white shadow-[var(--pe-shadow-accent)]'
                 }`}
               >
                 {isProcessing ? (

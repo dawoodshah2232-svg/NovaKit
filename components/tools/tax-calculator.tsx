@@ -138,7 +138,7 @@ export function TaxCalculator() {
       {
         name: 'Deductions / Allowances',
         value: Math.max(0, Math.round(deductions)),
-        color: '#6366f1', // Indigo
+        color: '#b91c1c', // Red (theme accent)
       },
     ].filter((item) => item.value > 0);
   }, [netIncome, totalTax, deductions]);
@@ -469,7 +469,7 @@ Take-Home Ratio: ${takeHomePercentage.toFixed(1)}%
             <div className="space-y-2">
               <div className="flex items-center justify-between">
                 <label className="text-xs font-extrabold text-slate-800 dark:text-slate-200 flex items-center gap-1">
-                  <TrendingDown className="w-3.5 h-3.5 text-indigo-500" />
+                  <TrendingDown className="w-3.5 h-3.5 text-[var(--pe-accent)]" />
                   <span>Custom Deductions / Allowances</span>
                 </label>
                 <span className="text-xs font-black text-slate-900 dark:text-white font-mono">
@@ -487,7 +487,7 @@ Take-Home Ratio: ${takeHomePercentage.toFixed(1)}%
                   value={deductions}
                   onChange={(e) => setDeductions(Math.max(0, parseFloat(e.target.value) || 0))}
                   placeholder="e.g. 14600"
-                  className="w-full min-h-[48px] pl-9 pr-4 text-sm font-bold rounded-2xl border border-slate-200 dark:border-slate-700 bg-slate-50/70 dark:bg-slate-800/60 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-indigo-500/40 focus:border-indigo-500 transition-all"
+                  className="w-full min-h-[48px] pl-9 pr-4 text-sm font-bold rounded-2xl border border-slate-200 dark:border-slate-700 bg-slate-50/70 dark:bg-slate-800/60 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-[var(--pe-accent-ring)] focus:border-[var(--pe-accent)] transition-all"
                 />
               </div>
               <p className="text-[11px] text-slate-500 dark:text-slate-400">
@@ -643,7 +643,7 @@ Take-Home Ratio: ${takeHomePercentage.toFixed(1)}%
               </div>
 
               <div className="flex items-center gap-2 p-2 rounded-xl bg-slate-50 dark:bg-slate-800/60">
-                <span className="w-3 h-3 rounded-full bg-indigo-500 shrink-0" />
+                <span className="w-3 h-3 rounded-full bg-[var(--pe-accent)] shrink-0" />
                 <div className="min-w-0 flex-1">
                   <p className="text-[10px] font-bold text-slate-500 truncate">Deductions</p>
                   <p className="text-xs font-black text-slate-900 dark:text-white truncate">

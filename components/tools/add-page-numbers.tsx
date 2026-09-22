@@ -1,4 +1,5 @@
 'use client';
+import { brandedFileName } from '@/lib/branded-filename';
 
 import React, { useState, useCallback, useEffect, useRef } from 'react';
 import { useDropzone } from 'react-dropzone';
@@ -124,7 +125,7 @@ export function AddPageNumbers() {
         setArrayBuffer(buffer);
 
         setLoadingProgress('Reading PDF pages...');
-        const loadingTask = pdfjsLib.getDocument({ data: new Uint8Array(buffer) });
+        const loadingTask = pdfjsLib.getDocument({ data: new Uint8Array(buffer.slice(0)) });
         const pdf = await loadingTask.promise;
         const totalPages = pdf.numPages;
 
@@ -276,7 +277,7 @@ export function AddPageNumbers() {
       const pdfBytes = await pdfDoc.save();
       const blob = new Blob([pdfBytes as unknown as BlobPart], { type: 'application/pdf' });
       const baseName = file.name.replace(/\.[^/.]+$/, '');
-      saveAs(blob, `${baseName}-numbered.pdf`);
+      saveAs(blob, brandedFileName(`${baseName}-numbered`, 'pdf'));
 
       trackToolExecution('add-page-numbers', true);
       setSuccessMessage(
@@ -308,13 +309,13 @@ export function AddPageNumbers() {
           {...getRootProps()}
           className={`relative rounded-3xl border-2 border-dashed p-8 sm:p-12 text-center transition-all cursor-pointer select-none ${
             isDragActive
-              ? 'border-blue-500 bg-blue-50/60 dark:bg-blue-950/20 scale-[1.01]'
-              : 'border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900/60 hover:border-blue-400 dark:hover:border-blue-500 hover:bg-slate-50/50'
+              ? 'border-[var(--pe-accent)] bg-[var(--pe-accent-soft)] dark:bg-[var(--pe-accent-soft)] scale-[1.01]'
+              : 'border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900/60 hover:border-[var(--pe-accent)] dark:hover:border-[var(--pe-accent)] hover:bg-slate-50/50'
           }`}
         >
           <input {...getInputProps()} />
           <div className="max-w-md mx-auto space-y-3">
-            <div className="w-16 h-16 rounded-2xl bg-blue-50 dark:bg-blue-950/60 text-blue-600 dark:text-blue-400 flex items-center justify-center mx-auto shadow-sm">
+            <div className="w-16 h-16 rounded-2xl bg-[var(--pe-accent-soft)] dark:bg-[var(--pe-accent-soft)] text-[var(--pe-accent)] dark:text-[var(--pe-accent)] flex items-center justify-center mx-auto shadow-sm">
               <Binary className="w-8 h-8" />
             </div>
             <div>
@@ -324,6 +325,14 @@ export function AddPageNumbers() {
               <p className="text-xs sm:text-sm text-slate-500 dark:text-slate-400 mt-1">
                 Customize format, position, font, and starting index with live preview
               </p>
+            </div>
+            <div>
+              <button
+                type="button"
+                className="inline-flex min-h-[48px] cursor-pointer touch-manipulation items-center justify-center gap-2 rounded-2xl bg-[var(--pe-accent)] px-7 py-3 text-sm font-bold text-white shadow-lg shadow-[var(--pe-shadow-accent)] transition-all hover:bg-[var(--pe-accent-hover)] active:scale-95"
+              >
+                Browse files
+              </button>
             </div>
             <div className="inline-flex items-center gap-1.5 text-xs text-slate-400 bg-slate-50 dark:bg-slate-800/80 px-3 py-1 rounded-full border border-slate-100 dark:border-slate-700">
               <Sparkles className="w-3.5 h-3.5 text-amber-500" />
@@ -335,7 +344,7 @@ export function AddPageNumbers() {
 
       {isLoadingPages && (
         <div className="p-8 rounded-3xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-center space-y-3">
-          <RefreshCw className="w-8 h-8 text-blue-500 animate-spin mx-auto" />
+          <RefreshCw className="w-8 h-8 text-[var(--pe-accent)] animate-spin mx-auto" />
           <p className="text-sm font-semibold text-slate-700 dark:text-slate-300">
             {loadingProgress || 'Loading document preview...'}
           </p>
@@ -367,7 +376,7 @@ export function AddPageNumbers() {
           {/* Document Header */}
           <div className="p-5 rounded-3xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 flex flex-col md:flex-row md:items-center justify-between gap-4">
             <div className="flex items-center gap-3">
-              <div className="w-10 h-10 rounded-xl bg-blue-50 dark:bg-blue-950/60 text-blue-600 dark:text-blue-400 flex items-center justify-center shrink-0">
+              <div className="w-10 h-10 rounded-xl bg-[var(--pe-accent-soft)] dark:bg-[var(--pe-accent-soft)] text-[var(--pe-accent)] dark:text-[var(--pe-accent)] flex items-center justify-center shrink-0">
                 <FileText className="w-5 h-5" />
               </div>
               <div className="min-w-0">
@@ -383,7 +392,7 @@ export function AddPageNumbers() {
             <button
               type="button"
               onClick={handleReset}
-              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 text-xs font-semibold text-slate-700 dark:text-slate-300 hover:text-blue-600 dark:hover:text-blue-400 transition self-start md:self-auto"
+              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 text-xs font-semibold text-slate-700 dark:text-slate-300 hover:text-[var(--pe-accent)] dark:hover:text-[var(--pe-accent)] transition self-start md:self-auto"
             >
               <RotateCcw className="w-3.5 h-3.5" />
               <span>Choose Another File</span>
@@ -395,7 +404,7 @@ export function AddPageNumbers() {
             {/* Left: Customization Settings */}
             <div className="lg:col-span-1 space-y-5 p-6 rounded-3xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-xs">
               <div className="flex items-center gap-2 pb-3 border-b border-slate-100 dark:border-slate-800 text-slate-900 dark:text-white font-bold text-sm">
-                <Sliders className="w-4 h-4 text-blue-500" />
+                <Sliders className="w-4 h-4 text-[var(--pe-accent)]" />
                 <span>Page Number Settings</span>
               </div>
 
@@ -407,7 +416,7 @@ export function AddPageNumbers() {
                 <select
                   value={format}
                   onChange={(e) => setFormat(e.target.value as NumberFormat)}
-                  className="w-full px-3 py-2 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-950 text-xs font-semibold text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  className="w-full px-3 py-2 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-950 text-xs font-semibold text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-[var(--pe-accent)]"
                 >
                   <option value="page-n-of-total">Page 1 of 10</option>
                   <option value="n-of-total">1 / 10</option>
@@ -437,7 +446,7 @@ export function AddPageNumbers() {
                       onClick={() => setPosition(pos.id as Position)}
                       className={`px-2 py-2 rounded-xl text-[11px] font-bold text-center transition ${
                         position === pos.id
-                          ? 'bg-blue-600 text-white shadow-xs'
+                          ? 'bg-[var(--pe-accent)] text-white shadow-xs'
                           : 'text-slate-600 dark:text-slate-400 hover:bg-slate-200/60 dark:hover:bg-slate-800'
                       }`}
                     >
@@ -458,7 +467,7 @@ export function AddPageNumbers() {
                     min={1}
                     value={firstPageToNumber}
                     onChange={(e) => setFirstPageToNumber(Math.max(1, parseInt(e.target.value) || 1))}
-                    className="w-full px-3 py-1.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-950 text-xs font-semibold text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    className="w-full px-3 py-1.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-950 text-xs font-semibold text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-[var(--pe-accent)]"
                   />
                   <span className="text-[10px] text-slate-400">e.g. 2 to skip cover</span>
                 </div>
@@ -472,7 +481,7 @@ export function AddPageNumbers() {
                     min={1}
                     value={startFromNumber}
                     onChange={(e) => setStartFromNumber(Math.max(1, parseInt(e.target.value) || 1))}
-                    className="w-full px-3 py-1.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-950 text-xs font-semibold text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    className="w-full px-3 py-1.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-950 text-xs font-semibold text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-[var(--pe-accent)]"
                   />
                   <span className="text-[10px] text-slate-400">First numbered value</span>
                 </div>
@@ -489,7 +498,7 @@ export function AddPageNumbers() {
                     onChange={(e) =>
                       setFontFamily(e.target.value as 'Helvetica' | 'TimesRoman' | 'Courier')
                     }
-                    className="w-full px-2.5 py-1.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-950 text-xs font-semibold text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    className="w-full px-2.5 py-1.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-950 text-xs font-semibold text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-[var(--pe-accent)]"
                   >
                     <option value="Helvetica">Helvetica</option>
                     <option value="TimesRoman">Times Roman</option>
@@ -508,7 +517,7 @@ export function AddPageNumbers() {
                     step={1}
                     value={fontSize}
                     onChange={(e) => setFontSize(parseInt(e.target.value))}
-                    className="w-full accent-blue-600 mt-2"
+                    className="w-full accent-[var(--pe-accent)] mt-2"
                   />
                 </div>
               </div>
@@ -543,7 +552,7 @@ export function AddPageNumbers() {
                     step={2}
                     value={margin}
                     onChange={(e) => setMargin(parseInt(e.target.value))}
-                    className="w-full accent-blue-600 mt-2"
+                    className="w-full accent-[var(--pe-accent)] mt-2"
                   />
                 </div>
               </div>
@@ -572,7 +581,7 @@ export function AddPageNumbers() {
                         <div className="w-full flex justify-between text-[10px] font-semibold text-slate-400 pb-1 px-1">
                           <span>Page {page.pageNumber}</span>
                           {label ? (
-                            <span className="text-blue-500 font-bold">Numbered</span>
+                            <span className="text-[var(--pe-accent)] font-bold">Numbered</span>
                           ) : (
                             <span className="text-slate-400">Skipped</span>
                           )}
@@ -625,7 +634,7 @@ export function AddPageNumbers() {
           <div className="sticky bottom-4 p-4 rounded-3xl bg-white/90 dark:bg-slate-900/90 backdrop-blur-md border border-slate-200 dark:border-slate-800 shadow-xl flex flex-col sm:flex-row items-center justify-between gap-4">
             <div className="text-xs sm:text-sm text-slate-600 dark:text-slate-300">
               Format:{' '}
-              <span className="font-bold text-blue-600 dark:text-blue-400">
+              <span className="font-bold text-[var(--pe-accent)] dark:text-[var(--pe-accent)]">
                 &quot;{generatePageLabel(firstPageToNumber - 1, 10)}&quot;
               </span>{' '}
               • Position:{' '}
@@ -638,7 +647,7 @@ export function AddPageNumbers() {
               type="button"
               onClick={handleApplyPageNumbers}
               disabled={isProcessing}
-              className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 py-3 rounded-2xl bg-blue-600 hover:bg-blue-700 active:scale-95 text-white font-bold text-sm shadow-md transition disabled:opacity-50 disabled:cursor-not-allowed"
+              className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 py-3 rounded-2xl bg-[var(--pe-accent)] hover:bg-[var(--pe-accent-hover)] active:scale-95 text-white font-bold text-sm shadow-md transition disabled:opacity-50 disabled:cursor-not-allowed"
             >
               {isProcessing ? (
                 <>

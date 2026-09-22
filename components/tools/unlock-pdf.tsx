@@ -1,4 +1,5 @@
 'use client';
+import { brandedFileName } from '@/lib/branded-filename';
 
 import React, { useState, useCallback } from 'react';
 import { useDropzone } from 'react-dropzone';
@@ -170,7 +171,7 @@ export function UnlockPdf() {
       const unlockedBytes = await unencryptedDoc.save();
       const blob = new Blob([unlockedBytes as unknown as BlobPart], { type: 'application/pdf' });
       const baseName = file.name.replace(/\.[^/.]+$/, '');
-      saveAs(blob, `${baseName}-unlocked.pdf`);
+      saveAs(blob, brandedFileName(`${baseName}-unlocked`, 'pdf'));
 
       trackToolExecution('unlock-pdf', true);
       setSuccessMessage('PDF unlocked successfully! All password restrictions and encryption have been removed.');
@@ -322,7 +323,7 @@ export function UnlockPdf() {
                 </p>
               </div>
             ) : (
-              <div className="p-4 rounded-2xl bg-blue-50 dark:bg-blue-950/40 border border-blue-200 dark:border-blue-900 text-xs text-blue-800 dark:text-blue-300">
+              <div className="p-4 rounded-2xl bg-[var(--pe-accent-soft)] dark:bg-[var(--pe-accent-soft)] border border-[var(--pe-accent)] dark:border-[var(--pe-accent)] text-xs text-[var(--pe-accent)] dark:text-[var(--pe-accent)]">
                 This document is not password encrypted. You can re-save it to confirm unencrypted format.
               </div>
             )}
@@ -330,7 +331,7 @@ export function UnlockPdf() {
             <button
               type="submit"
               disabled={isDecrypting}
- className="min-h-[46px] px-8 py-2.5 rounded-2xl bg-[var(--pe-accent)] hover:bg-[var(--pe-accent-soft)]0 text-[var(--pe-accent-ink)] text-xs sm:text-sm font-black transition-all shadow-md shadow-[var(--pe-shadow-accent)] active:scale-95 flex items-center justify-center gap-2 cursor-pointer disabled:opacity-60"
+ className="min-h-[46px] px-8 py-2.5 rounded-2xl bg-[var(--pe-accent)] hover:bg-[var(--pe-accent-hover)] text-[var(--pe-accent-ink)] text-xs sm:text-sm font-black transition-all shadow-md shadow-[var(--pe-shadow-accent)] active:scale-95 flex items-center justify-center gap-2 cursor-pointer disabled:opacity-60"
             >
               {isDecrypting ? (
                 <>

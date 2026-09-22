@@ -1,4 +1,5 @@
 'use client';
+import { brandedFileName } from '@/lib/branded-filename';
 
 import React, { useState, useCallback, useEffect, useRef } from 'react';
 import { useDropzone } from 'react-dropzone';
@@ -108,7 +109,7 @@ export function FlattenPdf() {
         }
 
         setLoadingProgress('Rendering PDF previews...');
-        const loadingTask = pdfjsLib.getDocument({ data: new Uint8Array(buffer) });
+        const loadingTask = pdfjsLib.getDocument({ data: new Uint8Array(buffer.slice(0)) });
         const pdf = await loadingTask.promise;
         const totalPages = pdf.numPages;
 
@@ -191,14 +192,14 @@ export function FlattenPdf() {
 
         const pdfBytes = await pdfDoc.save();
         const blob = new Blob([pdfBytes as unknown as BlobPart], { type: 'application/pdf' });
-        saveAs(blob, `${baseName}-flattened.pdf`);
+        saveAs(blob, brandedFileName(`${baseName}-flattened`, 'pdf'));
 
         trackToolExecution('flatten-pdf', true);
         setSuccessMessage('Successfully flattened form fields and locked document content!');
       } else {
         // High-resolution raster visual bake
         setLoadingProgress('Rendering and baking document pages...');
-        const loadingTask = pdfjsLib.getDocument({ data: new Uint8Array(arrayBuffer) });
+        const loadingTask = pdfjsLib.getDocument({ data: new Uint8Array(arrayBuffer.slice(0)) });
         const pdf = await loadingTask.promise;
         const totalPages = pdf.numPages;
 
@@ -238,7 +239,7 @@ export function FlattenPdf() {
 
         const pdfBytes = await newDoc.save();
         const blob = new Blob([pdfBytes as unknown as BlobPart], { type: 'application/pdf' });
-        saveAs(blob, `${baseName}-baked-flattened.pdf`);
+        saveAs(blob, brandedFileName(`${baseName}-baked-flattened`, 'pdf'));
 
         trackToolExecution('flatten-pdf', true);
         setSuccessMessage('Successfully baked all pages into uneditable static PDF document!');
@@ -270,13 +271,13 @@ export function FlattenPdf() {
           {...getRootProps()}
           className={`relative rounded-3xl border-2 border-dashed p-8 sm:p-12 text-center transition-all cursor-pointer select-none ${
             isDragActive
-              ? 'border-violet-500 bg-violet-50/60 dark:bg-violet-950/20 scale-[1.01]'
-              : 'border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900/60 hover:border-violet-400 dark:hover:border-violet-500 hover:bg-slate-50/50'
+              ? 'border-[var(--pe-accent)] bg-[var(--pe-accent-soft)]/60 dark:bg-[var(--pe-accent-soft)]/20 scale-[1.01]'
+              : 'border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900/60 hover:border-[var(--pe-accent)] dark:hover:border-[var(--pe-accent)] hover:bg-slate-50/50'
           }`}
         >
           <input {...getInputProps()} />
           <div className="max-w-md mx-auto space-y-3">
-            <div className="w-16 h-16 rounded-2xl bg-violet-50 dark:bg-violet-950/60 text-violet-600 dark:text-violet-400 flex items-center justify-center mx-auto shadow-sm">
+            <div className="w-16 h-16 rounded-2xl bg-[var(--pe-accent-soft)] dark:bg-[var(--pe-accent-soft)]/60 text-[var(--pe-accent)] dark:text-[var(--pe-accent)] flex items-center justify-center mx-auto shadow-sm">
               <Layers className="w-8 h-8" />
             </div>
             <div>
@@ -286,6 +287,14 @@ export function FlattenPdf() {
               <p className="text-xs sm:text-sm text-slate-500 dark:text-slate-400 mt-1">
                 Make form fields, annotations, signatures, and interactive layers permanent & uneditable
               </p>
+            </div>
+            <div>
+              <button
+                type="button"
+                className="inline-flex min-h-[48px] cursor-pointer touch-manipulation items-center justify-center gap-2 rounded-2xl bg-[var(--pe-accent)] px-7 py-3 text-sm font-bold text-white shadow-lg shadow-[var(--pe-shadow-accent)] transition-all hover:bg-[var(--pe-accent-hover)] active:scale-95"
+              >
+                Browse files
+              </button>
             </div>
             <div className="inline-flex items-center gap-1.5 text-xs text-slate-400 bg-slate-50 dark:bg-slate-800/80 px-3 py-1 rounded-full border border-slate-100 dark:border-slate-700">
               <Sparkles className="w-3.5 h-3.5 text-amber-500" />
@@ -297,7 +306,7 @@ export function FlattenPdf() {
 
       {isLoadingPages && (
         <div className="p-8 rounded-3xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-center space-y-3">
-          <RefreshCw className="w-8 h-8 text-violet-500 animate-spin mx-auto" />
+          <RefreshCw className="w-8 h-8 text-[var(--pe-accent)] animate-spin mx-auto" />
           <p className="text-sm font-semibold text-slate-700 dark:text-slate-300">
             {loadingProgress || 'Loading document pages...'}
           </p>
@@ -329,7 +338,7 @@ export function FlattenPdf() {
           {/* Header */}
           <div className="p-5 rounded-3xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 flex flex-col md:flex-row md:items-center justify-between gap-4">
             <div className="flex items-center gap-3">
-              <div className="w-10 h-10 rounded-xl bg-violet-50 dark:bg-violet-950/60 text-violet-600 dark:text-violet-400 flex items-center justify-center shrink-0">
+              <div className="w-10 h-10 rounded-xl bg-[var(--pe-accent-soft)] dark:bg-[var(--pe-accent-soft)]/60 text-[var(--pe-accent)] dark:text-[var(--pe-accent)] flex items-center justify-center shrink-0">
                 <FileText className="w-5 h-5" />
               </div>
               <div className="min-w-0">
@@ -348,7 +357,7 @@ export function FlattenPdf() {
             <button
               type="button"
               onClick={handleReset}
-              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 text-xs font-semibold text-slate-700 dark:text-slate-300 hover:text-violet-600 dark:hover:text-violet-400 transition self-start md:self-auto"
+              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 text-xs font-semibold text-slate-700 dark:text-slate-300 hover:text-[var(--pe-accent)] dark:hover:text-[var(--pe-accent)] transition self-start md:self-auto"
             >
               <RotateCcw className="w-3.5 h-3.5" />
               <span>Choose Another File</span>
@@ -362,17 +371,17 @@ export function FlattenPdf() {
               onClick={() => setFlattenMode('vector')}
               className={`p-5 rounded-3xl border-2 cursor-pointer transition select-none flex flex-col justify-between ${
                 flattenMode === 'vector'
-                  ? 'border-violet-600 bg-violet-50/60 dark:bg-violet-950/40 shadow-sm'
+                  ? 'border-[var(--pe-accent)] bg-[var(--pe-accent-soft)]/60 dark:bg-[var(--pe-accent-soft)]/40 shadow-sm'
                   : 'border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 hover:border-slate-300 dark:hover:border-slate-700'
               }`}
             >
               <div className="space-y-2">
                 <div className="flex items-center justify-between">
-                  <div className="w-9 h-9 rounded-xl bg-violet-100 dark:bg-violet-900/60 text-violet-600 dark:text-violet-400 flex items-center justify-center">
+                  <div className="w-9 h-9 rounded-xl bg-[var(--pe-accent-soft)] dark:bg-[var(--pe-accent-soft)]/60 text-[var(--pe-accent)] dark:text-[var(--pe-accent)] flex items-center justify-center">
                     <Zap className="w-5 h-5" />
                   </div>
                   {flattenMode === 'vector' && (
-                    <span className="inline-flex items-center gap-1 text-[11px] font-bold text-violet-600 dark:text-violet-400 bg-violet-100 dark:bg-violet-900/60 px-2 py-0.5 rounded-full">
+                    <span className="inline-flex items-center gap-1 text-[11px] font-bold text-[var(--pe-accent)] dark:text-[var(--pe-accent)] bg-[var(--pe-accent-soft)] dark:bg-[var(--pe-accent-soft)]/60 px-2 py-0.5 rounded-full">
                       <Check className="w-3 h-3" /> Recommended
                     </span>
                   )}
@@ -392,17 +401,17 @@ export function FlattenPdf() {
               onClick={() => setFlattenMode('raster')}
               className={`p-5 rounded-3xl border-2 cursor-pointer transition select-none flex flex-col justify-between ${
                 flattenMode === 'raster'
-                  ? 'border-violet-600 bg-violet-50/60 dark:bg-violet-950/40 shadow-sm'
+                  ? 'border-[var(--pe-accent)] bg-[var(--pe-accent-soft)]/60 dark:bg-[var(--pe-accent-soft)]/40 shadow-sm'
                   : 'border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 hover:border-slate-300 dark:hover:border-slate-700'
               }`}
             >
               <div className="space-y-2">
                 <div className="flex items-center justify-between">
-                  <div className="w-9 h-9 rounded-xl bg-violet-100 dark:bg-violet-900/60 text-violet-600 dark:text-violet-400 flex items-center justify-center">
+                  <div className="w-9 h-9 rounded-xl bg-[var(--pe-accent-soft)] dark:bg-[var(--pe-accent-soft)]/60 text-[var(--pe-accent)] dark:text-[var(--pe-accent)] flex items-center justify-center">
                     <ImageIcon className="w-5 h-5" />
                   </div>
                   {flattenMode === 'raster' && (
-                    <span className="inline-flex items-center gap-1 text-[11px] font-bold text-violet-600 dark:text-violet-400 bg-violet-100 dark:bg-violet-900/60 px-2 py-0.5 rounded-full">
+                    <span className="inline-flex items-center gap-1 text-[11px] font-bold text-[var(--pe-accent)] dark:text-[var(--pe-accent)] bg-[var(--pe-accent-soft)] dark:bg-[var(--pe-accent-soft)]/60 px-2 py-0.5 rounded-full">
                       <Check className="w-3 h-3" /> High Security
                     </span>
                   )}
@@ -449,7 +458,7 @@ export function FlattenPdf() {
           <div className="sticky bottom-4 p-4 rounded-3xl bg-white/90 dark:bg-slate-900/90 backdrop-blur-md border border-slate-200 dark:border-slate-800 shadow-xl flex flex-col sm:flex-row items-center justify-between gap-4">
             <div className="text-xs sm:text-sm text-slate-600 dark:text-slate-300">
               Mode:{' '}
-              <span className="font-bold text-violet-600 dark:text-violet-400">
+              <span className="font-bold text-[var(--pe-accent)] dark:text-[var(--pe-accent)]">
                 {flattenMode === 'vector' ? 'Vector Form Flatten' : 'Full Visual Bake (Raster)'}
               </span>
             </div>
@@ -458,7 +467,7 @@ export function FlattenPdf() {
               type="button"
               onClick={handleFlattenAndDownload}
               disabled={isProcessing}
-              className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 py-3 rounded-2xl bg-violet-600 hover:bg-violet-700 active:scale-95 text-white font-bold text-sm shadow-md transition disabled:opacity-50 disabled:cursor-not-allowed"
+              className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 py-3 rounded-2xl bg-[var(--pe-accent)] hover:bg-[var(--pe-accent-hover)] active:scale-95 text-white font-bold text-sm shadow-md transition disabled:opacity-50 disabled:cursor-not-allowed"
             >
               {isProcessing ? (
                 <>

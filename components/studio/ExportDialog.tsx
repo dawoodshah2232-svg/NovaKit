@@ -133,7 +133,9 @@ export function ExportDialog({
               Export as Word (.docx)
             </button>
             <p className="mt-1.5 text-center text-xs leading-5 text-[var(--pe-text-3)]">
-              Editable Word document — opens in MS Word and Google Docs.
+              Editable Word document — opens in MS Word and Google Docs. Exports the
+              document&apos;s own text; annotations, drawings, and signatures you added in
+              Studio are not included.
             </p>
             {hasRedactions && (
               <p className="mt-4 rounded-lg border border-[var(--pe-danger)] bg-[var(--pe-danger-soft)] p-3 text-[11px] leading-5 text-[var(--pe-danger)]">

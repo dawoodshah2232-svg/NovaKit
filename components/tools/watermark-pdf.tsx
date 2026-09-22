@@ -1,4 +1,5 @@
 'use client';
+import { brandedFileName } from '@/lib/branded-filename';
 
 import React, { useState, useCallback, useEffect, useRef } from 'react';
 import { useDropzone } from 'react-dropzone';
@@ -209,7 +210,7 @@ export function WatermarkPdf() {
       const pdfBytes = await pdfDoc.save();
       const blob = new Blob([pdfBytes as unknown as BlobPart], { type: 'application/pdf' });
       const baseName = file.name.replace(/\.[^/.]+$/, '');
-      saveAs(blob, `${baseName}-watermarked.pdf`);
+      saveAs(blob, brandedFileName(`${baseName}-watermarked`, 'pdf'));
 
       trackToolExecution('watermark-pdf', true);
       setSuccessMessage(`Watermark applied across all ${pages.length} pages successfully!`);
@@ -250,7 +251,7 @@ export function WatermarkPdf() {
             </div>
             <button
               type="button"
-              className="px-4 py-2 rounded-xl bg-slate-950 hover:bg-slate-900 dark:bg-white dark:hover:bg-slate-100 text-white dark:text-slate-950 text-xs font-bold transition-all shadow-sm active:scale-95"
+              className="inline-flex min-h-[48px] cursor-pointer touch-manipulation items-center justify-center gap-2 rounded-2xl bg-[var(--pe-accent)] px-7 py-3 text-sm font-bold text-white shadow-lg shadow-[var(--pe-shadow-accent)] transition-all hover:bg-[var(--pe-accent-hover)] active:scale-95"
             >
               Select Local PDF
             </button>

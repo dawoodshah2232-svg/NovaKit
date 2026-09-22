@@ -275,7 +275,7 @@ export function PasswordGenerator() {
               className={`min-h-[46px] px-5 py-2.5 rounded-xl text-xs sm:text-sm font-bold transition-all shadow-md inline-flex items-center gap-2 active:scale-95 cursor-pointer ${
                 copied
                   ? 'bg-emerald-600 text-white shadow-emerald-500/25'
-                  : 'bg-slate-900 hover:bg-blue-600 dark:bg-white dark:hover:bg-blue-600 text-white dark:text-slate-900 dark:hover:text-white shadow-slate-900/10'
+                  : 'bg-slate-900 hover:bg-[var(--pe-accent-hover)] dark:bg-white dark:hover:bg-[var(--pe-accent-hover)] text-white dark:text-slate-900 dark:hover:text-white shadow-slate-900/10'
               }`}
             >
               {copied ? (

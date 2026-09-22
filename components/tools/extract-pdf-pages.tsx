@@ -1,4 +1,5 @@
 'use client';
+import { brandedFileName } from '@/lib/branded-filename';
 
 import React, { useState, useCallback, useEffect, useRef } from 'react';
 import { useDropzone } from 'react-dropzone';
@@ -100,7 +101,7 @@ export function ExtractPdfPages() {
         setArrayBuffer(buffer);
 
         setLoadingProgress('Reading PDF pages...');
-        const loadingTask = pdfjsLib.getDocument({ data: new Uint8Array(buffer) });
+        const loadingTask = pdfjsLib.getDocument({ data: new Uint8Array(buffer.slice(0)) });
         const pdf = await loadingTask.promise;
         const totalPages = pdf.numPages;
 
@@ -252,7 +253,7 @@ export function ExtractPdfPages() {
 
         const pdfBytes = await newDoc.save();
         const blob = new Blob([pdfBytes as unknown as BlobPart], { type: 'application/pdf' });
-        saveAs(blob, `${baseName}-extracted.pdf`);
+        saveAs(blob, brandedFileName(`${baseName}-extracted`, 'pdf'));
 
         trackToolExecution('extract-pdf-pages', true);
         setSuccessMessage(
@@ -271,11 +272,11 @@ export function ExtractPdfPages() {
           singleDoc.setCreator('PDFEdit Studio Extract Pages');
 
           const singlePdfBytes = await singleDoc.save();
-          zip.file(`${baseName}-page-${pNum}.pdf`, singlePdfBytes);
+          zip.file(brandedFileName(`${baseName}-page-${pNum}`, 'pdf'), singlePdfBytes);
         }
 
         const zipBlob = await zip.generateAsync({ type: 'blob' });
-        saveAs(zipBlob, `${baseName}-extracted-pages.zip`);
+        saveAs(zipBlob, brandedFileName(`${baseName}-extracted-pages`, 'zip'));
 
         trackToolExecution('extract-pdf-pages', true);
         setSuccessMessage(
@@ -309,13 +310,13 @@ export function ExtractPdfPages() {
           {...getRootProps()}
           className={`relative rounded-3xl border-2 border-dashed p-8 sm:p-12 text-center transition-all cursor-pointer select-none ${
             isDragActive
-              ? 'border-indigo-500 bg-indigo-50/60 dark:bg-indigo-950/20 scale-[1.01]'
-              : 'border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900/60 hover:border-indigo-400 dark:hover:border-indigo-500 hover:bg-slate-50/50'
+              ? 'border-[var(--pe-accent)] bg-[var(--pe-accent-soft)] dark:bg-[var(--pe-accent-soft)] scale-[1.01]'
+              : 'border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900/60 hover:border-[var(--pe-accent)] dark:hover:border-[var(--pe-accent)] hover:bg-slate-50/50'
           }`}
         >
           <input {...getInputProps()} />
           <div className="max-w-md mx-auto space-y-3">
-            <div className="w-16 h-16 rounded-2xl bg-indigo-50 dark:bg-indigo-950/60 text-indigo-600 dark:text-indigo-400 flex items-center justify-center mx-auto shadow-sm">
+            <div className="w-16 h-16 rounded-2xl bg-[var(--pe-accent-soft)] dark:bg-[var(--pe-accent-soft)] text-[var(--pe-accent)] dark:text-[var(--pe-accent)] flex items-center justify-center mx-auto shadow-sm">
               <Scissors className="w-8 h-8" />
             </div>
             <div>
@@ -325,6 +326,14 @@ export function ExtractPdfPages() {
               <p className="text-xs sm:text-sm text-slate-500 dark:text-slate-400 mt-1">
                 Select specific pages to extract into a new PDF or ZIP archive
               </p>
+            </div>
+            <div>
+              <button
+                type="button"
+                className="inline-flex min-h-[48px] cursor-pointer touch-manipulation items-center justify-center gap-2 rounded-2xl bg-[var(--pe-accent)] px-7 py-3 text-sm font-bold text-white shadow-lg shadow-[var(--pe-shadow-accent)] transition-all hover:bg-[var(--pe-accent-hover)] active:scale-95"
+              >
+                Browse files
+              </button>
             </div>
             <div className="inline-flex items-center gap-1.5 text-xs text-slate-400 bg-slate-50 dark:bg-slate-800/80 px-3 py-1 rounded-full border border-slate-100 dark:border-slate-700">
               <Sparkles className="w-3.5 h-3.5 text-amber-500" />
@@ -336,7 +345,7 @@ export function ExtractPdfPages() {
 
       {isLoadingPages && (
         <div className="p-8 rounded-3xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-center space-y-3">
-          <RefreshCw className="w-8 h-8 text-indigo-500 animate-spin mx-auto" />
+          <RefreshCw className="w-8 h-8 text-[var(--pe-accent)] animate-spin mx-auto" />
           <p className="text-sm font-semibold text-slate-700 dark:text-slate-300">
             {loadingProgress || 'Loading document thumbnails...'}
           </p>
@@ -368,7 +377,7 @@ export function ExtractPdfPages() {
           {/* Document Header & Quick Actions */}
           <div className="p-5 rounded-3xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 flex flex-col md:flex-row md:items-center justify-between gap-4">
             <div className="flex items-center gap-3">
-              <div className="w-10 h-10 rounded-xl bg-indigo-50 dark:bg-indigo-950/60 text-indigo-600 dark:text-indigo-400 flex items-center justify-center shrink-0">
+              <div className="w-10 h-10 rounded-xl bg-[var(--pe-accent-soft)] dark:bg-[var(--pe-accent-soft)] text-[var(--pe-accent)] dark:text-[var(--pe-accent)] flex items-center justify-center shrink-0">
                 <FileText className="w-5 h-5" />
               </div>
               <div className="min-w-0">
@@ -413,7 +422,7 @@ export function ExtractPdfPages() {
               <button
                 type="button"
                 onClick={handleReset}
-                className="p-1.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 text-slate-500 hover:text-indigo-600 dark:hover:text-indigo-400 transition"
+                className="p-1.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 text-slate-500 hover:text-[var(--pe-accent)] dark:hover:text-[var(--pe-accent)] transition"
                 title="Choose different file"
               >
                 <RotateCcw className="w-4 h-4" />
@@ -433,7 +442,7 @@ export function ExtractPdfPages() {
                 value={rangeInput}
                 onChange={(e) => setRangeInput(e.target.value)}
                 placeholder="e.g. 1-3, 5, 7"
-                className="flex-1 px-3 py-1.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-950 text-xs text-slate-900 dark:text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                className="flex-1 px-3 py-1.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-950 text-xs text-slate-900 dark:text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-[var(--pe-accent)]"
                 onKeyDown={(e) => {
                   if (e.key === 'Enter') {
                     e.preventDefault();
@@ -444,7 +453,7 @@ export function ExtractPdfPages() {
               <button
                 type="button"
                 onClick={applyRangeSelection}
-                className="px-3 py-1.5 rounded-xl bg-indigo-600 text-white text-xs font-bold hover:bg-indigo-700 transition shrink-0"
+                className="px-3 py-1.5 rounded-xl bg-[var(--pe-accent)] text-white text-xs font-bold hover:bg-[var(--pe-accent-hover)] transition shrink-0"
               >
                 Select
               </button>
@@ -461,7 +470,7 @@ export function ExtractPdfPages() {
                   onClick={() => setExtractMode('merged')}
                   className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-lg text-xs font-bold transition ${
                     extractMode === 'merged'
-                      ? 'bg-white dark:bg-slate-900 text-indigo-600 dark:text-indigo-400 shadow-xs'
+                      ? 'bg-white dark:bg-slate-900 text-[var(--pe-accent)] dark:text-[var(--pe-accent)] shadow-xs'
                       : 'text-slate-600 dark:text-slate-400 hover:text-slate-900'
                   }`}
                 >
@@ -473,7 +482,7 @@ export function ExtractPdfPages() {
                   onClick={() => setExtractMode('zip')}
                   className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-lg text-xs font-bold transition ${
                     extractMode === 'zip'
-                      ? 'bg-white dark:bg-slate-900 text-indigo-600 dark:text-indigo-400 shadow-xs'
+                      ? 'bg-white dark:bg-slate-900 text-[var(--pe-accent)] dark:text-[var(--pe-accent)] shadow-xs'
                       : 'text-slate-600 dark:text-slate-400 hover:text-slate-900'
                   }`}
                 >
@@ -494,7 +503,7 @@ export function ExtractPdfPages() {
                   onClick={() => togglePage(item.pageNumber)}
                   className={`group relative rounded-2xl p-2 border-2 transition-all cursor-pointer flex flex-col items-center select-none ${
                     isSelected
-                      ? 'border-indigo-600 bg-indigo-50/70 dark:bg-indigo-950/40 shadow-sm'
+                      ? 'border-[var(--pe-accent)] bg-[var(--pe-accent-soft)] dark:bg-[var(--pe-accent-soft)] shadow-sm'
                       : 'border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 hover:border-slate-300 dark:hover:border-slate-700 shadow-xs opacity-75'
                   }`}
                 >
@@ -503,14 +512,14 @@ export function ExtractPdfPages() {
                     <span
                       className={`text-xs font-bold ${
                         isSelected
-                          ? 'text-indigo-600 dark:text-indigo-400'
+                          ? 'text-[var(--pe-accent)] dark:text-[var(--pe-accent)]'
                           : 'text-slate-700 dark:text-slate-300'
                       }`}
                     >
                       Page {item.pageNumber}
                     </span>
                     {isSelected ? (
-                      <span className="inline-flex items-center gap-1 text-[10px] font-extrabold uppercase px-1.5 py-0.5 rounded bg-indigo-600 text-white">
+                      <span className="inline-flex items-center gap-1 text-[10px] font-extrabold uppercase px-1.5 py-0.5 rounded bg-[var(--pe-accent)] text-white">
                         <Check className="w-3 h-3" />
                         Selected
                       </span>
@@ -529,7 +538,7 @@ export function ExtractPdfPages() {
                     />
 
                     {isSelected && (
-                      <div className="absolute inset-0 bg-indigo-600/10 backdrop-blur-[0.5px] pointer-events-none" />
+                      <div className="absolute inset-0 bg-[var(--pe-accent-soft)] backdrop-blur-[0.5px] pointer-events-none" />
                     )}
                   </div>
                 </div>
@@ -540,7 +549,7 @@ export function ExtractPdfPages() {
           {/* Action Bar */}
           <div className="sticky bottom-4 p-4 rounded-3xl bg-white/90 dark:bg-slate-900/90 backdrop-blur-md border border-slate-200 dark:border-slate-800 shadow-xl flex flex-col sm:flex-row items-center justify-between gap-4">
             <div className="text-xs sm:text-sm text-slate-600 dark:text-slate-300">
-              <span className="font-bold text-indigo-600 dark:text-indigo-400">
+              <span className="font-bold text-[var(--pe-accent)] dark:text-[var(--pe-accent)]">
                 {selectedPages.size} of {pages.length} pages selected
               </span>{' '}
               • Export format:{' '}
@@ -553,7 +562,7 @@ export function ExtractPdfPages() {
               type="button"
               onClick={handleExtract}
               disabled={isExporting || selectedPages.size === 0}
-              className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 py-3 rounded-2xl bg-indigo-600 hover:bg-indigo-700 active:scale-95 text-white font-bold text-sm shadow-md transition disabled:opacity-50 disabled:cursor-not-allowed"
+              className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 py-3 rounded-2xl bg-[var(--pe-accent)] hover:bg-[var(--pe-accent-hover)] active:scale-95 text-white font-bold text-sm shadow-md transition disabled:opacity-50 disabled:cursor-not-allowed"
             >
               {isExporting ? (
                 <>
