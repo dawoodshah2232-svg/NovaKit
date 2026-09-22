@@ -32,6 +32,13 @@ import { OcrPdf } from '@/components/tools/ocr-pdf';
 import { SignPdf } from '@/components/tools/sign-pdf';
 import { PdfToWord } from '@/components/tools/pdf-to-word';
 import { WordToPdf } from '@/components/tools/word-to-pdf';
+import { DeletePdfPages } from '@/components/tools/delete-pdf-pages';
+import { ExtractPdfPages } from '@/components/tools/extract-pdf-pages';
+import { AddPageNumbers } from '@/components/tools/add-page-numbers';
+import { CropPdf } from '@/components/tools/crop-pdf';
+import { PdfToText } from '@/components/tools/pdf-to-text';
+import { FlattenPdf } from '@/components/tools/flatten-pdf';
+import { RedactPdf } from '@/components/tools/redact-pdf';
 
 const canonicalPathBySlug: Record<string, string> = {
   'image-to-pdf': '/jpg-to-pdf',
@@ -48,6 +55,13 @@ const canonicalPathBySlug: Record<string, string> = {
   'word-to-pdf': '/word-to-pdf',
   'ocr-pdf': '/ocr-pdf',
   'sign-pdf': '/sign-pdf',
+  'delete-pdf-pages': '/delete-pdf-pages',
+  'extract-pdf-pages': '/extract-pdf-pages',
+  'add-page-numbers': '/add-page-numbers',
+  'crop-pdf': '/crop-pdf',
+  'pdf-to-text': '/pdf-to-text',
+  'flatten-pdf': '/flatten-pdf',
+  'redact-pdf': '/redact-pdf',
 };
 
 const relatedToolsBySlug: Record<string, [string, string][]> = {
@@ -66,6 +80,13 @@ const relatedToolsBySlug: Record<string, [string, string][]> = {
   'ocr-pdf': [['/pdf-to-images', 'PDF to Images'], ['/pdf-to-word', 'PDF to Word'], ['/compress-pdf', 'Compress PDF']],
   'sign-pdf': [['/merge-pdf', 'Merge PDF'], ['/watermark-pdf', 'Watermark PDF'], ['/studio', 'PDF Studio']],
   'edit-pdf-metadata': [['/merge-pdf', 'Merge PDF'], ['/compress-pdf', 'Compress PDF'], ['/studio', 'PDF Studio']],
+  'delete-pdf-pages': [['/organize-pdf', 'Organize PDF'], ['/extract-pdf-pages', 'Extract PDF Pages'], ['/split-pdf', 'Split PDF']],
+  'extract-pdf-pages': [['/delete-pdf-pages', 'Delete PDF Pages'], ['/split-pdf', 'Split PDF'], ['/merge-pdf', 'Merge PDF']],
+  'add-page-numbers': [['/watermark-pdf', 'Watermark PDF'], ['/flatten-pdf', 'Flatten PDF'], ['/studio', 'PDF Studio']],
+  'crop-pdf': [['/rotate-pdf', 'Rotate PDF'], ['/compress-pdf', 'Compress PDF'], ['/flatten-pdf', 'Flatten PDF']],
+  'pdf-to-text': [['/ocr-pdf', 'OCR PDF'], ['/pdf-to-word', 'PDF to Word'], ['/pdf-to-jpg', 'PDF to JPG']],
+  'flatten-pdf': [['/sign-pdf', 'Sign PDF'], ['/protect-pdf', 'Protect PDF'], ['/redact-pdf', 'Redact PDF']],
+  'redact-pdf': [['/flatten-pdf', 'Flatten PDF'], ['/edit-pdf-metadata', 'Edit Metadata'], ['/protect-pdf', 'Protect PDF']],
 };
 
 interface ToolPageProps {
@@ -101,7 +122,7 @@ export async function generateMetadata({ params }: ToolPageProps): Promise<Metad
   const canonicalUrl = `https://www.pdfedit.website${canonicalPath}`;
 
   return {
-    title,
+    title: { absolute: title },
     description,
     keywords: [
       tool.name,
@@ -265,6 +286,20 @@ export default async function ToolPage({ params }: ToolPageProps) {
         <OcrPdf />
       ) : slug === 'sign-pdf' ? (
         <SignPdf />
+      ) : slug === 'delete-pdf-pages' || slug === 'pdf-page-delete' ? (
+        <DeletePdfPages />
+      ) : slug === 'extract-pdf-pages' || slug === 'pdf-page-extractor' ? (
+        <ExtractPdfPages />
+      ) : slug === 'add-page-numbers' || slug === 'pdf-number-pages' ? (
+        <AddPageNumbers />
+      ) : slug === 'crop-pdf' || slug === 'pdf-cropper' ? (
+        <CropPdf />
+      ) : slug === 'pdf-to-text' || slug === 'pdf-text-extractor' ? (
+        <PdfToText />
+      ) : slug === 'flatten-pdf' || slug === 'pdf-flattener' ? (
+        <FlattenPdf />
+      ) : slug === 'redact-pdf' || slug === 'pdf-redaction' ? (
+        <RedactPdf />
       ) : slug === 'organize-pdf' || slug === 'pdf-page-reorder' ? (
         <OrganizePdf />
       ) : slug === 'unlock-pdf' || slug === 'pdf-password-remover' ? (

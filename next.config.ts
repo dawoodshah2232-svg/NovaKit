@@ -1,6 +1,11 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
+  async redirects() {
+    return [
+      { source: '/google-sitemap.xml', destination: '/sitemap.xml', permanent: true },
+    ];
+  },
   async rewrites() {
     return [
       { source: '/compress-pdf', destination: '/tools/compress-pdf' },

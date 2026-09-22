@@ -3,7 +3,7 @@ import ToolPage from '../tools/[slug]/page';
 
 const url = 'https://www.pdfedit.website/merge-pdf';
 export const metadata: Metadata = {
-	title: 'Merge PDF Online Free – Combine PDF Files | PDFEdit',
+	title: { absolute: 'Merge PDF Online Free – Combine PDF Files | PDFEdit' },
 	description:
 		'Merge PDF files online for free. Combine multiple PDFs in your preferred order directly in your browser and download one merged document.',
 	alternates: { canonical: url },
