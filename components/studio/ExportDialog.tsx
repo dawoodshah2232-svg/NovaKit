@@ -29,6 +29,7 @@ export interface ExportDialogProps {
   hasRedactions: boolean;
   onClose: () => void;
   onExport: (flatten: boolean) => void;
+  onExportDocx: () => void;
   onDownload: () => void;
   onContinue: () => void;
   onNewFile: () => void;
@@ -49,6 +50,7 @@ export function ExportDialog({
   hasRedactions,
   onClose,
   onExport,
+  onExportDocx,
   onDownload,
   onContinue,
   onNewFile,
@@ -122,6 +124,16 @@ export function ExportDialog({
             </button>
             <p className="mt-1.5 text-center text-xs leading-5 text-[var(--pe-text-3)]">
               Merges all overlays and form fields into static page content.
+            </p>
+            <button
+              type="button"
+              onClick={onExportDocx}
+              className="mt-4 h-12 w-full rounded-xl border border-[var(--pe-border-strong)] text-sm font-semibold text-[var(--pe-text)] transition hover:bg-[var(--pe-surface-3)]"
+            >
+              Export as Word (.docx)
+            </button>
+            <p className="mt-1.5 text-center text-xs leading-5 text-[var(--pe-text-3)]">
+              Editable Word document — opens in MS Word and Google Docs.
             </p>
             {hasRedactions && (
               <p className="mt-4 rounded-lg border border-[var(--pe-danger)] bg-[var(--pe-danger-soft)] p-3 text-[11px] leading-5 text-[var(--pe-danger)]">

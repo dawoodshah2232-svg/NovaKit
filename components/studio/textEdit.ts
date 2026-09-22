@@ -30,6 +30,10 @@ export interface PdfTextLine {
   h: number;
   /** fraction of displayed page height */
   fontSize: number;
+  /** unpadded top of the actual glyphs (no padding) — use for text layer placement */
+  glyphY: number;
+  /** normalized baseline position of the glyphs */
+  baselineY: number;
   fontId: string;
   bold: boolean;
   italic: boolean;
@@ -37,6 +41,8 @@ export interface PdfTextLine {
   color: string;
   /** hex page background sampled near the line ('' until sampled) */
   bg: string;
+  /** false when the background behind the line is busy (image/gradient) — use a tight cover */
+  bgReliable: boolean;
   /** true when the PDF font had no close Studio match */
   approxFont: boolean;
 }
@@ -99,26 +105,44 @@ export interface MatchedFont {
 /**
  * Map a PDF font name (often subset-prefixed like "ABCDEF+ArialMT-Bold") to
  * the closest Studio font. Only Arial/Times/Courier embed with true metrics
- * via pdf-lib StandardFonts; Georgia/Verdana are offered as labeled aliases.
+ * via pdf-lib StandardFonts; the rest are offered as labeled aliases.
  */
 export function matchFont(rawFamily: string | undefined): MatchedFont {
   const cleaned = (rawFamily ?? '')
     .replace(/^[A-Z0-9]{6}\+/, '') // strip subset prefix
     .toLowerCase()
     .replace(/[-_,]/g, '');
-  const bold = /bold|black|heavy|demi|medium/.test(cleaned);
-  const italic = /italic|oblique|slant/.test(cleaned);
+  const bold = /bold|black|heavy|demi|medium|\bbd\b/.test(cleaned);
+  const italic = /italic|oblique|slant|\bit\b/.test(cleaned);
 
   const has = (s: string) => cleaned.includes(s);
+  // Exact document workhorses first.
   if (has('times')) return { fontId: 'times', bold, italic, approx: false };
   if (has('courier')) return { fontId: 'courier', bold, italic, approx: false };
+  if (has('arial') || has('helvetica') || has('arialmt')) return { fontId: 'arial', bold, italic, approx: false };
+  // Common office fonts → labeled aliases (honest export note in the UI).
+  if (has('calibri') || has('carlito')) return { fontId: 'calibri', bold, italic, approx: false };
+  if (has('cambria') || has('caladea')) return { fontId: 'cambria', bold, italic, approx: false };
+  if (has('garamond')) return { fontId: 'garamond', bold, italic, approx: false };
+  if (has('palatino') || has('bookantiqua')) return { fontId: 'palatino', bold, italic, approx: false };
+  if (has('bookman')) return { fontId: 'bookman', bold, italic, approx: false };
+  if (has('trebuchet')) return { fontId: 'trebuchet', bold, italic, approx: false };
+  if (has('tahoma')) return { fontId: 'tahoma', bold, italic, approx: false };
+  if (has('segoe')) return { fontId: 'segoe', bold, italic, approx: false };
   if (has('georgia')) return { fontId: 'georgia', bold, italic, approx: false };
   if (has('verdana')) return { fontId: 'verdana', bold, italic, approx: false };
-  if (has('arial') || has('helvetica') || has('arialmt')) return { fontId: 'arial', bold, italic, approx: false };
+  if (has('franklin')) return { fontId: 'franklin', bold, italic, approx: false };
+  if (has('lucida')) return { fontId: 'lucida', bold, italic, approx: false };
+  if (has('century')) return { fontId: 'century', bold, italic, approx: false };
+  if (has('impact')) return { fontId: 'impact', bold, italic, approx: false };
+  if (has('comicsans')) return { fontId: 'comicsans', bold, italic, approx: false };
   // Fallbacks by family class — flagged as approximations.
-  if (has('mono') || has('typewriter') || has('couriernew')) return { fontId: 'courier', bold, italic, approx: true };
-  if (has('serif') || has('roman') || has('garamond') || has('bookman') || has('palatino'))
+  if (has('mono') || has('typewriter') || has('couriernew') || has('consolas') || has('menlo'))
+    return { fontId: 'courier', bold, italic, approx: true };
+  if (has('serif') || has('roman') || has('didot') || has('bodoni') || has('caslon') || has('minion'))
     return { fontId: 'times', bold, italic, approx: true };
+  if (has('sans') || has('gothic') || has('futura') || has('geneva') || has('optima') || has('arialnarrow'))
+    return { fontId: 'arial', bold, italic, approx: true };
   return { fontId: 'arial', bold, italic, approx: true };
 }
 
@@ -215,6 +239,8 @@ export async function extractTextLines(
     const padX = fontH * 0.12;
     const padY = fontH * 0.18;
     const hPx = fontH * 1.28 + padY * 2;
+    const glyphTopPx = minTop; // unpadded top of the actual glyphs
+    const ascent = 0.8; // matches the ascent used when grouping
     lines.push({
       id: `pdfline_${ri}_${Math.random().toString(36).slice(2, 8)}`,
       text,
@@ -223,11 +249,14 @@ export async function extractTextLines(
       w: clamp01((maxR - minX + padX * 2) / vw),
       h: clamp01(hPx / vh),
       fontSize: clamp01(fontH / vh),
+      glyphY: clamp01(glyphTopPx / vh),
+      baselineY: clamp01((glyphTopPx + fontH * ascent) / vh),
       fontId: matched.fontId,
       bold: matched.bold,
       italic: matched.italic,
       color: '',
       bg: '',
+      bgReliable: true,
       approxFont: matched.approx,
     });
   });
@@ -244,38 +273,58 @@ function toHex(r: number, g: number, b: number): string {
 }
 
 /**
- * Sample the rendered page pixels to recover each line's text color (darkest
- * sample near the glyph band) and background color (lightest sample just
- * outside the line box). Colors are returned as hex for the exporter.
+ * Sample the rendered page pixels to recover each line's text color and
+ * background color.
+ *
+ * Text color: median of the darkest third of samples across the glyph band —
+ * robust against anti-aliased edges and stray pixels (a single darkest pixel
+ * is usually noise, which is what made old edits look "destroyed").
+ *
+ * Background: median of the lightest third of samples from a ring just
+ * outside the line box. If those samples vary wildly (image, gradient, or
+ * rule lines behind the text), the background is flagged unreliable so the
+ * caller can use a tight glyph-band cover instead of painting a solid block
+ * over the artwork.
  */
 export function sampleLineColors(
   getPixel: (nx: number, ny: number) => [number, number, number] | null,
   line: PdfTextLine
-): { color: string; bg: string } {
-  let color = '#1f2937';
-  let darkest = 216;
-  for (let i = 0; i < 10; i++) {
-    const px = getPixel(line.x + (line.w * (i + 0.5)) / 10, line.y + line.h * 0.55);
+): { color: string; bg: string; bgReliable: boolean } {
+  const glyphSamples: Array<{ l: number; rgb: [number, number, number] }> = [];
+  for (let i = 0; i < 14; i++) {
+    const px = getPixel(line.x + (line.w * (i + 0.5)) / 14, line.glyphY + line.fontSize * 0.45);
     if (!px) continue;
-    const l = luminance(px[0], px[1], px[2]);
-    if (l < darkest) {
-      darkest = l;
-      color = toHex(px[0], px[1], px[2]);
+    glyphSamples.push({ l: luminance(px[0], px[1], px[2]), rgb: px });
+  }
+  let color = '#1f2937';
+  if (glyphSamples.length > 0) {
+    glyphSamples.sort((a, b) => a.l - b.l);
+    const darkest = glyphSamples.slice(0, Math.max(1, Math.ceil(glyphSamples.length / 3)));
+    const med = darkest[Math.floor(darkest.length / 2)];
+    // Ignore near-white samples (missed glyphs) — fall back to near-black text.
+    if (med.l < 225) color = toHex(med.rgb[0], med.rgb[1], med.rgb[2]);
+    else color = '#111827';
+  }
+
+  const bgSamples: Array<{ l: number; rgb: [number, number, number] }> = [];
+  for (let i = 0; i < 8; i++) {
+    const nx = clamp01(line.x + (line.w * (i + 0.5)) / 8);
+    for (const ny of [line.y - 0.008, line.y + line.h + 0.008]) {
+      const px = getPixel(nx, clamp01(ny));
+      if (!px) continue;
+      bgSamples.push({ l: luminance(px[0], px[1], px[2]), rgb: px });
     }
   }
   let bg = '#ffffff';
-  let lightest = -1;
-  for (let i = 0; i < 6; i++) {
-    const nx = line.x + (line.w * (i + 0.5)) / 6;
-    for (const ny of [line.y - 0.006, line.y + line.h + 0.006]) {
-      const px = getPixel(clamp01(nx), clamp01(ny));
-      if (!px) continue;
-      const l = luminance(px[0], px[1], px[2]);
-      if (l > lightest) {
-        lightest = l;
-        bg = toHex(px[0], px[1], px[2]);
-      }
-    }
+  let bgReliable = true;
+  if (bgSamples.length > 0) {
+    bgSamples.sort((a, b) => a.l - b.l);
+    const lightest = bgSamples.slice(Math.floor((bgSamples.length * 2) / 3));
+    const med = lightest[Math.floor(lightest.length / 2)];
+    bg = toHex(med.rgb[0], med.rgb[1], med.rgb[2]);
+    // High spread among background samples => busy background (image/gradient).
+    const spread = bgSamples[bgSamples.length - 1].l - bgSamples[0].l;
+    bgReliable = spread < 60;
   }
-  return { color, bg };
+  return { color, bg, bgReliable };
 }

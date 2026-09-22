@@ -99,6 +99,8 @@ export interface MenuBarProps {
   onOptionsChange: (patch: Partial<ToolOptions>) => void;
   /** displayed page height in PDF points — used for pt ↔ fraction conversion */
   pageHeightPt: number;
+  /** insert a formula/math symbol as a centered text layer */
+  onInsertFormula: (symbol: string) => void;
 }
 
 /* ------------------------------- menus ---------------------------------- */
@@ -213,7 +215,7 @@ export function MenuBar(props: MenuBarProps) {
     onNewFile, onOpenFile, onExport, onAddBlank,
     canCopy, canPaste, onCopySelected, onPaste, onDuplicateSelected, onDeleteSelected,
     selectedText, options, onPatchSelectedText, onOptionsChange,
-    pageHeightPt,
+    pageHeightPt, onInsertFormula,
   } = props;
 
   const [openMenu, setOpenMenu] = useState<string | null>(null);
@@ -338,8 +340,7 @@ export function MenuBar(props: MenuBarProps) {
           { kind: 'item', label: 'Blank page', action: onAddBlank },
         ];
       case 'Format':
-        return [
-          { kind: 'item', label: 'Bold', shortcut: 'Ctrl+B', checked: fmt.bold, action: () => toggle('bold') },
+        return [          { kind: 'item', label: 'Bold', shortcut: 'Ctrl+B', checked: fmt.bold, action: () => toggle('bold') },
           { kind: 'item', label: 'Italic', shortcut: 'Ctrl+I', checked: fmt.italic, action: () => toggle('italic') },
           { kind: 'item', label: 'Underline', shortcut: 'Ctrl+U', checked: fmt.underline, action: () => toggle('underline') },
           { kind: 'item', label: 'Strikethrough', checked: fmt.strikethrough, action: () => toggle('strikethrough') },
@@ -354,6 +355,38 @@ export function MenuBar(props: MenuBarProps) {
           { kind: 'divider' },
           { kind: 'item', label: 'Clear formatting', action: clearFormatting },
         ];
+      case 'Formula': {
+        const symbols: Array<[string, string]> = [
+          ['∑', 'Summation'],
+          ['√', 'Square root'],
+          ['π', 'Pi'],
+          ['∞', 'Infinity'],
+          ['±', 'Plus-minus'],
+          ['×', 'Multiply'],
+          ['÷', 'Divide'],
+          ['≤', 'Less than or equal'],
+          ['≥', 'Greater than or equal'],
+          ['≠', 'Not equal'],
+          ['≈', 'Approximately'],
+          ['Δ', 'Delta'],
+          ['θ', 'Theta'],
+          ['λ', 'Lambda'],
+          ['∫', 'Integral'],
+          ['°', 'Degree'],
+          ['½', 'One half'],
+          ['¼', 'One quarter'],
+          ['¾', 'Three quarters'],
+          ['→', 'Right arrow'],
+          ['✓', 'Check mark'],
+        ];
+        return symbols.map(
+          ([s, label]): MenuItem => ({
+            kind: 'item',
+            label: `${s}  ${label}`,
+            action: () => onInsertFormula(s),
+          })
+        );
+      }
       default:
         return [];
     }
@@ -363,13 +396,13 @@ export function MenuBar(props: MenuBarProps) {
     `${RIBBON_BTN} ${active ? RIBBON_BTN_ACTIVE : ''}`;
 
   return (
-    <div ref={barRef} className="shrink-0 border-b border-[var(--pe-border)] bg-[var(--pe-surface)]">
+    <div ref={barRef} className="sticky top-0 z-40 shrink-0 border-b border-[var(--pe-border)] bg-[var(--pe-surface)]">
       {/* row 1 — menu bar */}
       <div className="flex h-11 items-center gap-0.5 overflow-x-auto whitespace-nowrap px-3">
         <span className="mr-1 flex h-7 w-7 items-center justify-center rounded-lg bg-[var(--pe-accent)] text-[var(--pe-accent-ink)]">
           <Type size={15} strokeWidth={2.5} />
         </span>
-        {['File', 'Edit', 'View', 'Insert', 'Format'].map((m) => (
+        {['File', 'Edit', 'View', 'Insert', 'Format', 'Formula'].map((m) => (
           <Menu
             key={m}
             label={m}

@@ -18,6 +18,7 @@
     "@types/file-saver": "^2.0.7",
     "browser-image-compression": "2.0.2",
     "colorthief": "3.5.0",
+    "docx": "^9.7.1",
     "file-saver": "2.0.5",
     "jspdf": "4.2.1",
     "jspdf-autotable": "5.0.8",

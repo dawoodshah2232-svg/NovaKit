@@ -199,7 +199,7 @@ export function StudioCanvas(props: CanvasProps) {
     const rotation = ((page.nativeRotate + page.rotation) % 360 + 360) % 360;
     const doc = pdfDoc;
     const srcIndex = page.originalIndex;
-    const wantLines = tool === 'edittext' && doc && srcIndex >= 0;
+    const wantLines = (tool === 'edittext' || tool === 'text') && doc && srcIndex >= 0;
 
     if (wantLines) {
       Promise.resolve().then(() => {
@@ -256,8 +256,23 @@ export function StudioCanvas(props: CanvasProps) {
   }, []);
 
   // ---- layer creation helpers ----
+  // New text boxes inherit the style of the nearest existing text line, so
+  // added text automatically matches the document's own font/size/color.
   const placeTextAt = useCallback(
     (nx: number, ny: number) => {
+      let inherit: PdfTextLine | null = null;
+      if (textLines && textLines.length > 0) {
+        let best = 0.055; // max normalized distance to inherit from
+        for (const l of textLines) {
+          const cx = l.x + l.w / 2;
+          const cy = l.glyphY + l.fontSize / 2;
+          const d = Math.hypot(cx - nx, cy - ny);
+          if (d < best) {
+            best = d;
+            inherit = l;
+          }
+        }
+      }
       const layer: TextLayer = {
         id: newId('text'),
         type: 'text',
@@ -265,17 +280,17 @@ export function StudioCanvas(props: CanvasProps) {
         x: Math.min(0.9, nx),
         y: Math.min(0.9, ny),
         w: 0.42,
-        h: Math.max(0.035, options.fontSize * 1.6),
+        h: Math.max(0.035, (inherit?.fontSize ?? options.fontSize) * 1.6),
         rotation: 0,
         opacity: 1,
         text: 'Double-click to edit',
-        fontId: options.fontId,
-        fontSize: options.fontSize,
-        bold: options.bold,
-        italic: options.italic,
+        fontId: inherit?.fontId ?? options.fontId,
+        fontSize: inherit?.fontSize ?? options.fontSize,
+        bold: inherit ? inherit.bold : options.bold,
+        italic: inherit ? inherit.italic : options.italic,
         underline: options.underline,
         strikethrough: options.strikethrough,
-        color: options.textColor,
+        color: inherit?.color || options.textColor,
         highlightColor: options.textHighlight,
         align: options.align,
         list: options.list,
@@ -284,7 +299,7 @@ export function StudioCanvas(props: CanvasProps) {
       onAddLayer(layer);
       onEditingChange(layer.id);
     },
-    [options, onAddLayer, onEditingChange]
+    [options, onAddLayer, onEditingChange, textLines]
   );
 
   const placeImageAt = useCallback(
@@ -681,13 +696,13 @@ export function StudioCanvas(props: CanvasProps) {
                 onEditLine(line);
               }}
               onMouseEnter={(e) => {
-                (e.currentTarget as HTMLButtonElement).style.borderColor = 'rgba(248,113,113,0.7)';
+                (e.currentTarget as HTMLButtonElement).style.borderColor = 'var(--pe-select)';
               }}
               onMouseLeave={(e) => {
                 (e.currentTarget as HTMLButtonElement).style.borderColor = 'transparent';
               }}
               onFocus={(e) => {
-                (e.currentTarget as HTMLButtonElement).style.borderColor = 'rgba(248,113,113,0.7)';
+                (e.currentTarget as HTMLButtonElement).style.borderColor = 'var(--pe-select)';
               }}
               onBlur={(e) => {
                 (e.currentTarget as HTMLButtonElement).style.borderColor = 'transparent';
@@ -849,23 +864,23 @@ function LayerView(props: {
       {/* selection chrome */}
       {(selected || tool !== 'select') && selected && (
         <>
-          <div className="absolute -inset-[1px] border-2 border-[var(--pe-focus)] rounded-[2px] pointer-events-none" />
+          <div className="absolute -inset-[1px] border-2 border-[var(--pe-select)] rounded-[2px] pointer-events-none" />
           {HANDLES.map((h) => (
             <div
               key={h}
               data-handle={h}
               onPointerDown={(e) => onHandlePointerDown(e, layer, h)}
-              className="absolute w-3 h-3 -ml-1.5 -mt-1.5 bg-white border-2 border-[var(--pe-focus)] rounded-full cursor-nwse-resize touch-none"
+              className="absolute w-3 h-3 -ml-1.5 -mt-1.5 bg-white border-2 border-[var(--pe-select)] rounded-full cursor-nwse-resize touch-none"
               style={handlePos(h)}
             />
           ))}
           <div
             data-handle="rotate"
             onPointerDown={(e) => onHandlePointerDown(e, layer, 'rotate')}
-            className="absolute left-1/2 -ml-2 -top-8 w-4 h-4 bg-white border-2 border-[var(--pe-focus)] rounded-full cursor-grab touch-none"
+            className="absolute left-1/2 -ml-2 -top-8 w-4 h-4 bg-white border-2 border-[var(--pe-select)] rounded-full cursor-grab touch-none"
             title="Rotate"
           />
-          <div className="absolute left-1/2 -top-6 w-px h-4 bg-[var(--pe-focus)] pointer-events-none" style={{ transform: 'translateX(-0.5px)' }} />
+          <div className="absolute left-1/2 -top-6 w-px h-4 bg-[var(--pe-select)] pointer-events-none" style={{ transform: 'translateX(-0.5px)' }} />
         </>
       )}
     </div>

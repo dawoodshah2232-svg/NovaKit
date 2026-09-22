@@ -59,7 +59,7 @@ export function Studio() {
   const [selectedPageKeys, setSelectedPageKeys] = useState<string[]>([]);
   const [selectedLayerId, setSelectedLayerId] = useState<string | null>(null);
   const [editingId, setEditingId] = useState<string | null>(null);
-  const [tool, setTool] = useState<ToolId>('select');
+  const [tool, setTool] = useState<ToolId>('edittext');
   const [options, setOptions] = useState<ToolOptions>(DEFAULT_TOOL_OPTIONS);
   const [zoom, setZoom] = useState<ZoomState>({ mode: 'fit-width' });
   const [pagesOpen, setPagesOpen] = useState(true);
@@ -130,9 +130,21 @@ export function Studio() {
   const addLayer = useCallback(
     (layer: Layer) => {
       const withPage = { ...layer, pageIndex: activePageIndexRef.current };
+      // Letterhead rule: inserted images drop behind existing content so
+      // headers/footers stay in the background and text stays on top.
+      // (Users can still bring an image forward from the Inspector.)
+      const layers = docRef.current.layers;
+      const nextLayers =
+        withPage.type === 'image'
+          ? (() => {
+              const idx = layers.findIndex((l) => l.pageIndex === withPage.pageIndex);
+              if (idx === -1) return [...layers, withPage];
+              return [...layers.slice(0, idx), withPage, ...layers.slice(idx)];
+            })()
+          : [...layers, withPage];
       const next: DocState = {
         pages: docRef.current.pages,
-        layers: [...docRef.current.layers, withPage],
+        layers: nextLayers,
       };
       applyDoc(next, true);
       setSelectedLayerId(withPage.id);
@@ -661,6 +673,29 @@ export function Studio() {
     trackToolExecution('pdf-studio', true);
   }, [exportDlg.result]);
 
+  // ---------------- export as Word (.docx) ----------------
+  const doExportDocx = useCallback(async () => {
+    if (!pdfDocRef.current || !file) return;
+    setExportDlg((s) => ({ ...s, stage: 'working', progress: 'Preparing Word export…', error: '' }));
+    try {
+      const { exportToDocx } = await import('./docxExport');
+      const blob = await exportToDocx(pdfDocRef.current, (msg) =>
+        setExportDlg((s) => ({ ...s, progress: msg }))
+      );
+      const base = file.name.replace(/\.pdf$/i, '');
+      saveAs(blob, `${base}.docx`);
+      setExportDlg((s) => ({ ...s, stage: 'done', progress: '', result: { fileName: `${base}.docx`, sizeBytes: blob.size, pageCount: pdfDocRef.current?.numPages ?? 0 }, error: '' }));
+      trackToolExecution('pdf-studio', true);
+    } catch (err) {
+      setExportDlg((s) => ({
+        ...s,
+        stage: 'error',
+        error: 'Word export failed: ' + (err instanceof Error ? err.message : 'unknown error'),
+      }));
+      trackToolExecution('pdf-studio', false);
+    }
+  }, [file]);
+
   // ---------------- zoom ----------------
   const zoomLabel = zoom.mode === 'fit-width' ? 'Fit width' : zoom.mode === 'fit-page' ? 'Fit page' : `${zoom.mode}%`;
   const zoomBy = useCallback((delta: number) => {
@@ -839,20 +874,28 @@ export function Studio() {
 
   // ---------------- "Edit text" tool: patch a line of the PDF's own text ----
   // Covers the original glyphs with a background-colored rectangle and drops
-  // an editable text layer on top with matched font/size/color. Both are
-  // ordinary layers (one undo step), so the Inspector keeps working on them.
+  // an editable text layer on top with matched font/size/color. The text layer
+  // is anchored at the glyph top (not the padded box) so the baseline lands
+  // where the original glyphs were. When the background behind the line is
+  // busy (letterhead artwork, gradient), the cover shrinks to a tight
+  // glyph-band so it never paints a solid block over the design.
+  // Both are ordinary layers (one undo step), so the Inspector keeps working.
   const handleEditLine = useCallback(
     (line: PdfTextLine) => {
       const pageIndex = activePageIndexRef.current;
+      // Tight cover for busy backgrounds; full padded cover for flat ones.
+      const coverBox = line.bgReliable
+        ? { x: line.x, y: line.y, w: line.w, h: line.h }
+        : { x: line.x, y: line.glyphY, w: line.w, h: line.fontSize * 1.3 };
       const cover: ShapeLayer = {
         id: newId('cover'),
         type: 'shape',
         kind: 'rect',
         pageIndex,
-        x: line.x,
-        y: line.y,
-        w: line.w,
-        h: line.h,
+        x: coverBox.x,
+        y: coverBox.y,
+        w: coverBox.w,
+        h: coverBox.h,
         rotation: 0,
         opacity: 1,
         strokeColor: line.bg,
@@ -864,9 +907,9 @@ export function Studio() {
         type: 'text',
         pageIndex,
         x: line.x,
-        y: line.y,
+        y: line.glyphY,
         w: line.w,
-        h: Math.max(line.h, line.fontSize * 1.35),
+        h: Math.max(line.fontSize * 1.35, 0.02),
         rotation: 0,
         opacity: 1,
         text: line.text,
@@ -880,7 +923,7 @@ export function Studio() {
         highlightColor: null,
         align: 'left',
         list: 'none',
-        lineHeight: 1.15,
+        lineHeight: 1.1,
       };
       const d = docRef.current;
       applyDoc({ pages: d.pages, layers: [...d.layers, cover, text] }, true);
@@ -890,6 +933,41 @@ export function Studio() {
       if (line.approxFont) {
         setStatusMsg('Font approximated — the original font is not available for export. Adjust it in Options if needed.');
       }
+    },
+    [applyDoc]
+  );
+
+  // ---------------- Formula menu: insert a math symbol as a text layer ----
+  const insertFormulaSymbol = useCallback(
+    (symbol: string) => {
+      const pageIndex = activePageIndexRef.current;
+      const layer: TextLayer = {
+        id: newId('formula'),
+        type: 'text',
+        pageIndex,
+        x: 0.4,
+        y: 0.45,
+        w: 0.2,
+        h: 0.06,
+        rotation: 0,
+        opacity: 1,
+        text: symbol,
+        fontId: 'times',
+        fontSize: 0.035,
+        bold: false,
+        italic: false,
+        underline: false,
+        strikethrough: false,
+        color: '#0f172a',
+        highlightColor: null,
+        align: 'center',
+        list: 'none',
+        lineHeight: 1.2,
+      };
+      const d = docRef.current;
+      applyDoc({ pages: d.pages, layers: [...d.layers, layer] }, true);
+      setSelectedLayerId(layer.id);
+      setTool('select');
     },
     [applyDoc]
   );
@@ -944,6 +1022,7 @@ export function Studio() {
           }}
           onOptionsChange={patchOptions}
           pageHeightPt={displayedSize(activePage).h}
+          onInsertFormula={insertFormulaSymbol}
         />
       ) : (
         <header className="flex items-center gap-2 px-3 h-14 bg-[var(--pe-surface)] border-b border-[var(--pe-border)] shrink-0">
@@ -1191,6 +1270,7 @@ export function Studio() {
         hasRedactions={doc.layers.some((l) => l.type === 'redact')}
         onClose={() => setExportDlg((s) => ({ ...s, open: false }))}
         onExport={doExport}
+        onExportDocx={doExportDocx}
         onDownload={downloadExport}
         onContinue={() => setExportDlg((s) => ({ ...s, open: false }))}
         onNewFile={() => {

@@ -42,6 +42,10 @@
   --pe-accent-ring: rgba(185, 28, 28, 0.28);
   --pe-focus: #b91c1c;
 
+  /* ---- selection (canvas layer selection — professional blue, never pink) ---- */
+  --pe-select: #1d4ed8;
+  --pe-select-soft: rgba(29, 78, 216, 0.12);
+
   /* ---- status ---- */
   --pe-danger: #dc2626;
   --pe-danger-soft: #fee2e2;
@@ -101,6 +105,10 @@
   --pe-accent-soft: rgba(248, 113, 113, 0.12);
   --pe-accent-ring: rgba(248, 113, 113, 0.32);
   --pe-focus: #f87171;
+
+  /* ---- selection (canvas layer selection — professional blue, never pink) ---- */
+  --pe-select: #60a5fa;
+  --pe-select-soft: rgba(96, 165, 250, 0.16);
 
   --pe-danger: #f87171;
   --pe-danger-soft: rgba(248, 113, 113, 0.12);
