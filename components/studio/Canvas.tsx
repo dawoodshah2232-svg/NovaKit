@@ -25,6 +25,7 @@ import { displayedSize } from './geometry';
 import { STUDIO_FONTS } from './fonts';
 import type { ToolOptions } from './toolOptions';
 import { extractTextLines, sampleLineColors, type PdfTextLine } from './textEdit';
+import { TextFormatBar } from './TextFormatBar';
 
 export interface CanvasProps {
   pdfDoc: PDFDocumentProxy | null;
@@ -47,6 +48,7 @@ export interface CanvasProps {
   onSendToBack: (id: string) => void;
   /** "Edit text" tool: user clicked an extracted line of the PDF's own text */
   onEditLine: (line: PdfTextLine) => void;
+  onDeleteLayer: (id: string) => void;
 }
 
 const TOOL_EMPTY_HINT: Record<ToolId, string | null> = {
@@ -75,7 +77,7 @@ export function StudioCanvas(props: CanvasProps) {
   const {
     pdfDoc, page, layers, tool, options, zoom, selectedId, editingId,
     pendingSignature, onSelectLayer, onUpdateLayer, onAddLayer, onCommit,
-    onOpenSignaturePad, onConsumeSignature, onEditingChange, onEditLine,
+    onOpenSignaturePad, onConsumeSignature, onEditingChange, onEditLine, onDeleteLayer,
   } = props;
 
   const containerRef = useRef<HTMLDivElement | null>(null);
@@ -609,6 +611,19 @@ export function StudioCanvas(props: CanvasProps) {
               onEditCancel={() => onEditingChange(null)}
             />
           ))}
+
+          {/* Sejda-style floating format bar for the selected text layer */}
+          {(() => {
+            const sel = layers.find((l) => l.id === selectedId);
+            if (!sel || sel.type !== 'text') return null;
+            return (
+              <TextFormatBar
+                layer={sel}
+                onPatch={(patch) => onUpdateLayer(sel.id, patch as Partial<Layer>, true)}
+                onDelete={() => onDeleteLayer(sel.id)}
+              />
+            );
+          })()}
 
           {/* "Edit text" tool: clickable lines of the PDF's own text */}
           {tool === 'edittext' && textLinesState === 'ready' && textLines?.map((line) => (

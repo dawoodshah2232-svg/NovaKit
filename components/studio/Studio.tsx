@@ -1027,6 +1027,7 @@ export function Studio() {
             onBringToFront={bringToFront}
             onSendToBack={sendToBack}
             onEditLine={handleEditLine}
+            onDeleteLayer={deleteLayer}
           />
           {/* trust strip */}
           <div className="shrink-0 px-4 py-1.5 bg-[var(--pe-surface-2)] border-t border-[var(--pe-border)] text-[10px] text-[var(--pe-text-3)] text-center">
