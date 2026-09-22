@@ -10,5 +10,6 @@ export const metadata: Metadata = {
     description: 'Extract text from scanned PDF pages with browser-based OCR supporting English, Spanish, French, and German.',
     url,
   },
+  twitter: { card: 'summary_large_image', title: 'OCR PDF Online Free | PDFEdit', description: 'Extract text from scanned PDF pages with browser-based OCR supporting English, Spanish, French, and German.' },
 };
 export default function Page() { return <ToolPage params={Promise.resolve({ slug: 'ocr-pdf' })} />; }

@@ -15,6 +15,7 @@ export const metadata: Metadata = {
 		siteName: 'PDFEdit',
 		type: 'website',
 	},
+	twitter: { card: 'summary_large_image', title: 'Merge PDF Online Free – Combine PDF Files | PDFEdit', description: 'Combine multiple PDFs in your preferred order directly in your browser and download one merged document.' },
 };
 
 export default function Page() { return <ToolPage params={Promise.resolve({ slug: 'pdf-merger' })} />; }

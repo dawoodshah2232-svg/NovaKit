@@ -6,5 +6,6 @@ export const metadata: Metadata = {
 	description: 'Convert PDF pages to PNG or JPG images in your browser with selectable output quality and local downloads. Your PDF is processed on your device.',
 	alternates: { canonical: url },
 	openGraph: { title: 'PDF to Images Converter Online | PDFEdit', description: 'Convert PDF pages to PNG or JPG images in your browser with local downloads.', url },
+	twitter: { card: 'summary_large_image', title: 'PDF to Images Converter Online | PDFEdit', description: 'Convert PDF pages to PNG or JPG images in your browser with local downloads.' },
 };
 export default function Page() { return <ToolPage params={Promise.resolve({ slug: 'pdf-to-images' })} />; }

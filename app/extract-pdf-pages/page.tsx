@@ -12,6 +12,7 @@ export const metadata: Metadata = {
     description: 'Extract specific pages or ranges from PDF files into a new PDF or ZIP archive client-side.',
     url,
   },
+  twitter: { card: 'summary_large_image', title: 'Extract PDF Pages Online Free | PDFEdit', description: 'Extract specific pages or ranges from PDF files into a new PDF or ZIP archive client-side.' },
 };
 
 export default function Page() {

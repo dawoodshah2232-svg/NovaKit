@@ -177,9 +177,14 @@ export default function ContactPage() {
           <Link href='/privacy' className='text-red-600 dark:text-red-400 underline'>Privacy Policy</Link>,
           and the rules for using the site are in our{' '}
           <Link href='/terms' className='text-red-600 dark:text-red-400 underline'>Terms of Service</Link>.
+          Cookie details are in our{' '}
+          <Link href='/cookies' className='text-red-600 dark:text-red-400 underline'>Cookie Policy</Link>,
+          and the limits of our tools are in our{' '}
+          <Link href='/disclaimer' className='text-red-600 dark:text-red-400 underline'>Disclaimer</Link>.
         </p>
         <p>
-          PDFEdit is operated by the PDFEdit team. For questions about the site itself, start with the{' '}
+          PDFEdit is operated by Dawood Shah from Dubai, United Arab Emirates. For questions about
+          the site itself, start with the{' '}
           <Link href='/faq' className='text-red-600 dark:text-red-400 underline'>FAQ</Link>.
         </p>
       </section>

@@ -96,7 +96,7 @@ export async function generateMetadata({ params }: ToolPageProps): Promise<Metad
     geoData.metaDescription ||
     `${tool.description} Zero server uploads, completely free, and secure in your browser.`;
 
-  const canonicalPath = canonicalPathBySlug[slug] || `/tools/${tool.slug}`;
+  const canonicalPath = canonicalPathBySlug[tool.slug] || `/tools/${tool.slug}`;
   const canonicalUrl = `https://www.pdfedit.website${canonicalPath}`;
 
   return {
@@ -151,7 +151,7 @@ export default async function ToolPage({ params }: ToolPageProps) {
   }
 
   const geoData = getToolGeoData(slug);
-  const canonicalPath = canonicalPathBySlug[slug] || `/tools/${tool.slug}`;
+  const canonicalPath = canonicalPathBySlug[tool.slug] || `/tools/${tool.slug}`;
   const isMergePdf = slug === 'pdf-merger';
   const softwareSchema = generateSoftwareAppSchema(
     tool,

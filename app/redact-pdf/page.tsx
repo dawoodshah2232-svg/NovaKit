@@ -12,6 +12,7 @@ export const metadata: Metadata = {
     description: 'Visually cover sensitive info in PDF files with black or white boxes, right in your browser with zero server uploads.',
     url,
   },
+  twitter: { card: 'summary_large_image', title: 'Redact PDF Online Free | Cover Sensitive Text | PDFEdit', description: 'Visually cover sensitive info in PDF files with black or white boxes, right in your browser with zero server uploads.' },
 };
 
 export default function Page() {

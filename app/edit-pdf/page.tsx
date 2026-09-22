@@ -13,5 +13,6 @@ export const metadata: Metadata = {
       'Inspect, modify, or sanitize PDF title, author, subject, and keywords locally in your browser. No uploads, no sign-up.',
     url,
   },
+  twitter: { card: 'summary_large_image', title: 'Edit PDF Metadata Online Free | PDFEdit', description: 'Inspect, modify, or sanitize PDF title, author, subject, and keywords locally in your browser. No uploads, no sign-up.' },
 };
 export default function Page() { return <ToolPage params={Promise.resolve({ slug: 'edit-pdf-metadata' })} />; }

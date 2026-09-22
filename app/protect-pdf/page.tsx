@@ -15,6 +15,7 @@ export const metadata: Metadata = {
 		siteName: 'PDFEdit',
 		type: 'website',
 	},
+	twitter: { card: 'summary_large_image', title: 'Protect PDF Online Free – Add Password to PDF | PDFEdit', description: 'Add password protection and encryption to your PDFs directly in your browser.' },
 };
 
 export default function Page() { return <ToolPage params={Promise.resolve({ slug: 'protect-pdf' })} />; }

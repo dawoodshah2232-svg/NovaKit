@@ -29,7 +29,7 @@ export async function smallJson(req: Request): Promise<Record<string, unknown>> 
 const uuid = /^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
 const toolSlugs = new Set(getAllToolSlugs());
 // Store known public routes only: no arbitrary path segments, filenames, queries or fragments.
-const routes = new Set(['/', '/privacy', '/terms', '/Studio', '/studio', '/batch-pdf', '/pdf-to-jpg',
+const routes = new Set(['/', '/privacy', '/terms', '/disclaimer', '/Studio', '/studio', '/batch-pdf', '/pdf-to-jpg',
   '/pdf-to-images', '/jpg-to-pdf', '/merge-pdf', '/ocr-pdf', '/sign-pdf', '/edit-pdf',
   ...getAllToolSlugs().flatMap(slug => [`/${slug}`, `/tools/${slug}`])]);
 export const isBot = (ua: string) => /bot|crawler|spider|slurp|bingpreview|google-inspectiontool|headless|lighthouse|pagespeed|facebookexternalhit|preview|curl|wget/i.test(ua);

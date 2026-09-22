@@ -107,25 +107,35 @@ export default function AboutPage() {
         </div>
       </section>
 
+      <section className='space-y-3 text-gray-700'>
+        <h2 className='text-xl font-semibold'>Who runs PDFEdit</h2>
+        <p>
+          PDFEdit is operated by Dawood Shah from Dubai, United Arab Emirates. It is an independent
+          project: a free utility site funded by advertising, built to do one thing well &mdash;
+          handle everyday PDF work without asking for your files, your email, or your money.
+        </p>
+      </section>
+
       <section className='rounded-2xl bg-gray-50 border border-gray-200 p-5 text-sm text-gray-600 mb-10'>
         <h2 className='font-semibold text-gray-800 mb-2 flex items-center gap-2'>
           <FileText className='h-4 w-4' aria-hidden='true' /> Policies
         </h2>
         <p className='mb-2'>
           How we handle data and advertising is described in our{' '}
-          <Link href='/privacy' className='text-blue-600 underline'>Privacy Policy</Link>, and the
+          <Link href='/privacy' className='text-blue-600 underline'>Privacy Policy</Link>, the
           rules for using the site are in our{' '}
-          <Link href='/terms' className='text-blue-600 underline'>Terms of Service</Link>. Cookie
+          <Link href='/terms' className='text-blue-600 underline'>Terms of Service</Link>, cookie
           and browser-storage details are in our{' '}
-          <Link href='/cookies' className='text-blue-600 underline'>Cookie Policy</Link>.
+          <Link href='/cookies' className='text-blue-600 underline'>Cookie Policy</Link>, and the
+          limits of our tools &mdash; accuracy, signatures, redaction, and professional advice
+          &mdash; are in our <Link href='/disclaimer' className='text-blue-600 underline'>Disclaimer</Link>.
         </p>
       </section>
 
       <section className='space-y-3 text-gray-700'>
         <h2 className='text-xl font-semibold'>Contact</h2>
         <p>
-          PDFEdit is operated by the PDFEdit team. For support, feedback, business inquiries, or
-          abuse reports, visit our{' '}
+          For support, feedback, business inquiries, or abuse reports, visit our{' '}
           <Link href='/contact' className='text-blue-600 underline'>contact page</Link>.
         </p>
         <p>

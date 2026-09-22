@@ -13,5 +13,6 @@ export const metadata: Metadata = {
       'Extract pages or split every page of a PDF into separate files, locally in your browser. No uploads, no sign-up.',
     url,
   },
+  twitter: { card: 'summary_large_image', title: 'Split PDF Online Free – Extract Pages & Ranges | PDFEdit', description: 'Extract pages or split every page of a PDF into separate files, locally in your browser. No uploads, no sign-up.' },
 };
 export default function Page() { return <ToolPage params={Promise.resolve({ slug: 'split-pdf' })} />; }

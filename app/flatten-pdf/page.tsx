@@ -12,6 +12,7 @@ export const metadata: Metadata = {
     description: 'Flatten fillable form fields, comments, and annotations in PDF documents into static content client-side.',
     url,
   },
+  twitter: { card: 'summary_large_image', title: 'Flatten PDF Online Free | Lock Form Fields | PDFEdit', description: 'Flatten fillable form fields, comments, and annotations in PDF documents into static content client-side.' },
 };
 
 export default function Page() {

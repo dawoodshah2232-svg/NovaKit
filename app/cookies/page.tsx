@@ -23,7 +23,7 @@ export default function CookiePolicy() {
     <div className='max-w-4xl mx-auto px-4 py-12'>
       <JsonLd schema={cookiesSchema} />
       <h1 className='text-3xl font-bold mb-6'>Cookie Policy</h1>
-      <p className='mb-4 text-gray-600'>Last updated: September 22, 2026</p>
+      <p className='mb-4 text-gray-600'>Last updated: September 23, 2026</p>
 
       <section className='space-y-4 text-gray-700'>
         <h2 className='text-xl font-semibold mt-6'>1. What Cookies Are</h2>
@@ -33,7 +33,7 @@ export default function CookiePolicy() {
         <h2 className='text-xl font-semibold mt-6'>2. What PDFEdit Itself Sets</h2>
         <p>PDFEdit is deliberately designed to work without accounts or tracking, so for ordinary visitors we set <strong>no first-party cookies at all</strong>. Instead, the Site uses browser storage as follows:</p>
         <ul className='list-disc list-inside space-y-1 ml-2'>
-          <li><strong>Analytics session ID (session storage, not a cookie):</strong> we store a random, anonymous session identifier in session storage so we can count anonymous visits and understand tool usage. It is generated on your device, contains no personal data, and is discarded automatically when you close the tab. It is never written to a cookie and is never sent to third parties.</li>
+          <li><strong>Analytics session ID (session storage, not a cookie):</strong> we store a random, anonymous session identifier in session storage so we can count anonymous visits and understand tool usage (including 30-second &quot;still here&quot; heartbeats while a tab is visible). It is generated on your device, contains no personal data, and is discarded automatically when you close the tab. It is never written to a cookie and is never sent to third parties.</li>
           <li><strong>Theme preference (local storage, not a cookie):</strong> if you switch between light and dark mode, your choice is saved in your browser&apos;s local storage so it persists across visits. No cookie is involved, and this preference is never transmitted anywhere.</li>
         </ul>
         <p>Clearing your browser&apos;s cookies will not remove these values &mdash; you clear them by clearing site storage data or using private browsing. Either way, removing them does not break the Site; it only resets your session counter and theme choice.</p>

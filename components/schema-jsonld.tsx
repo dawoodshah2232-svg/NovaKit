@@ -15,6 +15,17 @@ export function JsonLd({ schema }: { schema: Record<string, unknown> }) {
   );
 }
 
+export const organizationSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'Organization',
+  '@id': `${BASE_URL}/#organization`,
+  name: 'PDFEdit',
+  url: `${BASE_URL}/`,
+  logo: `${BASE_URL}/og-image.png`,
+  description:
+    'PDFEdit: free, private, browser-based PDF tools. Files are processed locally on your device and never uploaded to our servers.',
+};
+
 const organizationRef = {
   '@type': 'Organization',
   '@id': `${BASE_URL}/#organization`,
@@ -67,6 +78,18 @@ export const termsSchema = {
   name: 'Terms of Service for PDFEdit',
   description: 'Terms of Service for using PDFEdit free online PDF tools.',
   datePublished: '2026-09-22',
+  publisher: organizationRef,
+};
+
+export const disclaimerSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'WebPage',
+  '@id': `${BASE_URL}/disclaimer`,
+  url: `${BASE_URL}/disclaimer`,
+  name: 'Disclaimer for PDFEdit',
+  description:
+    'PDFEdit disclaimer: free PDF tools provided as-is, best-effort outputs, visual signatures are not certified, and nothing on the site is professional advice.',
+  datePublished: '2026-09-23',
   publisher: organizationRef,
 };
 

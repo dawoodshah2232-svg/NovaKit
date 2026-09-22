@@ -12,6 +12,7 @@ export const metadata: Metadata = {
     description: 'Crop PDF page margins and trim borders directly in your browser. Fast and private.',
     url,
   },
+  twitter: { card: 'summary_large_image', title: 'Crop PDF Margins Online Free | PDFEdit', description: 'Crop PDF page margins and trim borders directly in your browser. Fast and private.' },
 };
 
 export default function Page() {

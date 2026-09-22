@@ -14,6 +14,7 @@ export const metadata: Metadata = {
       'Combine many PDF files into one document at once, locally in your browser. No uploads, no sign-up.',
     url,
   },
+  twitter: { card: 'summary_large_image', title: 'Batch Merge PDF Online Free | PDFEdit', description: 'Combine many PDF files into one document at once, locally in your browser. No uploads, no sign-up.' },
 };
 
 function jsonLd() {

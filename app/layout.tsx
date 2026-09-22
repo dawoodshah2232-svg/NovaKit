@@ -8,6 +8,7 @@ import { ThemeProvider } from '@/components/theme-provider';
 import { Header } from '@/components/header';
 import { MobileNav } from '@/components/mobile-nav';
 import { Footer } from '@/components/footer';
+import { JsonLd, organizationSchema } from '@/components/schema-jsonld';
 
 const inter = Inter({
   variable: '--font-sans',
@@ -154,6 +155,7 @@ export default function RootLayout({
         >
           <div className="flex min-h-screen flex-col">
             <Suspense fallback={null}><AnalyticsTracker /></Suspense>
+            <JsonLd schema={organizationSchema} />
             <a href="#main-content" className="skip-to-content">
               Skip to content
             </a>

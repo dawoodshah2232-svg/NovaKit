@@ -12,6 +12,7 @@ export const metadata: Metadata = {
     description: 'Extract selectable text from PDF documents into TXT with word count analysis locally in your browser.',
     url,
   },
+  twitter: { card: 'summary_large_image', title: 'PDF to Text Converter Online Free | PDFEdit', description: 'Extract selectable text from PDF documents into TXT with word count analysis locally in your browser.' },
 };
 
 export default function Page() {

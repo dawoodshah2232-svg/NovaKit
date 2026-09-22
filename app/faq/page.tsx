@@ -150,7 +150,7 @@ const CATEGORIES: FaqCategory[] = [
             <ul className='list-disc pl-5 space-y-1'>
               <li>
                 Images: JPG, PNG, and WebP can be converted to PDF with{' '}
-                {tool('/image-to-pdf', 'Image to PDF')} and can be produced from PDFs with{' '}
+                {tool('/jpg-to-pdf', 'Image to PDF')} and can be produced from PDFs with{' '}
                 {tool('/pdf-to-jpg', 'PDF to JPG')}.
               </li>
               <li>

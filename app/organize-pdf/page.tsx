@@ -6,5 +6,6 @@ export const metadata: Metadata = {
 	description: 'Reorder, duplicate, and remove PDF pages in a visual browser workspace before downloading the organized document locally.',
 	alternates: { canonical: url },
 	openGraph: { title: 'Organize and Reorder PDF Pages Online | PDFEdit', description: 'Reorder, duplicate, and remove PDF pages in a visual browser workspace.', url },
+	twitter: { card: 'summary_large_image', title: 'Organize and Reorder PDF Pages Online | PDFEdit', description: 'Reorder, duplicate, and remove PDF pages in a visual browser workspace.' },
 };
 export default function Page() { return <ToolPage params={Promise.resolve({ slug: 'organize-pdf' })} />; }
