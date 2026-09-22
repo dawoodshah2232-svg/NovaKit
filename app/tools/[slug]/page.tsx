@@ -21,6 +21,7 @@ const canonicalPathBySlug: Record<string, string> = {
   'pdf-to-images': '/pdf-to-images',
   'organize-pdf': '/organize-pdf',
   'unlock-pdf': '/unlock-pdf',
+  'protect-pdf': '/protect-pdf',
   'rotate-pdf': '/rotate-pdf',
   'watermark-pdf': '/watermark-pdf',
   'split-pdf': '/split-pdf',

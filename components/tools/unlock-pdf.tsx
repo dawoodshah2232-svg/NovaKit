@@ -213,6 +213,7 @@ export function UnlockPdf() {
               </h3>
               <p className="text-xs text-slate-500 dark:text-slate-400 mt-1">
                 Decrypts and removes password restrictions client-side in browser memory with zero server uploads.
+                Note: the unlocked PDF is rebuilt page-by-page, so text may no longer be selectable.
               </p>
             </div>
             <button
