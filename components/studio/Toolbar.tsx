@@ -77,14 +77,14 @@ const TOOLS: ToolDef[] = [
 
 const TOOL_BTN_BASE =
   'flex h-9 min-w-[44px] shrink-0 flex-col items-center justify-center gap-0.5 rounded-lg px-2 transition-colors';
-const TOOL_BTN_IDLE = 'text-slate-400 hover:bg-slate-800 hover:text-slate-100';
-const TOOL_BTN_ACTIVE = 'bg-red-500/15 text-red-400';
+const TOOL_BTN_IDLE = 'text-[var(--pe-text-2)] hover:bg-[var(--pe-surface-3)] hover:text-[var(--pe-text)]';
+const TOOL_BTN_ACTIVE = 'bg-[var(--pe-accent-soft)] text-[var(--pe-accent)]';
 
 const ICON_BTN =
-  'flex h-9 min-w-[36px] shrink-0 items-center justify-center rounded-lg px-1.5 text-slate-400 transition-colors hover:bg-slate-800 hover:text-slate-100 disabled:cursor-not-allowed disabled:opacity-30 disabled:hover:bg-transparent disabled:hover:text-slate-400';
+  'flex h-9 min-w-[36px] shrink-0 items-center justify-center rounded-lg px-1.5 text-[var(--pe-text-2)] transition-colors hover:bg-[var(--pe-surface-3)] hover:text-[var(--pe-text)] disabled:cursor-not-allowed disabled:opacity-30 disabled:hover:bg-transparent disabled:hover:text-[var(--pe-text-2)]';
 
 function Divider() {
-  return <div className="mx-1 h-6 w-px shrink-0 bg-slate-800" aria-hidden="true" />;
+  return <div className="mx-1 h-6 w-px shrink-0 bg-[var(--pe-surface-3)]" aria-hidden="true" />;
 }
 
 export function Toolbar(props: ToolbarProps) {
@@ -108,7 +108,7 @@ export function Toolbar(props: ToolbarProps) {
   return (
     <header
       aria-label="Studio toolbar"
-      className="flex h-14 shrink-0 items-center gap-1 overflow-x-auto whitespace-nowrap border-b border-slate-800 bg-slate-950 px-2"
+      className="flex h-14 shrink-0 items-center gap-1 overflow-x-auto whitespace-nowrap border-b border-[var(--pe-border)] bg-[var(--pe-bg)] px-2"
     >
       {/* Tools */}
       {TOOLS.map((t) => {
@@ -171,7 +171,7 @@ export function Toolbar(props: ToolbarProps) {
         onClick={onZoomMenu}
         title="Open zoom menu (0 fits width)"
         aria-label="Open zoom menu"
-        className="flex h-9 min-w-[64px] shrink-0 items-center justify-center rounded-lg px-2 text-xs font-semibold text-slate-300 transition-colors hover:bg-slate-800 hover:text-slate-100"
+        className="flex h-9 min-w-[64px] shrink-0 items-center justify-center rounded-lg px-2 text-xs font-semibold text-[var(--pe-text-2)] transition-colors hover:bg-[var(--pe-surface-3)] hover:text-[var(--pe-text)]"
       >
         {zoomLabel}
       </button>
@@ -193,7 +193,7 @@ export function Toolbar(props: ToolbarProps) {
         onClick={onExport}
         disabled={busy}
         title="Export the edited document as PDF"
-        className="flex h-9 shrink-0 items-center gap-2 rounded-lg bg-red-600 px-4 text-xs font-bold tracking-wide text-white transition-colors hover:bg-red-500 disabled:cursor-not-allowed disabled:opacity-60"
+        className="flex h-9 shrink-0 items-center gap-2 rounded-lg bg-[var(--pe-accent)] px-4 text-xs font-bold tracking-wide text-[var(--pe-accent-ink)] transition-colors hover:bg-[var(--pe-accent-hover)] disabled:cursor-not-allowed disabled:opacity-60"
       >
         {busy ? (
           <Loader2 className="h-4 w-4 animate-spin" />
@@ -208,7 +208,7 @@ export function Toolbar(props: ToolbarProps) {
       {/* File */}
       <span
         title={fileName}
-        className="max-w-[160px] shrink-0 truncate text-xs text-slate-400"
+        className="max-w-[160px] shrink-0 truncate text-xs text-[var(--pe-text-2)]"
       >
         {fileName}
       </span>
@@ -217,7 +217,7 @@ export function Toolbar(props: ToolbarProps) {
         onClick={onNewFile}
         title="Start a new file"
         aria-label="New file"
-        className="flex h-9 shrink-0 items-center gap-1.5 rounded-lg px-2 text-xs font-medium text-slate-300 transition-colors hover:bg-slate-800 hover:text-slate-100"
+        className="flex h-9 shrink-0 items-center gap-1.5 rounded-lg px-2 text-xs font-medium text-[var(--pe-text-2)] transition-colors hover:bg-[var(--pe-surface-3)] hover:text-[var(--pe-text)]"
       >
         <FilePlus className="h-4 w-4" />
         New

@@ -880,7 +880,7 @@ export function Studio() {
   // ---------------- render ----------------
   if (!pdfBytes || doc.pages.length === 0) {
     return (
-      <div className="min-h-screen bg-slate-950 text-slate-100">
+      <div className="pe-preview min-h-screen bg-[var(--pe-bg)] text-[var(--pe-text)]">
         <UploadScreen onFile={loadFile} onSample={loadSample} busy={busy} status={statusMsg} error={errorMsg} />
       </div>
     );
@@ -891,13 +891,13 @@ export function Studio() {
 
   const zoomMenu = (
     zoomMenuOpen && (
-      <div className="absolute top-full mt-1 left-1/2 -translate-x-1/2 z-50 bg-slate-900 border border-slate-700 rounded-xl shadow-2xl py-1 min-w-[160px]">
+      <div className="absolute top-full mt-1 left-1/2 -translate-x-1/2 z-50 bg-[var(--pe-surface)] border border-[var(--pe-border-strong)] rounded-xl shadow-2xl py-1 min-w-[160px]">
         {(['fit-width', 'fit-page', 50, 75, 100, 125, 150, 200] as const).map((m) => (
           <button
             key={String(m)}
             type="button"
             onClick={() => setZoomMode(m)}
-            className="w-full text-left px-4 py-2 text-xs text-slate-200 hover:bg-slate-800"
+            className="w-full text-left px-4 py-2 text-xs text-[var(--pe-text)] hover:bg-[var(--pe-surface-3)]"
           >
             {m === 'fit-width' ? 'Fit width' : m === 'fit-page' ? 'Fit page' : `${m}%`}
           </button>
@@ -907,7 +907,7 @@ export function Studio() {
   );
 
   return (
-    <div className="h-screen flex flex-col bg-slate-950 text-slate-100 overflow-hidden">
+    <div className="pe-preview h-screen flex flex-col bg-[var(--pe-bg)] text-[var(--pe-text)] overflow-hidden">
       {/* desktop toolbar / mobile mini header */}
       {!isMobile ? (
         <div className="relative">
@@ -930,25 +930,25 @@ export function Studio() {
           {zoomMenu}
         </div>
       ) : (
-        <header className="flex items-center gap-2 px-3 h-14 bg-slate-900 border-b border-slate-800 shrink-0">
+        <header className="flex items-center gap-2 px-3 h-14 bg-[var(--pe-surface)] border-b border-[var(--pe-border)] shrink-0">
           <button
             type="button"
             onClick={() => setMobilePagesOpen(true)}
-            className="h-9 px-3 rounded-lg bg-slate-800 text-slate-200 text-xs font-semibold"
+            className="h-9 px-3 rounded-lg bg-[var(--pe-surface-3)] text-[var(--pe-text)] text-xs font-semibold"
             aria-label="Open pages panel"
           >
             Pages
           </button>
           <div className="flex-1 min-w-0">
-            <p className="text-xs font-semibold text-slate-100 truncate">{file?.name}</p>
-            <p className="text-[10px] text-slate-400">{doc.pages.length} pages</p>
+            <p className="text-xs font-semibold text-[var(--pe-text)] truncate">{file?.name}</p>
+            <p className="text-[10px] text-[var(--pe-text-2)]">{doc.pages.length} pages</p>
           </div>
-          {(busy || statusMsg) && <Loader2 className="w-4 h-4 animate-spin text-red-400" />}
+          {(busy || statusMsg) && <Loader2 className="w-4 h-4 animate-spin text-[var(--pe-accent)]" />}
           <button
             type="button"
             onClick={openExport}
             disabled={busy}
-            className="h-9 px-4 rounded-lg bg-red-500 hover:bg-red-400 disabled:opacity-50 text-white text-xs font-bold flex items-center gap-1.5"
+            className="h-9 px-4 rounded-lg bg-[var(--pe-accent)] hover:bg-[var(--pe-accent-hover)] disabled:opacity-50 text-[var(--pe-accent-ink)] text-xs font-bold flex items-center gap-1.5"
           >
             <Download className="w-3.5 h-3.5" />
             Export
@@ -958,13 +958,13 @@ export function Studio() {
 
       {/* restore banner */}
       {showRestore && (
-        <div className="px-4 py-2 bg-blue-950/80 border-b border-blue-800 flex items-center gap-3 text-xs">
-          <CheckCircle2 className="w-4 h-4 text-blue-400 shrink-0" />
-          <span className="flex-1 text-blue-100">We found unsaved edits from your last session on this file.</span>
-          <button type="button" onClick={restoreDraft} className="px-3 py-1 rounded-lg bg-blue-600 text-white font-semibold">
+        <div className="px-4 py-2 bg-[var(--pe-accent-soft)] border-b border-[var(--pe-border)] flex items-center gap-3 text-xs">
+          <CheckCircle2 className="w-4 h-4 text-[var(--pe-accent)] shrink-0" />
+          <span className="flex-1 text-[var(--pe-text)]">We found unsaved edits from your last session on this file.</span>
+          <button type="button" onClick={restoreDraft} className="px-3 py-1 rounded-lg bg-[var(--pe-accent)] text-[var(--pe-accent-ink)] font-semibold">
             Restore
           </button>
-          <button type="button" onClick={() => setShowRestore(null)} className="px-3 py-1 rounded-lg bg-slate-800 text-slate-200">
+          <button type="button" onClick={() => setShowRestore(null)} className="px-3 py-1 rounded-lg bg-[var(--pe-surface-3)] text-[var(--pe-text)]">
             Discard
           </button>
         </div>
@@ -972,23 +972,23 @@ export function Studio() {
 
       {/* status / error banners */}
       {errorMsg && (
-        <div className="px-4 py-2 bg-red-950/80 border-b border-red-800 flex items-center gap-3 text-xs">
-          <AlertTriangle className="w-4 h-4 text-red-400 shrink-0" />
-          <span className="flex-1 text-red-100">{errorMsg}</span>
-          <button type="button" onClick={() => setErrorMsg('')} aria-label="Dismiss error" className="text-red-300 hover:text-red-100">
+        <div className="px-4 py-2 bg-[var(--pe-danger-soft)] border-b border-[var(--pe-border)] flex items-center gap-3 text-xs">
+          <AlertTriangle className="w-4 h-4 text-[var(--pe-accent)] shrink-0" />
+          <span className="flex-1 text-[var(--pe-danger)]">{errorMsg}</span>
+          <button type="button" onClick={() => setErrorMsg('')} aria-label="Dismiss error" className="text-[var(--pe-accent)] hover:text-[var(--pe-danger)]">
             <X className="w-4 h-4" />
           </button>
         </div>
       )}
       {statusMsg && !busy && (
-        <div className="px-4 py-1.5 bg-slate-900 border-b border-slate-800 text-[11px] text-slate-400">{statusMsg}</div>
+        <div className="px-4 py-1.5 bg-[var(--pe-surface)] border-b border-[var(--pe-border)] text-[11px] text-[var(--pe-text-2)]">{statusMsg}</div>
       )}
 
       {/* main 4-zone layout */}
       <div className="flex-1 flex min-h-0 relative">
         {/* LEFT: pages panel */}
         {!isMobile && pagesOpen && (
-          <aside className="w-[200px] shrink-0 border-r border-slate-800 bg-slate-900/60 overflow-hidden">
+          <aside className="w-[200px] shrink-0 border-r border-[var(--pe-border)] bg-[var(--pe-surface-2)] overflow-hidden">
             <PagesPanel
               pages={doc.pages}
               activeIndex={activePageIndex}
@@ -1029,14 +1029,14 @@ export function Studio() {
             onEditLine={handleEditLine}
           />
           {/* trust strip */}
-          <div className="shrink-0 px-4 py-1.5 bg-slate-900/80 border-t border-slate-800 text-[10px] text-slate-500 text-center">
+          <div className="shrink-0 px-4 py-1.5 bg-[var(--pe-surface-2)] border-t border-[var(--pe-border)] text-[10px] text-[var(--pe-text-3)] text-center">
             Files are processed in your browser — nothing is uploaded to our servers. Text and shapes are added as overlays on the original PDF.
           </div>
         </div>
 
         {/* RIGHT: inspector */}
         {!isMobile && (
-          <aside className="w-72 shrink-0 border-l border-slate-800 bg-slate-900/60 overflow-y-auto">
+          <aside className="w-72 shrink-0 border-l border-[var(--pe-border)] bg-[var(--pe-surface-2)] overflow-y-auto">
             <Inspector
               tool={tool}
               selected={selectedLayer}
@@ -1056,15 +1056,15 @@ export function Studio() {
 
       {/* mobile bottom toolbar */}
       {isMobile && (
-        <nav className="shrink-0 bg-slate-900 border-t border-slate-800 px-2 py-2 flex items-center gap-1 overflow-x-auto" aria-label="Editing tools">
+        <nav className="shrink-0 bg-[var(--pe-surface)] border-t border-[var(--pe-border)] px-2 py-2 flex items-center gap-1 overflow-x-auto" aria-label="Editing tools">
           <MobileToolButtons tool={tool} onTool={handleToolSelect} />
-          <div className="w-px h-8 bg-slate-800 shrink-0 mx-1" />
-          <button type="button" onClick={doUndo} disabled={!history.canUndo} className="h-10 min-w-[44px] rounded-lg text-slate-300 disabled:opacity-30 text-xs font-bold" aria-label="Undo">↺</button>
-          <button type="button" onClick={doRedo} disabled={!history.canRedo} className="h-10 min-w-[44px] rounded-lg text-slate-300 disabled:opacity-30 text-xs font-bold" aria-label="Redo">↻</button>
+          <div className="w-px h-8 bg-[var(--pe-surface-3)] shrink-0 mx-1" />
+          <button type="button" onClick={doUndo} disabled={!history.canUndo} className="h-10 min-w-[44px] rounded-lg text-[var(--pe-text-2)] disabled:opacity-30 text-xs font-bold" aria-label="Undo">↺</button>
+          <button type="button" onClick={doRedo} disabled={!history.canRedo} className="h-10 min-w-[44px] rounded-lg text-[var(--pe-text-2)] disabled:opacity-30 text-xs font-bold" aria-label="Redo">↻</button>
           <button
             type="button"
             onClick={() => setMobileInspectorOpen((v) => !v)}
-            className={`h-10 px-3 rounded-lg text-xs font-semibold shrink-0 ${mobileInspectorOpen ? 'bg-red-500/20 text-red-300' : 'bg-slate-800 text-slate-200'}`}
+            className={`h-10 px-3 rounded-lg text-xs font-semibold shrink-0 ${mobileInspectorOpen ? 'bg-[var(--pe-accent-soft)] text-[var(--pe-accent)]' : 'bg-[var(--pe-surface-3)] text-[var(--pe-text)]'}`}
           >
             Options
           </button>
@@ -1075,7 +1075,7 @@ export function Studio() {
       {isMobile && mobilePagesOpen && (
         <div className="fixed inset-0 z-50">
           <div className="absolute inset-0 bg-black/60" onClick={() => setMobilePagesOpen(false)} />
-          <div className="absolute left-0 top-0 bottom-0 w-[240px] bg-slate-900 border-r border-slate-800">
+          <div className="absolute left-0 top-0 bottom-0 w-[240px] bg-[var(--pe-surface)] border-r border-[var(--pe-border)]">
             <PagesPanel
               pages={doc.pages}
               activeIndex={activePageIndex}
@@ -1101,9 +1101,9 @@ export function Studio() {
       {isMobile && mobileInspectorOpen && (
         <div className="fixed inset-0 z-50">
           <div className="absolute inset-0 bg-black/60" onClick={() => setMobileInspectorOpen(false)} />
-          <div className="absolute left-0 right-0 bottom-0 max-h-[55%] overflow-y-auto bg-slate-900 border-t border-slate-700 rounded-t-2xl">
-            <div className="sticky top-0 bg-slate-900 pt-2 pb-1 flex justify-center">
-              <div className="w-10 h-1 rounded-full bg-slate-700" />
+          <div className="absolute left-0 right-0 bottom-0 max-h-[55%] overflow-y-auto bg-[var(--pe-surface)] border-t border-[var(--pe-border-strong)] rounded-t-2xl">
+            <div className="sticky top-0 bg-[var(--pe-surface)] pt-2 pb-1 flex justify-center">
+              <div className="w-10 h-1 rounded-full bg-[var(--pe-border-strong)]" />
             </div>
             <Inspector
               tool={tool}
@@ -1158,9 +1158,9 @@ export function Studio() {
       {/* busy overlay */}
       {busy && (
         <div className="fixed inset-0 z-[60] bg-black/50 flex items-center justify-center">
-          <div className="bg-slate-900 border border-slate-700 rounded-2xl px-6 py-5 flex items-center gap-3">
-            <Loader2 className="w-5 h-5 animate-spin text-red-400" />
-            <span className="text-sm text-slate-200">{statusMsg || 'Working…'}</span>
+          <div className="bg-[var(--pe-surface)] border border-[var(--pe-border-strong)] rounded-2xl px-6 py-5 flex items-center gap-3">
+            <Loader2 className="w-5 h-5 animate-spin text-[var(--pe-accent)]" />
+            <span className="text-sm text-[var(--pe-text)]">{statusMsg || 'Working…'}</span>
           </div>
         </div>
       )}
@@ -1186,7 +1186,7 @@ function MobileToolButtons({ tool, onTool }: { tool: ToolId; onTool: (t: ToolId)
           onClick={() => onTool(t)}
           aria-pressed={tool === t}
           className={`h-10 min-w-[52px] px-2 rounded-lg text-[11px] font-semibold shrink-0 ${
-            tool === t ? 'bg-red-500/20 text-red-300' : 'text-slate-300'
+            tool === t ? 'bg-[var(--pe-accent-soft)] text-[var(--pe-accent)]' : 'text-[var(--pe-text-2)]'
           }`}
         >
           {labels[t] ?? t}

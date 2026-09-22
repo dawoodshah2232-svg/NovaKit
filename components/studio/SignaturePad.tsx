@@ -216,22 +216,22 @@ export function SignaturePad({ open, onClose, onSave }: SignaturePadProps) {
         aria-modal="true"
         aria-label="Create signature"
         onClick={(e) => e.stopPropagation()}
-        className="w-full max-w-2xl rounded-2xl border border-slate-800 bg-slate-900 p-5"
+        className="w-full max-w-2xl rounded-2xl border border-[var(--pe-border)] bg-[var(--pe-surface)] p-5"
       >
         <div className="mb-4 flex items-center justify-between">
-          <h2 className="text-base font-semibold text-slate-100">Create signature</h2>
+          <h2 className="text-base font-semibold text-[var(--pe-text)]">Create signature</h2>
           <button
             type="button"
             title="Close"
             aria-label="Close signature dialog"
             onClick={onClose}
-            className="flex h-11 w-11 items-center justify-center rounded-lg text-slate-400 hover:bg-slate-800 hover:text-slate-200"
+            className="flex h-11 w-11 items-center justify-center rounded-lg text-[var(--pe-text-2)] hover:bg-[var(--pe-surface-3)] hover:text-[var(--pe-text)]"
           >
             <X size={17} />
           </button>
         </div>
 
-        <div className="mb-4 flex gap-1 rounded-xl border border-slate-800 bg-slate-950 p-1">
+        <div className="mb-4 flex gap-1 rounded-xl border border-[var(--pe-border)] bg-[var(--pe-bg)] p-1">
           {tabs.map((t) => (
             <button
               key={t.id}
@@ -240,8 +240,8 @@ export function SignaturePad({ open, onClose, onSave }: SignaturePadProps) {
               aria-pressed={t.id === tab}
               className={`flex h-11 flex-1 items-center justify-center gap-2 rounded-lg text-sm font-medium ${
                 t.id === tab
-                  ? 'bg-slate-800 text-slate-100'
-                  : 'text-slate-500 hover:text-slate-300'
+                  ? 'bg-[var(--pe-surface-3)] text-[var(--pe-text)]'
+                  : 'text-[var(--pe-text-3)] hover:text-[var(--pe-text-2)]'
               }`}
             >
               {t.icon}
@@ -257,7 +257,7 @@ export function SignaturePad({ open, onClose, onSave }: SignaturePadProps) {
             onChange={(e) => setTypedText(e.target.value)}
             placeholder="Type your full name"
             aria-label="Type your name"
-            className="mb-3 h-11 w-full rounded-xl border border-slate-700 bg-slate-950 px-3 text-sm text-slate-100 outline-none focus:border-red-500"
+            className="mb-3 h-11 w-full rounded-xl border border-[var(--pe-border-strong)] bg-[var(--pe-bg)] px-3 text-sm text-[var(--pe-text)] outline-none focus:border-[var(--pe-focus)]"
           />
         )}
 
@@ -274,7 +274,7 @@ export function SignaturePad({ open, onClose, onSave }: SignaturePadProps) {
             <button
               type="button"
               onClick={() => fileInputRef.current?.click()}
-              className="flex h-11 w-full items-center justify-center gap-2 rounded-xl border border-dashed border-slate-700 text-sm font-medium text-slate-300 hover:border-slate-600 hover:bg-slate-800/50"
+              className="flex h-11 w-full items-center justify-center gap-2 rounded-xl border border-dashed border-[var(--pe-border-strong)] text-sm font-medium text-[var(--pe-text-2)] hover:border-[var(--pe-border-strong)] hover:bg-[var(--pe-surface-3)]"
             >
               <Upload size={15} />
               {uploadedName ? uploadedName : 'Choose a PNG or JPG image'}
@@ -297,11 +297,11 @@ export function SignaturePad({ open, onClose, onSave }: SignaturePadProps) {
                 ? 'Signature preview'
                 : 'Uploaded signature preview'
           }
-          className={`w-full rounded-xl border border-slate-700 bg-white ${
+          className={`w-full rounded-xl border border-[var(--pe-border-strong)] bg-white ${
             tab === 'draw' ? 'cursor-crosshair touch-none' : 'pointer-events-none'
           }`}
         />
-        <p className="mt-2 text-xs text-slate-500">
+        <p className="mt-2 text-xs text-[var(--pe-text-3)]">
           {tab === 'draw'
             ? 'Draw with your mouse, trackpad or finger.'
             : tab === 'type'
@@ -313,7 +313,7 @@ export function SignaturePad({ open, onClose, onSave }: SignaturePadProps) {
           <button
             type="button"
             onClick={clearPad}
-            className="flex h-11 items-center gap-2 rounded-xl px-3 text-sm font-medium text-slate-400 hover:bg-slate-800 hover:text-slate-200"
+            className="flex h-11 items-center gap-2 rounded-xl px-3 text-sm font-medium text-[var(--pe-text-2)] hover:bg-[var(--pe-surface-3)] hover:text-[var(--pe-text)]"
           >
             <Trash2 size={15} />
             Clear
@@ -322,7 +322,7 @@ export function SignaturePad({ open, onClose, onSave }: SignaturePadProps) {
             <button
               type="button"
               onClick={onClose}
-              className="h-11 rounded-xl border border-slate-700 px-4 text-sm font-medium text-slate-300 hover:bg-slate-800"
+              className="h-11 rounded-xl border border-[var(--pe-border-strong)] px-4 text-sm font-medium text-[var(--pe-text-2)] hover:bg-[var(--pe-surface-3)]"
             >
               Cancel
             </button>
@@ -330,7 +330,7 @@ export function SignaturePad({ open, onClose, onSave }: SignaturePadProps) {
               type="button"
               onClick={handleSave}
               disabled={!canSave}
-              className="flex h-11 items-center gap-2 rounded-xl bg-red-600 px-4 text-sm font-semibold text-white hover:bg-red-500 disabled:opacity-40"
+              className="flex h-11 items-center gap-2 rounded-xl bg-[var(--pe-accent)] px-4 text-sm font-semibold text-[var(--pe-accent-ink)] hover:bg-[var(--pe-accent-hover)] disabled:opacity-40"
             >
               <Check size={15} />
               Use signature

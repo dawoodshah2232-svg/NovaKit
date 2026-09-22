@@ -42,7 +42,7 @@ interface PagesPanelProps {
 }
 
 const PANEL_ICON_BTN =
-  'flex h-9 w-9 shrink-0 items-center justify-center rounded-lg text-slate-400 transition-colors hover:bg-slate-800 hover:text-slate-100 disabled:cursor-not-allowed disabled:opacity-30 disabled:hover:bg-transparent disabled:hover:text-slate-400';
+  'flex h-9 w-9 shrink-0 items-center justify-center rounded-lg text-[var(--pe-text-2)] transition-colors hover:bg-[var(--pe-surface-3)] hover:text-[var(--pe-text)] disabled:cursor-not-allowed disabled:opacity-30 disabled:hover:bg-transparent disabled:hover:text-[var(--pe-text-2)]';
 
 function SortablePageThumb({
   page,
@@ -79,10 +79,10 @@ function SortablePageThumb({
   };
 
   const ring = isActive
-    ? 'ring-2 ring-blue-500 ring-offset-2 ring-offset-slate-900'
+    ? 'ring-2 ring-[var(--pe-accent)] ring-offset-2 ring-offset-[var(--pe-surface)]'
     : isSelected
-      ? 'ring-2 ring-red-500 ring-offset-2 ring-offset-slate-900'
-      : 'ring-1 ring-slate-800 hover:ring-slate-600';
+      ? 'ring-2 ring-[var(--pe-accent)] ring-offset-2 ring-offset-[var(--pe-surface)]'
+      : 'ring-1 ring-[var(--pe-border)] hover:ring-[var(--pe-border-strong)]';
 
   return (
     <div
@@ -100,10 +100,10 @@ function SortablePageThumb({
           onSelect(index, false);
         }
       }}
-      className={`cursor-grab select-none rounded-lg bg-slate-800 p-1.5 transition-shadow active:cursor-grabbing ${ring}`}
+      className={`cursor-grab select-none rounded-lg bg-[var(--pe-surface-3)] p-1.5 transition-shadow active:cursor-grabbing ${ring}`}
       title={`Page ${index + 1} — click to select, Ctrl/⌘/Shift-click for multi-select, drag to reorder`}
     >
-      <div className="relative overflow-hidden rounded-md bg-slate-950">
+      <div className="relative overflow-hidden rounded-md bg-[var(--pe-bg)]">
         <img
           src={page.thumbUrl}
           alt={`Page ${index + 1} thumbnail`}
@@ -111,11 +111,11 @@ function SortablePageThumb({
           className="block w-full"
           style={{ maxWidth: 150 }}
         />
-        <span className="absolute bottom-1 left-1 rounded bg-slate-950/80 px-1.5 py-0.5 text-[11px] font-semibold text-slate-100">
+        <span className="absolute bottom-1 left-1 rounded bg-[var(--pe-bg)]/80 px-1.5 py-0.5 text-[11px] font-semibold text-[var(--pe-text)]">
           {index + 1}
         </span>
         {page.rotation !== 0 && (
-          <span className="absolute right-1 top-1 flex items-center gap-0.5 rounded bg-slate-950/80 px-1.5 py-0.5 text-[11px] font-semibold text-amber-300">
+          <span className="absolute right-1 top-1 flex items-center gap-0.5 rounded bg-[var(--pe-bg)]/80 px-1.5 py-0.5 text-[11px] font-semibold text-[var(--pe-danger)]">
             <RotateCw className="h-3 w-3" />
             {page.rotation}°
           </span>
@@ -159,11 +159,11 @@ export function PagesPanel(props: PagesPanelProps) {
   return (
     <aside
       aria-label="Pages"
-      className="flex h-full w-[200px] shrink-0 flex-col overflow-hidden border-r border-slate-800 bg-slate-900"
+      className="flex h-full w-[200px] shrink-0 flex-col overflow-hidden border-r border-[var(--pe-border)] bg-[var(--pe-surface)]"
     >
       {/* Header */}
-      <div className="flex items-center justify-between border-b border-slate-800 px-2 py-1.5">
-        <span className="px-1 text-xs font-semibold uppercase tracking-wide text-slate-400">
+      <div className="flex items-center justify-between border-b border-[var(--pe-border)] px-2 py-1.5">
+        <span className="px-1 text-xs font-semibold uppercase tracking-wide text-[var(--pe-text-2)]">
           Pages
         </span>
         {onClose && (
@@ -172,7 +172,7 @@ export function PagesPanel(props: PagesPanelProps) {
             onClick={onClose}
             title="Close pages panel"
             aria-label="Close pages panel"
-            className="flex h-8 w-8 items-center justify-center rounded-lg text-slate-400 hover:bg-slate-800 hover:text-slate-100"
+            className="flex h-8 w-8 items-center justify-center rounded-lg text-[var(--pe-text-2)] hover:bg-[var(--pe-surface-3)] hover:text-[var(--pe-text)]"
           >
             <X className="h-4 w-4" />
           </button>
@@ -180,7 +180,7 @@ export function PagesPanel(props: PagesPanelProps) {
       </div>
 
       {/* Toolbar */}
-      <div className="border-b border-slate-800 px-2 py-2">
+      <div className="border-b border-[var(--pe-border)] px-2 py-2">
         <div className="flex items-center justify-between">
           <button
             type="button"
@@ -227,7 +227,7 @@ export function PagesPanel(props: PagesPanelProps) {
             disabled={selectedCount === 0}
             title="Delete selected pages (Delete)"
             aria-label="Delete selected pages"
-            className={`${PANEL_ICON_BTN} hover:!text-red-400`}
+            className={`${PANEL_ICON_BTN} hover:!text-[var(--pe-accent)]`}
           >
             <Trash2 className="h-4 w-4" />
           </button>
@@ -236,7 +236,7 @@ export function PagesPanel(props: PagesPanelProps) {
           type="button"
           onClick={() => onRotateAll(90)}
           disabled={pages.length === 0}
-          className="mt-1.5 flex h-8 w-full items-center justify-center gap-1.5 rounded-lg text-xs font-medium text-slate-400 transition-colors hover:bg-slate-800 hover:text-slate-100 disabled:cursor-not-allowed disabled:opacity-30"
+          className="mt-1.5 flex h-8 w-full items-center justify-center gap-1.5 rounded-lg text-xs font-medium text-[var(--pe-text-2)] transition-colors hover:bg-[var(--pe-surface-3)] hover:text-[var(--pe-text)] disabled:cursor-not-allowed disabled:opacity-30"
         >
           <RotateCw className="h-3.5 w-3.5" />
           Rotate all 90°
@@ -247,9 +247,9 @@ export function PagesPanel(props: PagesPanelProps) {
       <div className="flex-1 overflow-y-auto px-2 py-2">
         {pages.length === 0 ? (
           <div className="flex h-full flex-col items-center justify-center gap-2 text-center">
-            <ImageOff className="h-8 w-8 text-slate-700" />
-            <p className="text-sm text-slate-400">No pages yet</p>
-            <p className="px-4 text-xs text-slate-500">
+            <ImageOff className="h-8 w-8 text-[var(--pe-text-3)]" />
+            <p className="text-sm text-[var(--pe-text-2)]">No pages yet</p>
+            <p className="px-4 text-xs text-[var(--pe-text-3)]">
               Open a PDF or add a blank page to get started.
             </p>
           </div>
@@ -281,7 +281,7 @@ export function PagesPanel(props: PagesPanelProps) {
       </div>
 
       {/* Footer */}
-      <div className="border-t border-slate-800 px-3 py-2 text-center text-xs text-slate-500">
+      <div className="border-t border-[var(--pe-border)] px-3 py-2 text-center text-xs text-[var(--pe-text-3)]">
         {pages.length} page{pages.length === 1 ? '' : 's'} · {selectedCount}{' '}
         selected
       </div>

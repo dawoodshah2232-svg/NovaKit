@@ -566,7 +566,7 @@ export function StudioCanvas(props: CanvasProps) {
   const hint = TOOL_EMPTY_HINT[tool];
 
   return (
-    <div ref={containerRef} className="relative flex-1 overflow-auto bg-slate-950 flex items-start justify-center">
+    <div ref={containerRef} className="relative flex-1 overflow-auto bg-[var(--pe-bg)] flex items-start justify-center">
       <div className="relative my-6" style={{ width: cssSize.w, height: cssSize.h }}>
         {/* page shadow / paper */}
         <div
@@ -617,7 +617,7 @@ export function StudioCanvas(props: CanvasProps) {
               type="button"
               title={line.approxFont ? 'Edit this text (font approximated)' : 'Edit this text'}
               aria-label={`Edit text: ${line.text.slice(0, 80)}`}
-              className="absolute rounded-[2px] transition-colors hover:bg-red-500/15 focus-visible:outline-2 focus-visible:outline-red-400"
+              className="absolute rounded-[2px] transition-colors hover:bg-[var(--pe-accent-soft)] focus-visible:outline-2 focus-visible:outline-[var(--pe-focus)]"
               style={{
                 left: `${line.x * 100}%`,
                 top: `${line.y * 100}%`,
@@ -647,14 +647,14 @@ export function StudioCanvas(props: CanvasProps) {
           ))}
           {tool === 'edittext' && textLinesState === 'loading' && (
             <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
-              <div className="px-4 py-2 rounded-full bg-slate-900/85 text-slate-200 text-xs font-medium border border-slate-700 shadow-lg">
+              <div className="px-4 py-2 rounded-full bg-[var(--pe-elevated)] text-[var(--pe-text)] text-xs font-medium border border-[var(--pe-border-strong)] shadow-lg">
                 Reading page text…
               </div>
             </div>
           )}
           {tool === 'edittext' && textLinesState === 'empty' && (
             <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
-              <div className="px-4 py-2 rounded-full bg-slate-900/85 text-slate-200 text-xs font-medium border border-slate-700 shadow-lg text-center">
+              <div className="px-4 py-2 rounded-full bg-[var(--pe-elevated)] text-[var(--pe-text)] text-xs font-medium border border-[var(--pe-border-strong)] shadow-lg text-center">
                 No selectable text on this page — it may be a scanned image.
               </div>
             </div>
@@ -691,14 +691,14 @@ export function StudioCanvas(props: CanvasProps) {
 
         {hint && layers.length === 0 && (
           <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
-            <div className="px-4 py-2 rounded-full bg-slate-900/85 text-slate-200 text-xs font-medium border border-slate-700 shadow-lg">
+            <div className="px-4 py-2 rounded-full bg-[var(--pe-elevated)] text-[var(--pe-text)] text-xs font-medium border border-[var(--pe-border-strong)] shadow-lg">
               {hint}
             </div>
           </div>
         )}
         {hint && (tool === 'text' || tool === 'edittext') && layers.length > 0 && (
           <div className="absolute -bottom-9 left-1/2 -translate-x-1/2 pointer-events-none whitespace-nowrap">
-            <div className="px-3 py-1.5 rounded-full bg-slate-900/90 text-slate-300 text-[11px] border border-slate-700">
+            <div className="px-3 py-1.5 rounded-full bg-[var(--pe-elevated)] text-[var(--pe-text-2)] text-[11px] border border-[var(--pe-border-strong)]">
               {hint}{tool === 'text' ? ' · double-click text to edit' : ''}
             </div>
           </div>
@@ -754,23 +754,23 @@ function LayerView(props: {
       {/* selection chrome */}
       {(selected || tool !== 'select') && selected && (
         <>
-          <div className="absolute -inset-[1px] border-2 border-red-400 rounded-[2px] pointer-events-none" />
+          <div className="absolute -inset-[1px] border-2 border-[var(--pe-focus)] rounded-[2px] pointer-events-none" />
           {HANDLES.map((h) => (
             <div
               key={h}
               data-handle={h}
               onPointerDown={(e) => onHandlePointerDown(e, layer, h)}
-              className="absolute w-3 h-3 -ml-1.5 -mt-1.5 bg-white border-2 border-red-500 rounded-full cursor-nwse-resize touch-none"
+              className="absolute w-3 h-3 -ml-1.5 -mt-1.5 bg-white border-2 border-[var(--pe-focus)] rounded-full cursor-nwse-resize touch-none"
               style={handlePos(h)}
             />
           ))}
           <div
             data-handle="rotate"
             onPointerDown={(e) => onHandlePointerDown(e, layer, 'rotate')}
-            className="absolute left-1/2 -ml-2 -top-8 w-4 h-4 bg-white border-2 border-red-500 rounded-full cursor-grab touch-none"
+            className="absolute left-1/2 -ml-2 -top-8 w-4 h-4 bg-white border-2 border-[var(--pe-focus)] rounded-full cursor-grab touch-none"
             title="Rotate"
           />
-          <div className="absolute left-1/2 -top-6 w-px h-4 bg-red-400 pointer-events-none" style={{ transform: 'translateX(-0.5px)' }} />
+          <div className="absolute left-1/2 -top-6 w-px h-4 bg-[var(--pe-focus)] pointer-events-none" style={{ transform: 'translateX(-0.5px)' }} />
         </>
       )}
     </div>
@@ -949,7 +949,7 @@ function InlineTextEditor(props: {
         if (e.key === 'Enter' && (e.metaKey || e.ctrlKey)) props.onCommit(value || 'Text');
       }}
       onPointerDown={(e) => e.stopPropagation()}
-      className="w-full h-full bg-white/95 text-slate-900 rounded p-1 outline-none resize-none"
+      className="w-full h-full bg-[var(--pe-surface)]/95 text-[var(--pe-text)] rounded p-1 outline-none resize-none"
       style={{
         fontFamily: props.fontFamily,
         fontWeight: props.bold ? 700 : 400,

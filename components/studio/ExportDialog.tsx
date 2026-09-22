@@ -84,17 +84,17 @@ export function ExportDialog({
         aria-modal="true"
         aria-label="Export PDF"
         onClick={(e) => e.stopPropagation()}
-        className="w-full max-w-md rounded-2xl border border-slate-800 bg-slate-900 p-6"
+        className="w-full max-w-md rounded-2xl border border-[var(--pe-border)] bg-[var(--pe-surface)] p-6"
       >
         <div className="mb-4 flex items-center justify-between">
-          <h2 className="text-base font-semibold text-slate-100">Export PDF</h2>
+          <h2 className="text-base font-semibold text-[var(--pe-text)]">Export PDF</h2>
           <button
             type="button"
             title="Close"
             aria-label="Close export dialog"
             onClick={onClose}
             disabled={!canClose}
-            className="flex h-11 w-11 items-center justify-center rounded-lg text-slate-400 hover:bg-slate-800 hover:text-slate-200 disabled:opacity-40"
+            className="flex h-11 w-11 items-center justify-center rounded-lg text-[var(--pe-text-2)] hover:bg-[var(--pe-surface-3)] hover:text-[var(--pe-text)] disabled:opacity-40"
           >
             <X size={17} />
           </button>
@@ -102,29 +102,29 @@ export function ExportDialog({
 
         {stage === 'options' && (
           <div>
-            <p className="mb-5 text-sm leading-6 text-slate-400">
+            <p className="mb-5 text-sm leading-6 text-[var(--pe-text-2)]">
               Your edits are drawn onto a new PDF file. The original document stays untouched.
             </p>
             <button
               type="button"
               onClick={() => onExport(false)}
-              className="h-12 w-full rounded-xl bg-red-600 text-sm font-semibold text-white transition hover:bg-red-500"
+              className="h-12 w-full rounded-xl bg-[var(--pe-accent)] text-sm font-semibold text-[var(--pe-accent-ink)] transition hover:bg-[var(--pe-accent-hover)]"
             >
               Export PDF
             </button>
-            <p className="mb-4 mt-1.5 text-center text-xs text-slate-500">Standard export</p>
+            <p className="mb-4 mt-1.5 text-center text-xs text-[var(--pe-text-3)]">Standard export</p>
             <button
               type="button"
               onClick={() => onExport(true)}
-              className="h-12 w-full rounded-xl border border-slate-700 text-sm font-semibold text-slate-200 transition hover:bg-slate-800"
+              className="h-12 w-full rounded-xl border border-[var(--pe-border-strong)] text-sm font-semibold text-[var(--pe-text)] transition hover:bg-[var(--pe-surface-3)]"
             >
               Flatten &amp; Export
             </button>
-            <p className="mt-1.5 text-center text-xs leading-5 text-slate-500">
+            <p className="mt-1.5 text-center text-xs leading-5 text-[var(--pe-text-3)]">
               Merges all overlays and form fields into static page content.
             </p>
             {hasRedactions && (
-              <p className="mt-4 rounded-lg border border-amber-500/30 bg-amber-500/10 p-3 text-[11px] leading-5 text-amber-300">
+              <p className="mt-4 rounded-lg border border-[var(--pe-danger)] bg-[var(--pe-danger-soft)] p-3 text-[11px] leading-5 text-[var(--pe-danger)]">
                 Redactions are opaque overlays: they cover content visually, but the underlying
                 text may still be extractable from the exported PDF.
               </p>
@@ -134,21 +134,21 @@ export function ExportDialog({
 
         {stage === 'working' && (
           <div className="flex flex-col items-center py-8 text-center">
-            <Loader2 size={32} className="mb-4 animate-spin text-red-400" />
-            <p className="text-sm font-medium text-slate-200">Exporting your PDF…</p>
-            {progress && <p className="mt-1 text-xs text-slate-500">{progress}</p>}
+            <Loader2 size={32} className="mb-4 animate-spin text-[var(--pe-accent)]" />
+            <p className="text-sm font-medium text-[var(--pe-text)]">Exporting your PDF…</p>
+            {progress && <p className="mt-1 text-xs text-[var(--pe-text-3)]">{progress}</p>}
           </div>
         )}
 
         {stage === 'done' && result && (
           <div>
             <div className="flex flex-col items-center py-2 text-center">
-              <CheckCircle2 size={40} className="mb-3 text-emerald-400" />
-              <p className="text-sm font-semibold text-slate-100">Export complete</p>
-              <p className="mt-1 max-w-full truncate text-xs text-slate-500" title={result.fileName}>
+              <CheckCircle2 size={40} className="mb-3 text-[var(--pe-success)]" />
+              <p className="text-sm font-semibold text-[var(--pe-text)]">Export complete</p>
+              <p className="mt-1 max-w-full truncate text-xs text-[var(--pe-text-3)]" title={result.fileName}>
                 {result.fileName}
               </p>
-              <p className="mt-2 text-xs tabular-nums text-slate-400">
+              <p className="mt-2 text-xs tabular-nums text-[var(--pe-text-2)]">
                 {formatSize(result.sizeBytes)} · {result.pageCount}{' '}
                 {result.pageCount === 1 ? 'page' : 'pages'}
               </p>
@@ -157,7 +157,7 @@ export function ExportDialog({
               <button
                 type="button"
                 onClick={onDownload}
-                className="flex h-12 w-full items-center justify-center gap-2 rounded-xl bg-red-600 text-sm font-semibold text-white transition hover:bg-red-500"
+                className="flex h-12 w-full items-center justify-center gap-2 rounded-xl bg-[var(--pe-accent)] text-sm font-semibold text-[var(--pe-accent-ink)] transition hover:bg-[var(--pe-accent-hover)]"
               >
                 <Download size={16} />
                 Download
@@ -166,7 +166,7 @@ export function ExportDialog({
                 <button
                   type="button"
                   onClick={onContinue}
-                  className="flex h-11 flex-1 items-center justify-center gap-2 rounded-xl border border-slate-700 text-sm font-medium text-slate-200 transition hover:bg-slate-800"
+                  className="flex h-11 flex-1 items-center justify-center gap-2 rounded-xl border border-[var(--pe-border-strong)] text-sm font-medium text-[var(--pe-text)] transition hover:bg-[var(--pe-surface-3)]"
                 >
                   <Pencil size={15} />
                   Continue Editing
@@ -174,7 +174,7 @@ export function ExportDialog({
                 <button
                   type="button"
                   onClick={onNewFile}
-                  className="flex h-11 flex-1 items-center justify-center gap-2 rounded-xl border border-slate-700 text-sm font-medium text-slate-200 transition hover:bg-slate-800"
+                  className="flex h-11 flex-1 items-center justify-center gap-2 rounded-xl border border-[var(--pe-border-strong)] text-sm font-medium text-[var(--pe-text)] transition hover:bg-[var(--pe-surface-3)]"
                 >
                   <FilePlus2 size={15} />
                   Edit Another PDF
@@ -186,11 +186,11 @@ export function ExportDialog({
 
         {stage === 'error' && (
           <div>
-            <div className="flex items-start gap-3 rounded-xl border border-rose-500/30 bg-rose-500/10 p-4">
-              <TriangleAlert size={18} className="mt-0.5 shrink-0 text-rose-400" />
+            <div className="flex items-start gap-3 rounded-xl border border-[var(--pe-danger)] bg-[var(--pe-danger-soft)] p-4">
+              <TriangleAlert size={18} className="mt-0.5 shrink-0 text-[var(--pe-danger)]" />
               <div>
-                <p className="text-sm font-semibold text-rose-200">Export failed</p>
-                <p className="mt-1 text-xs leading-5 text-rose-300/90">
+                <p className="text-sm font-semibold text-[var(--pe-danger)]">Export failed</p>
+                <p className="mt-1 text-xs leading-5 text-[var(--pe-danger)]/90">
                   {error || 'Something went wrong while exporting the PDF.'}
                 </p>
               </div>
@@ -198,7 +198,7 @@ export function ExportDialog({
             <button
               type="button"
               onClick={onClose}
-              className="mt-4 h-11 w-full rounded-xl border border-slate-700 text-sm font-medium text-slate-200 transition hover:bg-slate-800"
+              className="mt-4 h-11 w-full rounded-xl border border-[var(--pe-border-strong)] text-sm font-medium text-[var(--pe-text)] transition hover:bg-[var(--pe-surface-3)]"
             >
               Close
             </button>

@@ -69,8 +69,8 @@ export interface InspectorProps {
 
 function Section({ title, children }: { title: string; children: ReactNode }) {
   return (
-    <section className="border-b border-slate-800 px-4 py-3">
-      <h3 className="mb-2.5 text-[11px] font-semibold uppercase tracking-wider text-slate-500">
+    <section className="border-b border-[var(--pe-border)] px-4 py-3">
+      <h3 className="mb-2.5 text-[11px] font-semibold uppercase tracking-wider text-[var(--pe-text-3)]">
         {title}
       </h3>
       <div className="space-y-3">{children}</div>
@@ -103,8 +103,8 @@ function SliderRow({
   return (
     <div>
       <div className="mb-0.5 flex items-center justify-between">
-        <span className="text-xs text-slate-400">{label}</span>
-        <span className="text-xs tabular-nums text-slate-300">{format(value)}</span>
+        <span className="text-xs text-[var(--pe-text-2)]">{label}</span>
+        <span className="text-xs tabular-nums text-[var(--pe-text-2)]">{format(value)}</span>
       </div>
       <input
         type="range"
@@ -114,7 +114,7 @@ function SliderRow({
         step={step}
         value={value}
         onChange={(e) => onChange(Number(e.target.value))}
-        className="h-9 w-full cursor-pointer accent-red-500"
+        className="h-9 w-full cursor-pointer accent-[var(--pe-accent)]"
       />
     </div>
   );
@@ -131,15 +131,15 @@ function ColorRow({
 }) {
   return (
     <div className="flex min-h-9 items-center justify-between gap-2">
-      <span className="text-xs text-slate-400">{label}</span>
+      <span className="text-xs text-[var(--pe-text-2)]">{label}</span>
       <div className="flex items-center gap-2">
-        <span className="text-xs uppercase tabular-nums text-slate-500">{value}</span>
+        <span className="text-xs uppercase tabular-nums text-[var(--pe-text-3)]">{value}</span>
         <input
           type="color"
           aria-label={label}
           value={value}
           onChange={(e) => onChange(e.target.value)}
-          className="h-9 w-11 cursor-pointer rounded-lg border border-slate-700 bg-slate-950 p-1"
+          className="h-9 w-11 cursor-pointer rounded-lg border border-[var(--pe-border-strong)] bg-[var(--pe-bg)] p-1"
         />
       </div>
     </div>
@@ -159,12 +159,12 @@ function TextAreaRow({
 }) {
   return (
     <div>
-      <div className="mb-1 text-xs text-slate-400">{label}</div>
+      <div className="mb-1 text-xs text-[var(--pe-text-2)]">{label}</div>
       <textarea
         value={value}
         rows={rows}
         onChange={(e) => onChange(e.target.value)}
-        className="w-full rounded-lg border border-slate-700 bg-slate-950 px-2.5 py-2 text-sm text-slate-100 outline-none focus:border-red-500"
+        className="w-full rounded-lg border border-[var(--pe-border-strong)] bg-[var(--pe-bg)] px-2.5 py-2 text-sm text-[var(--pe-text)] outline-none focus:border-[var(--pe-focus)]"
       />
     </div>
   );
@@ -183,13 +183,13 @@ function TextInputRow({
 }) {
   return (
     <div>
-      <div className="mb-1 text-xs text-slate-400">{label}</div>
+      <div className="mb-1 text-xs text-[var(--pe-text-2)]">{label}</div>
       <input
         type="text"
         value={value}
         placeholder={placeholder}
         onChange={(e) => onChange(e.target.value)}
-        className="h-9 w-full rounded-lg border border-slate-700 bg-slate-950 px-2.5 text-sm text-slate-100 outline-none focus:border-red-500"
+        className="h-9 w-full rounded-lg border border-[var(--pe-border-strong)] bg-[var(--pe-bg)] px-2.5 text-sm text-[var(--pe-text)] outline-none focus:border-[var(--pe-focus)]"
       />
     </div>
   );
@@ -208,9 +208,9 @@ function SegRow<T extends string>({
 }) {
   return (
     <div>
-      <div className="mb-1 text-xs text-slate-400">{label}</div>
+      <div className="mb-1 text-xs text-[var(--pe-text-2)]">{label}</div>
       <div
-        className="flex gap-1 rounded-xl border border-slate-800 bg-slate-950 p-1"
+        className="flex gap-1 rounded-xl border border-[var(--pe-border)] bg-[var(--pe-bg)] p-1"
         role="group"
         aria-label={label}
       >
@@ -223,8 +223,8 @@ function SegRow<T extends string>({
             onClick={() => onChange(o.value)}
             className={`flex h-9 min-w-9 flex-1 items-center justify-center rounded-lg text-xs font-medium ${
               o.value === value
-                ? 'bg-slate-800 text-slate-100'
-                : 'text-slate-500 hover:text-slate-300'
+                ? 'bg-[var(--pe-surface-3)] text-[var(--pe-text)]'
+                : 'text-[var(--pe-text-3)] hover:text-[var(--pe-text-2)]'
             }`}
           >
             {o.label}
@@ -258,7 +258,7 @@ function StyleToggles({
   ];
   return (
     <div>
-      <div className="mb-1 text-xs text-slate-400">Style</div>
+      <div className="mb-1 text-xs text-[var(--pe-text-2)]">Style</div>
       <div className="flex gap-1.5">
         {items.map((it) => (
           <button
@@ -269,8 +269,8 @@ function StyleToggles({
             onClick={() => onToggle(it.k)}
             className={`flex h-9 min-w-9 items-center justify-center rounded-lg border ${
               it.active
-                ? 'border-red-500 bg-red-500/15 text-red-300'
-                : 'border-slate-700 text-slate-400 hover:bg-slate-800 hover:text-slate-200'
+                ? 'border-[var(--pe-focus)] bg-[var(--pe-accent-soft)] text-[var(--pe-accent)]'
+                : 'border-[var(--pe-border-strong)] text-[var(--pe-text-2)] hover:bg-[var(--pe-surface-3)] hover:text-[var(--pe-text)]'
             }`}
           >
             {it.icon}
@@ -285,11 +285,11 @@ function FontRow({ value, onChange }: { value: string; onChange: (v: string) => 
   const note = fontAliasNote(value);
   return (
     <div>
-      <div className="mb-1 text-xs text-slate-400">Font</div>
+      <div className="mb-1 text-xs text-[var(--pe-text-2)]">Font</div>
       <select
         value={value}
         onChange={(e) => onChange(e.target.value)}
-        className="h-9 w-full rounded-lg border border-slate-700 bg-slate-950 px-2 text-sm text-slate-100 outline-none focus:border-red-500"
+        className="h-9 w-full rounded-lg border border-[var(--pe-border-strong)] bg-[var(--pe-bg)] px-2 text-sm text-[var(--pe-text)] outline-none focus:border-[var(--pe-focus)]"
       >
         {STUDIO_FONTS.map((f) => {
           const n = fontAliasNote(f.id);
@@ -301,7 +301,7 @@ function FontRow({ value, onChange }: { value: string; onChange: (v: string) => 
         })}
       </select>
       {note && (
-        <div className="mt-1 text-[11px] leading-4 text-amber-400/90">
+        <div className="mt-1 text-[11px] leading-4 text-[var(--pe-danger)]">
           {note.charAt(0).toUpperCase() + note.slice(1)} in the exported PDF.
         </div>
       )}
@@ -320,8 +320,8 @@ function PercentField({
 }) {
   const display = Math.round(value * 1000) / 10;
   return (
-    <label className="flex h-9 items-center justify-between gap-1 rounded-lg border border-slate-800 bg-slate-950 px-2">
-      <span className="text-xs text-slate-500">{label}</span>
+    <label className="flex h-9 items-center justify-between gap-1 rounded-lg border border-[var(--pe-border)] bg-[var(--pe-bg)] px-2">
+      <span className="text-xs text-[var(--pe-text-3)]">{label}</span>
       <input
         type="number"
         aria-label={label}
@@ -333,7 +333,7 @@ function PercentField({
           const n = Number(e.target.value);
           if (Number.isFinite(n)) onChange(Math.min(1, Math.max(0, n / 100)));
         }}
-        className="w-16 bg-transparent text-right text-sm tabular-nums text-slate-100 outline-none"
+        className="w-16 bg-transparent text-right text-sm tabular-nums text-[var(--pe-text)] outline-none"
       />
     </label>
   );
@@ -348,7 +348,7 @@ function FillRow({
 }) {
   return (
     <div>
-      <div className="mb-1 text-xs text-slate-400">Fill color</div>
+      <div className="mb-1 text-xs text-[var(--pe-text-2)]">Fill color</div>
       <div className="flex items-center gap-2">
         <button
           type="button"
@@ -357,8 +357,8 @@ function FillRow({
           onClick={() => onChange(value === null ? '#ffffff' : null)}
           className={`h-9 rounded-lg border px-3 text-xs font-medium ${
             value === null
-              ? 'border-red-500 bg-red-500/15 text-red-300'
-              : 'border-slate-700 text-slate-400 hover:bg-slate-800 hover:text-slate-200'
+              ? 'border-[var(--pe-focus)] bg-[var(--pe-accent-soft)] text-[var(--pe-accent)]'
+              : 'border-[var(--pe-border-strong)] text-[var(--pe-text-2)] hover:bg-[var(--pe-surface-3)] hover:text-[var(--pe-text)]'
           }`}
         >
           No fill
@@ -369,7 +369,7 @@ function FillRow({
             aria-label="Fill color"
             value={value}
             onChange={(e) => onChange(e.target.value)}
-            className="h-9 w-11 cursor-pointer rounded-lg border border-slate-700 bg-slate-950 p-1"
+            className="h-9 w-11 cursor-pointer rounded-lg border border-[var(--pe-border-strong)] bg-[var(--pe-bg)] p-1"
           />
         )}
       </div>
@@ -386,7 +386,7 @@ function StampPicker({
 }) {
   return (
     <div>
-      <div className="mb-1 text-xs text-slate-400">Stamp</div>
+      <div className="mb-1 text-xs text-[var(--pe-text-2)]">Stamp</div>
       <div className="grid grid-cols-2 gap-1.5" role="group" aria-label="Stamp">
         {STAMPS.map((s) => {
           const active = s.id === value;
@@ -417,9 +417,9 @@ function StampPicker({
 
 function RedactWarning() {
   return (
-    <div className="flex gap-2 rounded-xl border border-amber-500/30 bg-amber-500/10 p-3">
-      <TriangleAlert size={16} className="mt-0.5 shrink-0 text-amber-400" />
-      <p className="text-xs leading-5 text-amber-200/90">
+    <div className="flex gap-2 rounded-xl border border-[var(--pe-danger)] bg-[var(--pe-danger-soft)] p-3">
+      <TriangleAlert size={16} className="mt-0.5 shrink-0 text-[var(--pe-danger)]" />
+      <p className="text-xs leading-5 text-[var(--pe-danger)]">
         Overlay-only redaction: covers content with an opaque box. The underlying content may
         still be extractable from the file.
       </p>
@@ -429,7 +429,7 @@ function RedactWarning() {
 
 function OverlayNote() {
   return (
-    <p className="text-[11px] leading-5 text-slate-500">
+    <p className="text-[11px] leading-5 text-[var(--pe-text-3)]">
       Text is added as an overlay on the original PDF.
     </p>
   );
@@ -437,9 +437,9 @@ function OverlayNote() {
 
 function ToolHeader({ title, hint }: { title: string; hint?: string }) {
   return (
-    <div className="border-b border-slate-800 px-4 py-3">
-      <div className="text-sm font-semibold text-slate-100">{title}</div>
-      {hint && <div className="mt-0.5 text-xs text-slate-500">{hint}</div>}
+    <div className="border-b border-[var(--pe-border)] px-4 py-3">
+      <div className="text-sm font-semibold text-[var(--pe-text)]">{title}</div>
+      {hint && <div className="mt-0.5 text-xs text-[var(--pe-text-3)]">{hint}</div>}
     </div>
   );
 }
@@ -543,7 +543,7 @@ function TextSection({ layer, onPatch }: { layer: TextLayer; onPatch: Patch }) {
           <PercentField label="W" value={layer.w} onChange={(v) => onPatch({ w: v })} />
           <PercentField label="H" value={layer.h} onChange={(v) => onPatch({ h: v })} />
         </div>
-        <p className="text-[11px] leading-4 text-slate-600">
+        <p className="text-[11px] leading-4 text-[var(--pe-text-3)]">
           Position and size are % of the page.
         </p>
       </Section>
@@ -884,7 +884,7 @@ function SignatureToolOptions({
         <button
           type="button"
           onClick={onOpenSignaturePad}
-          className="flex h-9 w-full items-center justify-center gap-2 rounded-lg border border-slate-700 text-sm font-medium text-slate-200 hover:bg-slate-800"
+          className="flex h-9 w-full items-center justify-center gap-2 rounded-lg border border-[var(--pe-border-strong)] text-sm font-medium text-[var(--pe-text)] hover:bg-[var(--pe-surface-3)]"
         >
           <PenLine size={15} />
           {hasSignature ? 'Update signature' : 'Draw signature'}
@@ -949,7 +949,7 @@ function IdleToolOptions({ tool }: { tool: ToolId }) {
     <>
       <ToolHeader title="Inspector" />
       <Section title="Nothing to edit">
-        <p className="text-xs leading-5 text-slate-500">{hint}</p>
+        <p className="text-xs leading-5 text-[var(--pe-text-3)]">{hint}</p>
       </Section>
     </>
   );
@@ -971,15 +971,15 @@ export function Inspector({
   onSendToBack,
 }: InspectorProps) {
   return (
-    <div className="flex h-full flex-col overflow-y-auto bg-slate-900">
+    <div className="flex h-full flex-col overflow-y-auto bg-[var(--pe-surface)]">
       {selected ? (
         <>
-          <div className="flex items-center justify-between gap-2 border-b border-slate-800 px-4 py-3">
+          <div className="flex items-center justify-between gap-2 border-b border-[var(--pe-border)] px-4 py-3">
             <div className="min-w-0">
-              <div className="truncate text-sm font-semibold text-slate-100">
+              <div className="truncate text-sm font-semibold text-[var(--pe-text)]">
                 {layerTitle(selected)}
               </div>
-              <div className="text-xs text-slate-500">Page {selected.pageIndex + 1}</div>
+              <div className="text-xs text-[var(--pe-text-3)]">Page {selected.pageIndex + 1}</div>
             </div>
             <div className="flex shrink-0 gap-1.5">
               {onBringToFront && (
@@ -987,7 +987,7 @@ export function Inspector({
                   type="button"
                   title="Bring to front"
                   onClick={onBringToFront}
-                  className="flex h-9 w-9 items-center justify-center rounded-lg border border-slate-700 text-slate-300 hover:bg-slate-800"
+                  className="flex h-9 w-9 items-center justify-center rounded-lg border border-[var(--pe-border-strong)] text-[var(--pe-text-2)] hover:bg-[var(--pe-surface-3)]"
                 >
                   <ArrowUpToLine size={15} />
                 </button>
@@ -997,7 +997,7 @@ export function Inspector({
                   type="button"
                   title="Send to back"
                   onClick={onSendToBack}
-                  className="flex h-9 w-9 items-center justify-center rounded-lg border border-slate-700 text-slate-300 hover:bg-slate-800"
+                  className="flex h-9 w-9 items-center justify-center rounded-lg border border-[var(--pe-border-strong)] text-[var(--pe-text-2)] hover:bg-[var(--pe-surface-3)]"
                 >
                   <ArrowDownToLine size={15} />
                 </button>
@@ -1006,7 +1006,7 @@ export function Inspector({
                 type="button"
                 title="Duplicate"
                 onClick={onDuplicateSelected}
-                className="flex h-9 w-9 items-center justify-center rounded-lg border border-slate-700 text-slate-300 hover:bg-slate-800"
+                className="flex h-9 w-9 items-center justify-center rounded-lg border border-[var(--pe-border-strong)] text-[var(--pe-text-2)] hover:bg-[var(--pe-surface-3)]"
               >
                 <Copy size={15} />
               </button>
@@ -1014,7 +1014,7 @@ export function Inspector({
                 type="button"
                 title="Delete (Delete/Backspace)"
                 onClick={onDeleteSelected}
-                className="flex h-9 w-9 items-center justify-center rounded-lg border border-rose-500/40 text-rose-400 hover:bg-rose-500/10"
+                className="flex h-9 w-9 items-center justify-center rounded-lg border border-[var(--pe-danger)] text-[var(--pe-danger)] hover:bg-[var(--pe-danger-soft)]"
               >
                 <Trash2 size={15} />
               </button>
@@ -1063,7 +1063,7 @@ export function Inspector({
             <>
               <ToolHeader title="Edit text" />
               <Section title="How it works">
-                <p className="text-xs leading-5 text-slate-500">
+                <p className="text-xs leading-5 text-[var(--pe-text-3)]">
                   Click any line of the document&rsquo;s own text to edit it in place. The original
                   wording is covered and your replacement keeps the matched font, size and color.
                   After editing, select the text to fine-tune it here.
