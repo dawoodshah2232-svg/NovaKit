@@ -1082,7 +1082,7 @@ function PropertiesPanel(props: {
           </div>
 
           {primary.type === 'text' && (
-            <TextProps layer={primary} patch={props.patch} patchLive={props.patchLive} snapshot={props.snapshot} />
+            <TextProps layer={primary} patch={props.patch} patchLive={props.patchLive} snapshot={props.snapshot} pageHeightPt={props.doc.page.heightPt} />
           )}
           {primary.type === 'image' && (
             <ImageProps layer={primary} patch={props.patch} patchLive={props.patchLive} snapshot={props.snapshot} />
@@ -1227,7 +1227,7 @@ function asText(l: DocLayer, fn: (t: DocTextLayer) => DocTextLayer): DocLayer {
   return l.type === 'text' ? fn(l) : l;
 }
 
-function TextProps({ layer, patch, patchLive, snapshot }: { layer: DocTextLayer } & Patchers) {
+function TextProps({ layer, patch, patchLive, snapshot, pageHeightPt }: { layer: DocTextLayer; pageHeightPt: number } & Patchers) {
   const setAlign = (align: DocAlign) =>
     patch((l) => asText(l, (t) => ({ ...t, blocks: t.blocks.map((b) => ({ ...b, align })) })));
   const aligns: Array<{ id: DocAlign; icon: React.ReactNode; label: string }> = [
@@ -1257,7 +1257,7 @@ function TextProps({ layer, patch, patchLive, snapshot }: { layer: DocTextLayer 
           </label>
           <Slider
             label="Size" min={0.008} max={0.06} step={0.001} value={layer.fontSize} snapshot={snapshot}
-            format={(v) => `${Math.round(v * 841.89)} pt`}
+            format={(v) => `${Math.round(v * pageHeightPt)} pt`}
             onLive={(v) => patchLive((l) => asText(l, (t) => ({ ...t, fontSize: v })))}
           />
           <Slider

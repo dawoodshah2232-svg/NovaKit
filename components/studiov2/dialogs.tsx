@@ -61,7 +61,7 @@ function DialogShell({
   }, [onClose]);
   return (
     <div
-      className="fixed inset-0 z-[90] flex items-center justify-center p-4"
+      className="fixed inset-0 z-[100] flex items-center justify-center p-4"
       style={{ background: 'rgba(8,10,14,0.55)', backdropFilter: 'blur(6px)' }}
       onClick={onClose}
       role="dialog"

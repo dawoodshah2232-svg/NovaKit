@@ -109,31 +109,31 @@ function firstH1(doc: DocState): string {
   return 'cv';
 }
 
-function recolorDoc(doc: DocState, from: string, to: string): DocState {
-  const f = from.toLowerCase();
-  const swap = (c: string | null): string | null =>
-    c && c.toLowerCase() === f ? to : c;
+function recolorDoc(doc: DocState, to: string): DocState {
+  // Set (not swap): every layer tagged accent:true takes the new accent color,
+  // even when the template used derived shades (e.g. a darker sidebar).
+  const set = (c: string | null): string | null => (c ? to : c);
   return {
     ...doc,
     layers: doc.layers.map((l) => {
       if (!l.accent) return l;
       if (l.type === 'text') {
-        const color = swap(l.color);
+        const color = set(l.color);
         return {
           ...l,
           color: color ?? l.color,
           blocks: l.blocks.map((b) => ({
             ...b,
-            runs: b.runs.map((r) => ({ ...r, color: swap(r.color) })),
+            runs: b.runs.map((r) => ({ ...r, color: set(r.color) })),
           })),
         };
       }
       if (l.type === 'shape') {
-        const stroke = swap(l.stroke);
-        return { ...l, fill: swap(l.fill), stroke: stroke ?? l.stroke };
+        const stroke = set(l.stroke);
+        return { ...l, fill: set(l.fill), stroke: stroke ?? l.stroke };
       }
       if (l.type === 'divider') {
-        const color = swap(l.color);
+        const color = set(l.color);
         return { ...l, color: color ?? l.color };
       }
       return l;
@@ -343,6 +343,7 @@ export function CvBuilderV2() {
 
   const [templateId, setTemplateId] = useState(initialMeta.templateId);
   const [accent, setAccent] = useState(initialMeta.accent);
+  const [confirm, setConfirm] = useState<{ title: string; message: string; onConfirm: () => void } | null>(null);
   const [fontScale, setFontScale] = useState(1);
   const [selection, setSelection] = useState<string[]>([]);
   const [editingId, setEditingId] = useState<string | null>(null);
@@ -385,21 +386,26 @@ export function CvBuilderV2() {
 
   const switchTemplate = (t: CvTemplateMeta) => {
     if (t.id === templateId) return;
-    if (!window.confirm('Switching templates rebuilds the layout — your text edits will be lost. Continue?')) return;
-    setHiddenMap(new Map());
-    setSelection([]);
-    setEditingId(null);
-    setFontScale(1);
-    fontScaleRef.current = 1;
-    setPhotoVisible(true);
-    setTemplateId(t.id);
-    setAccent(t.accent);
-    hist.reset(t.build());
+    setConfirm({
+      title: 'Switch template?',
+      message: 'Switching templates rebuilds the layout — your text edits will be lost.',
+      onConfirm: () => {
+        setHiddenMap(new Map());
+        setSelection([]);
+        setEditingId(null);
+        setFontScale(1);
+        fontScaleRef.current = 1;
+        setPhotoVisible(true);
+        setTemplateId(t.id);
+        setAccent(t.accent);
+        hist.reset(t.build());
+      },
+    });
   };
 
   const onAccentChange = (next: string) => {
     if (next.toLowerCase() === accent.toLowerCase()) return;
-    hist.update((d) => recolorDoc(d, accent, next), true);
+    hist.update((d) => recolorDoc(d, next), true);
     setAccent(next);
   };
 
@@ -498,14 +504,19 @@ export function CvBuilderV2() {
   };
 
   const deleteSection = (gid: string) => {
-    if (!window.confirm(`Delete the “${sectionLabel(gid)}” section? You can still undo this.`)) return;
-    setHiddenMap((prev) => {
-      const next = new Map(prev);
-      next.delete(gid);
-      return next;
+    setConfirm({
+      title: `Delete “${sectionLabel(gid)}”?`,
+      message: 'You can still undo this.',
+      onConfirm: () => {
+        setHiddenMap((prev) => {
+          const next = new Map(prev);
+          next.delete(gid);
+          return next;
+        });
+        setSelection((sel) => sel.filter((sid) => !doc.layers.some((l) => l.id === sid && l.groupId === gid)));
+        hist.update((d) => ({ ...d, layers: d.layers.filter((l) => l.groupId !== gid) }), true);
+      },
     });
-    setSelection((sel) => sel.filter((sid) => !doc.layers.some((l) => l.id === sid && l.groupId === gid)));
-    hist.update((d) => ({ ...d, layers: d.layers.filter((l) => l.groupId !== gid) }), true);
   };
 
   const addSection = (label: string) => {
@@ -864,6 +875,42 @@ export function CvBuilderV2() {
 
   return (
     <div className="h-full">
+      {confirm && (
+        <div
+          className="fixed inset-0 z-[100] flex items-center justify-center p-4"
+          style={{ background: 'rgba(8,10,14,0.55)', backdropFilter: 'blur(6px)' }}
+          onClick={() => setConfirm(null)}
+          role="dialog"
+          aria-modal="true"
+          aria-label={confirm.title}
+        >
+          <div
+            className="w-full max-w-sm rounded-2xl p-6"
+            style={{ background: 'var(--pe-surface)', border: '1px solid var(--pe-border)', boxShadow: 'var(--pe-shadow-lg)' }}
+            onClick={(e) => e.stopPropagation()}
+          >
+            <h2 className="text-base font-bold" style={{ color: 'var(--pe-text)' }}>{confirm.title}</h2>
+            <p className="mt-1.5 text-sm" style={{ color: 'var(--pe-text-2)' }}>{confirm.message}</p>
+            <div className="mt-5 flex justify-end gap-2">
+              <button
+                type="button"
+                onClick={() => setConfirm(null)}
+                className="rounded-full px-5 py-2.5 text-sm font-semibold"
+                style={{ border: '1px solid var(--pe-border)', color: 'var(--pe-text)' }}
+              >
+                Cancel
+              </button>
+              <button
+                type="button"
+                onClick={() => { const c = confirm; setConfirm(null); c.onConfirm(); }}
+                className="rounded-full bg-[var(--pe-accent)] px-5 py-2.5 text-sm font-bold text-[var(--pe-accent-ink)] hover:bg-[var(--pe-accent-hover)]"
+              >
+                Confirm
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
       <input
         ref={fileRef}
         type="file"
