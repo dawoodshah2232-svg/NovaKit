@@ -12,15 +12,16 @@ export const metadata: Metadata = {
 export default function CvBuilderPreviewPage() {
   return (
     <main className="min-h-screen bg-[var(--pe-bg)]">
-      <div className="flex items-center gap-2 border-b border-[var(--pe-border)] bg-[var(--pe-accent-soft)] px-4 py-2 text-sm">
-        <FlaskConical className="h-4 w-4 shrink-0 text-[var(--pe-accent)]" />
-        <p className="text-[var(--pe-text-2)]">
-          <span className="font-semibold text-[var(--pe-text)]">CV Builder V2 preview</span>
-          {' — experimental. The production builder is unchanged at '}
-          <Link href="/cv-builder" className="font-medium text-[var(--pe-accent)] underline underline-offset-2">
-            /cv-builder
-          </Link>
-          .
+      <div className="flex justify-center border-b border-[var(--pe-border)] bg-[var(--pe-surface)] px-3 py-1.5">
+        <p className="inline-flex max-w-full items-center gap-1.5 rounded-full border border-[var(--pe-border)] bg-[var(--pe-surface-2)] px-3 py-1 text-[11px] leading-snug text-[var(--pe-text-3)]">
+          <FlaskConical className="h-3 w-3 shrink-0" />
+          <span>
+            <span className="font-semibold text-[var(--pe-text-2)]">CV Builder V2 preview</span>
+            {' — experimental · production builder unchanged at '}
+            <Link href="/cv-builder" className="font-medium text-[var(--pe-text-2)] underline underline-offset-2">
+              /cv-builder
+            </Link>
+          </span>
         </p>
       </div>
       <CvBuilderV2Lazy />

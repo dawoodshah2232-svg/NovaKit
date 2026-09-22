@@ -11,15 +11,17 @@ export const metadata: Metadata = {
 export default function StudioV2PreviewPage() {
   return (
     <div className="flex min-h-screen flex-col bg-[var(--pe-bg)]">
-      <div className="flex items-center justify-center gap-2 border-b border-[var(--pe-border)] bg-[var(--pe-accent-soft)] px-4 py-2 text-center text-xs text-[var(--pe-text-2)]">
-        <FlaskConical size={14} className="shrink-0 text-[var(--pe-accent)]" />
-        <span>
-          <strong className="font-semibold text-[var(--pe-text)]">Studio V2 preview</strong>
-          {' '}— experimental. The production Studio is unchanged at{' '}
-          <Link href="/studio" className="font-medium text-[var(--pe-accent)] underline underline-offset-2">
-            /studio
-          </Link>.
-        </span>
+      <div className="flex justify-center border-b border-[var(--pe-border)] bg-[var(--pe-surface)] px-3 py-1.5">
+        <p className="inline-flex max-w-full items-center gap-1.5 rounded-full border border-[var(--pe-border)] bg-[var(--pe-surface-2)] px-3 py-1 text-[11px] leading-snug text-[var(--pe-text-3)]">
+          <FlaskConical className="h-3 w-3 shrink-0" />
+          <span>
+            <span className="font-semibold text-[var(--pe-text-2)]">Studio V2 preview</span>
+            {' — experimental · production Studio unchanged at '}
+            <Link href="/studio" className="font-medium text-[var(--pe-text-2)] underline underline-offset-2">
+              /studio
+            </Link>
+          </span>
+        </p>
       </div>
       <div className="min-h-0 flex-1">
         <StudioV2PreviewLazy />
