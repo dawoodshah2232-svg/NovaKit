@@ -2,7 +2,7 @@
 
 import Image from 'next/image';
 import Link from 'next/link';
-import heroVisual from '../../app/ui-preview/hero-visual.png';
+import heroBanner from '../../app/ui-preview/hero-banner.png';
 import studioVisual from '../../app/ui-preview/studio-visual.png';
 import {
   useEffect,
@@ -135,24 +135,25 @@ function SearchBar() {
 
 /**
  * Hero visual — the signature moment.
- * AI-generated premium product render (hero-visual.png) of PDF documents
- * being signed and merged, with glass stat chips layered on top.
- * Original artwork, generated for this preview.
+ * Owner-supplied premium product render (hero-banner.png): annual report
+ * artwork with Merge / Edit / Compress / Convert badges and a
+ * "Signed & ready" pill. The artwork carries its own badges, so no
+ * extra chips are layered on top.
  */
 function HeroVisual() {
   return (
-    <div className="relative mx-auto w-full max-w-[460px]" aria-hidden="true">
+    <div className="relative mx-auto w-full max-w-[520px]" aria-hidden="true">
       {/* ambient accent light */}
       <div
         className="pointer-events-none absolute left-1/2 top-1/2 h-[88%] w-[92%] -translate-x-1/2 -translate-y-1/2 rounded-full blur-3xl"
         style={{ background: 'radial-gradient(50% 50% at 50% 50%, var(--pe-accent-soft), transparent 70%)' }}
       />
-      {/* generated artwork, framed as the product shot */}
+      {/* owner artwork, framed as the product shot */}
       <div className="pe-float-slow relative overflow-hidden rounded-[24px] border border-[var(--pe-border)] shadow-[var(--pe-shadow-lg)]">
         <Image
-          src={heroVisual}
+          src={heroBanner}
           alt=""
-          sizes="(max-width: 640px) 100vw, 460px"
+          sizes="(max-width: 640px) 100vw, 520px"
           className="h-auto w-full"
           priority
         />
@@ -161,36 +162,6 @@ function HeroVisual() {
           className="pointer-events-none absolute inset-x-0 top-0 z-10 h-24"
           style={{ background: 'linear-gradient(to bottom, rgba(255,255,255,0.12), transparent)' }}
         />
-      </div>
-      {/* compressed chip — glass with progress ring */}
-      <div className="pe-float-slower absolute -right-1 top-6 flex items-center gap-3 rounded-2xl border border-[var(--pe-border)] bg-[var(--pe-elevated)]/90 px-4 py-3 shadow-[var(--pe-shadow-lg)] backdrop-blur sm:-right-3">
-        <svg viewBox="0 0 36 36" className="h-9 w-9 -rotate-90" aria-hidden="true">
-          <circle cx="18" cy="18" r="15.5" fill="none" stroke="var(--pe-surface-3)" strokeWidth="4" />
-          <circle cx="18" cy="18" r="15.5" fill="none" stroke="var(--pe-accent)" strokeWidth="4" strokeLinecap="round" strokeDasharray="66.2 97.4" />
-        </svg>
-        <div>
-          <div className="text-[10px] font-semibold uppercase tracking-[0.16em] text-[var(--pe-text-3)]">Compressed</div>
-          <div className="text-lg font-bold tracking-tight text-[var(--pe-accent)]">−68%</div>
-        </div>
-      </div>
-      {/* download chip — glass */}
-      <div className="pe-float-slow absolute -bottom-4 left-2 flex items-center gap-2.5 rounded-2xl border border-[var(--pe-border)] bg-[var(--pe-elevated)]/90 px-4 py-3 shadow-[var(--pe-shadow-lg)] backdrop-blur sm:left-4">
-        <span className="grid h-9 w-9 place-items-center rounded-full bg-[var(--pe-accent-soft)] text-[var(--pe-accent)]">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2.4} strokeLinecap="round" strokeLinejoin="round" className="h-4 w-4">
-            <path d="M12 3v12m0 0 4-4m-4 4-4-4" />
-            <path d="M4 17v2a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-2" />
-          </svg>
-        </span>
-        <div>
-          <div className="text-sm font-semibold text-[var(--pe-text)]">report-final.pdf</div>
-          <div className="text-xs text-[var(--pe-text-2)]">Ready to download</div>
-        </div>
-      </div>
-      {/* seal */}
-      <div className="absolute bottom-8 right-6 z-10 grid h-12 w-12 place-items-center rounded-full bg-[var(--pe-accent)] text-[var(--pe-accent-ink)] shadow-[var(--pe-shadow-accent)]">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2.6} strokeLinecap="round" strokeLinejoin="round" className="h-5 w-5" aria-hidden="true">
-          <path d="m5 13 4 4L19 7" />
-        </svg>
       </div>
     </div>
   );
