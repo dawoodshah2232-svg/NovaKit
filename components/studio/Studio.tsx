@@ -19,8 +19,9 @@ import { SignaturePad } from './SignaturePad';
 import { UploadScreen } from './UploadScreen';
 import { ExportDialog } from './ExportDialog';
 import { DEFAULT_TOOL_OPTIONS, type ToolOptions } from './toolOptions';
-import type { DocState, Layer, StudioPage, ToolId, ZoomState } from './types';
+import type { DocState, Layer, ShapeLayer, StudioPage, TextLayer, ToolId, ZoomState } from './types';
 import { newId } from './types';
+import type { PdfTextLine } from './textEdit';
 import { useHistory } from './useHistory';
 import { exportStudioPdf } from './exporter';
 import { trackToolExecution } from '@/lib/analytics';
@@ -752,7 +753,7 @@ export function Studio() {
       if (mod || e.altKey) return;
       const k = e.key.toLowerCase();
       const toolFor: Record<string, ToolId> = {
-        v: 'select', t: 'text', d: 'draw', h: 'highlight', s: 'shape',
+        v: 'select', t: 'text', e: 'edittext', d: 'draw', h: 'highlight', s: 'shape',
         i: 'image', g: 'signature', m: 'stamp', r: 'redact', p: 'pages',
       };
       const t = toolFor[k];
@@ -820,6 +821,60 @@ export function Studio() {
       if (isMobile && t !== 'select') setMobileInspectorOpen(true);
     },
     [isMobile]
+  );
+
+  // ---------------- "Edit text" tool: patch a line of the PDF's own text ----
+  // Covers the original glyphs with a background-colored rectangle and drops
+  // an editable text layer on top with matched font/size/color. Both are
+  // ordinary layers (one undo step), so the Inspector keeps working on them.
+  const handleEditLine = useCallback(
+    (line: PdfTextLine) => {
+      const pageIndex = activePageIndexRef.current;
+      const cover: ShapeLayer = {
+        id: newId('cover'),
+        type: 'shape',
+        kind: 'rect',
+        pageIndex,
+        x: line.x,
+        y: line.y,
+        w: line.w,
+        h: line.h,
+        rotation: 0,
+        opacity: 1,
+        strokeColor: line.bg,
+        fillColor: line.bg,
+        strokeWidth: 0.0005,
+      };
+      const text: TextLayer = {
+        id: newId('etext'),
+        type: 'text',
+        pageIndex,
+        x: line.x,
+        y: line.y,
+        w: line.w,
+        h: Math.max(line.h, line.fontSize * 1.35),
+        rotation: 0,
+        opacity: 1,
+        text: line.text,
+        fontId: line.fontId,
+        fontSize: line.fontSize,
+        bold: line.bold,
+        italic: line.italic,
+        underline: false,
+        color: line.color,
+        align: 'left',
+        lineHeight: 1.15,
+      };
+      const d = docRef.current;
+      applyDoc({ pages: d.pages, layers: [...d.layers, cover, text] }, true);
+      setSelectedLayerId(text.id);
+      // Open the inline editor immediately so the user can start typing.
+      setEditingId(text.id);
+      if (line.approxFont) {
+        setStatusMsg('Font approximated — the original font is not available for export. Adjust it in Options if needed.');
+      }
+    },
+    [applyDoc]
   );
 
   // ---------------- render ----------------
@@ -971,6 +1026,7 @@ export function Studio() {
             onEditingChange={setEditingId}
             onBringToFront={bringToFront}
             onSendToBack={sendToBack}
+            onEditLine={handleEditLine}
           />
           {/* trust strip */}
           <div className="shrink-0 px-4 py-1.5 bg-slate-900/80 border-t border-slate-800 text-[10px] text-slate-500 text-center">

@@ -1059,6 +1059,18 @@ export function Inspector({
           {tool === 'stamp' && <StampToolOptions options={options} onChange={onOptionsChange} />}
           {tool === 'redact' && <RedactToolOptions options={options} onChange={onOptionsChange} />}
           {(tool === 'select' || tool === 'pages') && <IdleToolOptions tool={tool} />}
+          {tool === 'edittext' && (
+            <>
+              <ToolHeader title="Edit text" />
+              <Section title="How it works">
+                <p className="text-xs leading-5 text-slate-500">
+                  Click any line of the document&rsquo;s own text to edit it in place. The original
+                  wording is covered and your replacement keeps the matched font, size and color.
+                  After editing, select the text to fine-tune it here.
+                </p>
+              </Section>
+            </>
+          )}
         </>
       )}
     </div>

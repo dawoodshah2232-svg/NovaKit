@@ -24,6 +24,7 @@ import { STAMPS, newId, clamp01 } from './types';
 import { displayedSize } from './geometry';
 import { STUDIO_FONTS } from './fonts';
 import type { ToolOptions } from './toolOptions';
+import { extractTextLines, sampleLineColors, type PdfTextLine } from './textEdit';
 
 export interface CanvasProps {
   pdfDoc: PDFDocumentProxy | null;
@@ -44,11 +45,14 @@ export interface CanvasProps {
   onEditingChange: (id: string | null) => void;
   onBringToFront: (id: string) => void;
   onSendToBack: (id: string) => void;
+  /** "Edit text" tool: user clicked an extracted line of the PDF's own text */
+  onEditLine: (line: PdfTextLine) => void;
 }
 
 const TOOL_EMPTY_HINT: Record<ToolId, string | null> = {
   select: null,
   text: 'Click anywhere on the page to add text',
+  edittext: 'Click any text on the page to edit it in place',
   draw: 'Drag on the page to draw',
   highlight: 'Drag over text to highlight it',
   shape: 'Drag on the page to place a shape',
@@ -71,7 +75,7 @@ export function StudioCanvas(props: CanvasProps) {
   const {
     pdfDoc, page, layers, tool, options, zoom, selectedId, editingId,
     pendingSignature, onSelectLayer, onUpdateLayer, onAddLayer, onCommit,
-    onOpenSignaturePad, onConsumeSignature, onEditingChange,
+    onOpenSignaturePad, onConsumeSignature, onEditingChange, onEditLine,
   } = props;
 
   const containerRef = useRef<HTMLDivElement | null>(null);
@@ -82,6 +86,9 @@ export function StudioCanvas(props: CanvasProps) {
   const [drag, setDrag] = useState<DragMode>(null);
   const [previewRect, setPreviewRect] = useState<{ x: number; y: number; w: number; h: number } | null>(null);
   const [previewPoints, setPreviewPoints] = useState<Array<{ x: number; y: number }> | null>(null);
+  // "Edit text" tool: extracted lines of the PDF's own text for the active page
+  const [textLines, setTextLines] = useState<PdfTextLine[] | null>(null);
+  const [textLinesState, setTextLinesState] = useState<'idle' | 'loading' | 'ready' | 'empty'>('idle');
   const fileInputRef = useRef<HTMLInputElement | null>(null);
   const dragRef = useRef<DragMode>(null);
   useEffect(() => {
@@ -172,6 +179,60 @@ export function StudioCanvas(props: CanvasProps) {
       } catch { /* noop */ }
     };
   }, [pdfDoc, page, cssSize]);
+
+  // ---- "Edit text" tool: extract the PDF's own text lines for the active page ----
+  // All state updates happen in async continuations below (never synchronously
+  // in the effect body) — the documented pattern for data fetching in effects.
+  useEffect(() => {
+    let cancelled = false;
+    const rotation = ((page.nativeRotate + page.rotation) % 360 + 360) % 360;
+    const doc = pdfDoc;
+    const srcIndex = page.originalIndex;
+    const wantLines = tool === 'edittext' && doc && srcIndex >= 0;
+
+    if (wantLines) {
+      Promise.resolve().then(() => {
+        if (!cancelled) setTextLinesState('loading');
+      });
+      extractTextLines(doc, srcIndex + 1, rotation)
+        .then((lines) => {
+          if (cancelled) return;
+          // Sample rendered pixels for text + background colors.
+          const canvas = canvasRef.current;
+          const getPixel = (nx: number, ny: number): [number, number, number] | null => {
+            if (!canvas) return null;
+            const px = Math.floor(clamp01(nx) * canvas.width);
+            const py = Math.floor(clamp01(ny) * canvas.height);
+            if (px < 0 || py < 0 || px >= canvas.width || py >= canvas.height) return null;
+            try {
+              const d = canvas.getContext('2d')?.getImageData(px, py, 1, 1).data;
+              return d ? [d[0], d[1], d[2]] : null;
+            } catch {
+              return null;
+            }
+          };
+          const colored = lines.map((l) => ({ ...l, ...sampleLineColors(getPixel, l) }));
+          setTextLines(colored);
+          setTextLinesState(colored.length > 0 ? 'ready' : 'empty');
+        })
+        .catch(() => {
+          if (!cancelled) {
+            setTextLines(null);
+            setTextLinesState('empty');
+          }
+        });
+    } else {
+      Promise.resolve().then(() => {
+        if (!cancelled) {
+          setTextLines(null);
+          setTextLinesState('idle');
+        }
+      });
+    }
+    return () => {
+      cancelled = true;
+    };
+  }, [tool, pdfDoc, page.originalIndex, page.nativeRotate, page.rotation, page.key, cssSize.w]);
 
   const toNormalized = useCallback((clientX: number, clientY: number) => {
     const el = overlayRef.current;
@@ -521,7 +582,7 @@ export function StudioCanvas(props: CanvasProps) {
         <div
           ref={overlayRef}
           className="absolute inset-0 rounded-[2px] touch-none"
-          style={{ cursor: tool === 'select' ? 'default' : 'crosshair' }}
+          style={{ cursor: tool === 'select' ? 'default' : tool === 'edittext' ? 'text' : 'crosshair' }}
           onPointerDown={handleOverlayPointerDown}
           onPointerMove={handleOverlayPointerMove}
           onPointerUp={handleOverlayPointerUp}
@@ -548,6 +609,56 @@ export function StudioCanvas(props: CanvasProps) {
               onEditCancel={() => onEditingChange(null)}
             />
           ))}
+
+          {/* "Edit text" tool: clickable lines of the PDF's own text */}
+          {tool === 'edittext' && textLinesState === 'ready' && textLines?.map((line) => (
+            <button
+              key={line.id}
+              type="button"
+              title={line.approxFont ? 'Edit this text (font approximated)' : 'Edit this text'}
+              aria-label={`Edit text: ${line.text.slice(0, 80)}`}
+              className="absolute rounded-[2px] transition-colors hover:bg-red-500/15 focus-visible:outline-2 focus-visible:outline-red-400"
+              style={{
+                left: `${line.x * 100}%`,
+                top: `${line.y * 100}%`,
+                width: `${line.w * 100}%`,
+                height: `${line.h * 100}%`,
+                cursor: 'text',
+                border: '1px dashed transparent',
+              }}
+              onPointerDown={(e) => e.stopPropagation()}
+              onClick={(e) => {
+                e.stopPropagation();
+                onEditLine(line);
+              }}
+              onMouseEnter={(e) => {
+                (e.currentTarget as HTMLButtonElement).style.borderColor = 'rgba(248,113,113,0.7)';
+              }}
+              onMouseLeave={(e) => {
+                (e.currentTarget as HTMLButtonElement).style.borderColor = 'transparent';
+              }}
+              onFocus={(e) => {
+                (e.currentTarget as HTMLButtonElement).style.borderColor = 'rgba(248,113,113,0.7)';
+              }}
+              onBlur={(e) => {
+                (e.currentTarget as HTMLButtonElement).style.borderColor = 'transparent';
+              }}
+            />
+          ))}
+          {tool === 'edittext' && textLinesState === 'loading' && (
+            <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
+              <div className="px-4 py-2 rounded-full bg-slate-900/85 text-slate-200 text-xs font-medium border border-slate-700 shadow-lg">
+                Reading page text…
+              </div>
+            </div>
+          )}
+          {tool === 'edittext' && textLinesState === 'empty' && (
+            <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
+              <div className="px-4 py-2 rounded-full bg-slate-900/85 text-slate-200 text-xs font-medium border border-slate-700 shadow-lg text-center">
+                No selectable text on this page — it may be a scanned image.
+              </div>
+            </div>
+          )}
 
           {/* creation previews */}
           {previewRect && (tool === 'shape' || tool === 'redact') && (
@@ -585,10 +696,10 @@ export function StudioCanvas(props: CanvasProps) {
             </div>
           </div>
         )}
-        {hint && tool === 'text' && layers.length > 0 && (
+        {hint && (tool === 'text' || tool === 'edittext') && layers.length > 0 && (
           <div className="absolute -bottom-9 left-1/2 -translate-x-1/2 pointer-events-none whitespace-nowrap">
             <div className="px-3 py-1.5 rounded-full bg-slate-900/90 text-slate-300 text-[11px] border border-slate-700">
-              {hint} · double-click text to edit
+              {hint}{tool === 'text' ? ' · double-click text to edit' : ''}
             </div>
           </div>
         )}

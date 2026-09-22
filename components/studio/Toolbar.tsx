@@ -11,6 +11,7 @@ import {
   MousePointer2,
   PenLine,
   PenTool,
+  PencilLine,
   Redo2,
   Shapes,
   Stamp,
@@ -43,6 +44,7 @@ interface ToolbarProps {
 export const MOBILE_TOOLS: ToolId[] = [
   'select',
   'text',
+  'edittext',
   'draw',
   'highlight',
   'shape',
@@ -62,6 +64,7 @@ interface ToolDef {
 const TOOLS: ToolDef[] = [
   { id: 'select', label: 'Select', icon: MousePointer2, tip: 'Select and move layers (V)' },
   { id: 'text', label: 'Text', icon: Type, tip: 'Add editable text overlays (T)' },
+  { id: 'edittext', label: 'Edit text', icon: PencilLine, tip: 'Edit the PDF’s own text in place (E)' },
   { id: 'draw', label: 'Draw', icon: PenTool, tip: 'Draw freehand strokes (D)' },
   { id: 'highlight', label: 'Highlight', icon: Highlighter, tip: 'Mark text with a translucent highlighter (H)' },
   { id: 'shape', label: 'Shapes', icon: Shapes, tip: 'Insert rectangles, ellipses, lines and arrows (S)' },

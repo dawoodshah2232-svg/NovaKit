@@ -13,6 +13,7 @@
 export type ToolId =
   | 'select'
   | 'text'
+  | 'edittext'
   | 'draw'
   | 'highlight'
   | 'shape'
