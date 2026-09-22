@@ -682,7 +682,7 @@ export function RedactPdf() {
               {isProcessing ? (
                 <>
                   <RefreshCw className="w-4 h-4 animate-spin" />
-                  <span>Sanitizing & Redacting PDF...</span>
+                  <span>Applying Redaction Boxes...</span>
                 </>
               ) : (
                 <>
@@ -691,6 +691,10 @@ export function RedactPdf() {
                 </>
               )}
             </button>
+            <p className="mt-2 text-[11px] leading-relaxed text-amber-700 dark:text-amber-400">
+              Note: this covers text visually with opaque boxes. The underlying text remains
+              in the PDF file — for certified true redaction, use dedicated desktop software.
+            </p>
           </div>
         </div>
       )}

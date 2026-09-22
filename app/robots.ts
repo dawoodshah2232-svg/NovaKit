@@ -12,6 +12,8 @@ export default function robots(): MetadataRoute.Robots {
           '/admin',
           '/ui-preview',
           '/api',
+          '/studio-v2-preview',
+          '/cv-builder-preview',
         ],
       },
     ],

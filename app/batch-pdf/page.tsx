@@ -47,6 +47,25 @@ function jsonLd() {
           },
         ],
       },
+      {
+        '@type': 'SoftwareApplication',
+        url,
+        name: 'Batch Merge PDF Online Free',
+        applicationCategory: 'BusinessApplication',
+        operatingSystem: 'Any (Web browser)',
+        offers: { '@type': 'Offer', price: '0', priceCurrency: 'USD' },
+        description:
+          'Merge multiple PDF files at once in your browser. Batch PDF processing with zero server uploads — free, private, and no sign-up required.',
+      },
+      {
+        '@type': 'HowTo',
+        name: 'How to batch merge PDFs',
+        step: [
+          { '@type': 'HowToStep', name: 'Add files', text: 'Select or drag in the PDF files you want to combine.' },
+          { '@type': 'HowToStep', name: 'Arrange order', text: 'Files merge in selection order; use Merge PDF for drag-and-drop ordering.' },
+          { '@type': 'HowToStep', name: 'Merge and download', text: 'Merge the files in your browser and download the combined PDF.' },
+        ],
+      },
     ],
   };
 }

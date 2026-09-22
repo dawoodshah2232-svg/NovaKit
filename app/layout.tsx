@@ -87,6 +87,14 @@ export const metadata: Metadata = {
     url: 'https://www.pdfedit.website/',
     siteName: 'PDFEdit',
     type: 'website',
+    images: [
+      {
+        url: '/og-image.png',
+        width: 1200,
+        height: 630,
+        alt: 'PDFEdit – Free Online PDF Editor & Tools',
+      },
+    ],
   },
 
   twitter: {
@@ -94,6 +102,7 @@ export const metadata: Metadata = {
     title: 'PDFEdit – Free Online PDF Editor & Tools',
     description:
       'Edit, convert, organize and sign PDFs with fast browser-based tools.',
+    images: ['/og-image.png'],
   },
 };
 

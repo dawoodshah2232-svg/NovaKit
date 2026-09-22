@@ -1,5 +1,6 @@
 import Link from 'next/link';
 import type { Metadata } from 'next';
+import { JsonLd, privacySchema } from '@/components/schema-jsonld';
 
 export const metadata: Metadata = {
   title: { absolute: 'Privacy Policy | PDFEdit' },
@@ -20,7 +21,8 @@ export const metadata: Metadata = {
 export default function PrivacyPolicy() {
   return (
     <div className='max-w-4xl mx-auto px-4 py-12'>
-      <h1 className='text-3xl font-bold mb-6'>Privacy Policy for PDFEdit Studio</h1>
+      <JsonLd schema={privacySchema} />
+      <h1 className='text-3xl font-bold mb-6'>Privacy Policy for PDFEdit</h1>
       <p className='mb-4 text-gray-600'>Last updated: September 22, 2026</p>
 
       <section className='space-y-4 text-gray-700'>
