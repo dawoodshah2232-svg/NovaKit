@@ -44,6 +44,13 @@ export const metadata: Metadata = {
   alternates: {
     canonical: 'https://www.pdfedit.website/about',
   },
+  openGraph: {
+    title: 'About PDFEdit | Free Private PDF Tools',
+    description:
+      'Free, private, browser-based PDF tools. Files are processed locally on your device and never uploaded to our servers.',
+    url: 'https://www.pdfedit.website/about',
+    type: 'website',
+  },
 };
 
 export default function AboutPage() {
@@ -53,6 +60,12 @@ export default function AboutPage() {
       <p className='text-gray-600 mb-8'>Free PDF tools that respect your privacy.</p>
 
       <section className='space-y-4 text-gray-700 mb-10'>
+        <h2 className='text-xl font-semibold'>Our mission</h2>
+        <p>
+          Make everyday PDF work free, fast, and private &mdash; without accounts, uploads, or
+          subscriptions getting in the way. Every tool on PDFEdit is built to run directly on
+          your device, so your documents stay yours.
+        </p>
         <p>
           PDFEdit (www.pdfedit.website) is a free collection of browser-based PDF utility tools:
           merging, splitting, compressing, rotating, cropping, watermarking, signing, redacting,
@@ -92,7 +105,7 @@ export default function AboutPage() {
         </div>
       </section>
 
-      <section className='rounded-2xl bg-gray-50 border border-gray-200 p-5 text-sm text-gray-600'>
+      <section className='rounded-2xl bg-gray-50 border border-gray-200 p-5 text-sm text-gray-600 mb-10'>
         <h2 className='font-semibold text-gray-800 mb-2 flex items-center gap-2'>
           <FileText className='h-4 w-4' aria-hidden='true' /> Policies
         </h2>
@@ -100,12 +113,21 @@ export default function AboutPage() {
           How we handle data and advertising is described in our{' '}
           <Link href='/privacy' className='text-blue-600 underline'>Privacy Policy</Link>, and the
           rules for using the site are in our{' '}
-          <Link href='/terms' className='text-blue-600 underline'>Terms of Service</Link>.
+          <Link href='/terms' className='text-blue-600 underline'>Terms of Service</Link>. Cookie
+          and browser-storage details are in our{' '}
+          <Link href='/cookies' className='text-blue-600 underline'>Cookie Policy</Link>.
         </p>
+      </section>
+
+      <section className='space-y-3 text-gray-700'>
+        <h2 className='text-xl font-semibold'>Contact</h2>
         <p>
-          PDFEdit is operated by the PDFEdit team. For questions about this site, see our{' '}
-          <Link href='/privacy' className='text-blue-600 underline'>Privacy Policy</Link> or{' '}
-          <Link href='/terms' className='text-blue-600 underline'>Terms of Service</Link>.
+          PDFEdit is operated by the PDFEdit team. For support, feedback, business inquiries, or
+          abuse reports, visit our{' '}
+          <Link href='/contact' className='text-blue-600 underline'>contact page</Link>.
+        </p>
+        <p className='rounded-lg border border-amber-200 bg-amber-50 px-4 py-3 text-sm font-mono text-amber-800'>
+          [OWNER ACTION REQUIRED: no support email published yet — add one here and on the contact page]
         </p>
       </section>
     </main>

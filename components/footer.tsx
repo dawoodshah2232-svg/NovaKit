@@ -2,7 +2,9 @@ import Link from 'next/link';
 import { ShieldCheck, Zap, Lock, Cpu, FileText } from 'lucide-react';
 import { Logo } from './logo';
 
-const TOOL_LINKS = [
+const PRODUCT_LINKS = [
+  { label: 'All tools', href: '/#tools' },
+  { label: 'PDF Studio', href: '/studio' },
   { label: 'Merge PDF', href: '/merge-pdf' },
   { label: 'Split PDF', href: '/split-pdf' },
   { label: 'Compress PDF', href: '/compress-pdf' },
@@ -13,16 +15,22 @@ const TOOL_LINKS = [
 
 const COMPANY_LINKS = [
   { label: 'About', href: '/about' },
+  { label: 'Contact', href: '/contact' },
+  { label: 'FAQ', href: '/faq' },
+  { label: 'Security', href: '/#security' },
+];
+
+const LEGAL_LINKS = [
   { label: 'Privacy Policy', href: '/privacy' },
   { label: 'Terms of Service', href: '/terms' },
-  { label: 'Security', href: '/#security' },
+  { label: 'Cookie Policy', href: '/cookies' },
 ];
 
 export function Footer() {
   return (
     <footer className="mt-auto border-t border-[var(--pe-border)] bg-[var(--pe-surface)]">
       <div className="mx-auto max-w-7xl px-4 py-10 pb-28 sm:px-6 lg:px-8 lg:pb-10">
-        <div className="grid grid-cols-1 gap-8 md:grid-cols-4">
+        <div className="grid grid-cols-1 gap-8 sm:grid-cols-2 md:grid-cols-5">
           <div className="space-y-4 md:col-span-2">
             <Logo size="sm" badgeText="100% Client-Side" />
 
@@ -49,15 +57,15 @@ export function Footer() {
             </div>
           </div>
 
-          <nav aria-label="Popular PDF tools">
+          <nav aria-label="Products">
             <h4 className="mb-3 flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-[var(--pe-text)]">
               <FileText className="h-4 w-4 text-[var(--pe-accent)]" aria-hidden="true" />
-              PDF Tools
+              Products
             </h4>
 
             <ul className="space-y-2 text-sm text-[var(--pe-text-2)]">
-              {TOOL_LINKS.map((link) => (
-                <li key={link.href}>
+              {PRODUCT_LINKS.map((link) => (
+                <li key={link.href + link.label}>
                   <Link href={link.href} className="transition hover:text-[var(--pe-accent)]">
                     {link.label}
                   </Link>
@@ -73,6 +81,22 @@ export function Footer() {
 
             <ul className="space-y-2 text-sm text-[var(--pe-text-2)]">
               {COMPANY_LINKS.map((link) => (
+                <li key={link.href + link.label}>
+                  <Link href={link.href} className="transition hover:text-[var(--pe-accent)]">
+                    {link.label}
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </nav>
+
+          <nav aria-label="Legal">
+            <h4 className="mb-3 text-xs font-bold uppercase tracking-wider text-[var(--pe-text)]">
+              Legal
+            </h4>
+
+            <ul className="space-y-2 text-sm text-[var(--pe-text-2)]">
+              {LEGAL_LINKS.map((link) => (
                 <li key={link.href + link.label}>
                   <Link href={link.href} className="transition hover:text-[var(--pe-accent)]">
                     {link.label}

@@ -7,6 +7,13 @@ export const metadata: Metadata = {
   alternates: {
     canonical: 'https://www.pdfedit.website/terms',
   },
+  openGraph: {
+    title: 'Terms of Service | PDFEdit',
+    description:
+      'The PDFEdit terms of service: rules for using our free browser-based PDF tools, acceptable use, and limitation of liability.',
+    url: 'https://www.pdfedit.website/terms',
+    type: 'website',
+  },
 };
 
 export default function TermsOfService() {
@@ -21,7 +28,7 @@ export default function TermsOfService() {
 
         <h2 className='text-xl font-semibold mt-6'>2. Our Service</h2>
         <p>PDFEdit provides free client-side PDF utility tools, including PDF editing, conversion, merging, splitting, compression, signing, and related document utilities. No account or registration is required. All processing happens in your web browser; your files are never uploaded to our servers.</p>
-        <p>We may modify, suspend, or discontinue any tool or feature at any time without notice.</p>
+        <p>We may modify, suspend, or discontinue any tool or feature at any time without notice. We do not guarantee continuous availability: the Site or individual tools may be temporarily unavailable for maintenance, traffic spikes, or other reasons, and some features may depend on the capabilities of your browser or device (such as available memory for large files).</p>
 
         <h2 className='text-xl font-semibold mt-6'>3. Acceptable Use</h2>
         <p>You agree to use the Site only for lawful purposes. You must not:</p>
@@ -51,7 +58,7 @@ export default function TermsOfService() {
         <p>We may revise these Terms at any time. Continued use of the Site after changes are posted constitutes your acceptance of the revised Terms. Material changes will be reflected in the &quot;Last updated&quot; date above.</p>
 
         <h2 className='text-xl font-semibold mt-6'>10. Contact</h2>
-        <p>Questions about these Terms may be sent to us via our website.</p>
+        <p>Questions about these Terms may be sent to us via our <a href='/contact' className='text-blue-600 underline'>contact page</a>.</p>
       </section>
     </div>
   );
