@@ -16,6 +16,7 @@
  * slider reuses `drawWidth` in tool-options mode.
  */
 import type { ReactNode } from 'react';
+import { useRef, useState } from 'react';
 import {
   AlignCenter,
   AlignLeft,
@@ -26,6 +27,7 @@ import {
   Bold,
   Circle,
   Copy,
+  Image as ImageIcon,
   Italic,
   PenLine,
   Slash,
@@ -33,6 +35,7 @@ import {
   Trash2,
   TriangleAlert,
   Underline,
+  Upload,
 } from 'lucide-react';
 import type {
   ImageLayer,
@@ -63,6 +66,10 @@ export interface InspectorProps {
   hasSignature: boolean;
   onBringToFront?: () => void;
   onSendToBack?: () => void;
+  /** data URL of the staged image for the Image tool (null = none chosen) */
+  pendingImage: string | null;
+  onImageSelected: (dataUrl: string) => void;
+  onClearImage: () => void;
 }
 
 /* ---------------------------------- bits --------------------------------- */
@@ -705,45 +712,17 @@ function RedactSelectedSection({ layer, onPatch }: { layer: RedactLayer; onPatch
 type OptPatch = (patch: Partial<ToolOptions>) => void;
 
 function TextToolOptions({ options, onChange }: { options: ToolOptions; onChange: OptPatch }) {
+  void options;
+  void onChange;
   return (
     <>
       <ToolHeader title="Text tool" hint="Click on a page to place text." />
-      <Section title="Text">
-        <FontRow value={options.fontId} onChange={(v) => onChange({ fontId: v })} />
-        <SliderRow
-          label="Size"
-          value={options.fontSize}
-          min={0.008}
-          max={0.12}
-          step={0.002}
-          onChange={(v) => onChange({ fontSize: v })}
-          format={pct1}
-        />
-        <StyleToggles
-          bold={options.bold}
-          italic={options.italic}
-          underline={options.underline}
-          onToggle={(k) => {
-            if (k === 'bold') onChange({ bold: !options.bold });
-            else if (k === 'italic') onChange({ italic: !options.italic });
-            else onChange({ underline: !options.underline });
-          }}
-        />
-        <ColorRow
-          label="Color"
-          value={options.textColor}
-          onChange={(v) => onChange({ textColor: v })}
-        />
-        <SegRow
-          label="Align"
-          value={options.align}
-          onChange={(v) => onChange({ align: v })}
-          options={[
-            { value: 'left', label: <AlignLeft size={15} />, title: 'Align left' },
-            { value: 'center', label: <AlignCenter size={15} />, title: 'Align center' },
-            { value: 'right', label: <AlignRight size={15} />, title: 'Align right' },
-          ]}
-        />
+      <Section title="Formatting">
+        <p className="text-xs leading-relaxed text-[var(--pe-text-3)]">
+          Use the formatting ribbon above the canvas — font, size, bold, italic, underline,
+          strikethrough, colors, alignment, lists and clear formatting. It edits the selected text
+          box, or sets the style for the next one you place.
+        </p>
         <OverlayNote />
       </Section>
     </>
@@ -841,17 +820,142 @@ function ShapeToolOptions({ options, onChange }: { options: ToolOptions; onChang
   );
 }
 
+const MAX_IMAGE_BYTES = 15 * 1024 * 1024;
+
 function MediaToolOptions({
   options,
   onChange,
+  pendingImage,
+  onImageSelected,
+  onClearImage,
 }: {
   options: ToolOptions;
   onChange: OptPatch;
+  pendingImage: string | null;
+  onImageSelected: (dataUrl: string) => void;
+  onClearImage: () => void;
 }) {
+  const inputRef = useRef<HTMLInputElement | null>(null);
+  const [dragOver, setDragOver] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+
+  const acceptFile = (file: File | null | undefined) => {
+    if (!file) return;
+    if (!file.type.startsWith('image/')) {
+      setError('Please choose an image file (PNG, JPG, GIF, WebP…).');
+      return;
+    }
+    if (file.size > MAX_IMAGE_BYTES) {
+      setError('That image is larger than 15 MB — please pick a smaller one.');
+      return;
+    }
+    setError(null);
+    const reader = new FileReader();
+    reader.onload = () => onImageSelected(String(reader.result));
+    reader.onerror = () => setError('Could not read that image. Try another file.');
+    reader.readAsDataURL(file);
+  };
+
   return (
     <>
-      <ToolHeader title="Image tool" hint="Click on a page to place an image." />
+      <ToolHeader
+        title="Image tool"
+        hint={
+          pendingImage
+            ? 'Click on a page to place the image. You can place it again on other pages.'
+            : 'Choose an image first, then click on a page to place it.'
+        }
+      />
       <Section title="Image">
+        {pendingImage ? (
+          <div className="space-y-2.5">
+            <div className="overflow-hidden rounded-xl border border-[var(--pe-border-strong)] bg-[var(--pe-surface-3)]">
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img src={pendingImage} alt="Selected image preview" className="max-h-44 w-full object-contain" />
+            </div>
+            <div className="flex gap-2">
+              <button
+                type="button"
+                onClick={() => inputRef.current?.click()}
+                className="flex h-9 flex-1 items-center justify-center gap-1.5 rounded-lg border border-[var(--pe-border-strong)] text-[13px] font-medium text-[var(--pe-text-2)] transition-colors hover:bg-[var(--pe-surface-3)] hover:text-[var(--pe-text)]"
+              >
+                <Upload size={14} />
+                Replace
+              </button>
+              <button
+                type="button"
+                onClick={onClearImage}
+                className="flex h-9 flex-1 items-center justify-center gap-1.5 rounded-lg border border-[var(--pe-border-strong)] text-[13px] font-medium text-[var(--pe-text-2)] transition-colors hover:bg-[var(--pe-surface-3)] hover:text-[var(--pe-text)]"
+              >
+                <Trash2 size={14} />
+                Remove
+              </button>
+            </div>
+            <p className="text-xs leading-relaxed text-[var(--pe-text-3)]">
+              Click on a page to place the image at that spot. The image stays ready so you can
+              place it multiple times.
+            </p>
+          </div>
+        ) : (
+          <div className="space-y-2">
+            <div
+              role="button"
+              tabIndex={0}
+              aria-label="Choose an image to insert"
+              onClick={() => inputRef.current?.click()}
+              onKeyDown={(e) => {
+                if (e.key === 'Enter' || e.key === ' ') {
+                  e.preventDefault();
+                  inputRef.current?.click();
+                }
+              }}
+              onDragOver={(e) => {
+                e.preventDefault();
+                setDragOver(true);
+              }}
+              onDragLeave={() => setDragOver(false)}
+              onDrop={(e) => {
+                e.preventDefault();
+                setDragOver(false);
+                acceptFile(e.dataTransfer.files?.[0]);
+              }}
+              className={`flex cursor-pointer flex-col items-center justify-center gap-2 rounded-xl border-2 border-dashed px-4 py-8 text-center transition-colors ${
+                dragOver
+                  ? 'border-[var(--pe-accent)] bg-[var(--pe-accent-soft)]'
+                  : 'border-[var(--pe-border-strong)] bg-[var(--pe-surface-3)] hover:border-[var(--pe-accent)]'
+              }`}
+            >
+              <span className="flex h-11 w-11 items-center justify-center rounded-full bg-[var(--pe-accent-soft)] text-[var(--pe-accent)]">
+                <ImageIcon size={20} />
+              </span>
+              <p className="text-[13px] font-medium text-[var(--pe-text)]">
+                Drag &amp; drop an image here
+              </p>
+              <p className="text-xs text-[var(--pe-text-3)]">or</p>
+              <span className="flex h-9 items-center rounded-lg bg-[var(--pe-accent)] px-4 text-[13px] font-bold text-[var(--pe-accent-ink)]">
+                Browse files
+              </span>
+              <p className="text-[11px] text-[var(--pe-text-3)]">PNG, JPG, GIF or WebP · up to 15 MB</p>
+            </div>
+            {error && (
+              <p role="alert" className="text-xs leading-relaxed text-[var(--pe-accent)]">
+                {error}
+              </p>
+            )}
+          </div>
+        )}
+        <input
+          ref={inputRef}
+          type="file"
+          accept="image/*"
+          aria-label="Choose an image file"
+          className="hidden"
+          onChange={(e) => {
+            const f = e.target.files?.[0];
+            e.target.value = '';
+            acceptFile(f);
+          }}
+        />
         <SliderRow
           label="Opacity"
           value={options.mediaOpacity}
@@ -969,6 +1073,9 @@ export function Inspector({
   hasSignature,
   onBringToFront,
   onSendToBack,
+  pendingImage,
+  onImageSelected,
+  onClearImage,
 }: InspectorProps) {
   return (
     <div className="flex h-full flex-col overflow-y-auto bg-[var(--pe-surface)]">
@@ -1047,7 +1154,15 @@ export function Inspector({
             <HighlightToolOptions options={options} onChange={onOptionsChange} />
           )}
           {tool === 'shape' && <ShapeToolOptions options={options} onChange={onOptionsChange} />}
-          {tool === 'image' && <MediaToolOptions options={options} onChange={onOptionsChange} />}
+          {tool === 'image' && (
+            <MediaToolOptions
+              options={options}
+              onChange={onOptionsChange}
+              pendingImage={pendingImage}
+              onImageSelected={onImageSelected}
+              onClearImage={onClearImage}
+            />
+          )}
           {tool === 'signature' && (
             <SignatureToolOptions
               options={options}

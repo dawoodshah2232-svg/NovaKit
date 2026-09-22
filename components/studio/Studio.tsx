@@ -8,12 +8,13 @@
 import { useState, useEffect, useRef, useCallback } from 'react';
 import * as pdfjsLib from 'pdfjs-dist';
 import type { PDFDocumentProxy } from 'pdfjs-dist';
-import { PDFDocument, StandardFonts, rgb } from 'pdf-lib';
+import { PDFDocument } from 'pdf-lib';
 import { saveAs } from 'file-saver';
 import { X, AlertTriangle, CheckCircle2, Loader2, Download } from 'lucide-react';
 import { StudioCanvas } from './Canvas';
 import { PagesPanel } from './PagesPanel';
-import { Toolbar, MOBILE_TOOLS } from './Toolbar';
+import { MenuBar, MOBILE_TOOLS } from './MenuBar';
+import { displayedSize } from './geometry';
 import { Inspector } from './Inspector';
 import { SignaturePad } from './SignaturePad';
 import { UploadScreen } from './UploadScreen';
@@ -61,12 +62,14 @@ export function Studio() {
   const [tool, setTool] = useState<ToolId>('select');
   const [options, setOptions] = useState<ToolOptions>(DEFAULT_TOOL_OPTIONS);
   const [zoom, setZoom] = useState<ZoomState>({ mode: 'fit-width' });
-  const [zoomMenuOpen, setZoomMenuOpen] = useState(false);
   const [pagesOpen, setPagesOpen] = useState(true);
   const [mobilePagesOpen, setMobilePagesOpen] = useState(false);
   const [mobileInspectorOpen, setMobileInspectorOpen] = useState(false);
   const [sigPadOpen, setSigPadOpen] = useState(false);
   const [pendingSignature, setPendingSignature] = useState<string | null>(null);
+  /** staged image for the Image tool — chosen via Inspector uploader or canvas fallback */
+  const [pendingImage, setPendingImage] = useState<string | null>(null);
+  const [inspectorOpen, setInspectorOpen] = useState(true);
   const [clipboard, setClipboard] = useState<Layer | null>(null);
 
   const [busy, setBusy] = useState(false);
@@ -96,12 +99,14 @@ export function Studio() {
   const selectedLayerIdRef = useRef(selectedLayerId);
   const activePageIndexRef = useRef(activePageIndex);
   const zoomRef = useRef(zoom);
+  const clipboardRef = useRef<Layer | null>(null);
   useEffect(() => {
     docRef.current = doc;
     toolRef.current = tool;
     selectedLayerIdRef.current = selectedLayerId;
     activePageIndexRef.current = activePageIndex;
     zoomRef.current = zoom;
+    clipboardRef.current = clipboard;
   });
 
   const revokeThumbs = useCallback(() => {
@@ -177,6 +182,18 @@ export function Studio() {
     },
     [applyDoc]
   );
+
+  const copySelectedLayer = useCallback(() => {
+    const l = docRef.current.layers.find((x) => x.id === selectedLayerIdRef.current);
+    if (l) setClipboard(JSON.parse(JSON.stringify(l)) as Layer);
+  }, []);
+
+  const pasteClipboard = useCallback(() => {
+    const cb = clipboardRef.current;
+    if (!cb) return;
+    const copy = { ...JSON.parse(JSON.stringify(cb)), id: newId('paste'), x: Math.min(0.9, cb.x + 0.03), y: Math.min(0.9, cb.y + 0.03) } as Layer;
+    addLayer(copy);
+  }, [addLayer]);
 
   const doUndo = useCallback(() => {
     const prev = history.undo();
@@ -267,6 +284,21 @@ export function Studio() {
           const w = pg.view[2] - pg.view[0];
           const h = pg.view[3] - pg.view[1];
           const thumbUrl = await renderThumb(pdf, i, 0, nr);
+          // detect genuinely blank pages (e.g. the "blank document" sample) so the
+          // canvas can show the subtle empty-document hint
+          let isBlank = false;
+          try {
+            const tc = await pg.getTextContent();
+            const hasText = tc.items.some((it) => String((it as { str?: string }).str ?? '').trim().length > 0);
+            let hasImage = false;
+            if (!hasText) {
+              const ops = await pg.getOperatorList();
+              hasImage = ops.fnArray.some((fn) => fn === pdfjsLib.OPS.paintImageXObject);
+            }
+            isBlank = !hasText && !hasImage;
+          } catch {
+            isBlank = false;
+          }
           pages.push({
             key: newId('pg'),
             originalIndex: i - 1,
@@ -275,7 +307,7 @@ export function Studio() {
             nativeWidth: w,
             nativeHeight: h,
             thumbUrl,
-            isBlank: false,
+            isBlank,
           });
         }
 
@@ -316,32 +348,15 @@ export function Studio() {
 
   const loadSample = useCallback(async () => {
     setBusy(true);
-    setStatusMsg('Creating sample document…');
+    setStatusMsg('Creating blank document…');
     try {
       const d = await PDFDocument.create();
-      const bold = await d.embedFont(StandardFonts.HelveticaBold);
-      const reg = await d.embedFont(StandardFonts.Helvetica);
-      const titles: Array<[string, [number, number, number]]> = [
-        ['Sales Agreement — Draft', [0.1, 0.35, 0.75]],
-        ['Project Timeline — Q3', [0.05, 0.55, 0.4]],
-        ['Sign-off Sheet', [0.45, 0.2, 0.7]],
-      ];
-      titles.forEach(([title, c], i) => {
-        const p = d.addPage([595.28, 841.89]);
-        p.drawRectangle({ x: 0, y: 779, width: 595.28, height: 62.89, color: rgb(c[0], c[1], c[2]) });
-        p.drawText(title, { x: 40, y: 800, size: 20, font: bold, color: rgb(1, 1, 1) });
-        p.drawText(`Page ${i + 1} of ${titles.length} — try the Text, Signature, Stamp and Redact tools.`, {
-          x: 40, y: 740, size: 12, font: reg, color: rgb(0.3, 0.3, 0.3),
-        });
-        p.drawText('Confidential reference: ACCT-4829-1928 (try redacting this line).', {
-          x: 40, y: 700, size: 11, font: reg, color: rgb(0.6, 0.15, 0.15),
-        });
-      });
+      d.addPage([595.28, 841.89]);
       const bytes = await d.save();
-      const sample = new File([bytes.buffer as ArrayBuffer], 'PDFEdit-Studio-Sample.pdf', { type: 'application/pdf' });
+      const sample = new File([bytes.buffer as ArrayBuffer], 'Untitled.pdf', { type: 'application/pdf' });
       await loadFile(sample);
     } catch {
-      setErrorMsg('Could not create the sample document.');
+      setErrorMsg('Could not create the blank document.');
       setBusy(false);
     }
   }, [loadFile]);
@@ -365,6 +380,7 @@ export function Studio() {
     setActivePageIndex(0);
     setSelectedLayerId(null);
     setPendingSignature(null);
+    setPendingImage(null);
     setShowRestore(null);
     setErrorMsg('');
   }, [history, revokeThumbs, destroyPdf]);
@@ -655,7 +671,6 @@ export function Studio() {
   }, []);
   const setZoomMode = useCallback((mode: ZoomState['mode']) => {
     setZoom({ mode });
-    setZoomMenuOpen(false);
   }, []);
 
   // ctrl/cmd + wheel zoom on canvas container
@@ -721,7 +736,6 @@ export function Studio() {
         }
         case 'Escape':
           setSelectedLayerId(null);
-          setZoomMenuOpen(false);
           return;
         case 'ArrowLeft':
         case 'ArrowRight':
@@ -861,8 +875,11 @@ export function Studio() {
         bold: line.bold,
         italic: line.italic,
         underline: false,
+        strikethrough: false,
         color: line.color,
+        highlightColor: null,
         align: 'left',
+        list: 'none',
         lineHeight: 1.15,
       };
       const d = docRef.current;
@@ -889,46 +906,45 @@ export function Studio() {
   const activePage = doc.pages[activePageIndex] ?? doc.pages[0];
   const pageLayers = doc.layers.filter((l) => l.pageIndex === activePageIndex);
 
-  const zoomMenu = (
-    zoomMenuOpen && (
-      <div className="absolute top-full mt-1 left-1/2 -translate-x-1/2 z-50 bg-[var(--pe-surface)] border border-[var(--pe-border-strong)] rounded-xl shadow-2xl py-1 min-w-[160px]">
-        {(['fit-width', 'fit-page', 50, 75, 100, 125, 150, 200] as const).map((m) => (
-          <button
-            key={String(m)}
-            type="button"
-            onClick={() => setZoomMode(m)}
-            className="w-full text-left px-4 py-2 text-xs text-[var(--pe-text)] hover:bg-[var(--pe-surface-3)]"
-          >
-            {m === 'fit-width' ? 'Fit width' : m === 'fit-page' ? 'Fit page' : `${m}%`}
-          </button>
-        ))}
-      </div>
-    )
-  );
-
   return (
     <div className="pe-preview h-screen flex flex-col bg-[var(--pe-bg)] text-[var(--pe-text)] overflow-hidden">
-      {/* desktop toolbar / mobile mini header */}
+      {/* desktop menu bar + ribbon / mobile mini header */}
       {!isMobile ? (
-        <div className="relative">
-          <Toolbar
-            tool={tool}
-            onTool={handleToolSelect}
-            canUndo={history.canUndo}
-            canRedo={history.canRedo}
-            onUndo={doUndo}
-            onRedo={doRedo}
-            zoomLabel={zoomLabel}
-            onZoomIn={() => zoomBy(15)}
-            onZoomOut={() => zoomBy(-15)}
-            onZoomMenu={() => setZoomMenuOpen((v) => !v)}
-            onExport={openExport}
-            busy={busy}
-            fileName={file?.name ?? ''}
-            onNewFile={closeDocument}
-          />
-          {zoomMenu}
-        </div>
+        <MenuBar
+          fileName={file?.name ?? 'Untitled.pdf'}
+          busy={busy}
+          tool={tool}
+          onTool={handleToolSelect}
+          canUndo={history.canUndo}
+          canRedo={history.canRedo}
+          onUndo={doUndo}
+          onRedo={doRedo}
+          zoomLabel={zoomLabel}
+          onZoomIn={() => zoomBy(15)}
+          onZoomOut={() => zoomBy(-15)}
+          onZoomMode={setZoomMode}
+          pagesOpen={pagesOpen}
+          onTogglePages={() => setPagesOpen((v) => !v)}
+          inspectorOpen={inspectorOpen}
+          onToggleInspector={() => setInspectorOpen((v) => !v)}
+          onNewFile={closeDocument}
+          onOpenFile={loadFile}
+          onExport={openExport}
+          onAddBlank={addBlankPage}
+          canCopy={!!selectedLayerId}
+          canPaste={!!clipboard}
+          onCopySelected={copySelectedLayer}
+          onPaste={pasteClipboard}
+          onDuplicateSelected={() => selectedLayerId && duplicateLayer(selectedLayerId)}
+          onDeleteSelected={() => selectedLayerId && deleteLayer(selectedLayerId)}
+          selectedText={selectedLayer?.type === 'text' ? selectedLayer : null}
+          options={options}
+          onPatchSelectedText={(patch) => {
+            if (selectedLayerId) updateLayer(selectedLayerId, patch as Partial<Layer>, true);
+          }}
+          onOptionsChange={patchOptions}
+          pageHeightPt={displayedSize(activePage).h}
+        />
       ) : (
         <header className="flex items-center gap-2 px-3 h-14 bg-[var(--pe-surface)] border-b border-[var(--pe-border)] shrink-0">
           <button
@@ -1028,6 +1044,18 @@ export function Studio() {
             onSendToBack={sendToBack}
             onEditLine={handleEditLine}
             onDeleteLayer={deleteLayer}
+            pendingImage={pendingImage}
+            onPlaceImageLayer={addLayer}
+            onImageToolClickWithoutImage={() => {
+              setStatusMsg('Choose an image first — then click the page to place it.');
+              setTimeout(() => setStatusMsg(''), 3500);
+            }}
+            onImageSelected={(dataUrl) => {
+              setPendingImage(dataUrl);
+              setTool('image');
+              setStatusMsg('Image ready — click on a page to place it.');
+              setTimeout(() => setStatusMsg(''), 3500);
+            }}
           />
           {/* trust strip */}
           <div className="shrink-0 px-4 py-1.5 bg-[var(--pe-surface-2)] border-t border-[var(--pe-border)] text-[10px] text-[var(--pe-text-3)] text-center">
@@ -1036,7 +1064,7 @@ export function Studio() {
         </div>
 
         {/* RIGHT: inspector */}
-        {!isMobile && (
+        {!isMobile && inspectorOpen && (
           <aside className="w-72 shrink-0 border-l border-[var(--pe-border)] bg-[var(--pe-surface-2)] overflow-y-auto">
             <Inspector
               tool={tool}
@@ -1050,6 +1078,13 @@ export function Studio() {
               hasSignature={!!pendingSignature}
               onBringToFront={() => selectedLayerId && bringToFront(selectedLayerId)}
               onSendToBack={() => selectedLayerId && sendToBack(selectedLayerId)}
+              pendingImage={pendingImage}
+              onImageSelected={(dataUrl) => {
+                setPendingImage(dataUrl);
+                setStatusMsg('Image ready — click on a page to place it.');
+                setTimeout(() => setStatusMsg(''), 3500);
+              }}
+              onClearImage={() => setPendingImage(null)}
             />
           </aside>
         )}
@@ -1118,6 +1153,14 @@ export function Studio() {
               hasSignature={!!pendingSignature}
               onBringToFront={() => selectedLayerId && bringToFront(selectedLayerId)}
               onSendToBack={() => selectedLayerId && sendToBack(selectedLayerId)}
+              pendingImage={pendingImage}
+              onImageSelected={(dataUrl) => {
+                setPendingImage(dataUrl);
+                setMobileInspectorOpen(false);
+                setStatusMsg('Image ready — tap the page to place it.');
+                setTimeout(() => setStatusMsg(''), 3500);
+              }}
+              onClearImage={() => setPendingImage(null)}
             />
           </div>
         </div>
@@ -1175,7 +1218,7 @@ function idxIncludes(arr: number[], v: number): boolean {
 
 function MobileToolButtons({ tool, onTool }: { tool: ToolId; onTool: (t: ToolId) => void }) {
   const labels: Record<string, string> = {
-    select: 'Select', text: 'Text', draw: 'Draw', highlight: 'Hi-Lite', shape: 'Shapes',
+    select: 'Select', text: 'Text', edittext: 'Edit', draw: 'Draw', highlight: 'Hi-Lite', shape: 'Shapes',
     image: 'Image', signature: 'Sign', stamp: 'Stamp', redact: 'Redact',
   };
   return (

@@ -49,6 +49,13 @@ export interface CanvasProps {
   /** "Edit text" tool: user clicked an extracted line of the PDF's own text */
   onEditLine: (line: PdfTextLine) => void;
   onDeleteLayer: (id: string) => void;
+  /** Image tool: staged image data URL chosen via the Inspector uploader */
+  pendingImage: string | null;
+  /** place the staged image at a clicked point (parent selects it + switches tool) */
+  onPlaceImageLayer: (layer: Layer) => void;
+  /** image tool active but no image staged yet (e.g. mobile) */
+  onImageToolClickWithoutImage: () => void;
+  onImageSelected: (dataUrl: string) => void;
 }
 
 const TOOL_EMPTY_HINT: Record<ToolId, string | null> = {
@@ -58,7 +65,7 @@ const TOOL_EMPTY_HINT: Record<ToolId, string | null> = {
   draw: 'Drag on the page to draw',
   highlight: 'Drag over text to highlight it',
   shape: 'Drag on the page to place a shape',
-  image: 'Click on the page to place your image',
+  image: 'Click on the page to place your image — choose one in the Inspector first',
   signature: 'Click on the page to place your signature',
   stamp: 'Click on the page to place the stamp',
   redact: 'Drag over an area to redact it',
@@ -78,6 +85,7 @@ export function StudioCanvas(props: CanvasProps) {
     pdfDoc, page, layers, tool, options, zoom, selectedId, editingId,
     pendingSignature, onSelectLayer, onUpdateLayer, onAddLayer, onCommit,
     onOpenSignaturePad, onConsumeSignature, onEditingChange, onEditLine, onDeleteLayer,
+    pendingImage, onPlaceImageLayer, onImageToolClickWithoutImage, onImageSelected,
   } = props;
 
   const containerRef = useRef<HTMLDivElement | null>(null);
@@ -91,7 +99,8 @@ export function StudioCanvas(props: CanvasProps) {
   // "Edit text" tool: extracted lines of the PDF's own text for the active page
   const [textLines, setTextLines] = useState<PdfTextLine[] | null>(null);
   const [textLinesState, setTextLinesState] = useState<'idle' | 'loading' | 'ready' | 'empty'>('idle');
-  const fileInputRef = useRef<HTMLInputElement | null>(null);
+  const [chooseImageError, setChooseImageError] = useState<string | null>(null);
+  const chooseImageRef = useRef<HTMLInputElement | null>(null);
   const dragRef = useRef<DragMode>(null);
   useEffect(() => {
     dragRef.current = drag;
@@ -265,8 +274,11 @@ export function StudioCanvas(props: CanvasProps) {
         bold: options.bold,
         italic: options.italic,
         underline: options.underline,
+        strikethrough: options.strikethrough,
         color: options.textColor,
+        highlightColor: options.textHighlight,
         align: options.align,
+        list: options.list,
         lineHeight: 1.25,
       };
       onAddLayer(layer);
@@ -281,7 +293,7 @@ export function StudioCanvas(props: CanvasProps) {
       img.onload = () => {
         const fw = 0.35;
         const fh = fw * (img.naturalHeight / Math.max(1, img.naturalWidth)) * (disp.w / disp.h);
-        onAddLayer({
+        onPlaceImageLayer({
           id: newId('img'),
           type: 'image',
           pageIndex: 0,
@@ -297,7 +309,28 @@ export function StudioCanvas(props: CanvasProps) {
       };
       img.src = dataUrl;
     },
-    [disp.w, disp.h, onAddLayer, options.mediaOpacity]
+    [disp.w, disp.h, onPlaceImageLayer, options.mediaOpacity]
+  );
+
+  /** fallback picker for when the Image tool has no staged image (mobile, small screens) */
+  const acceptChosenImage = useCallback(
+    (file: File | null | undefined) => {
+      if (!file) return;
+      if (!file.type.startsWith('image/')) {
+        setChooseImageError('Please choose an image file (PNG, JPG, GIF, WebP…).');
+        return;
+      }
+      if (file.size > 15 * 1024 * 1024) {
+        setChooseImageError('That image is larger than 15 MB — please pick a smaller one.');
+        return;
+      }
+      setChooseImageError(null);
+      const reader = new FileReader();
+      reader.onload = () => onImageSelected(String(reader.result));
+      reader.onerror = () => setChooseImageError('Could not read that image. Try another file.');
+      reader.readAsDataURL(file);
+    },
+    [onImageSelected]
   );
 
   const placeSignatureAt = useCallback(
@@ -364,7 +397,8 @@ export function StudioCanvas(props: CanvasProps) {
       return;
     }
     if (tool === 'image') {
-      fileInputRef.current?.click();
+      if (pendingImage) placeImageAt(nx, ny, pendingImage);
+      else onImageToolClickWithoutImage();
       return;
     }
     if (tool === 'signature') {
@@ -551,29 +585,29 @@ export function StudioCanvas(props: CanvasProps) {
     }
   };
 
-  const handleImageFile = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const f = e.target.files?.[0];
-    e.target.value = '';
-    if (!f) return;
-    if (!/^image\/(png|jpeg)$/.test(f.type)) return;
-    const reader = new FileReader();
-    reader.onload = () => {
-      const url = String(reader.result);
-      // place at center
-      placeImageAt(0.5, 0.4, url);
-    };
-    reader.readAsDataURL(f);
-  };
-
   const hint = TOOL_EMPTY_HINT[tool];
 
+  const overlayCursor: Record<ToolId, string> = {
+    select: 'default',
+    text: 'text',
+    edittext: 'text',
+    draw: 'crosshair',
+    highlight: 'crosshair',
+    shape: 'crosshair',
+    image: pendingImage ? 'copy' : 'pointer',
+    signature: 'copy',
+    stamp: 'copy',
+    redact: 'crosshair',
+    pages: 'default',
+  };
+
   return (
-    <div ref={containerRef} className="relative flex-1 overflow-auto bg-[var(--pe-bg)] flex items-start justify-center">
+    <div ref={containerRef} className="relative flex-1 overflow-auto bg-[#eceef1] dark:bg-[#16181d] flex items-start justify-center">
       <div className="relative my-6" style={{ width: cssSize.w, height: cssSize.h }}>
         {/* page shadow / paper */}
         <div
           className="absolute inset-0 rounded-[2px] bg-white"
-          style={{ boxShadow: '0 12px 48px rgba(0,0,0,0.55), 0 2px 8px rgba(0,0,0,0.4)' }}
+          style={{ boxShadow: '0 1px 2px rgba(16,24,40,0.12), 0 8px 28px rgba(16,24,40,0.14)' }}
         />
         <canvas
           ref={canvasRef}
@@ -584,7 +618,7 @@ export function StudioCanvas(props: CanvasProps) {
         <div
           ref={overlayRef}
           className="absolute inset-0 rounded-[2px] touch-none"
-          style={{ cursor: tool === 'select' ? 'default' : tool === 'edittext' ? 'text' : 'crosshair' }}
+          style={{ cursor: overlayCursor[tool] }}
           onPointerDown={handleOverlayPointerDown}
           onPointerMove={handleOverlayPointerMove}
           onPointerUp={handleOverlayPointerUp}
@@ -704,7 +738,54 @@ export function StudioCanvas(props: CanvasProps) {
           )}
         </div>
 
-        {hint && layers.length === 0 && (
+        {/* Image tool without a staged image: inline picker (also the mobile path) */}
+        {tool === 'image' && !pendingImage && (
+          <div className="absolute inset-x-0 top-0 flex justify-center pointer-events-none pt-5">
+            <div
+              className="pointer-events-auto flex flex-col items-center gap-2 rounded-2xl border border-[var(--pe-border-strong)] bg-[var(--pe-surface)]/95 px-6 py-5 shadow-xl"
+              onPointerDown={(e) => e.stopPropagation()}
+            >
+              <p className="text-sm font-medium text-[var(--pe-text)]">No image chosen yet</p>
+              <button
+                type="button"
+                onClick={() => chooseImageRef.current?.click()}
+                className="flex h-10 items-center gap-2 rounded-lg bg-[var(--pe-accent)] px-5 text-sm font-bold text-[var(--pe-accent-ink)] transition-colors hover:bg-[var(--pe-accent-hover)]"
+              >
+                Choose image
+              </button>
+              <p className="max-w-[220px] text-center text-[11px] leading-relaxed text-[var(--pe-text-3)]">
+                Pick an image, then click on the page to place it.
+              </p>
+              {chooseImageError && (
+                <p role="alert" className="max-w-[220px] text-center text-[11px] text-[var(--pe-accent)]">
+                  {chooseImageError}
+                </p>
+              )}
+              <input
+                ref={chooseImageRef}
+                type="file"
+                accept="image/*"
+                aria-label="Choose an image file"
+                className="hidden"
+                onChange={(e) => {
+                  const f = e.target.files?.[0];
+                  e.target.value = '';
+                  acceptChosenImage(f);
+                }}
+              />
+            </div>
+          </div>
+        )}
+
+        {/* subtle empty-document hint on blank pages */}
+        {page.isBlank && layers.length === 0 && tool === 'select' && (
+          <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
+            <p className="px-4 text-center text-[15px] text-slate-400 dark:text-slate-500">
+              Start creating — add text, images, or shapes.
+            </p>
+          </div>
+        )}
+        {hint && layers.length === 0 && !(page.isBlank && tool === 'select') && (
           <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
             <div className="px-4 py-2 rounded-full bg-[var(--pe-elevated)] text-[var(--pe-text)] text-xs font-medium border border-[var(--pe-border-strong)] shadow-lg">
               {hint}
@@ -719,7 +800,6 @@ export function StudioCanvas(props: CanvasProps) {
           </div>
         )}
       </div>
-      <input ref={fileInputRef} type="file" accept="image/png,image/jpeg" className="hidden" onChange={handleImageFile} />
     </div>
   );
 }
@@ -836,6 +916,12 @@ function LayerContent(props: {
         />
       );
     }
+    const deco = [t.underline ? 'underline' : '', t.strikethrough ? 'line-through' : '']
+      .filter(Boolean)
+      .join(' ');
+    const list = t.list ?? 'none';
+    const useRichLines = list !== 'none' || !!t.highlightColor;
+    const rawLines = t.text.split('\n');
     return (
       <div
         className="w-full h-full overflow-hidden select-none"
@@ -843,16 +929,36 @@ function LayerContent(props: {
           fontFamily: font.cssFamily,
           fontWeight: t.bold ? 700 : 400,
           fontStyle: t.italic ? 'italic' : 'normal',
-          textDecoration: t.underline ? 'underline' : 'none',
+          textDecoration: deco || 'none',
           color: t.color,
-          textAlign: t.align,
+          textAlign: t.align === 'justify' ? 'justify' : t.align,
           lineHeight: t.lineHeight,
           whiteSpace: 'pre-wrap',
           wordBreak: 'break-word',
           fontSize: `${fontPx}px`,
         }}
       >
-        {t.text}
+        {useRichLines
+          ? rawLines.map((ln, i) => (
+              <div key={i} style={{ display: 'flex' }}>
+                {list === 'bullet' && (
+                  <span aria-hidden="true" style={{ paddingRight: '0.5em', flexShrink: 0 }}>•</span>
+                )}
+                {list === 'numbered' && (
+                  <span aria-hidden="true" style={{ paddingRight: '0.5em', flexShrink: 0 }}>{i + 1}.</span>
+                )}
+                <span
+                  style={
+                    t.highlightColor
+                      ? { backgroundColor: t.highlightColor, flex: 1 }
+                      : { flex: 1 }
+                  }
+                >
+                  {ln === '' ? ' ' : ln}
+                </span>
+              </div>
+            ))
+          : t.text}
       </div>
     );
   }

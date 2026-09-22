@@ -20,8 +20,12 @@ export interface ToolOptions {
   bold: boolean;
   italic: boolean;
   underline: boolean;
+  strikethrough: boolean;
   textColor: string;
-  align: 'left' | 'center' | 'right';
+  /** background highlight behind text runs; null = none */
+  textHighlight: string | null;
+  align: 'left' | 'center' | 'right' | 'justify';
+  list: 'none' | 'bullet' | 'numbered';
   // draw
   drawColor: string;
   drawWidth: number; // width as fraction of page width, e.g. 0.004
@@ -47,8 +51,11 @@ export const DEFAULT_TOOL_OPTIONS: ToolOptions = {
   bold: false,
   italic: false,
   underline: false,
+  strikethrough: false,
   textColor: '#0f172a',
+  textHighlight: null,
   align: 'left',
+  list: 'none',
   drawColor: '#1e3a8a',
   drawWidth: 0.004,
   highlightColor: '#fde047',

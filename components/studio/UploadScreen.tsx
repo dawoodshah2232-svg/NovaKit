@@ -135,7 +135,7 @@ export function UploadScreen({ onFile, onSample, busy, status, error }: UploadSc
               disabled={busy}
               className="text-sm font-semibold text-[var(--pe-accent)] hover:text-[var(--pe-accent-hover)] hover:underline disabled:opacity-50"
             >
-              Try a sample document
+              Try a blank document
             </button>
           </div>
 

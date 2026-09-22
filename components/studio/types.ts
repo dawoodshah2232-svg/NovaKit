@@ -57,8 +57,12 @@ export interface TextLayer extends LayerBase {
   bold: boolean;
   italic: boolean;
   underline: boolean;
+  strikethrough: boolean;
   color: string;
-  align: 'left' | 'center' | 'right';
+  /** background highlight behind the text runs; null = none */
+  highlightColor: string | null;
+  align: 'left' | 'center' | 'right' | 'justify';
+  list: 'none' | 'bullet' | 'numbered';
   lineHeight: number;
 }
 

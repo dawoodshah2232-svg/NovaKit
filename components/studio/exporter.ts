@@ -154,19 +154,41 @@ async function drawTextLayer(outDoc: PDFDocument, page: PageLike, layer: TextLay
   const cx = rect.x + rect.w / 2;
   const cy = rect.y + rect.h / 2;
   const color = hexToRgb(layer.color);
-  const lines = layer.text.split('\n');
   const lineStep = size * layer.lineHeight;
 
   // drawText y = baseline; anchor box top in native y-up = rect.y + rect.h
   let baselineTop = rect.y + rect.h - size * 0.82;
-  for (const line of lines) {
+  const list = layer.list ?? 'none';
+  const numbered = list === 'numbered';
+  const highlight = layer.highlightColor ? hexToRgb(layer.highlightColor) : null;
+  const lines = (layer.text || '').split('\n');
+  if (lines.length === 0) lines.push('');
+  for (let li = 0; li < lines.length; li++) {
+    const rawLine = lines[li];
+    const marker = list === 'bullet' ? '•  ' : numbered ? `${li + 1}.  ` : '';
+    const line = marker + rawLine;
     const lineWidth = font.widthOfTextAtSize(line, size);
     let x = rect.x;
+    // justify falls back to left — PDF text has no word-spread in this pipeline
     if (layer.align === 'center') x = rect.x + (rect.w - lineWidth) / 2;
     else if (layer.align === 'right') x = rect.x + rect.w - lineWidth;
     // pdf-lib rotates about the (x,y) anchor; rotate the anchor about the
     // box center so it matches CSS transform-origin: center on screen.
     const anchor = rotateAnchor(x, baselineTop, cx, cy, theta);
+    if (highlight && line.trim()) {
+      // background highlight band behind the line's text run
+      const hTop = baselineTop + size * 0.82;
+      const c0 = rotatePoint(x, hTop - size * 1.15, cx, cy, theta);
+      page.drawRectangle({
+        x: c0.x,
+        y: c0.y,
+        width: lineWidth,
+        height: size * 1.15,
+        color: highlight,
+        opacity: layer.opacity,
+        rotate: degrees(theta),
+      });
+    }
     page.drawText(line, {
       x: anchor.x,
       y: anchor.y,
@@ -183,6 +205,18 @@ async function drawTextLayer(outDoc: PDFDocument, page: PageLike, layer: TextLay
       page.drawLine({
         start: u0,
         end: u1,
+        thickness: Math.max(0.75, size / 14),
+        color,
+        opacity: layer.opacity,
+      });
+    }
+    if (layer.strikethrough && line.trim()) {
+      const sy = baselineTop + size * 0.28;
+      const s0 = rotatePoint(x, sy, cx, cy, theta);
+      const s1 = rotatePoint(x + lineWidth, sy, cx, cy, theta);
+      page.drawLine({
+        start: s0,
+        end: s1,
         thickness: Math.max(0.75, size / 14),
         color,
         opacity: layer.opacity,
