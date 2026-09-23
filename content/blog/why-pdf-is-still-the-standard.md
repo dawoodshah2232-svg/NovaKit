@@ -48,7 +48,7 @@ No format does everything, and PDF's weaknesses are the flip side of its strengt
 - **Reflowing on small screens.** A fixed-layout page doesn't adapt to a phone screen. Tagged PDFs help, but a PDF will never read as comfortably on mobile as a web page.
 - **Editing.** PDF is a finished format. Editing one is possible — that's what tools like [our Studio](/studio) do — but it's surgery, not drafting. Draft in Word or Docs; deliver in PDF.
 - **Accessibility.** A well-tagged PDF (PDF/UA) works with screen readers; most real-world PDFs aren't tagged. The format supports accessibility, but the ecosystem under-delivers it.
-- **File size.** PDFs with high-res images get heavy. (Compressible, fortunately — see our [compression guide](/how-to-compress-pdf).)
+- **File size.** PDFs with high-res images get heavy. (Compressible, fortunately — see our [compression guide](/blog/how-to-compress-pdf).)
 - **Interactivity.** Forms and JavaScript exist in PDF but feel frozen in time compared to the web.
 
 None of these killed it, because none of them touch the core job: *this document must look the same for everyone, forever.*
@@ -86,7 +86,7 @@ The pattern: PDF sheds what the web does better and keeps what only it does — 
 
 Practically, PDF's permanence is an instruction:
 
-- **Deliver final work as PDF.** Resumes, invoices, contracts, proposals — anything where appearance matters. (Our [PDF vs Word guide](/pdf-vs-word-format) covers the decision in detail.)
+- **Deliver final work as PDF.** Resumes, invoices, contracts, proposals — anything where appearance matters. (Our [PDF vs Word guide](/blog/pdf-vs-word-format) covers the decision in detail.)
 - **Learn the basics once.** Merging, splitting, compressing, signing, converting — a small skill set you'll use for decades, because the format isn't going anywhere. The [free tools](/tools/pdf-merger) take minutes to learn.
 - **Archive important documents as PDF/A** when the option exists. Future-you will thank present-you.
 

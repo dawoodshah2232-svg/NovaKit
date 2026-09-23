@@ -84,7 +84,7 @@ Applicant tracking systems reject qualified candidates every day — not from ma
 
 **The PDF itself matters.** An ATS needs to extract text from your file. A real PDF with selectable text (what our builder exports) parses cleanly. A scanned image or flattened graphic of your CV parses as nothing. Always verify your exported PDF has selectable text — try copying a sentence from it.
 
-One nuance: some very old ATS setups prefer .docx. If the posting explicitly requests Word, send Word. Otherwise, PDF is the safer default — and our [PDF vs Word guide](/pdf-vs-word-format) explains why.
+One nuance: some very old ATS setups prefer .docx. If the posting explicitly requests Word, send Word. Otherwise, PDF is the safer default — and our [PDF vs Word guide](/blog/pdf-vs-word-format) explains why.
 
 ## Before you send it
 

@@ -9,25 +9,25 @@ imageAlt: "Layers of a PDF document merging into a single flat page"
 readingMinutes: 5
 faqs:
   - q: "What does flattening a PDF mean?"
-    a: "Flattening merges a PDF's editable layers — form fields, annotations, markups — into the fixed page content, so they can't be edited, moved, or deleted afterward."
+    a: "Flattening merges a PDF's editable layers into the fixed page content. Vector mode locks fillable form fields into static text; raster mode bakes each whole page — fields, annotations, markups and all — into a print-quality image, so nothing can be edited, moved, or deleted afterward."
   - q: "How do I flatten a PDF for free?"
     a: "PDFEdit's free flatten tool offers two modes: vector flattening (locks form fields while keeping text selectable) and raster flattening (bakes every page into a print-quality image). Both run in your browser."
   - q: "Does flattening a PDF reduce quality?"
     a: "Vector flattening doesn't touch quality at all. Raster flattening re-renders pages as high-resolution images (2x print quality), which looks excellent but makes text unselectable and the file larger."
   - q: "Should I flatten a PDF before sending it?"
-    a: "Yes, when the document is final: flattening prevents recipients from editing form values, moving your annotations, or toggling layers you added. Keep an unflattened master copy for yourself."
+    a: "Yes, when the document is final: flattening prevents recipients from editing form values. To also stop anyone moving or deleting review annotations and markups, use raster mode, which bakes the entire visible page. Keep an unflattened master copy for yourself."
   - q: "Can a flattened PDF be unflattened?"
     a: "No. Flattening is one-way — that's the point. Always keep the original editable file before flattening."
 related: ["how-to-fill-out-pdf-forms-online", "how-to-sign-a-pdf-electronically", "how-to-redact-a-pdf"]
 ---
 
-The short answer: flattening merges a PDF's editable layers into the fixed page — form fields become plain text, annotations become permanent. Use [PDFEdit's flatten tool](/tools/flatten-pdf): **vector mode** to lock forms while keeping text selectable, **raster mode** to bake whole pages into images.
+The short answer: flattening merges a PDF's editable layers into the fixed page. Use [PDFEdit's flatten tool](/tools/flatten-pdf): **vector mode** to lock fillable form fields into static text while keeping text selectable, **raster mode** to bake each whole page — fields, annotations, markups and all — into a print-quality image.
 
 ## What "flatten" actually means
 
 A working PDF is a lasagna: the page content on the bottom, then layers of form fields, annotations, highlights, signatures, and markups floating above it. Each layer is independently editable — a form field's value can change, a highlight can be deleted, a signature can be dragged elsewhere.
 
-Flattening fuses the lasagna into a single sheet. Form field *values* stay visible but the fields themselves stop existing as fields. Your annotations become part of the page. Nothing floats anymore, so nothing can be moved, edited, or quietly deleted by the next person who opens the file.
+Flattening fuses the lasagna into a single sheet. Form field *values* stay visible but the fields themselves stop existing as fields. In raster mode, your annotations and markups are baked into the page image too — nothing floats anymore, so nothing can be moved, edited, or quietly deleted by the next person who opens the file. (Vector mode locks form fields only; review annotations stay as annotations.)
 
 ## The two flattening modes
 
@@ -38,7 +38,7 @@ Flattening fuses the lasagna into a single sheet. Form field *values* stay visib
 ## When to flatten
 
 - **Filled forms going out the door.** A completed application with live fields invites "corrections" by the recipient. Flatten it; the values stay, the editability goes.
-- **Documents with your markup.** Review annotations, stamps, highlights — flattening stops anyone from deleting your comments and pretending the review never happened.
+- **Documents with your markup.** Review annotations, stamps, highlights — raster flattening bakes them into the page so no one can delete your comments and pretend the review never happened.
 - **Final versions for archiving.** The archived copy should be exactly what was approved, immune to accidental edits years later.
 - **Before redaction-adjacent sharing.** Flattening plus [redaction](/tools/redact-pdf) is the belt-and-suspenders approach for sensitive files: nothing editable, nothing recoverable.
 

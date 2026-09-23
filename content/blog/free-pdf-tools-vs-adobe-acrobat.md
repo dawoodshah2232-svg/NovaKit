@@ -65,7 +65,7 @@ Acrobat is subscription software — you pay continuously, forever, to keep usin
 But the honest accounting includes *your* costs too:
 
 - **Learning curve.** Acrobat is deep software; the depth you don't use is just interface complexity. Free tools do one thing per page — you already know how to use them.
-- **Privacy.** Desktop software processes locally (good). Many free *online* tools upload your files to a server (depends). Browser-local free tools like ours process locally too — the privacy of desktop with the convenience of the web. See our [guide to choosing a PDF tool](/how-to-choose-pdf-tool-online) for what to check.
+- **Privacy.** Desktop software processes locally (good). Many free *online* tools upload your files to a server (depends). Browser-local free tools like ours process locally too — the privacy of desktop with the convenience of the web. See our [guide to choosing a PDF tool](/blog/how-to-choose-pdf-tool-online) for what to check.
 - **Availability.** A browser tool works on any device, including the Chromebook or borrowed laptop where you can't install software.
 
 ## Feature by feature: test before you commit

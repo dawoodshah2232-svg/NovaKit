@@ -43,7 +43,7 @@ PDF has been around since 1993, and three decades of accumulated terminology can
 
 **CMYK.** The four-ink color model for print (cyan, magenta, yellow, black). Screen PDFs use RGB; professional print workflows convert to CMYK.
 
-**Compression.** Reducing file size via algorithms (JPEG for images, Flate/ZIP for text and vector data). Lossy compression (JPEG) sacrifices quality; lossless preserves it. See our [compression guide](/how-to-compress-pdf).
+**Compression.** Reducing file size via algorithms (JPEG for images, Flate/ZIP for text and vector data). Lossy compression (JPEG) sacrifices quality; lossless preserves it. See our [compression guide](/blog/how-to-compress-pdf).
 
 ## D
 

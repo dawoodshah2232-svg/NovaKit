@@ -68,7 +68,7 @@ A QR code is not encryption — **anyone who can see or photograph the code gets
 - **Home:** fridge, guest room, entryway — anywhere visitors naturally wait
 - **Office:** reception desk or meeting rooms, on a small tent card
 - **Rental properties:** the welcome binder or framed on the wall
-- **Cafés and shops:** counter or table tents (pairs well with a [QR menu](/qr-code-menu-for-restaurants) on the same card)
+- **Cafés and shops:** counter or table tents (pairs well with a [QR menu](/blog/qr-code-menu-for-restaurants) on the same card)
 
 Print at a reasonable size — about 5cm / 2 inches square minimum for reliable scanning from arm's length. SVG downloads scale infinitely, so size is never a quality problem.
 

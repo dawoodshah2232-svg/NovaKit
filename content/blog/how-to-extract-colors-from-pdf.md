@@ -95,6 +95,6 @@ The extraction is a one-minute job; wiring the colors into your tools is what ma
 
 ## Building a full brand palette from a PDF
 
-If the goal is a reusable brand palette rather than one-off codes, the extraction is step one of a slightly bigger process — choosing primaries, secondaries, neutrals, and checking contrast. Our [brand palette guide](/brand-color-palette-from-pdf-guide) walks through turning extracted colors into a complete, usable palette.
+If the goal is a reusable brand palette rather than one-off codes, the extraction is step one of a slightly bigger process — choosing primaries, secondaries, neutrals, and checking contrast. Our [brand palette guide](/blog/brand-color-palette-from-pdf-guide) walks through turning extracted colors into a complete, usable palette.
 
 For the quick version, though: export the page, [extract the colors](/tools/color-extractor), copy the hex codes. One minute, exact values, zero uploads.

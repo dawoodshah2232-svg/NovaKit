@@ -84,7 +84,7 @@ A passphrase — four or five random words like `correct horse battery staple` �
 
 A strong password you can't retrieve is a locked account. You have three sane options:
 
-1. **A password manager** — encrypted vault, one master password, autofill. The best option for almost everyone. (More on this in our [password manager vs. generator guide](/password-manager-vs-generator).)
+1. **A password manager** — encrypted vault, one master password, autofill. The best option for almost everyone. (More on this in our [password manager vs. generator guide](/blog/password-manager-vs-generator).)
 2. **Your browser's built-in manager** — decent, synced, better than nothing.
 3. **Written down, kept safe** — genuinely fine for a handful of critical passwords. A notebook in a drawer beats reuse.
 

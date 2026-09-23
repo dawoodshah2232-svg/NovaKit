@@ -53,7 +53,7 @@ The tent is a tiny poster — treat it like one:
 - **Big code, clear label.** "SCAN FOR MENU" in large type, with a smaller line like "No app needed — just point your camera." Many customers still hesitate; the instruction matters.
 - **Minimum 3 × 3 cm code**, bigger for wall-mounted or outdoor posters.
 - **Your logo and a hint of branding.** The tent is also marketing.
-- **WiFi details on the same tent.** Guests need internet to load the menu — pair the menu code with your [WiFi QR code](/how-to-make-qr-code-for-wifi) on the same card and you've solved both problems at once.
+- **WiFi details on the same tent.** Guests need internet to load the menu — pair the menu code with your [WiFi QR code](/blog/how-to-make-qr-code-for-wifi) on the same card and you've solved both problems at once.
 - **Laminate it.** Menus live in the splash zone. Lamination or acrylic holders keep codes scannable for months.
 
 ## The update workflow

@@ -54,7 +54,7 @@ Our [text analyzer](/tools/text-analyzer) starts with the count and keeps going:
 
 Each extra metric answers a real editing question:
 
-- **Sentences + avg words/sentence** → "Is this readable?" (see our [readability guide](/how-to-analyze-text-readability))
+- **Sentences + avg words/sentence** → "Is this readable?" (see our [readability guide](/blog/how-to-analyze-text-readability))
 - **Reading time** → "Will anyone finish this?" A 12-minute article for a 3-minute audience is a mismatch you can spot before publishing.
 - **Speaking time** → "Does my script fit the slot?" At ~140 wpm, a 5-minute talk is ~700 words. Write 1,200 and you'll be speed-talking.
 - **Keyword density** → "Am I overusing words?" Every writer has crutch words; the density table finds yours. For SEO, it shows whether target terms appear at natural levels (1–3%) rather than stuffed.

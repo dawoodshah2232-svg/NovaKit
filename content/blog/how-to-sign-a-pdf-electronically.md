@@ -47,12 +47,12 @@ For signing a contract, approving an invoice, or accepting an offer letter, a si
 In [PDFEdit's free sign tool](/sign-pdf):
 
 1. **Open your PDF.** Drag it into the browser. No sign-up, and the file stays on your device.
-2. **Create your signature.** Three options: draw it with your mouse or finger, type your name and pick a handwriting-style font, or upload a photo of your real signature. Drawn signatures look the most natural.
-3. **Place it.** Drag the signature onto the signature line and resize it to fit. Add the date next to it if the document asks for one.
-4. **Add anything else.** Initials on each page? A checkbox tick? Place those the same way.
+2. **Create your signature.** Three options: draw it with your mouse or finger, type your name in a handwriting-style script, or upload a photo of your real signature. Drawn signatures look the most natural.
+3. **Place it.** Drag the signature onto the signature line and resize it to fit. If the document asks for a date next to the signature, include it when you type your name (e.g. "Dawood Shah · 23 Sep 2026") — the tool places one signature image per spot, so anything you want beside it should be part of the image.
+4. **Repeat for other spots.** If the document needs signing in more than one place, navigate to each page and place the signature again before downloading.
 5. **Download.** Save the signed PDF. It's crisp, clean, and ready to send.
 
-If you sign documents regularly, save your signature so you can drop it in with one click next time.
+One privacy note: your signature isn't saved anywhere — it exists only in your browser session while the tab is open. That's also what keeps the tool private.
 
 ## Tips for a signature that looks right
 
@@ -82,7 +82,7 @@ This works better than you'd expect. Open PDFEdit's signing tool in your phone's
 
 The other side of the process deserves a mention, because it happens constantly: a PDF lands in your inbox with "please sign and return."
 
-Don't print it. Open it in the signing tool, add your signature and the date, save, and reply with the signed file attached. The whole round trip takes two minutes. If the document has multiple signature fields or initial boxes on each page, work through them top to bottom so you don't miss one — there's nothing more annoying than a document bouncing back because page 6 is missing your initials.
+Don't print it. Open it in the signing tool, add your signature (with the date typed in if the document asks for one), save, and reply with the signed file attached. The whole round trip takes two minutes. If the document needs signatures in several places, work through them top to bottom before downloading so you don't miss one — there's nothing more annoying than a document bouncing back because page 6 is missing your signature.
 
 One more thing: rename the file before sending it back. "Contract-signed.pdf" tells the recipient exactly what they're opening. "Contract(1).pdf" does not.
 

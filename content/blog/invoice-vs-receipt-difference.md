@@ -41,7 +41,7 @@ Here's the sequence for a typical freelance job:
 
 ## What's on each document
 
-**Invoice:** your details, client details, invoice number, invoice date, due date, line items, subtotal, discount, tax, total due, payment instructions. (Full breakdown in our [freelance invoice template guide](/freelance-invoice-template-guide).)
+**Invoice:** your details, client details, invoice number, invoice date, due date, line items, subtotal, discount, tax, total due, payment instructions. (Full breakdown in our [freelance invoice template guide](/blog/freelance-invoice-template-guide).)
 
 **Receipt:** your details, payment date, invoice number reference, amount received, payment method (bank transfer, card, cash), and ideally the word "RECEIPT" or a "PAID" stamp so nobody mistakes it for a new bill.
 

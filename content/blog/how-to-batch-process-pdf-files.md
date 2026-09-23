@@ -71,7 +71,7 @@ So the "process 50 PDFs" workflow is really: batch-merge the 50 into one file, t
 ## Tips for big batches
 
 - **Order your selection deliberately.** The batch page uses selection order — in most file pickers, shift-click selects a range in the displayed sort. Sort by name first if your files are named sensibly.
-- **Watch total size.** Each file must be under 100 MB, and the combined job lives in browser memory. On a phone, keep batches modest.
+- **Watch total size.** The batch page doesn't enforce a per-file size cap, but the whole job lives in your browser's memory — very large files or dozens of heavy scans can slow things down or fail on low-memory phones. On a phone, keep batches modest.
 - **Verify the merge.** Open the result, check the page count equals the sum of inputs, and spot-check the start of each section.
 - **Then post-process once.** Compress the merged file, add page numbers, whatever it needs — one pass on the combined file instead of fifty passes on parts.
 

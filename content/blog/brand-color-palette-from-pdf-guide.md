@@ -27,7 +27,7 @@ Every brand has a PDF somewhere — a brochure, a pitch deck, an old letterhead 
 
 ## Step 1: Extract the raw colors
 
-Start with the extraction workflow from our [color extraction guide](/how-to-extract-colors-from-pdf): export the key PDF pages as images (logo page, cover, a typical content page) and run them through the [Color Palette Extractor](/tools/color-extractor). You'll get dominant colors plus the most prominent colors per page, each with HEX and RGB codes.
+Start with the extraction workflow from our [color extraction guide](/blog/how-to-extract-colors-from-pdf): export the key PDF pages as images (logo page, cover, a typical content page) and run them through the [Color Palette Extractor](/tools/color-extractor). You'll get dominant colors plus the most prominent colors per page, each with HEX and RGB codes.
 
 Extract from **multiple pages**, not just one. A cover might show the primary and accent; an interior page might reveal the neutrals used for body text and backgrounds. Collect everything first, decide later.
 
