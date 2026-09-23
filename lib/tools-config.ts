@@ -398,7 +398,7 @@ export const TOOLS_CONFIG: ToolConfig[] = [
   {
     id: 'tax-calculator',
     name: 'Tax Calculator',
-    description: 'Quickly compute sales tax, value-added tax (VAT), gross-to-net earnings, and deductions with real-time breakdowns.',
+    description: 'Compute income tax with real-time bracket breakdowns: gross income, deductions, tax owed, and net earnings.',
     slug: 'tax-calculator',
     category: 'Finance',
     badge: 'Updated 2026',

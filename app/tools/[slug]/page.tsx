@@ -3,6 +3,7 @@ import { notFound } from 'next/navigation';
 import Link from 'next/link';
 import { ArrowLeft, ShieldCheck, Sparkles, CheckCircle2, Lock, Cpu, Zap } from 'lucide-react';
 import { getToolBySlug, getAllToolSlugs } from '@/lib/tools-config';
+import { getAllPostsMeta } from '@/lib/blog';
 import {
   getToolGeoData,
   generateFaqSchema,
@@ -65,6 +66,37 @@ const relatedToolsBySlug: Record<string, [string, string][]> = {
   'pdf-to-text': [['/ocr-pdf', 'OCR PDF'], ['/pdf-to-word', 'PDF to Word'], ['/pdf-to-jpg', 'PDF to JPG']],
   'flatten-pdf': [['/sign-pdf', 'Sign PDF'], ['/unlock-pdf', 'Unlock PDF'], ['/redact-pdf', 'Redact PDF']],
   'redact-pdf': [['/flatten-pdf', 'Flatten PDF'], ['/edit-pdf', 'Edit Metadata'], ['/studio', 'PDF Studio']],
+};
+
+/*
+ * Related blog guides per tool slug (tool -> blog internal linking).
+ * Only slugs that exist in content/blog/ are listed here.
+ */
+const relatedBlogPostsBySlug: Record<string, string[]> = {
+  'pdf-merger': ['how-to-merge-pdf-files', 'how-to-split-a-pdf', 'how-to-edit-a-pdf-online'],
+  'split-pdf': ['how-to-split-a-pdf', 'how-to-merge-pdf-files', 'how-to-edit-a-pdf-online'],
+  'compress-pdf': ['how-to-compress-pdf', 'how-to-edit-a-pdf-online', 'how-to-protect-a-pdf-with-password'],
+  'image-to-pdf': ['how-to-convert-jpg-to-pdf', 'pdf-to-jpg-images-guide', 'how-to-edit-a-pdf-online'],
+  'pdf-to-images': ['pdf-to-jpg-images-guide', 'how-to-convert-jpg-to-pdf', 'how-to-ocr-a-scanned-pdf'],
+  'pdf-to-jpg': ['pdf-to-jpg-images-guide', 'how-to-convert-jpg-to-pdf', 'how-to-compress-pdf'],
+  'pdf-to-word': ['pdf-to-word-conversion-guide', 'pdf-vs-word-format', 'how-to-edit-a-pdf-online'],
+  'word-to-pdf': ['pdf-to-word-conversion-guide', 'pdf-vs-word-format', 'how-to-convert-jpg-to-pdf'],
+  'ocr-pdf': ['how-to-ocr-a-scanned-pdf', 'pdf-to-jpg-images-guide', 'how-to-edit-a-pdf-online'],
+  'sign-pdf': ['how-to-sign-a-pdf-electronically', 'how-to-fill-out-pdf-forms-online', 'how-to-protect-a-pdf-with-password'],
+  'rotate-pdf': ['how-to-rotate-pdf-pages', 'how-to-edit-a-pdf-online', 'how-to-split-a-pdf'],
+  'organize-pdf': ['how-to-split-a-pdf', 'how-to-merge-pdf-files', 'how-to-rotate-pdf-pages'],
+  'watermark-pdf': ['how-to-watermark-a-pdf', 'how-to-sign-a-pdf-electronically', 'how-to-protect-a-pdf-with-password'],
+  'unlock-pdf': ['how-to-protect-a-pdf-with-password', 'how-to-edit-a-pdf-online', 'how-to-sign-a-pdf-electronically'],
+  'protect-pdf': ['how-to-protect-a-pdf-with-password', 'how-to-sign-a-pdf-electronically', 'how-to-redact-a-pdf'],
+  'delete-pdf-pages': ['how-to-split-a-pdf', 'how-to-edit-a-pdf-online', 'how-to-merge-pdf-files'],
+  'extract-pdf-pages': ['how-to-split-a-pdf', 'how-to-edit-a-pdf-online', 'how-to-merge-pdf-files'],
+  'add-page-numbers': ['how-to-add-page-numbers-to-pdf', 'how-to-watermark-a-pdf', 'how-to-edit-a-pdf-online'],
+  'crop-pdf': ['how-to-rotate-pdf-pages', 'how-to-edit-a-pdf-online', 'pdf-to-jpg-images-guide'],
+  'pdf-to-text': ['how-to-ocr-a-scanned-pdf', 'pdf-to-word-conversion-guide', 'how-to-edit-a-pdf-online'],
+  'flatten-pdf': ['how-to-fill-out-pdf-forms-online', 'how-to-protect-a-pdf-with-password', 'how-to-sign-a-pdf-electronically'],
+  'redact-pdf': ['how-to-redact-a-pdf', 'how-to-protect-a-pdf-with-password', 'how-to-fill-out-pdf-forms-online'],
+  'edit-pdf-metadata': ['how-to-edit-a-pdf-online', 'how-to-redact-a-pdf', 'how-to-protect-a-pdf-with-password'],
+  'image-compressor': ['how-to-compress-pdf', 'how-to-convert-jpg-to-pdf', 'pdf-to-jpg-images-guide'],
 };
 
 interface ToolPageProps {
@@ -332,6 +364,37 @@ export default async function ToolPage({ params }: ToolPageProps) {
           </div>
         </nav>
       )}
+
+      {/* Related blog guides (tool -> blog internal linking) */}
+      {(() => {
+        const postSlugs = relatedBlogPostsBySlug[slug] ?? [];
+        if (postSlugs.length === 0) return null;
+        const postMetaBySlug = new Map(getAllPostsMeta().map((p) => [p.slug, p]));
+        const posts = postSlugs
+          .map((postSlug) => postMetaBySlug.get(postSlug))
+          .filter((p): p is NonNullable<typeof p> => Boolean(p));
+        if (posts.length === 0) return null;
+        return (
+          <nav aria-label="Related guides" className="rounded-3xl border border-slate-200/80 bg-slate-50 p-5 dark:border-slate-800 dark:bg-slate-950/40">
+            <h2 className="text-base font-black text-slate-900 dark:text-white">Related guides</h2>
+            <p className="mt-1 text-xs text-slate-500 dark:text-slate-400">
+              Step-by-step tutorials from the PDFEdit blog.
+            </p>
+            <ul className="mt-3 space-y-2">
+              {posts.map((post) => (
+                <li key={post.slug}>
+                  <Link
+                    href={`/blog/${post.slug}`}
+                    className="block rounded-xl border border-slate-200 bg-white px-4 py-3 text-sm font-bold text-slate-800 transition hover:border-blue-300 hover:bg-blue-50 hover:text-blue-800 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-600 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-200 dark:hover:bg-slate-800 dark:hover:text-blue-300"
+                  >
+                    {post.title}
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </nav>
+        );
+      })()}
 
       {/* Tool Architecture & Security Guarantee Cards */}
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-2">
