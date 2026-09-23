@@ -1,6 +1,7 @@
 import Link from 'next/link';
 import { ShieldCheck, Zap, Lock, Cpu, FileText } from 'lucide-react';
 import { Logo } from './logo';
+import { CookieSettingsButton } from './cookie-settings-button';
 
 const PRODUCT_LINKS = [
   { label: 'All tools', href: '/#tools' },
@@ -105,6 +106,7 @@ export function Footer() {
                   </Link>
                 </li>
               ))}
+              <CookieSettingsButton />
             </ul>
           </nav>
         </div>

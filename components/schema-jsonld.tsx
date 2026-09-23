@@ -34,6 +34,18 @@ const organizationRef = {
   logo: `${BASE_URL}/og-image.png`,
 };
 
+export const websiteSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'WebSite',
+  '@id': `${BASE_URL}/#website`,
+  url: `${BASE_URL}/`,
+  name: 'PDFEdit',
+  description:
+    'Free online PDF editor and document tools. Edit, merge, split, compress, sign, rotate, watermark, convert and organize PDF files directly in your browser.',
+  inLanguage: 'en',
+  publisher: organizationRef,
+};
+
 export const aboutSchema = {
   '@context': 'https://schema.org',
   '@type': 'AboutPage',

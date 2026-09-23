@@ -1,5 +1,9 @@
 import { Suspense } from 'react';
+import Script from 'next/script';
 import { AnalyticsTracker } from '@/components/analytics-tracker';
+import { Ga4Provider } from '@/components/ga4-provider';
+import { CookieConsent } from '@/components/cookie-consent';
+import { CONSENT_DEFAULTS_SCRIPT } from '@/lib/cookie-consent';
 import type { Metadata, Viewport } from 'next';
 import { Inter, JetBrains_Mono } from 'next/font/google';
 import './globals.css';
@@ -8,7 +12,7 @@ import { ThemeProvider } from '@/components/theme-provider';
 import { Header } from '@/components/header';
 import { MobileNav } from '@/components/mobile-nav';
 import { Footer } from '@/components/footer';
-import { JsonLd, organizationSchema } from '@/components/schema-jsonld';
+import { JsonLd, organizationSchema, websiteSchema } from '@/components/schema-jsonld';
 
 const inter = Inter({
   variable: '--font-sans',
@@ -147,6 +151,14 @@ export default function RootLayout({
         suppressHydrationWarning
         className={`${inter.variable} ${jetbrainsMono.variable} min-h-full bg-[#f8fafc] font-sans text-slate-900 antialiased dark:bg-slate-950 dark:text-slate-100`}
       >
+        {/* GA4 Consent Mode defaults: deny analytics until the visitor accepts.
+            beforeInteractive is required here (root layout) so it runs before
+            the gtag.js library loads. Renders nothing without a measurement ID. */}
+        {process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID ? (
+          <Script id="ga4-consent-defaults" strategy="beforeInteractive">
+            {CONSENT_DEFAULTS_SCRIPT}
+          </Script>
+        ) : null}
         <ThemeProvider
           attribute="class"
           defaultTheme="light"
@@ -155,7 +167,9 @@ export default function RootLayout({
         >
           <div className="flex min-h-screen flex-col">
             <Suspense fallback={null}><AnalyticsTracker /></Suspense>
+            <Ga4Provider />
             <JsonLd schema={organizationSchema} />
+            <JsonLd schema={websiteSchema} />
             <a href="#main-content" className="skip-to-content">
               Skip to content
             </a>
@@ -168,6 +182,7 @@ export default function RootLayout({
             <Footer />
 
             <MobileNav />
+            <CookieConsent />
           </div>
         </ThemeProvider>
       </body>
