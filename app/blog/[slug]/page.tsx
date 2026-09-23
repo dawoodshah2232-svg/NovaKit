@@ -11,6 +11,7 @@ import {
   faqJsonLd,
 } from '@/lib/blog';
 import { ArrowLeft, ArrowRight, Clock, ChevronRight } from 'lucide-react';
+import BlogShareButtons from '@/components/blog-share-buttons';
 
 interface PageProps {
   params: Promise<{ slug: string }>;
@@ -161,6 +162,8 @@ export default async function BlogPostPage({ params }: PageProps) {
           </Link>
         </div>
       </aside>
+
+      <BlogShareButtons title={post.title} path={`/blog/${post.slug}`} />
 
       {relatedFallback.length > 0 && (
         <section className="mt-12" aria-label="Related guides">
