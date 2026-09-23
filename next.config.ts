@@ -74,8 +74,9 @@ const nextConfig: NextConfig = {
   async redirects() {
     return [
       { source: '/google-sitemap.xml', destination: '/sitemap.xml', permanent: true },
-      // No app/tools/page.tsx exists — the hub lives on the homepage (#tools).
-      { source: '/tools', destination: '/#tools', permanent: true },
+      // No app/tools/page.tsx exists — the hub lives on the homepage.
+      // Redirect to "/" (not "/#tools") — Googlebot cannot follow fragment redirects.
+      { source: '/tools', destination: '/', permanent: true },
     ];
   },
   async rewrites() {
