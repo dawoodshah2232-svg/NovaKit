@@ -74,6 +74,8 @@ const nextConfig: NextConfig = {
   async redirects() {
     return [
       { source: '/google-sitemap.xml', destination: '/sitemap.xml', permanent: true },
+      // No app/tools/page.tsx exists — the hub lives on the homepage (#tools).
+      { source: '/tools', destination: '/#tools', permanent: true },
     ];
   },
   async rewrites() {
