@@ -35,6 +35,9 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
     keywords: post.keywords,
     authors: [{ name: post.author }],
     alternates: { canonical: url },
+    // Google Discover requires large image previews — without this, posts
+    // are ineligible for Discover's large-card layout.
+    robots: { index: true, follow: true, 'max-image-preview': 'large' },
     openGraph: {
       title: `${post.title} | PDFEdit`,
       description: post.description,
