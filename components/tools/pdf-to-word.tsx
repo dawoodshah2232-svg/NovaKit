@@ -1,5 +1,6 @@
 'use client';
 import { brandedFileName } from '@/lib/branded-filename';
+import { MAX_PDF_FILE_BYTES, uploadRejectionMessage } from '@/lib/file-limits';
 
 import { useState } from 'react';
 import { ToolFilePicker } from '@/components/tool-file-picker';
@@ -153,10 +154,15 @@ export function PdfToWord() {
       <ToolFilePicker
         accept={{ 'application/pdf': ['.pdf'] }}
         multiple={false}
+        maxSize={MAX_PDF_FILE_BYTES}
         files={file ? [file] : []}
         onAdd={(picked) => {
           setFile(picked[0] || null);
           setError('');
+          setStatus('');
+        }}
+        onRejected={(rejections) => {
+          setError(uploadRejectionMessage(rejections, MAX_PDF_FILE_BYTES));
           setStatus('');
         }}
         onRemove={() => {

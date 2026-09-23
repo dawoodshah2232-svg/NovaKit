@@ -1,4 +1,5 @@
 'use client';
+import { MAX_IMAGE_FILE_BYTES, validateUploadSize } from '@/lib/file-limits';
 import { brandedFileName } from '@/lib/branded-filename';
 
 import React, { useState, useEffect, useCallback, useRef } from 'react';
@@ -109,8 +110,16 @@ export function ImageCompressor() {
     (acceptedFiles: File[]) => {
       if (acceptedFiles.length === 0) return;
       const file = acceptedFiles[0];
-      setOriginalFileRef(file);
       setErrorMessage(null);
+
+      // Guard: oversized images can exhaust browser tab memory — reject before loading.
+      const sizeError = validateUploadSize(file, MAX_IMAGE_FILE_BYTES);
+      if (sizeError) {
+        setErrorMessage(sizeError);
+        return;
+      }
+
+      setOriginalFileRef(file);
 
       if (prevOriginalUrlRef.current) {
         URL.revokeObjectURL(prevOriginalUrlRef.current);

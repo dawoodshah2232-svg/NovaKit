@@ -1,4 +1,5 @@
 'use client';
+import { MAX_IMAGE_FILE_BYTES, formatLimitBytes } from '@/lib/file-limits';
 import { brandedFileName } from '@/lib/branded-filename';
 
 import React, { useState, useCallback, useRef } from 'react';
@@ -116,9 +117,19 @@ export function ImageToPdf() {
       return;
     }
 
+    // Guard: oversized images can exhaust browser tab memory — skip before loading.
+    const oversized = validFiles.filter((f) => f.size > MAX_IMAGE_FILE_BYTES);
+    const usableFiles = validFiles.filter((f) => f.size <= MAX_IMAGE_FILE_BYTES);
+    if (oversized.length > 0) {
+      setErrorMessage(
+        `${oversized.length} image${oversized.length === 1 ? ' was' : 's were'} skipped — over the ${formatLimitBytes(MAX_IMAGE_FILE_BYTES)} per-image limit.`
+      );
+    }
+    if (usableFiles.length === 0) return;
+
     const loadedList: UploadedImage[] = [];
 
-    for (const file of validFiles) {
+    for (const file of usableFiles) {
       const previewUrl = URL.createObjectURL(file);
       const img = new Image();
 

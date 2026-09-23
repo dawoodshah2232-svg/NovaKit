@@ -1,5 +1,6 @@
 'use client';
 
+import { MAX_IMAGE_FILE_BYTES, validateUploadSize } from '@/lib/file-limits';
 import React, { useState, useCallback, useRef } from 'react';
 import { useDropzone } from 'react-dropzone';
 import { trackToolExecution } from '@/lib/analytics';
@@ -222,6 +223,13 @@ export function ColorExtractor() {
 
       if (!file.type.startsWith('image/')) {
         setErrorMessage('Please select a valid image file (PNG, JPG, WebP, SVG).');
+        return;
+      }
+
+      // Guard: oversized images can exhaust browser tab memory — reject before loading.
+      const sizeError = validateUploadSize(file, MAX_IMAGE_FILE_BYTES);
+      if (sizeError) {
+        setErrorMessage(sizeError);
         return;
       }
 

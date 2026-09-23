@@ -1,4 +1,5 @@
 'use client';
+import { validateUploadSize } from '@/lib/file-limits';
 import { brandedFileName } from '@/lib/branded-filename';
 
 import React, { useState, useCallback, useEffect, useRef } from 'react';
@@ -107,6 +108,13 @@ export function PdfToImage({ jpgOnly = false, analyticsSlug = 'pdf-to-image' }: 
 
       if (file.type !== 'application/pdf' && !file.name.toLowerCase().endsWith('.pdf')) {
         setErrorMessage('Please upload a valid PDF document.');
+        return;
+      }
+
+      // Guard: oversized files can exhaust browser tab memory — reject before parsing.
+      const sizeError = validateUploadSize(file);
+      if (sizeError) {
+        setErrorMessage(sizeError);
         return;
       }
 
@@ -658,7 +666,7 @@ export function PdfToImage({ jpgOnly = false, analyticsSlug = 'pdf-to-image' }: 
                       <a
                         href={page.previewUrl}
                         target="_blank"
-                        rel="noreferrer"
+                        rel="noreferrer noopener"
                         className="absolute bottom-2.5 right-2.5 p-2 rounded-xl bg-white/90 dark:bg-slate-900/90 text-slate-700 dark:text-slate-200 opacity-0 group-hover:opacity-100 transition-opacity shadow-sm hover:scale-105 active:scale-95"
                         title="View Full Size"
                       >

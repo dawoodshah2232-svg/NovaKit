@@ -1,4 +1,5 @@
 'use client';
+import { validateUploadSize } from '@/lib/file-limits';
 import { brandedFileName } from '@/lib/branded-filename';
 
 import React, { useState, useCallback, useMemo } from 'react';
@@ -129,6 +130,13 @@ export function SplitPdf() {
 
     if (file.type !== 'application/pdf' && !file.name.toLowerCase().endsWith('.pdf')) {
       setErrorMessage('Please upload a valid PDF document.');
+      return;
+    }
+
+    // Guard: oversized files can exhaust browser tab memory — reject before parsing.
+    const sizeError = validateUploadSize(file);
+    if (sizeError) {
+      setErrorMessage(sizeError);
       return;
     }
 

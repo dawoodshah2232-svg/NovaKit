@@ -1,4 +1,5 @@
 'use client';
+import { validateUploadSize } from '@/lib/file-limits';
 import { brandedFileName } from '@/lib/branded-filename';
 
 import React, { useState, useCallback, useEffect, useRef } from 'react';
@@ -78,6 +79,13 @@ export function RotatePdf() {
 
     if (pdfFile.type !== 'application/pdf' && !pdfFile.name.toLowerCase().endsWith('.pdf')) {
       setErrorMessage('Please upload a valid PDF document.');
+      return;
+    }
+
+    // Guard: oversized files can exhaust browser tab memory — reject before parsing.
+    const sizeError = validateUploadSize(pdfFile);
+    if (sizeError) {
+      setErrorMessage(sizeError);
       return;
     }
 

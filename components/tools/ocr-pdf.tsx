@@ -1,5 +1,6 @@
 'use client';
 import { brandedFileName } from '@/lib/branded-filename';
+import { MAX_PDF_FILE_BYTES, uploadRejectionMessage } from '@/lib/file-limits';
 
 import { useEffect, useRef, useState } from 'react';
 import { ToolFilePicker } from '@/components/tool-file-picker';
@@ -149,11 +150,18 @@ export function OcrPdf() {
           <ToolFilePicker
             accept={{ 'application/pdf': ['.pdf'] }}
             multiple={false}
+            maxSize={MAX_PDF_FILE_BYTES}
             files={file ? [file] : []}
             onAdd={(picked) => {
               setFile(picked[0] || null);
               setText('');
               setError('');
+              setStatus('');
+              setProgress(0);
+            }}
+            onRejected={(rejections) => {
+              setText('');
+              setError(uploadRejectionMessage(rejections, MAX_PDF_FILE_BYTES));
               setStatus('');
               setProgress(0);
             }}
