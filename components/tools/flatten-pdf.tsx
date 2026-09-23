@@ -195,7 +195,7 @@ export function FlattenPdf() {
         saveAs(blob, brandedFileName(`${baseName}-flattened`, 'pdf'));
 
         trackToolExecution('flatten-pdf', true);
-        setSuccessMessage('Successfully flattened form fields and locked document content!');
+        setSuccessMessage('Successfully flattened form fields!');
       } else {
         // High-resolution raster visual bake
         setLoadingProgress('Rendering and baking document pages...');
