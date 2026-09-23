@@ -258,20 +258,71 @@ export function CvEditor({ initialTemplate }: { initialTemplate?: string }) {
                   return (
                     <div key={cat.id}>
                       <div className="mb-1.5 text-[11px] font-semibold uppercase tracking-wider text-[var(--pe-text-3)]">{cat.label}</div>
-                      <div className="space-y-1.5">
-                        {list.map((t) => (
-                          <button
-                            key={t.id}
-                            onClick={() => applyTemplate(t.id)}
-                            className={`w-full rounded-xl border p-2.5 text-left transition ${cv.design.templateId === t.id ? 'border-[var(--pe-accent)] bg-[var(--pe-accent-soft)]' : 'border-[var(--pe-border)] hover:border-[var(--pe-border-strong)]'}`}
-                          >
-                            <div className="flex items-center justify-between">
-                              <div className="text-sm font-semibold">{t.name}</div>
-                              {t.atsSafe ? <span className="rounded-full bg-emerald-500/10 px-2 py-0.5 text-[10px] font-semibold text-emerald-600">ATS</span> : null}
-                            </div>
-                            <div className="mt-0.5 text-xs text-[var(--pe-text-2)]">{t.description}</div>
-                          </button>
-                        ))}
+                      <div className="grid grid-cols-2 gap-2">
+                        {list.map((t) => {
+                          const isActive = cv.design.templateId === t.id;
+                          return (
+                            <button
+                              key={t.id}
+                              onClick={() => applyTemplate(t.id)}
+                              className={`rounded-xl border p-2 text-left transition ${isActive ? 'border-[var(--pe-accent)] bg-[var(--pe-accent-soft)] ring-1 ring-[var(--pe-accent)]' : 'border-[var(--pe-border)] hover:border-[var(--pe-border-strong)]'}`}
+                            >
+                              {/* Mini visual thumbnail */}
+                              <div
+                                className="mb-2 h-20 overflow-hidden rounded-lg border border-[var(--pe-border)] bg-white"
+                                aria-hidden="true"
+                              >
+                                {t.layout === 'sidebar' ? (
+                                  <div className="flex h-full">
+                                    <div className="flex flex-col items-center pt-1.5" style={{ width: '34%', background: t.sidebarBg }}>
+                                      <div className="h-4 w-4 rounded-full bg-white/30" />
+                                      <div className="mt-1 h-1 w-8 rounded" style={{ background: t.sidebarText, opacity: 0.7 }} />
+                                      <div className="mt-1 h-1 w-6 rounded" style={{ background: t.sidebarText, opacity: 0.4 }} />
+                                    </div>
+                                    <div className="flex-1 p-1.5">
+                                      <div className="h-1.5 w-3/4 rounded" style={{ background: t.headingColor }} />
+                                      <div className="mt-1 h-1 w-1/2 rounded" style={{ background: t.mutedColor, opacity: 0.6 }} />
+                                      <div className="mt-2 h-1 w-full rounded" style={{ background: t.accent, opacity: 0.8 }} />
+                                      <div className="mt-1 h-1 w-full rounded bg-gray-200" />
+                                      <div className="mt-1 h-1 w-5/6 rounded bg-gray-200" />
+                                    </div>
+                                  </div>
+                                ) : t.header === 'band' ? (
+                                  <div className="h-full">
+                                    <div className="flex h-8 items-center justify-center" style={{ background: t.headerBg }}>
+                                      <div className="h-1.5 w-1/2 rounded bg-white/90" />
+                                    </div>
+                                    <div className="p-1.5">
+                                      <div className="h-1 w-1/3 rounded" style={{ background: t.accent }} />
+                                      <div className="mt-1 h-1 w-full rounded bg-gray-200" />
+                                      <div className="mt-1 h-1 w-5/6 rounded bg-gray-200" />
+                                    </div>
+                                  </div>
+                                ) : t.header === 'monogram' ? (
+                                  <div className="h-full p-1.5">
+                                    <div className="text-[14px] font-extrabold leading-none" style={{ color: t.accent }}>JD</div>
+                                    <div className="mt-1 h-1.5 w-2/3 rounded" style={{ background: t.headingColor }} />
+                                    <div className="mt-1 h-1 w-1/2 rounded" style={{ background: t.mutedColor, opacity: 0.6 }} />
+                                    <div className="mt-1.5 h-0.5 w-full rounded" style={{ background: t.accent }} />
+                                    <div className="mt-1 h-1 w-full rounded bg-gray-200" />
+                                  </div>
+                                ) : (
+                                  <div className="h-full p-1.5" style={{ textAlign: t.header === 'centered' ? 'center' : 'left' }}>
+                                    <div className={`h-1.5 rounded ${t.header === 'centered' ? 'mx-auto' : ''}`} style={{ width: '60%', background: t.headingColor }} />
+                                    <div className={`mt-1 h-1 rounded ${t.header === 'centered' ? 'mx-auto' : ''}`} style={{ width: '40%', background: t.mutedColor, opacity: 0.6 }} />
+                                    <div className="mt-2 h-1 w-1/3 rounded" style={{ background: t.accent }} />
+                                    <div className="mt-1 h-1 w-full rounded bg-gray-200" />
+                                    <div className="mt-1 h-1 w-5/6 rounded bg-gray-200" />
+                                  </div>
+                                )}
+                              </div>
+                              <div className="flex items-center justify-between gap-1">
+                                <div className="truncate text-xs font-semibold">{t.name}</div>
+                                {t.atsSafe ? <span className="shrink-0 rounded-full bg-emerald-500/10 px-1.5 py-0.5 text-[9px] font-semibold text-emerald-600">ATS</span> : null}
+                              </div>
+                            </button>
+                          );
+                        })}
                       </div>
                     </div>
                   );

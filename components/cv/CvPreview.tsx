@@ -223,8 +223,10 @@ export function CvPreview({ cv, scale = 1 }: Props) {
 
   const headerCentered = tpl.header === 'centered';
   const bandHeader = tpl.header === 'band';
+  const monogramHeader = tpl.header === 'monogram';
   const nameColor = bandHeader && tpl.headerBg !== '#FFFFFF' ? '#FFFFFF' : tpl.headingColor;
   const subColor = bandHeader && tpl.headerBg !== '#FFFFFF' ? '#FFFFFF' : tpl.mutedColor;
+  const initials = (p.fullName || 'YN').split(/\s+/).map((w) => w[0]).join('').slice(0, 2).toUpperCase();
 
   const renderSections = (list: CvSection[]) =>
     list.map((s) => {
@@ -273,8 +275,8 @@ export function CvPreview({ cv, scale = 1 }: Props) {
     // so we pass a template-colored override below for side sections.
   } else {
     body = (
-      <div style={{ padding: bandHeader ? `0 ${marginPx}px ${marginPx}px ${marginPx}px` : `${marginPx}px` }}>
-        {bandHeader ? null : (
+      <div style={{ padding: bandHeader ? `0 ${marginPx}px ${marginPx}px ${marginPx}px` : monogramHeader ? `0 ${marginPx}px ${marginPx}px ${marginPx}px` : `${marginPx}px` }}>
+        {bandHeader || monogramHeader ? null : (
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: 14 * scale, textAlign: headerCentered ? 'center' : 'left' } as React.CSSProperties}>
             <div style={{ flex: 1, textAlign: headerCentered ? 'center' : 'left' }}>
               <div style={{ fontFamily: cvCssFont(tpl.fontHeading), fontWeight: 700, fontSize: `${namePx}px`, color: tpl.headingColor, lineHeight: 1.15 }}>
@@ -320,6 +322,32 @@ export function CvPreview({ cv, scale = 1 }: Props) {
               <Photo cv={cv} size={76 * scale} />
             </div>
           ) : null}
+        </div>
+      ) : null}
+      {monogramHeader ? (
+        <div style={{ padding: `${18 * scale}px ${marginPx}px 0 ${marginPx}px`, marginBottom: 4 * scale }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 14 * scale }}>
+            <div style={{
+              fontFamily: cvCssFont(tpl.fontHeading),
+              fontWeight: 800,
+              fontSize: `${namePx * 1.6}px`,
+              color: accent,
+              lineHeight: 1,
+              letterSpacing: '0.02em',
+            }}>
+              {initials}
+            </div>
+            <div>
+              <div style={{ fontFamily: cvCssFont(tpl.fontHeading), fontWeight: 700, fontSize: `${namePx * 0.85}px`, color: tpl.headingColor, lineHeight: 1.2 }}>
+                {p.fullName || 'Your Name'}
+              </div>
+              {p.title ? <div style={{ fontSize: `${titlePx * 0.9}px`, color: tpl.mutedColor, marginTop: 2 }}>{p.title}</div> : null}
+            </div>
+          </div>
+          <div style={{ marginTop: 8 * scale }}>
+            <ContactLine cv={cv} color={tpl.mutedColor} small={smallPx} />
+          </div>
+          <div style={{ marginTop: 10 * scale, borderBottom: `2px solid ${accent}` }} />
         </div>
       ) : null}
       {body}

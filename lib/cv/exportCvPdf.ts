@@ -296,6 +296,22 @@ async function drawHeaderSingle(ctx: Ctx) {
     return;
   }
 
+  if (tpl.header === 'monogram') {
+    const initials = (p.fullName || 'YN').split(/\s+/).map((w) => w[0]).join('').slice(0, 2).toUpperCase();
+    // Oversized initials as brand mark
+    drawLine(ctx, initials, ctx.fonts.headingBold, tpl.nameSize * 1.6 * fs, ctx.accent, { align: 'left' });
+    ctx.y -= 4;
+    drawLine(ctx, p.fullName || 'Your Name', ctx.fonts.headingBold, tpl.nameSize * 0.85 * fs, ctx.heading, { align: 'left' });
+    if (p.title) drawLine(ctx, p.title, ctx.fonts.body, tpl.titleSize * 0.9 * fs, ctx.muted, { align: 'left' });
+    const contact = contactLine(cv);
+    if (contact) drawPara(ctx, contact, ctx.fonts.body, tpl.smallSize * fs, ctx.muted, {});
+    ctx.y -= 6;
+    // Accent rule below header
+    ctx.page.drawRectangle({ x: ctx.margin, y: ctx.y, width: ctx.x1 - ctx.x0, height: 2, color: rgb(ctx.accent.r, ctx.accent.g, ctx.accent.b) });
+    ctx.y -= 10;
+    return;
+  }
+
   // centered / left headers (photo floats right when enabled)
   const align = tpl.header === 'centered' ? 'center' : 'left';
   const nameSize = tpl.nameSize * fs;
