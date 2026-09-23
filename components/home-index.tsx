@@ -1,11 +1,16 @@
+import type { ElementType } from 'react';
 import Link from 'next/link';
+import { ArrowUpRight, CheckCircle2, FileText } from 'lucide-react';
 import { PREVIEW_TOOLS, categoryById } from '@/components/ui-preview/data';
 import { TOOLS_CONFIG } from '@/lib/tools-config';
+import { TOOL_ICON_MAP } from '@/components/tools-hub';
 
 /**
  * Homepage-only SEO section: complete tool index + FAQ.
  * Server-rendered crawlable copy that preserves the old homepage's
  * internal linking and keyword coverage inside the new red design.
+ * Every entry renders as a full product card (icon tile, name, blurb,
+ * open affordance) — identical treatment to the categorized tools hub.
  */
 
 type IndexEntry = {
@@ -13,6 +18,9 @@ type IndexEntry = {
   href: string;
   blurb: string;
   group: string;
+  icon: ElementType;
+  badge?: string;
+  note: string;
 };
 
 const UTILITY_SLUGS = new Set([
@@ -38,6 +46,8 @@ function buildIndex(): IndexEntry[] {
     href: t.href,
     blurb: t.tagline,
     group: categoryById(t.category).label,
+    icon: t.icon,
+    note: 'Free • No sign-up',
   }));
 
   for (const tool of TOOLS_CONFIG) {
@@ -47,6 +57,9 @@ function buildIndex(): IndexEntry[] {
         href: `/tools/${tool.slug}`,
         blurb: tool.description,
         group: GROUP_LABELS[tool.category] ?? tool.category,
+        icon: TOOL_ICON_MAP[tool.iconName] || FileText,
+        badge: tool.badge,
+        note: tool.processingNote || 'Free • No sign-up',
       });
     }
   }
@@ -101,32 +114,51 @@ export function HomeIndex() {
             </p>
           </div>
 
-          <ul className="mt-8 grid grid-cols-1 gap-x-8 gap-y-1 sm:grid-cols-2 lg:grid-cols-3">
-            {entries.map((entry) => (
-              <li key={entry.href} className="border-b border-[var(--pe-divider)]">
+          <div className="mt-8 grid grid-cols-2 gap-3 sm:grid-cols-3 sm:gap-5 xl:grid-cols-4">
+            {entries.map((entry) => {
+              const IconComponent = entry.icon;
+              return (
                 <Link
+                  key={entry.href}
                   href={entry.href}
-                  className="group flex items-baseline justify-between gap-3 py-3"
-                  aria-label={`${entry.name} — ${entry.blurb}`}
+                  aria-label={`Open ${entry.name} — ${entry.blurb}`}
+                  className="group relative flex flex-col rounded-2xl border border-[var(--pe-border)] bg-[var(--pe-surface)] p-4 shadow-[var(--pe-shadow-sm)] transition-all duration-200 hover:-translate-y-1 hover:border-red-500/50 hover:shadow-[0_20px_40px_-15px_rgba(220,38,38,0.18)] focus:outline-none focus-visible:ring-2 focus-visible:ring-red-500 sm:rounded-3xl sm:p-6"
                 >
-                  <span className="min-w-0">
-                    <span className="block truncate text-[15px] font-semibold text-[var(--pe-text)] transition-colors group-hover:text-[var(--pe-accent)]">
-                      {entry.name}
+                  <div className="mb-3 flex items-start justify-between gap-2 sm:mb-4">
+                    <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-red-50 text-red-600 shadow-sm transition-all duration-200 group-hover:scale-105 group-hover:bg-red-100 dark:bg-red-950/50 dark:text-red-400 dark:group-hover:bg-red-900/60 sm:h-13 sm:w-13 sm:rounded-2xl">
+                      <IconComponent className="h-5 w-5 sm:h-6 sm:w-6" />
+                    </div>
+                    {entry.badge ? (
+                      <span className="shrink-0 rounded-full border border-red-200/80 bg-red-50 px-2 py-0.5 text-[9px] font-extrabold text-red-600 dark:border-red-900/60 dark:bg-red-950/60 dark:text-red-400 sm:text-[10px]">
+                        {entry.badge}
+                      </span>
+                    ) : (
+                      <span className="shrink-0 rounded-full border border-[var(--pe-border)] px-2 py-0.5 text-[9px] font-bold text-[var(--pe-text-3)] sm:text-[10px]">
+                        {entry.group}
+                      </span>
+                    )}
+                  </div>
+
+                  <h3 className="mb-1 text-sm font-bold leading-snug tracking-tight text-[var(--pe-text)] transition-colors group-hover:text-[var(--pe-accent)] sm:text-lg">
+                    {entry.name}
+                  </h3>
+                  <p className="mb-3 line-clamp-2 text-[11px] leading-relaxed text-[var(--pe-text-2)] sm:mb-4 sm:text-sm">
+                    {entry.blurb}
+                  </p>
+
+                  <span className="mt-auto flex items-center justify-between gap-2 border-t border-[var(--pe-divider)] pt-2 sm:pt-3">
+                    <span className="inline-flex min-w-0 items-center gap-1 truncate text-[10px] font-bold text-emerald-600 dark:text-emerald-400 sm:text-[11px]">
+                      <CheckCircle2 className="h-3 w-3 shrink-0 sm:h-3.5 sm:w-3.5" />
+                      <span className="truncate">{entry.note}</span>
                     </span>
-                    <span className="mt-0.5 block truncate text-[13px] text-[var(--pe-text-3)]">
-                      {entry.blurb}
+                    <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-[var(--pe-surface-2)] text-[var(--pe-text-3)] transition-all duration-200 group-hover:bg-red-600 group-hover:text-white sm:h-8 sm:w-8">
+                      <ArrowUpRight className="h-3.5 w-3.5 transition-transform duration-200 group-hover:-translate-y-0.5 group-hover:translate-x-0.5 sm:h-4 sm:w-4" />
                     </span>
-                  </span>
-                  <span
-                    aria-hidden="true"
-                    className="shrink-0 text-lg text-[var(--pe-text-3)] transition-all group-hover:translate-x-0.5 group-hover:text-[var(--pe-accent)]"
-                  >
-                    →
                   </span>
                 </Link>
-              </li>
-            ))}
-          </ul>
+              );
+            })}
+          </div>
         </div>
       </section>
 

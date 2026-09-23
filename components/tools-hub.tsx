@@ -41,8 +41,8 @@ import {
 } from 'lucide-react';
 import { TOOLS_CONFIG, ToolConfig } from '@/lib/tools-config';
 
-// Map iconName to Lucide icon components
-const ICON_MAP: Record<string, React.ElementType> = {
+// Map iconName to Lucide icon components (shared with the homepage A–Z index)
+export const TOOL_ICON_MAP: Record<string, React.ElementType> = {
   Image: ImageIcon,
   FileText: FileText,
   Receipt: Receipt,
@@ -359,7 +359,7 @@ export function ToolsHub() {
               {/* Section Card Grid — 2 cols mobile, 3-4 desktop */}
               <div className="grid grid-cols-2 sm:grid-cols-3 xl:grid-cols-4 gap-3 sm:gap-5">
                 {section.tools.map((tool) => {
-                  const IconComponent = ICON_MAP[tool.iconName] || FileText;
+                  const IconComponent = TOOL_ICON_MAP[tool.iconName] || FileText;
                   return (
                     <Link
                       key={tool.id}
