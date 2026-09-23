@@ -60,6 +60,9 @@
 
 Step-by-step tutorials from the PDFEdit blog:
 
+- [PDF Won't Open? 9 Fixes That Actually Work](https://www.pdfedit.website/blog/pdf-wont-open-fixes): PDF won't open? Diagnose the real cause — corrupted download, wrong app, password lock, damaged file — with 9 fixes in order of likelihood.
+- [PDF Prints Wrong? Fix Blurry, Cut-Off, and Tiny Prints](https://www.pdfedit.website/blog/pdf-prints-wrong-fixes): PDF printed too small, cut off, or blurry? The exact print settings to change for each symptom, plus a pre-print checklist.
+- [Why Your PDF Looks Different on Your Phone (and How to Fix It)](https://www.pdfedit.website/blog/pdf-looks-different-on-phone): Why PDFs render differently on phones — font substitution, reflow mode, rendering engines — and how to make your PDF phone-proof.
 - [12 CV Formatting Mistakes That Cost Interviews](https://www.pdfedit.website/blog/cv-pdf-formatting-mistakes): CV formatting mistakes that cost interviews: ATS killers, font chaos, date inconsistencies, photo pitfalls, and file errors — plus how to fix each one fast.
 - [Convert PDF to JPG at High Resolution: DPI Settings That Matter](https://www.pdfedit.website/blog/how-to-convert-pdf-to-jpg-high-resolution): Get crisp JPGs from your PDF: PDFEdit renders pages at 72, 144, or 216 DPI with adjustable JPEG quality. Which setting to pick for print, web, and sharing.
 - [Do Merged PDFs Lose Quality? The Honest Answer](https://www.pdfedit.website/blog/do-merged-pdfs-lose-quality): No — merging PDFs is lossless. Pages are copied exactly, never re-rendered. Here's what actually can change (and what can't), explained without myths.
