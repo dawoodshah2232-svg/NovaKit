@@ -28,6 +28,14 @@ export const canonicalPathBySlug: Record<string, string> = {
   'studio': '/studio',
   'cv-builder': '/cv-builder',
   'batch-pdf': '/batch-pdf',
+  // Utility tools live only under /tools/<slug> (no top-level route).
+  'color-extractor': '/tools/color-extractor',
+  'image-compressor': '/tools/image-compressor',
+  'invoice-generator': '/tools/invoice-generator',
+  'password-generator': '/tools/password-generator',
+  'qr-generator': '/tools/qr-generator',
+  'tax-calculator': '/tools/tax-calculator',
+  'text-analyzer': '/tools/text-analyzer',
 };
 
 /** tool slug ('merge-pdf', 'color-extractor', 'studio') -> canonical page path. */
