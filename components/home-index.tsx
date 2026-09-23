@@ -151,7 +151,7 @@ export function HomeIndex() {
                       <CheckCircle2 className="h-3 w-3 shrink-0 sm:h-3.5 sm:w-3.5" />
                       <span className="truncate">{entry.note}</span>
                     </span>
-                    <span className="inline-flex shrink-0 items-center gap-1 rounded-full bg-red-600 px-3 py-1.5 text-[11px] font-bold text-white shadow-sm transition-all duration-200 group-hover:bg-red-700 group-hover:shadow-md sm:px-4 sm:py-2 sm:text-xs">
+                    <span className="inline-flex shrink-0 items-center gap-1 rounded-full bg-[var(--pe-accent)] px-3 py-1.5 text-[11px] font-bold text-[var(--pe-accent-ink)] shadow-sm transition-all duration-200 group-hover:bg-[var(--pe-accent-hover)] group-hover:shadow-md sm:px-4 sm:py-2 sm:text-xs">
                       Start
                       <ArrowUpRight className="h-3.5 w-3.5 transition-transform duration-200 group-hover:-translate-y-0.5 group-hover:translate-x-0.5 sm:h-4 sm:w-4" />
                     </span>

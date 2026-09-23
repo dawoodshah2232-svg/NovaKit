@@ -391,7 +391,8 @@ export function ToolsHub() {
                           <span className="truncate hidden sm:inline">{tool.processingNote}</span>
                           <span className="truncate sm:hidden">Free</span>
                         </span>
-                        <span className="w-7 h-7 sm:w-8 sm:h-8 rounded-full bg-slate-100 dark:bg-slate-800 text-slate-400 dark:text-slate-500 flex items-center justify-center group-hover:bg-red-600 group-hover:text-white transition-all duration-200 shrink-0">
+                        <span className="inline-flex shrink-0 items-center gap-1 rounded-full bg-[var(--pe-accent)] px-3 py-1.5 text-[11px] font-bold text-[var(--pe-accent-ink)] shadow-sm transition-all duration-200 group-hover:bg-[var(--pe-accent-hover)] group-hover:shadow-md sm:px-4 sm:py-2 sm:text-xs">
+                          Start
                           <ArrowUpRight className="w-3.5 h-3.5 sm:w-4 sm:h-4 transition-transform duration-200 group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
                         </span>
                       </span>
