@@ -9,7 +9,7 @@ imageAlt: "A hand signing a document on a tablet with a stylus pen"
 readingMinutes: 8
 faqs:
   - q: "Is an electronic signature on a PDF legally valid?"
-    a: "In most countries, yes. Laws like the ESIGN Act in the US and eIDAS in the EU give electronic signatures the same legal standing as handwritten ones for most documents."
+    a: "In most countries, yes. Laws like the ESIGN Act in the US and eIDAS in the EU give electronic signatures the same legal standing as handwritten ones for most documents. This is general information, not legal advice — check local rules for regulated filings."
   - q: "What's the difference between an electronic and a digital signature?"
     a: "An electronic signature is any mark showing intent to sign — a drawn squiggle, a typed name. A digital signature adds cryptographic proof of identity and tamper detection. Most everyday documents only need the former."
   - q: "Can I sign a PDF on my phone?"

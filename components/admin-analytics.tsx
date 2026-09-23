@@ -1,10 +1,12 @@
 'use client';
-import { useCallback, useEffect, useRef, useState, type ReactNode, type FormEvent } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState, type ReactNode, type FormEvent } from 'react';
 import { useRouter } from 'next/navigation';
 import { Area, AreaChart, CartesianGrid, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts';
 import { Activity, RefreshCw, ShieldCheck, LogOut, MousePointerClick, X } from 'lucide-react';
 import type { AnalyticsDashboardData, Breakdown } from '@/lib/analytics-types';
 import { toolLabel, toolSlugToPath } from '@/lib/tool-labels';
+import { toolSlugToCanonicalPath } from '@/lib/tool-paths';
+import { TOOLS_CONFIG } from '@/lib/tools-config';
 import { countryLabel } from '@/lib/country-names';
 
 const panel = 'rounded-2xl border border-slate-800 bg-slate-900/80 p-5';
@@ -128,7 +130,7 @@ export function AdminDashboard() {
   const setDashboardRange = (value: RangeValue) => { setData(null); setError(''); setHistoryPage(1); setRange(value); };
   const drillRange = (value: RangeValue) => { setDashboardRange(value); scrollToSection('history'); };
   const clearTableFilters = () => { setCountry(''); setDevice(''); setSource(''); setPageFilter(''); setHistoryPage(1); };
-  const drillTool = (slug: string) => { setPageFilter(toolSlugToPath(slug)); setHistoryPage(1); scrollToSection('history'); };
+  const drillTool = (path: string) => { setPageFilter(path); setHistoryPage(1); scrollToSection('history'); };
   const hasTableFilters = country !== '' || device !== '' || source !== '' || pageFilter !== '';
 
   const cards: { label: string; value: string; hint: string; action: string }[] = data ? [
@@ -151,7 +153,47 @@ export function AdminDashboard() {
     else scrollToSection(action);
   }
 
-  const maxRuns = data?.tools.reduce((m, t) => Math.max(m, t.runs), 0) ?? 0;
+  // Every product, even with zero recorded runs in the selected window: merge the
+  // configured catalog (plus Studio / CV Builder / Batch, which live outside
+  // TOOLS_CONFIG) with the recorded tool_execution rows. Zeros are real zeros,
+  // not estimates. Recorded slugs missing from the catalog are kept, honestly labeled.
+  const productRanking = useMemo(() => {
+    const recorded = new Map((data?.tools ?? []).map(t => [t.name, t]));
+    const totalRuns = (data?.tools ?? []).reduce((sum, t) => sum + t.runs, 0);
+    const catalog = [
+      ...TOOLS_CONFIG.map(t => ({ slug: t.slug })),
+      { slug: 'studio' }, { slug: 'cv-builder' }, { slug: 'batch-pdf' },
+    ];
+    const seen = new Set<string>();
+    const rows = catalog.map(({ slug }) => {
+      seen.add(slug);
+      const r = recorded.get(slug);
+      const runs = r?.runs ?? 0;
+      return {
+        slug,
+        path: toolSlugToCanonicalPath(slug),
+        runs,
+        succeeded: r?.succeeded ?? 0,
+        failed: r?.failed ?? 0,
+        unknown: r?.unknown ?? 0,
+        percentage: totalRuns ? Math.round(runs / totalRuns * 1000) / 10 : 0,
+      };
+    });
+    for (const r of recorded.values()) {
+      if (!seen.has(r.name)) rows.push({
+        slug: r.name,
+        path: toolSlugToCanonicalPath(r.name),
+        runs: r.runs,
+        succeeded: r.succeeded,
+        failed: r.failed,
+        unknown: r.unknown,
+        percentage: totalRuns ? Math.round(r.runs / totalRuns * 1000) / 10 : 0,
+      });
+    }
+    return rows.sort((a, b) => b.runs - a.runs);
+  }, [data]);
+
+  const maxRuns = productRanking.reduce((m, t) => Math.max(m, t.runs), 0);
 
   return <div className="min-h-screen rounded-3xl bg-slate-950 p-4 text-slate-100 sm:p-7">
     <header className="mb-8 flex flex-wrap items-start justify-between gap-5"><div><div className="mb-2 flex items-center gap-2 text-xs uppercase tracking-widest text-red-400"><Activity size={16} /> PDFEdit analytics</div><h1 className="text-3xl font-semibold tracking-tight">Traffic overview</h1><p className="mt-2 text-sm text-slate-400">Anonymous sessions · Asia/Dubai · live data, no samples</p></div>
@@ -173,14 +215,14 @@ export function AdminDashboard() {
         {data.live.length ? <div className="overflow-x-auto"><table className="w-full whitespace-nowrap text-left text-xs"><thead className="text-slate-500"><tr>{['Session','Currently on','Country','Device / browser','Source','Active time','Last activity'].map(label => <th key={label} className="px-3 pb-3 font-medium">{label}</th>)}</tr></thead><tbody>{data.live.map(row => <tr key={row.session_id} className="border-t border-slate-800"><td className="px-3 py-4"><span className="mr-2 inline-block h-2 w-2 animate-pulse rounded-full bg-emerald-400" />{row.session_id.slice(0,8)}</td><td className="px-3 font-medium text-white" title={row.last_path}>{toolLabel(row.last_path)}</td><td className="px-3">{countryLabel(row.country)}</td><td className="px-3">{row.device} / {row.browser}</td><td className="px-3">{row.source || row.referrer || 'Direct'}</td><td className="px-3">{duration(row.duration)}</td><td className="px-3">{time(row.last_seen)}</td></tr>)}</tbody></table></div> : empty}
       </Section>
 
-      <Section id="products" title="Product Usage" subtitle="Every product ranked by how many times it was actually used in the selected window. Click a product to list the visitors who used it." flashed={flashKey === 'products'}>
-        {data.tools.length ? <div className="space-y-2">{data.tools.map((row, i) => {
+      <Section id="products" title="Product Usage" subtitle="Every product ranked by how many times it was actually used in the selected window. Products with no recorded runs show 0 — real zeros, not estimates. Click a product to list the visitors who opened its page." flashed={flashKey === 'products'}>
+        {productRanking.length ? <div className="space-y-2">{productRanking.map((row, i) => {
           const total = row.succeeded + row.failed + row.unknown;
           const successRate = total ? Math.round(row.succeeded / total * 100) : 0;
-          return <button key={row.name} onClick={() => drillTool(row.name)} title={`List visitors who used ${toolLabel(toolSlugToPath(row.name))}`} className="group block w-full rounded-xl border border-transparent p-3 text-left transition hover:border-red-500/50 hover:bg-slate-800/60">
+          return <button key={row.slug} onClick={() => drillTool(row.path)} title={`List visitors who opened the ${toolLabel(row.path)} page`} className="group block w-full rounded-xl border border-transparent p-3 text-left transition hover:border-red-500/50 hover:bg-slate-800/60">
             <div className="flex items-center gap-3">
               <span className="w-7 shrink-0 text-center text-sm font-bold text-slate-500">{i + 1}</span>
-              <div className="min-w-0 flex-1"><div className="flex flex-wrap items-baseline justify-between gap-2"><span className="truncate text-sm font-medium text-white">{toolLabel(toolSlugToPath(row.name))}</span><span className="shrink-0 text-sm text-slate-300">{row.runs.toLocaleString()} runs · {row.percentage}% of all runs</span></div>
+              <div className="min-w-0 flex-1"><div className="flex flex-wrap items-baseline justify-between gap-2"><span className="truncate text-sm font-medium text-white">{toolLabel(row.path)}{row.runs === 0 && <span className="ml-2 text-xs font-normal text-slate-500">no runs in this window</span>}</span><span className="shrink-0 text-sm text-slate-300">{row.runs.toLocaleString()} runs · {row.percentage}% of all runs</span></div>
                 <div className="mt-2 h-2 rounded bg-slate-800"><div className="h-full rounded bg-gradient-to-r from-red-600 to-red-400" style={{ width: `${maxRuns ? row.runs / maxRuns * 100 : 0}%` }} /></div>
                 <p className="mt-1.5 text-xs text-slate-500">Success {row.succeeded.toLocaleString()} · Failed {row.failed.toLocaleString()} · Unreported {row.unknown.toLocaleString()} · <span className={successRate >= 90 ? 'text-emerald-400' : successRate >= 70 ? 'text-amber-400' : 'text-rose-400'}>{successRate}% success</span> <span className="opacity-0 transition group-hover:opacity-100">· click to list visitors →</span></p>
               </div>
