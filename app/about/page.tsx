@@ -1,6 +1,31 @@
 import Link from 'next/link';
 import { ShieldCheck, Zap, FileText, Lock, Globe } from 'lucide-react';
 import { JsonLd, aboutSchema } from '@/components/schema-jsonld';
+import { PageFaq } from '@/components/page-faq';
+import type { BlogFaq } from '@/lib/blog';
+
+const ABOUT_FAQS: BlogFaq[] = [
+  {
+    q: 'Is PDFEdit really free?',
+    a: 'Yes. All core PDF tools on PDFEdit are free to use, with no watermarks on core tools and no subscription.',
+  },
+  {
+    q: 'Are my files uploaded to your servers?',
+    a: 'No. Every tool runs directly in your browser on your own device. Your documents are never uploaded to our servers, stored, or viewed by anyone.',
+  },
+  {
+    q: 'Do I need to create an account?',
+    a: 'No. PDFEdit has no accounts and no sign-up. We deliberately avoid collecting personal data, so there is nothing to leak or misuse.',
+  },
+  {
+    q: 'Who runs PDFEdit?',
+    a: 'PDFEdit is an independent project operated by Dawood Shah from Dubai, United Arab Emirates — a free utility site funded by advertising.',
+  },
+  {
+    q: 'Does PDFEdit work on mobile?',
+    a: 'Yes. The tools run in modern browsers on both desktop and mobile, with light and dark themes built in.',
+  },
+];
 
 const TOOL_GROUPS = [
   { label: 'Merge PDF', href: '/merge-pdf' },
@@ -144,6 +169,12 @@ export default function AboutPage() {
           support, feedback, business inquiries, or abuse reports.
         </p>
       </section>
+
+      <PageFaq
+        faqs={ABOUT_FAQS}
+        pageUrl="https://www.pdfedit.website/about"
+        intro="The short version of everything above, in question-and-answer form."
+      />
     </main>
   );
 }

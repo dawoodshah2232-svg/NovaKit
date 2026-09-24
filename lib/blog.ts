@@ -7,6 +7,11 @@ export interface BlogFaq {
   a: string;
 }
 
+export interface BlogSource {
+  label: string;
+  url: string;
+}
+
 export interface BlogMeta {
   slug: string;
   title: string;
@@ -18,6 +23,7 @@ export interface BlogMeta {
   imageAlt: string;
   readingMinutes: number;
   faqs: BlogFaq[];
+  sources: BlogSource[];
   related: string[];
 }
 
@@ -59,6 +65,21 @@ function parseFrontmatter(raw: string): { data: Record<string, unknown>; body: s
       continue;
     }
     if (currentListKey && /^\s*-\s/.test(line)) {
+      // `sources:` list uses `- label:` / `- url:` pairs (like faqs uses q:/a:)
+      if (currentListKey === 'sources') {
+        const item = line.replace(/^\s*-\s*/, '');
+        const list = data[currentListKey] as BlogSource[];
+        const subL = item.match(/^label:\s*(.*)$/);
+        if (subL) {
+          list.push({ label: parseScalar(subL[1].trim()) as string, url: '' });
+        } else {
+          const last = list[list.length - 1];
+          const subU = item.match(/^url:\s*(.*)$/);
+          if (last && subU) last.url = parseScalar(subU[1].trim()) as string;
+        }
+        i++;
+        continue;
+      }
       const item = line.replace(/^\s*-\s*/, '');
       const list = data[currentListKey] as unknown[];
       const subQ = item.match(/^q:\s*(.*)$/);
@@ -130,6 +151,7 @@ function metaFromFile(slug: string): BlogMeta {
     imageAlt: String(data.imageAlt ?? ''),
     readingMinutes: Number(data.readingMinutes ?? 6),
     faqs: (data.faqs as BlogFaq[]) ?? [],
+    sources: (data.sources as BlogSource[]) ?? [],
     related: (data.related as string[]) ?? [],
   };
 }

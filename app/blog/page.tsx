@@ -1,8 +1,28 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
 import Image from 'next/image';
-import { getAllPostsMeta } from '@/lib/blog';
+import { getAllPostsMeta, type BlogFaq } from '@/lib/blog';
 import { ArrowRight, Clock } from 'lucide-react';
+import { PageFaq } from '@/components/page-faq';
+
+const BLOG_FAQS: BlogFaq[] = [
+  {
+    q: 'Are the PDFEdit guides free to read?',
+    a: 'Yes. Every guide on the PDFEdit blog is free, with no account, no sign-up, and no paywall.',
+  },
+  {
+    q: 'Do I need a PDFEdit account to follow these guides?',
+    a: 'No. PDFEdit has no accounts at all. Open any guide, then open the linked tool and follow along right in your browser.',
+  },
+  {
+    q: 'Who writes the PDFEdit guides?',
+    a: 'The PDFEdit Team — the same people who build the tools. Every workflow in our guides is tested by us before publishing, so the steps describe what actually works.',
+  },
+  {
+    q: 'How often are the guides updated?',
+    a: 'We review guides regularly and update them when our tools change or when PDF software behaves differently. Each guide shows its publication date at the top.',
+  },
+];
 
 export const metadata: Metadata = {
   title: 'PDF Blog — Guides, Tips & Tutorials',
@@ -132,6 +152,14 @@ export default function BlogIndexPage() {
           New guides are on the way — check back soon.
         </p>
       )}
+
+      <div className="mx-auto mt-4 max-w-3xl">
+        <PageFaq
+          faqs={BLOG_FAQS}
+          pageUrl="https://www.pdfedit.website/blog"
+          intro="Quick answers about reading and using the PDFEdit guides."
+        />
+      </div>
     </main>
   );
 }

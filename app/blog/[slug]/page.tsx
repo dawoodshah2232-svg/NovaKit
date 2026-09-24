@@ -10,8 +10,9 @@ import {
   articleJsonLd,
   faqJsonLd,
 } from '@/lib/blog';
-import { ArrowLeft, ArrowRight, Clock, ChevronRight } from 'lucide-react';
+import { ArrowLeft, ArrowRight, Clock, ChevronRight, BookOpenCheck } from 'lucide-react';
 import BlogShareButtons from '@/components/blog-share-buttons';
+import { PageFaq } from '@/components/page-faq';
 
 interface PageProps {
   params: Promise<{ slug: string }>;
@@ -137,6 +138,47 @@ export default async function BlogPostPage({ params }: PageProps) {
         className="pe-prose mt-8"
         dangerouslySetInnerHTML={{ __html: post.html }}
       />
+
+      <aside className="mt-10 rounded-2xl border border-[var(--pe-border)] bg-[var(--pe-surface)] p-5 sm:p-6" aria-label="About the author">
+        <p className="text-sm leading-relaxed text-[var(--pe-text-2)]">
+          <span className="font-bold text-[var(--pe-text)]">Written by the PDFEdit Team.</span>{' '}
+          We build the tools on this site ourselves, and every workflow in this guide was
+          tested by us before publishing — so what you read here is what actually works.
+        </p>
+      </aside>
+
+      <PageFaq
+        faqs={post.faqs}
+        pageUrl={blogPostUrl(post.slug)}
+        withJsonLd={false}
+        intro="Short answers to the questions readers ask us most about this topic."
+      />
+
+      {post.sources.length > 0 && (
+        <section className="mt-12" aria-label="Sources and further reading">
+          <h2 className="flex items-center gap-2 text-2xl font-bold tracking-tight text-slate-900 dark:text-white">
+            <BookOpenCheck className="h-5 w-5 text-red-600 dark:text-red-400" aria-hidden="true" />
+            Sources &amp; further reading
+          </h2>
+          <p className="mt-2 text-sm leading-relaxed text-slate-600 dark:text-slate-400">
+            Official documentation we referenced while writing this guide.
+          </p>
+          <ul className="mt-4 space-y-2">
+            {post.sources.map((s) => (
+              <li key={s.url}>
+                <a
+                  href={s.url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-sm font-semibold text-red-600 underline decoration-red-200 underline-offset-2 transition hover:decoration-red-400 dark:text-red-400 dark:decoration-red-900"
+                >
+                  {s.label}
+                </a>
+              </li>
+            ))}
+          </ul>
+        </section>
+      )}
 
       <aside className="mt-10 rounded-2xl border border-[var(--pe-accent)]/30 bg-[var(--pe-accent-soft)] p-6 sm:p-8">
         <h2 className="text-xl font-bold text-[var(--pe-text)]">

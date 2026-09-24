@@ -11,6 +11,27 @@ import {
   FileText,
 } from 'lucide-react';
 import { JsonLd, contactSchema } from '@/components/schema-jsonld';
+import { PageFaq } from '@/components/page-faq';
+import type { BlogFaq } from '@/lib/blog';
+
+const CONTACT_FAQS: BlogFaq[] = [
+  {
+    q: 'How do I contact PDFEdit support?',
+    a: 'Use the contact form on this page and choose the topic that fits: support, feedback, business, or abuse report. A dedicated support email address is coming soon.',
+  },
+  {
+    q: 'How quickly will I get a reply?',
+    a: 'Every message is read. Abuse reports and issues affecting many users are prioritized first, then support requests and feedback are handled in the order they arrive.',
+  },
+  {
+    q: 'Should I send you my PDF file with the support request?',
+    a: 'Please do not. Describe the problem instead — which tool you used, your browser, and what happened. PDFEdit processes everything in your browser, so most issues can be diagnosed without ever sharing a file.',
+  },
+  {
+    q: 'Where can I find answers without contacting you?',
+    a: 'The FAQ / Help Center covers the common questions: how files are handled, size limits, supported browsers, and troubleshooting failed conversions. Checking there first is the fastest way to get an answer.',
+  },
+];
 
 export const metadata: Metadata = {
   title: { absolute: 'Contact PDFEdit | Support, Feedback & Business Inquiries' },
@@ -188,6 +209,12 @@ export default function ContactPage() {
           <Link href='/faq' className='text-red-600 dark:text-red-400 underline'>FAQ</Link>.
         </p>
       </section>
+
+      <PageFaq
+        faqs={CONTACT_FAQS}
+        pageUrl="https://www.pdfedit.website/contact"
+        intro="Before you write in — the short answers to our most common contact questions."
+      />
     </main>
   );
 }

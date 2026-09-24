@@ -19,6 +19,9 @@ faqs:
   - q: "Why does my PDF print as garbled text instead of the document?"
     a: "This happens with complex PDFs — fonts or graphics the printer driver mishandles. The reliable fix is 'Print as image' (found in advanced print settings), which sends each page as a picture instead of raw instructions."
 related: ["how-to-crop-pdf-margins-for-printing", "how-to-delete-blank-pages-from-pdf", "how-to-convert-pdf-to-jpg-high-resolution"]
+sources:
+  - label: "Adobe Support: Fix PDF printing errors in Acrobat"
+    url: "https://helpx.adobe.com/acrobat/kb/troubleshoot-pdf-printing-acrobat-reader.html"
 ---
 
 You hit print, walked to the printer, and came back with a document that looks nothing like what's on your screen. Tiny. Cut off at the edges. Blurry like a bad photocopy. Congratulations — you've joined the large and miserable club of people who've watched a PDF ruin perfectly good paper.

@@ -19,6 +19,9 @@ faqs:
   - q: "What does 'the file is damaged and could not be repaired' mean?"
     a: "That's Adobe Reader's way of saying the file's internal structure is broken beyond what it can rebuild automatically. It usually means the file is incomplete (bad download) or genuinely corrupted. Re-download from the source first — that's the fix in the majority of cases."
 related: ["how-to-handle-password-protected-pdf-conversion", "how-to-split-a-large-pdf-for-email", "how-to-merge-pdf-files"]
+sources:
+  - label: "Adobe Support: Can't open PDF — troubleshooting guide"
+    url: "https://helpx.adobe.com/acrobat/kb/cant-open-pdf.html"
 ---
 
 Nothing is more frustrating than clicking a PDF and getting... nothing. A spinning wheel. A blank page. A cryptic error message — when the document you need is inside.
