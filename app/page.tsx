@@ -25,6 +25,12 @@ export const metadata: Metadata = {
     'Free online PDF editor and PDF tools. Merge, split, compress, sign, convert and watermark PDF files directly in your browser — no uploads, no accounts.',
   alternates: {
     canonical: 'https://www.pdfedit.website/',
+    languages: {
+      'x-default': 'https://www.pdfedit.website/',
+      en: 'https://www.pdfedit.website/',
+      es: 'https://www.pdfedit.website/es',
+      ar: 'https://www.pdfedit.website/ar',
+    },
   },
   openGraph: {
     title: 'PDFEdit – Free Online PDF Editor & Tools',

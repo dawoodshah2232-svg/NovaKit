@@ -62,6 +62,16 @@ export default function sitemap(): MetadataRoute.Sitemap {
       changeFrequency: 'monthly',
       priority: 0.6,
     },
+    {
+      url: `${BASE_URL}/embed`,
+      changeFrequency: 'monthly',
+      priority: 0.5,
+    },
+    {
+      url: `${BASE_URL}/search`,
+      changeFrequency: 'monthly',
+      priority: 0.5,
+    },
   ];
 
   /*
@@ -143,12 +153,53 @@ export default function sitemap(): MetadataRoute.Sitemap {
     }));
 
   /*
+   * i18n pilot (branch blitz/i18n): Spanish + Arabic versions of the
+   * homepage and the 5 top tool pages. hreflang itself is emitted per page
+   * via metadata `alternates.languages`; the sitemap lists the URLs.
+   */
+  const i18nPilotRoutes = [
+    '',
+    '/merge-pdf',
+    '/compress-pdf',
+    '/pdf-to-word',
+    '/word-to-pdf',
+    '/sign-pdf',
+  ];
+  const i18nPages: MetadataRoute.Sitemap = [];
+  for (const locale of ['es', 'ar'] as const) {
+    for (const route of i18nPilotRoutes) {
+      i18nPages.push({
+        url: `${BASE_URL}/${locale}${route}`,
+        changeFrequency: route === '' ? ('weekly' as const) : ('monthly' as const),
+        priority: route === '' ? 0.9 : 0.75,
+      });
+    }
+  }
+
+  /*
+   * Honest competitor comparison landing pages.
+   */
+  const compareRoutes = [
+    '/compare/pdfedit-vs-smallpdf',
+    '/compare/pdfedit-vs-ilovepdf',
+    '/compare/pdfedit-vs-sejda',
+  ];
+
+  const comparePages: MetadataRoute.Sitemap = compareRoutes.map((route) => ({
+    url: `${BASE_URL}${route}`,
+    changeFrequency: 'monthly',
+    priority: 0.75,
+  }));
+
+  /*
    * Remove accidental duplicate URLs before returning.
    */
   const pages = [
     ...corePages,
     ...dedicatedPages,
+    ...i18nPages,
     ...dynamicTools,
+    ...comparePages,
     {
       url: `${BASE_URL}/blog`,
       changeFrequency: 'weekly' as const,

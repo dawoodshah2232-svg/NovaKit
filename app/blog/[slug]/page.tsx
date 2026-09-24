@@ -9,6 +9,7 @@ import {
   blogPostUrl,
   articleJsonLd,
   faqJsonLd,
+  howToJsonLd,
 } from '@/lib/blog';
 import { ArrowLeft, ArrowRight, Clock, ChevronRight, BookOpenCheck } from 'lucide-react';
 import BlogShareButtons from '@/components/blog-share-buttons';
@@ -83,6 +84,7 @@ export default async function BlogPostPage({ params }: PageProps) {
 
   const articleLd = articleJsonLd(post);
   const faqLd = faqJsonLd(post);
+  const howToLd = howToJsonLd(post);
 
   return (
     <main className="mx-auto w-full max-w-3xl px-4 py-10 sm:px-6">
@@ -94,6 +96,12 @@ export default async function BlogPostPage({ params }: PageProps) {
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(faqLd) }}
+        />
+      )}
+      {howToLd && (
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(howToLd) }}
         />
       )}
 

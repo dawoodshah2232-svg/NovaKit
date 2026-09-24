@@ -36,6 +36,8 @@ export const canonicalPathBySlug: Record<string, string> = {
   'qr-generator': '/tools/qr-generator',
   'tax-calculator': '/tools/tax-calculator',
   'text-analyzer': '/tools/text-analyzer',
+  'heic-to-jpg': '/tools/heic-to-jpg',
+  'excel-to-pdf': '/tools/excel-to-pdf',
 };
 
 /** tool slug ('merge-pdf', 'color-extractor', 'studio') -> canonical page path. */

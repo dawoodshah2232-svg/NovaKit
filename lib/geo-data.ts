@@ -1317,6 +1317,154 @@ export const GEO_DATA_MAP: Record<string, GeoToolData> = {
       { question: 'Does redaction strip metadata?', answer: 'When metadata sanitization is enabled, document title, author, subject, and producer headers are cleared.' },
     ],
   },
+  'heic-to-jpg': {
+    primaryKeyword: 'convert HEIC to JPG online free',
+    seoTitle: 'HEIC to JPG Converter – Convert iPhone HEIC Photos Free, No Upload | PDFEdit Studio',
+    metaDescription:
+      'Convert iPhone HEIC photos to JPG images — or combine them into a single PDF — entirely in your browser. The HEIC decoder runs on your device, so your photos are never uploaded anywhere. Free, no account, no watermark.',
+    longTailKeywords: [
+      'convert heic to jpg online free',
+      'heic to jpg no upload',
+      'iphone heic to jpg converter private',
+      'heif to jpg in browser',
+      'heic to pdf online free',
+      'convert heic photos without uploading',
+      'batch heic to jpg converter',
+      'open heic on windows convert to jpg',
+    ],
+    highlights: [
+      '100% In-Browser HEIC Decoding — Photos Never Leave Your Device',
+      'Batch Convert Multiple HEIC Photos at Once',
+      'Download as JPG Images or One Combined PDF',
+      'No Account, No Watermark, No File Limits Within Reason',
+    ],
+    semanticSubheadings: [
+      {
+        heading: 'HEIC photos are decoded on your device, never uploaded',
+        body: 'iPhone HEIC files use a modern compression format that Windows and older software cannot open. PDFEdit Studio decodes HEIC directly in your browser using a local decoder — your photos never travel to a server, which is exactly what you want for personal pictures.',
+      },
+      {
+        heading: 'Batch convert a whole photo burst to JPG or one PDF',
+        body: 'Drop in an entire set of HEIC photos from your iPhone, choose JPG images or a single combined PDF, and download everything in one pass. Converting to PDF is the fastest way to share iPhone photos with someone on Windows.',
+      },
+    ],
+    howItWorks: [
+      {
+        number: '01',
+        title: 'Drop Your HEIC Photos',
+        description:
+          'Drag and drop one or more .heic / .heif files from your iPhone into the workspace, or tap to browse your device.',
+      },
+      {
+        number: '02',
+        title: 'Choose JPG or PDF Output',
+        description:
+          'Pick individual JPG downloads per photo, or combine every photo into a single PDF document.',
+      },
+      {
+        number: '03',
+        title: 'Convert & Download',
+        description:
+          'The decoder runs locally in your browser. Save your JPGs or PDF instantly — nothing was ever uploaded.',
+      },
+    ],
+    faqs: [
+      {
+        question: 'Are my iPhone photos uploaded to a server during conversion?',
+        answer:
+          'No. PDFEdit Studio decodes HEIC files directly in your browser. Your photos never leave your device, which keeps personal pictures completely private.',
+      },
+      {
+        question: 'Why convert HEIC to JPG at all?',
+        answer:
+          'HEIC is the default iPhone photo format, but Windows PCs, older phones, and many websites cannot open it. JPG opens everywhere, so converting makes your photos universally viewable and shareable.',
+      },
+      {
+        question: 'Can I convert several HEIC photos at once?',
+        answer:
+          'Yes. Add as many HEIC files as you like and convert them in one batch — either as individual JPG downloads or merged into a single PDF.',
+      },
+      {
+        question: 'Does the converter keep the original photo quality?',
+        answer:
+          'Photos are re-encoded as JPEG at 92% quality, which is visually near-identical to the original while staying compact. Animated HEIC photos convert to their first frame.',
+      },
+    ],
+  },
+  'excel-to-pdf': {
+    primaryKeyword: 'convert Excel to PDF online free',
+    seoTitle: 'Excel to PDF Converter – Turn XLSX into PDF Free, No Upload | PDFEdit Studio',
+    metaDescription:
+      'Convert Excel workbooks to clean, paginated PDFs in your browser. Choose which sheets to include, set portrait or landscape, and download — your spreadsheet data never leaves your device. Free, no account, no watermark.',
+    longTailKeywords: [
+      'convert excel to pdf online free',
+      'xlsx to pdf converter no upload',
+      'excel to pdf private in browser',
+      'spreadsheet to pdf free',
+      'convert xls to pdf online',
+      'csv to pdf converter',
+      'excel sheet to pdf landscape',
+      'select sheets excel to pdf',
+    ],
+    highlights: [
+      '100% Client-Side Workbook Parsing — Data Never Leaves Your Device',
+      'Choose Exactly Which Sheets Go Into the PDF',
+      'Clean Styled Tables with Header Rows and Page Numbers',
+      'Portrait or Landscape Layout per Conversion',
+    ],
+    semanticSubheadings: [
+      {
+        heading: 'Your spreadsheet data never leaves your device',
+        body: 'Excel files often hold salaries, client lists, and financial figures. PDFEdit Studio parses the workbook and builds the PDF entirely in your browser, so sensitive data is never sent to a conversion server.',
+      },
+      {
+        heading: 'Pick sheets and layout for a print-ready PDF',
+        body: 'Select only the sheets you want, mark the first row as a styled header, and choose landscape for wide tables or portrait for narrow ones. Every sheet starts on its own page with page numbers for easy reference.',
+      },
+    ],
+    howItWorks: [
+      {
+        number: '01',
+        title: 'Drop Your Spreadsheet',
+        description:
+          'Add an .xlsx, .xls, .csv, or .ods file. The workbook is read instantly in local memory.',
+      },
+      {
+        number: '02',
+        title: 'Choose Sheets & Layout',
+        description:
+          'Tick the sheets to include, decide whether the first row is a header, and pick portrait or landscape orientation.',
+      },
+      {
+        number: '03',
+        title: 'Download Your PDF',
+        description:
+          'Each selected sheet becomes paginated, styled table pages in one PDF — generated on your device.',
+      },
+    ],
+    faqs: [
+      {
+        question: 'Is my Excel data uploaded to a server?',
+        answer:
+          'No. The workbook is parsed and the PDF is generated entirely in your browser. Financial and personal data in your spreadsheets never leaves your device.',
+      },
+      {
+        question: 'Which spreadsheet formats are supported?',
+        answer:
+          'XLSX (modern Excel), XLS (legacy Excel), CSV, and ODS files are all supported for conversion to PDF.',
+      },
+      {
+        question: 'Can I convert only some sheets of a workbook?',
+        answer:
+          'Yes. After the workbook loads, tick exactly the sheets you want in the PDF. Each selected sheet starts on its own page.',
+      },
+      {
+        question: 'Are formulas and formatting preserved?',
+        answer:
+          'Cell values are preserved — formulas are replaced by their last computed values from Excel. Fonts, colors, charts, and images are not carried over; the PDF uses clean, print-ready table styling instead.',
+      },
+    ],
+  },
 };
 
 const GEO_ALIASES: Record<string, string> = {
@@ -1389,7 +1537,7 @@ export function getToolGeoData(slug: string): GeoToolData {
 /**
  * Generate Schema.org FAQPage structured JSON-LD object
  */
-export function generateFaqSchema(faqs: GeoFaqItem[], _toolName?: string) {
+export function generateFaqSchema(faqs: GeoFaqItem[]) {
   return {
     '@context': 'https://schema.org',
     '@type': 'FAQPage',

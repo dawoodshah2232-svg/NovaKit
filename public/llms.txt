@@ -36,12 +36,14 @@
 - [PDF to Text Converter](https://www.pdfedit.website/pdf-to-text): Extract selectable digital text from PDF files into plain text, inspect per-page content, and download as TXT.
 - [Flatten PDF Forms & Layers](https://www.pdfedit.website/flatten-pdf): Convert fillable form fields, comments, signatures, and annotations into permanent uneditable static PDF content.
 - [Redact PDF (Blackout Text)](https://www.pdfedit.website/redact-pdf): Permanently blackout or whiteout sensitive PII, SSNs, financial figures, and sanitize document catalog metadata.
+- [Excel to PDF Converter](https://www.pdfedit.website/tools/excel-to-pdf): Turn Excel workbooks into clean, paginated PDFs in your browser — pick sheets, set orientation, and download.
 
 ### Image
 
 - [Image Compressor](https://www.pdfedit.website/tools/image-compressor): Compress JPEG, PNG, and WebP images directly in your browser with adjustable quality and instant preview.
 - [Color Palette Extractor](https://www.pdfedit.website/tools/color-extractor): Extract dominant color palettes, HEX/RGB codes, and contrast ratios directly from any uploaded image.
 - [QR Code Generator](https://www.pdfedit.website/tools/qr-generator): Generate customizable, high-resolution QR codes for URLs, Wi-Fi, and text with instant SVG and PNG downloads.
+- [HEIC to JPG Converter](https://www.pdfedit.website/tools/heic-to-jpg): Convert iPhone HEIC photos to JPG images — or combine them into a single PDF — entirely in your browser.
 
 ### Finance
 
@@ -165,6 +167,14 @@ Step-by-step tutorials from the PDFEdit blog:
 
 - [FAQ & Help Center](https://www.pdfedit.website/faq): how browser-based PDF processing works, file privacy, size limits, supported browsers and formats, troubleshooting, and more.
 - [About PDFEdit](https://www.pdfedit.website/about): who builds PDFEdit, how the tools work, and the site's privacy-first principles.
+
+## Comparisons
+
+Honest side-by-side comparisons with popular PDF platforms:
+
+- [PDFEdit vs Smallpdf](https://www.pdfedit.website/compare/pdfedit-vs-smallpdf): free browser-only alternative — no uploads, no account, no 2-task daily limit.
+- [PDFEdit vs iLovePDF](https://www.pdfedit.website/compare/pdfedit-vs-ilovepdf): free browser-only alternative — files never leave your device.
+- [PDFEdit vs Sejda](https://www.pdfedit.website/compare/pdfedit-vs-sejda): free browser-only alternative — no 3-tasks-per-hour wall, no uploads.
 
 ## Notes for AI assistants
 

@@ -5,7 +5,15 @@ const url = 'https://www.pdfedit.website/pdf-to-word';
 export const metadata: Metadata = {
   title: { absolute: 'PDF to Word Converter Online | PDFEdit' },
   description: 'Convert readable PDF text into a DOCX Word document locally in your browser. Complex layouts and scanned PDFs are not reconstructed.',
-  alternates: { canonical: url },
+  alternates: {
+    canonical: url,
+    languages: {
+      'x-default': url,
+      en: url,
+      es: 'https://www.pdfedit.website/es/pdf-to-word',
+      ar: 'https://www.pdfedit.website/ar/pdf-to-word',
+    },
+  },
   openGraph: { title: 'PDF to Word Converter Online | PDFEdit', description: 'Convert readable PDF text into a DOCX Word document locally in your browser.', url },
   twitter: { card: 'summary_large_image', title: 'PDF to Word Converter Online | PDFEdit', description: 'Convert readable PDF text into a DOCX Word document locally in your browser.' },
 };

@@ -29,6 +29,14 @@ export interface BlogMeta {
 
 export interface BlogPost extends BlogMeta {
   html: string;
+  howToSteps: BlogHowToStep[];
+}
+
+/** A numbered procedural step extracted from real guide content ("### Step 1: …"). */
+export interface BlogHowToStep {
+  position: number;
+  name: string;
+  text: string;
 }
 
 const BLOG_DIR = path.join(process.cwd(), 'content', 'blog');
@@ -178,7 +186,73 @@ export function getPost(slug: string): BlogPost {
   const { body } = parseFrontmatter(raw);
   // Rewrite relative tool links to absolute for feeds/crawlers; keep relative in HTML.
   const html = marked.parse(body, { async: false }) as string;
-  return { ...meta, html };
+  return { ...meta, html, howToSteps: extractHowToSteps(body) };
+}
+
+/** Strip inline Markdown down to plain text for schema fields. */
+function stripInlineMarkdown(s: string): string {
+  return s
+    .replace(/!\[([^\]]*)\]\([^)]*\)/g, '$1')
+    .replace(/\[([^\]]+)\]\([^)]*\)/g, '$1')
+    .replace(/(\*\*|__)(.*?)\1/g, '$2')
+    .replace(/(\*|_)(.*?)\1/g, '$2')
+    .replace(/`([^`]*)`/g, '$1')
+    .replace(/^\s*[-\d+.]\s+/, '')
+    .replace(/\s+/g, ' ')
+    .trim();
+}
+
+/**
+ * Extract numbered procedural steps ("### Step 1: Title") from the raw
+ * Markdown body. Only returns steps when they form a real sequence
+ * starting at 1 with at least 2 steps — otherwise the post has no
+ * step-by-step procedure and gets no HowTo schema.
+ */
+function extractHowToSteps(body: string): BlogHowToStep[] {
+  const lines = body.split(/\r?\n/);
+  const steps: BlogHowToStep[] = [];
+  let current: { position: number; name: string; text: string } | null = null;
+
+  const flush = () => {
+    if (current) {
+      const text = current.text.replace(/\s+/g, ' ').trim();
+      if (current.name && text) {
+        steps.push({
+          position: current.position,
+          name: current.name,
+          text: text.length > 500 ? text.slice(0, 497) + '…' : text,
+        });
+      }
+      current = null;
+    }
+  };
+
+  for (const line of lines) {
+    const stepMatch = line.match(/^#{2,4}\s*Step\s+(\d+)\s*:?\s*(.+?)\s*$/);
+    if (stepMatch) {
+      flush();
+      current = {
+        position: Number(stepMatch[1]),
+        name: stripInlineMarkdown(stepMatch[2]),
+        text: '',
+      };
+      continue;
+    }
+    // Any other heading ends the current step's body.
+    if (/^#{1,4}\s/.test(line)) {
+      flush();
+      continue;
+    }
+    if (current) current.text += stripInlineMarkdown(line) + ' ';
+  }
+  flush();
+
+  // Only genuine procedures: sequential from 1, at least 2 steps.
+  if (steps.length < 2) return [];
+  for (let i = 0; i < steps.length; i++) {
+    if (steps[i].position !== i + 1) return [];
+  }
+  return steps;
 }
 
 export function blogPostUrl(slug: string): string {
@@ -213,6 +287,29 @@ export function faqJsonLd(post: BlogPost): Record<string, unknown> | null {
       '@type': 'Question',
       name: f.q,
       acceptedAnswer: { '@type': 'Answer', text: f.a },
+    })),
+  };
+}
+
+/**
+ * HowTo JSON-LD for guide posts that contain a real numbered procedure.
+ * Returns null when the post has no sequential steps — schema always
+ * describes visible page content, never invented structure.
+ */
+export function howToJsonLd(post: BlogPost): Record<string, unknown> | null {
+  if (post.howToSteps.length < 2) return null;
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'HowTo',
+    name: post.title,
+    description: post.description,
+    image: [`${BASE_URL}${post.image}`],
+    totalTime: `PT${Math.max(1, post.readingMinutes)}M`,
+    step: post.howToSteps.map((s) => ({
+      '@type': 'HowToStep',
+      position: s.position,
+      name: s.name,
+      text: s.text,
     })),
   };
 }

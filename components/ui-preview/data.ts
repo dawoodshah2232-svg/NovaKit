@@ -86,6 +86,8 @@ export const PREVIEW_TOOLS: PreviewTool[] = [
   // ---- Convert to PDF ----
   { id: 'word-to-pdf', name: 'Word to PDF', tagline: 'Convert Word files to polished PDFs', href: '/word-to-pdf', category: 'to', icon: WordToPdfIcon, keywords: ['word to pdf', 'docx to pdf', 'convert'], popular: true },
   { id: 'jpg-to-pdf', name: 'JPG to PDF', tagline: 'Build a PDF from your images', href: '/jpg-to-pdf', category: 'to', icon: JpgToPdfIcon, keywords: ['jpg to pdf', 'image to pdf', 'png to pdf', 'photos to pdf'], popular: true },
+  { id: 'excel-to-pdf', name: 'Excel to PDF', tagline: 'Turn spreadsheets into clean PDFs', href: '/tools/excel-to-pdf', category: 'to', icon: WordToPdfIcon, keywords: ['excel to pdf', 'xlsx to pdf', 'spreadsheet', 'csv to pdf'] },
+  { id: 'heic-to-jpg', name: 'HEIC to JPG', tagline: 'Convert iPhone photos to JPG or PDF', href: '/tools/heic-to-jpg', category: 'to', icon: JpgToPdfIcon, keywords: ['heic to jpg', 'heif', 'iphone photos', 'heic to pdf'] },
   // ---- Optimize ----
   { id: 'compress', name: 'Compress PDF', tagline: 'Shrink file size without the quality loss', href: '/compress-pdf', category: 'optimize', icon: CompressIcon, keywords: ['compress', 'reduce size', 'smaller', 'shrink', 'optimize'], popular: true },
   { id: 'flatten', name: 'Flatten PDF', tagline: 'Bake forms and layers into one file', href: '/flatten-pdf', category: 'advanced', icon: FlattenIcon, keywords: ['flatten', 'forms', 'layers', 'lock form'] },

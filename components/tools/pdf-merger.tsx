@@ -1,5 +1,6 @@
 'use client';
 import { brandedFileName } from '@/lib/branded-filename';
+import { ShareNudge } from '@/components/share-nudge';
 
 import React, { useState, useCallback, useEffect, useId } from 'react';
 import { useDropzone } from 'react-dropzone';
@@ -519,6 +520,9 @@ export function PdfMerger() {
                 Start Again
               </button>
             </div>
+          )}
+          {downloadClicked && (
+            <ShareNudge toolName="Merge PDF" toolPath="/merge-pdf" />
           )}
         </div>
       )}
