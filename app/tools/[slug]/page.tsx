@@ -2,7 +2,7 @@ import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import Link from 'next/link';
 import { ArrowLeft, ShieldCheck, Sparkles, CheckCircle2, Lock, Cpu, Zap } from 'lucide-react';
-import { getToolBySlug, getAllToolSlugs } from '@/lib/tools-config';
+import { getToolBySlug, getAllToolSlugs, TOOLS_CONFIG } from '@/lib/tools-config';
 import { getAllPostsMeta } from '@/lib/blog';
 import {
   getToolGeoData,
@@ -73,6 +73,84 @@ const relatedBlogPostsBySlug: Record<string, string[]> = {
   'edit-pdf-metadata': ['how-to-edit-a-pdf-online', 'how-to-redact-a-pdf', 'how-to-protect-a-pdf-with-password'],
   'image-compressor': ['how-to-compress-pdf', 'how-to-convert-jpg-to-pdf', 'pdf-to-jpg-images-guide'],
 };
+
+const GUIDE_KEYWORD_STOP = new Set([
+  'pdf', 'pdfs', 'file', 'files', 'free', 'online', 'your', 'with', 'from',
+  'into', 'using', 'tool', 'tools', 'the', 'and', 'for', 'how',
+]);
+
+/**
+ * Related guides for a tool page. Curated entries come from
+ * `relatedBlogPostsBySlug`; tools without a curated entry get the 3 best
+ * keyword matches from the blog (title + description), falling back to the
+ * 3 latest guides so the block — and its crawler-readable links — always
+ * renders.
+ */
+function getRelatedGuides(slug: string, toolName: string, toolDescription: string) {
+  const allPosts = getAllPostsMeta();
+  const postMetaBySlug = new Map(allPosts.map((p) => [p.slug, p]));
+
+  const curatedPosts = (relatedBlogPostsBySlug[slug] ?? [])
+    .map((postSlug) => postMetaBySlug.get(postSlug))
+    .filter((p): p is NonNullable<typeof p> => Boolean(p));
+  if (curatedPosts.length > 0) return curatedPosts;
+
+  const keywords = new Set(
+    `${toolName} ${toolDescription}`
+      .toLowerCase()
+      .split(/[^a-z0-9]+/)
+      .filter((w) => w.length > 3 && !GUIDE_KEYWORD_STOP.has(w)),
+  );
+  const scored = allPosts
+    .map((p) => {
+      const haystack = `${p.title} ${p.description}`.toLowerCase();
+      let score = 0;
+      for (const kw of keywords) {
+        if (haystack.includes(kw)) score += 1;
+      }
+      return { p, score };
+    })
+    .filter((s) => s.score > 0)
+    .sort((a, b) => b.score - a.score)
+    .slice(0, 3)
+    .map((s) => s.p);
+  return scored.length > 0 ? scored : allPosts.slice(0, 3);
+}
+
+/**
+ * Related tools for a tool page. Curated entries come from
+ * `relatedToolsBySlug`; tools without a curated entry fall back to up to 3
+ * tools from the same category (excluding itself) so the "Related PDF tools"
+ * block — and its crawler-readable links — renders on every tool page.
+ */
+function getRelatedTools(slug: string, category: string): [string, string][] {
+  const curated = relatedToolsBySlug[slug];
+  if (curated && curated.length > 0) return curated;
+  const picked: [string, string][] = TOOLS_CONFIG.filter(
+    (t) => t.slug !== slug && t.category === category,
+  )
+    .slice(0, 3)
+    .map(
+      (t) =>
+        [
+          canonicalPathBySlug[t.slug] || `/tools/${t.slug}`,
+          t.name,
+        ] as [string, string],
+    );
+  // Fill any remaining slots with popular tools so the block always renders.
+  const popularSlugs = ['pdf-merger', 'compress-pdf', 'jpg-to-pdf', 'split-pdf'];
+  for (const popularSlug of popularSlugs) {
+    if (picked.length >= 3) break;
+    if (popularSlug === slug || picked.some(([href]) => href.endsWith(`/${popularSlug}`))) continue;
+    const popular = getToolBySlug(popularSlug);
+    if (!popular) continue;
+    picked.push([
+      canonicalPathBySlug[popular.slug] || `/tools/${popular.slug}`,
+      popular.name,
+    ]);
+  }
+  return picked;
+}
 
 interface ToolPageProps {
   params: Promise<{
@@ -160,6 +238,7 @@ export default async function ToolPage({ params }: ToolPageProps) {
   const geoData = getToolGeoData(slug);
   const canonicalPath = canonicalPathBySlug[tool.slug] || `/tools/${tool.slug}`;
   const isMergePdf = slug === 'pdf-merger';
+  const relatedTools = getRelatedTools(slug, tool.category);
   const answerLead =
     'Yes — ' + tool.description.charAt(0).toLowerCase() + tool.description.slice(1);
   const softwareSchema = generateSoftwareAppSchema(
@@ -260,7 +339,7 @@ export default async function ToolPage({ params }: ToolPageProps) {
       </div>
 
       <section aria-labelledby="tool-answer" className="rounded-3xl border border-blue-200/80 bg-blue-50/60 p-5 dark:border-blue-900/60 dark:bg-blue-950/20">
-        <h2 id="tool-answer" className="text-base font-black text-slate-950 dark:text-white">What this tool does</h2>
+        <h2 id="tool-answer" className="text-base font-black text-slate-950 dark:text-white">{tool.name} runs in your browser — nothing is uploaded</h2>
         <p className="mt-2 text-sm leading-6 text-slate-700 dark:text-slate-300">{tool.description}</p>
         <p className="mt-2 text-xs font-semibold text-blue-700 dark:text-blue-300">{tool.processingNote}</p>
       </section>
@@ -284,13 +363,13 @@ export default async function ToolPage({ params }: ToolPageProps) {
 
           <div className="grid gap-4 md:grid-cols-2">
             <article className="rounded-3xl border border-slate-200/80 bg-white p-5 shadow-sm dark:border-slate-800 dark:bg-slate-900">
-              <h3 className="text-base font-extrabold text-slate-900 dark:text-white">Why use PDFEdit Merge PDF?</h3>
+              <h3 className="text-base font-extrabold text-slate-900 dark:text-white">Merge without uploading your files anywhere</h3>
               <p className="mt-2 text-sm leading-6 text-slate-600 dark:text-slate-300">
                 Reorder contracts, reports, forms, and attachments before creating one clean document. The merger copies PDF pages directly instead of rasterizing them, so text and vector content remain usable.
               </p>
             </article>
             <article className="rounded-3xl border border-slate-200/80 bg-white p-5 shadow-sm dark:border-slate-800 dark:bg-slate-900">
-              <h3 className="text-base font-extrabold text-slate-900 dark:text-white">Privacy and browser processing</h3>
+              <h3 className="text-base font-extrabold text-slate-900 dark:text-white">The merge happens on your device — nothing is sent to a server</h3>
               <p className="mt-2 text-sm leading-6 text-slate-600 dark:text-slate-300">
                 The merge runs locally in browser memory using pdf-lib. This page does not send your selected PDF files to a merge server; files are released when you clear the workspace or close the page.
               </p>
@@ -298,7 +377,7 @@ export default async function ToolPage({ params }: ToolPageProps) {
           </div>
 
           <div>
-            <h3 className="text-base font-extrabold text-slate-900 dark:text-white">Common use cases</h3>
+            <h3 className="text-base font-extrabold text-slate-900 dark:text-white">One file for the whole packet: contracts, invoices, applications</h3>
             <p className="mt-2 text-sm leading-6 text-slate-600 dark:text-slate-300">
               Combine a signed cover letter with a resume, assemble an invoice packet, join project documents for review, or prepare one submission file from separate PDF attachments.
             </p>
@@ -323,11 +402,11 @@ export default async function ToolPage({ params }: ToolPageProps) {
         </section>
       )}
 
-      {relatedToolsBySlug[slug] && !isMergePdf && (
+      {relatedTools.length > 0 && !isMergePdf && (
         <nav aria-label="Related PDF tools" className="rounded-3xl border border-slate-200/80 bg-slate-50 p-5 dark:border-slate-800 dark:bg-slate-950/40">
           <h2 className="text-base font-black text-slate-900 dark:text-white">Related PDF tools</h2>
           <div className="mt-3 flex flex-wrap gap-2">
-            {relatedToolsBySlug[slug].map(([href, label]) => (
+            {relatedTools.map(([href, label]) => (
               <Link key={href} href={href} className="rounded-xl border border-slate-200 bg-white px-3 py-2 text-xs font-bold text-blue-700 transition hover:border-blue-300 hover:bg-blue-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-600 dark:border-slate-700 dark:bg-slate-900 dark:text-blue-300 dark:hover:bg-slate-800">
                 {label}
               </Link>
@@ -338,12 +417,7 @@ export default async function ToolPage({ params }: ToolPageProps) {
 
       {/* Related blog guides (tool -> blog internal linking) */}
       {(() => {
-        const postSlugs = relatedBlogPostsBySlug[slug] ?? [];
-        if (postSlugs.length === 0) return null;
-        const postMetaBySlug = new Map(getAllPostsMeta().map((p) => [p.slug, p]));
-        const posts = postSlugs
-          .map((postSlug) => postMetaBySlug.get(postSlug))
-          .filter((p): p is NonNullable<typeof p> => Boolean(p));
+        const posts = getRelatedGuides(slug, tool.name, tool.description);
         if (posts.length === 0) return null;
         return (
           <nav aria-label="Related guides" className="rounded-3xl border border-slate-200/80 bg-slate-50 p-5 dark:border-slate-800 dark:bg-slate-950/40">

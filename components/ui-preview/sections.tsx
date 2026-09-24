@@ -205,8 +205,8 @@ export function Hero() {
             <span className="text-[var(--pe-accent)]">Just simple, powerful PDF tools.</span>
           </h1>
           <p className="pe-fade-up pe-fade-up-2 mx-auto mt-4 max-w-xl text-pretty text-base leading-relaxed text-[var(--pe-text-2)] sm:text-lg lg:mx-0">
-            Merge, compress, convert, sign and edit PDFs right in your browser —
-            fast, private, and free to start. No uploads. No accounts.
+            PDFEdit is a free PDF tool that works entirely in your browser — merge,
+            compress, convert, sign and edit PDFs with no uploads and no accounts.
           </p>
           <p className="pe-fade-up pe-fade-up-2 mt-5 flex items-center justify-center gap-2.5 text-[15px] font-semibold text-[var(--pe-text)] sm:text-base lg:justify-start">
             <span
@@ -253,7 +253,7 @@ export function PopularTools() {
         <div className="flex items-end justify-between gap-4">
           <div>
             <Eyebrow>Most used</Eyebrow>
-            <h2 className="text-2xl font-bold tracking-tight text-[var(--pe-text)] sm:text-3xl">Popular tools</h2>
+            <h2 className="text-2xl font-bold tracking-tight text-[var(--pe-text)] sm:text-3xl">The PDF tools people reach for every day</h2>
             <p className="mt-1.5 text-[15px] text-[var(--pe-text-2)]">The tools people reach for every day.</p>
           </div>
           <a href="#categories" className="hidden shrink-0 rounded-full px-3 py-2 text-sm font-semibold text-[var(--pe-accent)] transition-colors hover:bg-[var(--pe-accent-soft)] sm:block">
@@ -373,7 +373,7 @@ export function StudioPromo() {
               Flagship product
             </p>
             <h2 className="mt-3 text-2xl font-bold tracking-tight sm:text-3xl" style={{ color: 'var(--pe-ink-text)' }}>
-              Meet PDFEdit Studio
+              Meet PDFEdit Studio — edit PDFs like a desktop app, right in your browser
             </h2>
             <p className="mt-2 max-w-md text-[15px] leading-relaxed" style={{ color: 'var(--pe-ink-text-2)' }}>
               A full document workspace in your browser — edit, sign, redact and
@@ -486,7 +486,7 @@ export function CvPromo() {
 
 const TRUST: { title: string; desc: string; icon: ReactElement }[] = [
   {
-    title: 'Processed in your browser',
+    title: 'Runs on your device, not our servers',
     desc: 'Tools run locally on your device wherever technically possible.',
     icon: (
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" className="h-5 w-5" aria-hidden="true">
@@ -496,8 +496,8 @@ const TRUST: { title: string; desc: string; icon: ReactElement }[] = [
     ),
   },
   {
-    title: 'Files stay with you',
-    desc: 'No forced uploads just to merge or compress a file.',
+    title: 'No forced uploads just to merge or compress a file',
+    desc: 'Your documents are processed on your device — they are not uploaded to use the tools.',
     icon: (
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" className="h-5 w-5" aria-hidden="true">
         <path d="M3 7a2 2 0 0 1 2-2h4l2 2h8a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" />
@@ -506,7 +506,7 @@ const TRUST: { title: string; desc: string; icon: ReactElement }[] = [
     ),
   },
   {
-    title: 'No account needed',
+    title: 'Start working instantly — no account, ever',
     desc: 'Open a tool and start working immediately.',
     icon: (
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" className="h-5 w-5" aria-hidden="true">
@@ -515,8 +515,8 @@ const TRUST: { title: string; desc: string; icon: ReactElement }[] = [
     ),
   },
   {
-    title: 'Free core tools',
-    desc: 'The everyday tools are free to use, no trial walls.',
+    title: 'Everyday tools are free, with no trial walls',
+    desc: 'The core PDF tools are free to use — no sign-up, no watermarks, no locked features.',
     icon: (
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" className="h-5 w-5" aria-hidden="true">
         <path d="M12 3v18" />
@@ -555,7 +555,7 @@ export function Trust() {
 const WHY: { n: string; title: string; desc: string; tint: string; visual: ReactElement }[] = [
   {
     n: '01',
-    title: 'Built for speed',
+    title: 'Feels instant, even on mobile data',
     desc: 'Lightweight pages and browser-side processing keep every tool feeling instant — even on mobile data.',
     tint: 'var(--pe-tint-optimize)',
     visual: (
@@ -569,7 +569,7 @@ const WHY: { n: string; title: string; desc: string; tint: string; visual: React
   },
   {
     n: '02',
-    title: 'Private by design',
+    title: 'Your documents stay on your device',
     desc: 'Your documents are processed on your device where possible, instead of being shipped to a server farm.',
     tint: 'var(--pe-tint-security)',
     visual: (
@@ -581,7 +581,7 @@ const WHY: { n: string; title: string; desc: string; tint: string; visual: React
   },
   {
     n: '03',
-    title: 'One calm workspace',
+    title: 'One calm interface, from quick tools to full Studio',
     desc: 'From quick conversions to the full Studio editor, everything shares the same clean, predictable interface.',
     tint: 'var(--pe-tint-edit)',
     visual: (

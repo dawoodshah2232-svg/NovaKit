@@ -175,7 +175,7 @@ export default function ContactPage() {
       </section>
 
       <section className='mb-10'>
-        <h2 className='text-xl font-semibold mb-3 text-slate-900 dark:text-white'>Key tools</h2>
+        <h2 className='text-xl font-semibold mb-3 text-slate-900 dark:text-white'>The PDF tools people reach for every day</h2>
         <div className='flex flex-wrap gap-2'>
           {KEY_TOOLS.map(({ label, href }) => (
             <Link

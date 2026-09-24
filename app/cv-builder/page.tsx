@@ -109,7 +109,7 @@ export default function CvBuilderPage() {
       {/* templates */}
       <section id="templates" className="scroll-mt-20 border-b border-[var(--pe-border)]">
         <div className="mx-auto max-w-6xl px-4 py-12 sm:px-6">
-          <h2 className="text-2xl font-bold tracking-tight text-[var(--pe-text)] sm:text-3xl">Template library</h2>
+          <h2 className="text-2xl font-bold tracking-tight text-[var(--pe-text)] sm:text-3xl">Eight original templates — your content carries over when you switch</h2>
           <p className="mt-2 max-w-2xl text-[var(--pe-text-2)]">
             Eight original templates designed for PDFEdit. Switch anytime — your content carries over.
           </p>
@@ -152,7 +152,7 @@ export default function CvBuilderPage() {
       {/* benefits */}
       <section className="border-b border-[var(--pe-border)] bg-[var(--pe-surface)]">
         <div className="mx-auto max-w-6xl px-4 py-12 sm:px-6">
-          <h2 className="text-2xl font-bold tracking-tight text-[var(--pe-text)] sm:text-3xl">Why build your CV with PDFEdit?</h2>
+          <h2 className="text-2xl font-bold tracking-tight text-[var(--pe-text)] sm:text-3xl">Build your CV without uploading it anywhere</h2>
           <div className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
             {BENEFITS.map((b) => (
               <div key={b.title} className="rounded-2xl border border-[var(--pe-border)] bg-[var(--pe-elevated)] p-5">

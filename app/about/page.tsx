@@ -41,22 +41,22 @@ const TOOL_GROUPS = [
 const PRINCIPLES = [
   {
     icon: ShieldCheck,
-    title: 'Private by design',
+    title: 'Your files never leave your device',
     text: 'Files are processed locally in your browser with client-side technology. Your documents are never uploaded to our servers, stored, or viewed by anyone.',
   },
   {
     icon: Zap,
-    title: 'Fast and free',
+    title: 'No accounts, no watermarks, no upload queues',
     text: 'No accounts, no watermarks on core tools, no waiting in upload queues. Open a tool and start working immediately.',
   },
   {
     icon: Lock,
-    title: 'No sign-up required',
+    title: 'No accounts means nothing to leak',
     text: 'We deliberately avoid accounts and personal-data collection, so there is nothing to leak, sell, or misuse.',
   },
   {
     icon: Globe,
-    title: 'Works everywhere',
+    title: 'Works in any modern browser, on desktop or mobile',
     text: 'Modern browsers on desktop and mobile, with light and dark themes built in.',
   },
 ];
@@ -87,11 +87,12 @@ export default function AboutPage() {
       <p className='text-gray-600 mb-8'>Free PDF tools that respect your privacy.</p>
 
       <section className='space-y-4 text-gray-700 mb-10'>
-        <h2 className='text-xl font-semibold'>Our mission</h2>
+        <h2 className='text-xl font-semibold'>Everyday PDF work, free — without asking for your files</h2>
         <p>
-          Make everyday PDF work free, fast, and private &mdash; without accounts, uploads, or
-          subscriptions getting in the way. Every tool on PDFEdit is built to run directly on
-          your device, so your documents stay yours.
+          PDFEdit is a free PDF tool that works entirely in your browser &mdash; your files are
+          never uploaded. Our mission: make everyday PDF work free, fast, and private &mdash;
+          without accounts, uploads, or subscriptions getting in the way. Every tool on PDFEdit is
+          built to run directly on your device, so your documents stay yours.
         </p>
         <p>
           PDFEdit (www.pdfedit.website) is a free collection of browser-based PDF utility tools:
@@ -118,7 +119,7 @@ export default function AboutPage() {
       </section>
 
       <section className='mb-10'>
-        <h2 className='text-xl font-semibold mb-3'>Popular tools</h2>
+        <h2 className='text-xl font-semibold mb-3'>The PDF tools people reach for every day</h2>
         <div className='flex flex-wrap gap-2'>
           {TOOL_GROUPS.map(({ label, href }) => (
             <Link
@@ -133,7 +134,7 @@ export default function AboutPage() {
       </section>
 
       <section className='space-y-3 text-gray-700'>
-        <h2 className='text-xl font-semibold'>Who runs PDFEdit</h2>
+        <h2 className='text-xl font-semibold'>Funded by advertising — not by your files, your email, or your money</h2>
         <p>
           PDFEdit is operated by Dawood Shah from Dubai, United Arab Emirates. It is an independent
           project: a free utility site funded by advertising, built to do one thing well &mdash;
