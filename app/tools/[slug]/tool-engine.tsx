@@ -101,6 +101,12 @@ const FlattenPdf = dynamic(() => import('@/components/tools/flatten-pdf').then((
 const RedactPdf = dynamic(() => import('@/components/tools/redact-pdf').then((m) => m.RedactPdf), {
   loading: () => <ToolEngineFallback />,
 });
+const HeicToJpg = dynamic(() => import('@/components/tools/heic-to-jpg').then((m) => m.HeicToJpg), {
+  loading: () => <ToolEngineFallback />,
+});
+const ExcelToPdf = dynamic(() => import('@/components/tools/excel-to-pdf').then((m) => m.ExcelToPdf), {
+  loading: () => <ToolEngineFallback />,
+});
 
 
 export function ToolEngine({ slug }: { slug: string }) {
@@ -167,6 +173,10 @@ export function ToolEngine({ slug }: { slug: string }) {
         <TextAnalyzer />
       ) : slug === 'password-generator' ? (
         <PasswordGenerator />
+      ) : slug === 'heic-to-jpg' ? (
+        <HeicToJpg />
+      ) : slug === 'excel-to-pdf' ? (
+        <ExcelToPdf />
       ) : (
         <div className="text-center py-12 text-slate-400">Tool not found</div>
       )}

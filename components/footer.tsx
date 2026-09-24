@@ -2,6 +2,7 @@ import Link from 'next/link';
 import { ShieldCheck, Zap, Lock, Cpu, FileText } from 'lucide-react';
 import { Logo } from './logo';
 import { CookieSettingsButton } from './cookie-settings-button';
+import { LanguageSwitcherSlot } from './language-switcher-slot';
 
 const PRODUCT_LINKS = [
   { label: 'All tools', href: '/#tools' },
@@ -120,6 +121,8 @@ export function Footer() {
             <Cpu className="h-4 w-4" aria-hidden="true" />
             Built for fast browser-based document processing
           </p>
+
+          <LanguageSwitcherSlot />
         </div>
       </div>
     </footer>

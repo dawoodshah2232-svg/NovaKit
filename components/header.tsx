@@ -4,6 +4,7 @@ import Link from 'next/link';
 import { FileText, LayoutGrid, Newspaper, ShieldCheck, Sparkles } from 'lucide-react';
 import { ThemeToggle } from './theme-toggle';
 import { Logo } from './logo';
+import { LanguageSwitcherSlot } from './language-switcher-slot';
 
 const NAV_LINKS = [
   { label: 'PDF Tools', href: '/#tools', icon: FileText },
@@ -41,6 +42,8 @@ export function Header() {
           </Link>
 
           <ThemeToggle />
+
+          <LanguageSwitcherSlot className="hidden lg:inline-flex" />
         </div>
       </div>
     </header>

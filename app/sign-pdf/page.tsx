@@ -5,7 +5,15 @@ export const metadata: Metadata = {
   title: { absolute: 'Sign PDF Online Free | PDFEdit' },
   description:
     'Draw, type, or upload a signature image, place it on a PDF page, and download the signed copy locally in your browser.',
-  alternates: { canonical: url },
+  alternates: {
+    canonical: url,
+    languages: {
+      'x-default': url,
+      en: url,
+      es: 'https://www.pdfedit.website/es/sign-pdf',
+      ar: 'https://www.pdfedit.website/ar/sign-pdf',
+    },
+  },
   openGraph: {
     title: 'Sign PDF Online Free | PDFEdit',
     description:

@@ -41,6 +41,8 @@ const relatedToolsBySlug: Record<string, [string, string][]> = {
   'pdf-to-text': [['/ocr-pdf', 'OCR PDF'], ['/pdf-to-word', 'PDF to Word'], ['/pdf-to-jpg', 'PDF to JPG']],
   'flatten-pdf': [['/sign-pdf', 'Sign PDF'], ['/unlock-pdf', 'Unlock PDF'], ['/redact-pdf', 'Redact PDF']],
   'redact-pdf': [['/flatten-pdf', 'Flatten PDF'], ['/edit-pdf', 'Edit Metadata'], ['/studio', 'PDF Studio']],
+  'heic-to-jpg': [['/jpg-to-pdf', 'JPG to PDF'], ['/pdf-to-images', 'PDF to Images'], ['/image-compressor', 'Image Compressor']],
+  'excel-to-pdf': [['/word-to-pdf', 'Word to PDF'], ['/pdf-to-word', 'PDF to Word'], ['/merge-pdf', 'Merge PDF']],
 };
 
 /*

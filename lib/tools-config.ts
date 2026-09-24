@@ -434,6 +434,32 @@ export const TOOLS_CONFIG: ToolConfig[] = [
     accentColor: 'text-amber-500 dark:text-amber-400',
     processingNote: 'Web Crypto API • Never stored',
   },
+  {
+    id: 'heic-to-jpg',
+    name: 'HEIC to JPG Converter',
+    description: 'Convert iPhone HEIC photos to JPG images — or combine them into a single PDF — entirely in your browser.',
+    slug: 'heic-to-jpg',
+    category: 'Image',
+    badge: 'New',
+    iconName: 'FileImage',
+    tags: ['HEIC to JPG', 'HEIF', 'iPhone Photos', 'HEIC to PDF', 'Convert'],
+    gradient: 'from-sky-500 to-blue-600',
+    accentColor: 'text-sky-500 dark:text-sky-400',
+    processingNote: 'In-Browser HEIC Decoding • Zero Uploads',
+  },
+  {
+    id: 'excel-to-pdf',
+    name: 'Excel to PDF Converter',
+    description: 'Turn Excel workbooks into clean, paginated PDFs in your browser — pick sheets, set orientation, and download.',
+    slug: 'excel-to-pdf',
+    category: 'PDF',
+    badge: 'New',
+    iconName: 'FileText',
+    tags: ['Excel to PDF', 'XLSX to PDF', 'Spreadsheet', 'Convert', 'Tables'],
+    gradient: 'from-green-500 to-emerald-600',
+    accentColor: 'text-green-500 dark:text-green-400',
+    processingNote: 'Client-Side Parsing • Styled Tables',
+  },
 ];
 
 // Slugs and Alias Lookup Mapping

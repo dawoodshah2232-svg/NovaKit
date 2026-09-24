@@ -4,7 +4,15 @@ const url = 'https://www.pdfedit.website/compress-pdf';
 export const metadata: Metadata = {
 	title: { absolute: 'Compress PDF Online Free | PDF Compressor | PDFEdit' },
 	description: 'Compress PDF files online in your browser to reduce size for email, uploads, and sharing. Compare the original and compressed file sizes before downloading.',
-	alternates: { canonical: url },
+	alternates: {
+    canonical: url,
+    languages: {
+      'x-default': url,
+      en: url,
+      es: 'https://www.pdfedit.website/es/compress-pdf',
+      ar: 'https://www.pdfedit.website/ar/compress-pdf',
+    },
+  },
 	openGraph: { title: 'Compress PDF Online Free | PDF Compressor | PDFEdit', description: 'Reduce PDF files in your browser for email, uploads, and sharing, then compare sizes before downloading.', url },
 	twitter: { card: 'summary_large_image', title: 'Compress PDF Online Free | PDF Compressor | PDFEdit', description: 'Reduce PDF files in your browser for email, uploads, and sharing, then compare sizes before downloading.' },
 };

@@ -1,6 +1,7 @@
 'use client';
 import { validateUploadSize } from '@/lib/file-limits';
 import { brandedFileName } from '@/lib/branded-filename';
+import { ShareNudge } from '@/components/share-nudge';
 
 import React, { useState, useCallback } from 'react';
 import { useDropzone } from 'react-dropzone';
@@ -531,6 +532,7 @@ export function CompressPdf() {
                   <Download className="w-4 h-4" />
                   <span>Download Compressed PDF Again</span>
                 </button>
+                <ShareNudge toolName="Compress PDF" toolPath="/compress-pdf" />
               </div>
             )}
 

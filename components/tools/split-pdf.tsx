@@ -1,6 +1,7 @@
 'use client';
 import { validateUploadSize } from '@/lib/file-limits';
 import { brandedFileName } from '@/lib/branded-filename';
+import { ShareNudge } from '@/components/share-nudge';
 
 import React, { useState, useCallback, useMemo } from 'react';
 import { useDropzone } from 'react-dropzone';
@@ -357,9 +358,12 @@ export function SplitPdf() {
 
       {/* Success Alert */}
       {successMessage && (
-        <div className="flex items-center gap-2.5 p-4 rounded-2xl bg-emerald-50 dark:bg-emerald-950/50 border border-emerald-200 dark:border-emerald-800 text-xs sm:text-sm font-medium text-emerald-800 dark:text-emerald-300 shadow-xs animate-in fade-in">
-          <FileCheck2 className="w-4 h-4 text-emerald-600 dark:text-emerald-400 shrink-0" />
-          <span>{successMessage}</span>
+        <div className="space-y-3">
+          <div className="flex items-center gap-2.5 p-4 rounded-2xl bg-emerald-50 dark:bg-emerald-950/50 border border-emerald-200 dark:border-emerald-800 text-xs sm:text-sm font-medium text-emerald-800 dark:text-emerald-300 shadow-xs animate-in fade-in">
+            <FileCheck2 className="w-4 h-4 text-emerald-600 dark:text-emerald-400 shrink-0" />
+            <span>{successMessage}</span>
+          </div>
+          <ShareNudge toolName="Split PDF" toolPath="/split-pdf" />
         </div>
       )}
 
