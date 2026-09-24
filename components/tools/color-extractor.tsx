@@ -429,7 +429,7 @@ export function ColorExtractor() {
                 <Sparkles className="w-3.5 h-3.5 text-pink-600 dark:text-pink-400" />
                 <span>Or test instantly with sample images:</span>
               </span>
-              <span className="text-[10px] font-mono text-slate-400">1-click demo</span>
+              <span className="text-[10px] font-mono text-slate-500">1-click demo</span>
             </div>
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
               {SAMPLE_PREVIEWS.map((sample) => (
@@ -546,7 +546,7 @@ export function ColorExtractor() {
                   <span className="text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400">
                     Source Image
                   </span>
-                  <span className="text-[10px] font-mono text-slate-400">Preview</span>
+                  <span className="text-[10px] font-mono text-slate-500">Preview</span>
                 </div>
                 <div className="rounded-2xl overflow-hidden bg-slate-100 dark:bg-slate-800 border border-slate-200/60 dark:border-slate-700/60 aspect-video flex items-center justify-center">
                   <img

@@ -432,6 +432,7 @@ export function ExtractPdfPages() {
                 onClick={handleReset}
                 className="p-1.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 text-slate-500 hover:text-[var(--pe-accent)] dark:hover:text-[var(--pe-accent)] transition"
                 title="Choose different file"
+                aria-label="Choose different file"
               >
                 <RotateCcw className="w-4 h-4" />
               </button>

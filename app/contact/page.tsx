@@ -17,7 +17,7 @@ import type { BlogFaq } from '@/lib/blog';
 const CONTACT_FAQS: BlogFaq[] = [
   {
     q: 'How do I contact PDFEdit support?',
-    a: 'Use the contact form on this page and choose the topic that fits: support, feedback, business, or abuse report. A dedicated support email address is coming soon.',
+    a: 'There is no contact form on this page yet, and no support email has been published. The FAQ / Help Center covers the common questions — how files are handled, size limits, supported browsers, and troubleshooting failed conversions — so checking there first is the fastest way to get an answer. This page will be updated as soon as a contact email is available.',
   },
   {
     q: 'How quickly will I get a reply?',

@@ -142,8 +142,8 @@ export default async function BlogPostPage({ params }: PageProps) {
       <aside className="mt-10 rounded-2xl border border-[var(--pe-border)] bg-[var(--pe-surface)] p-5 sm:p-6" aria-label="About the author">
         <p className="text-sm leading-relaxed text-[var(--pe-text-2)]">
           <span className="font-bold text-[var(--pe-text)]">Written by the PDFEdit Team.</span>{' '}
-          We build the tools on this site ourselves, and every workflow in this guide was
-          tested by us before publishing — so what you read here is what actually works.
+          We are the same people who build the tools on this site. Our guides describe how the
+          tools actually behave and cite official sources where relevant.
         </p>
       </aside>
 

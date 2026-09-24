@@ -389,7 +389,7 @@ export function PasswordGenerator() {
                   Character Rule Toggles
                 </h3>
               </div>
-              <span className="text-[10px] font-mono text-slate-400">Min 44px Taps</span>
+              <span className="text-[10px] font-mono text-slate-500">Min 44px Taps</span>
             </div>
 
             {/* Toggles Grid (Min 44px tap targets for mobile) */}

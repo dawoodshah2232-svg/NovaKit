@@ -456,7 +456,7 @@ export function ImageToPdf() {
                   <p className="text-xs font-bold text-slate-900 dark:text-white truncate" title={img.name}>
                     {img.name}
                   </p>
-                  <p className="text-[10px] text-slate-400 font-mono">
+                  <p className="text-[10px] text-slate-500 font-mono">
                     {img.width}×{img.height} • {formatBytes(img.size)}
                   </p>
                 </div>
@@ -472,7 +472,7 @@ export function ImageToPdf() {
                   >
                     <ArrowUp className="w-3.5 h-3.5 -rotate-90" />
                   </button>
-                  <span className="text-[10px] font-extrabold text-slate-400">Page {idx + 1}</span>
+                  <span className="text-[10px] font-extrabold text-slate-500">Page {idx + 1}</span>
                   <button
                     type="button"
                     onClick={() => moveImage(idx, 'down')}

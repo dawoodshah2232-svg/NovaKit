@@ -664,7 +664,7 @@ export function InvoiceGenerator() {
 
               <div className="space-y-1">
                 <label className="text-xs font-semibold text-slate-700 dark:text-slate-300 flex items-center gap-1">
-                  <Calendar className="w-3.5 h-3.5 text-slate-400" />
+                  <Calendar className="w-3.5 h-3.5 text-slate-400" aria-hidden="true" />
                   <span>Invoice Date</span>
                 </label>
                 <input
@@ -677,7 +677,7 @@ export function InvoiceGenerator() {
 
               <div className="space-y-1">
                 <label className="text-xs font-semibold text-slate-700 dark:text-slate-300 flex items-center gap-1">
-                  <Calendar className="w-3.5 h-3.5 text-slate-400" />
+                  <Calendar className="w-3.5 h-3.5 text-slate-400" aria-hidden="true" />
                   <span>Due Date</span>
                 </label>
                 <input

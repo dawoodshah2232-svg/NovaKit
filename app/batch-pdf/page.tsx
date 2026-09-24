@@ -1,7 +1,24 @@
 import type { Metadata } from 'next';
 import BatchTool from './batch-tool';
+import { PageFaq } from '@/components/page-faq';
+import type { BlogFaq } from '@/lib/blog';
 
 const url = 'https://www.pdfedit.website/batch-pdf';
+
+const BATCH_FAQS: BlogFaq[] = [
+  {
+    q: 'Are files sent to a server?',
+    a: 'No. The batch merge runs entirely in browser memory; files are never uploaded.',
+  },
+  {
+    q: 'How many files can I select?',
+    a: 'The practical limit depends on available device memory.',
+  },
+  {
+    q: 'Can I reorder files?',
+    a: 'The batch page uses selection order; use Merge PDF for drag-and-drop ordering.',
+  },
+];
 
 export const metadata: Metadata = {
   title: { absolute: 'Batch Merge PDF Online Free | Combine Files | PDFEdit' },
@@ -79,6 +96,14 @@ export default function BatchPdfPage() {
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd()) }}
       />
       <BatchTool />
+      <div className="mx-auto w-full max-w-4xl px-4">
+        <PageFaq
+          faqs={BATCH_FAQS}
+          pageUrl={url}
+          withJsonLd={false}
+          intro="Short answers about how batch merging works and what it can handle."
+        />
+      </div>
     </>
   );
 }

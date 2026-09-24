@@ -399,7 +399,7 @@ export function ImageCompressor() {
                   {formatBytes(originalImage.size)}
                 </div>
                 {originalImage.width && originalImage.height && (
-                  <p className="text-[11px] text-slate-400 mt-0.5">
+                  <p className="text-[11px] text-slate-500 mt-0.5">
                     {originalImage.width} × {originalImage.height} px
                   </p>
                 )}

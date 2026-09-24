@@ -237,7 +237,7 @@ export function QrGenerator() {
                   Color Styling
                 </h3>
               </div>
-              <span className="text-[10px] font-bold uppercase tracking-wider text-slate-400">
+              <span className="text-[10px] font-bold uppercase tracking-wider text-slate-500">
                 Contrast Safe
               </span>
             </div>
@@ -371,7 +371,7 @@ export function QrGenerator() {
                   onChange={(e) => setSize(parseInt(e.target.value, 10))}
                   className="w-full accent-[var(--pe-accent)] h-2 bg-slate-200 dark:bg-slate-700 rounded-lg cursor-pointer"
                 />
-                <div className="flex justify-between text-[10px] text-slate-400">
+                <div className="flex justify-between text-[10px] text-slate-500">
                   <span>160px (Compact)</span>
                   <span>480px (Ultra-HD)</span>
                 </div>
@@ -396,7 +396,7 @@ export function QrGenerator() {
                   onChange={(e) => setMarginSize(parseInt(e.target.value, 10))}
                   className="w-full accent-[var(--pe-accent)] h-2 bg-slate-200 dark:bg-slate-700 rounded-lg cursor-pointer"
                 />
-                <div className="flex justify-between text-[10px] text-slate-400">
+                <div className="flex justify-between text-[10px] text-slate-500">
                   <span>0 (Flush)</span>
                   <span>6 (Wide Buffer)</span>
                 </div>
@@ -491,13 +491,13 @@ export function QrGenerator() {
             {/* Technical Spec Matrix */}
             <div className="grid grid-cols-3 gap-2 text-left p-3 rounded-2xl bg-slate-50 dark:bg-slate-800/50 border border-slate-200/70 dark:border-slate-700/70">
               <div>
-                <span className="text-[10px] text-slate-400 uppercase font-semibold block">Resolution</span>
+                <span className="text-[10px] text-slate-500 uppercase font-semibold block">Resolution</span>
                 <span className="text-xs font-bold text-slate-800 dark:text-slate-200 font-mono">
                   {size}×{size}px
                 </span>
               </div>
               <div>
-                <span className="text-[10px] text-slate-400 uppercase font-semibold block">Correction</span>
+                <span className="text-[10px] text-slate-500 uppercase font-semibold block">Correction</span>
                 <span className="text-xs font-bold text-slate-800 dark:text-slate-200 font-mono">
                   Level {level}
                 </span>

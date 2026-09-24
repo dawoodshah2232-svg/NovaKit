@@ -6,7 +6,6 @@ import { getToolBySlug, getAllToolSlugs } from '@/lib/tools-config';
 import { getAllPostsMeta } from '@/lib/blog';
 import {
   getToolGeoData,
-  generateFaqSchema,
   generateSoftwareAppSchema,
   generateHowToSchema,
 } from '@/lib/geo-data';
@@ -161,6 +160,8 @@ export default async function ToolPage({ params }: ToolPageProps) {
   const geoData = getToolGeoData(slug);
   const canonicalPath = canonicalPathBySlug[tool.slug] || `/tools/${tool.slug}`;
   const isMergePdf = slug === 'pdf-merger';
+  const answerLead =
+    'Yes — ' + tool.description.charAt(0).toLowerCase() + tool.description.slice(1);
   const softwareSchema = generateSoftwareAppSchema(
     tool,
     geoData,
@@ -171,7 +172,6 @@ export default async function ToolPage({ params }: ToolPageProps) {
         }
       : undefined
   );
-  const faqSchema = generateFaqSchema(geoData.faqs, tool.name);
   const howToSchema = generateHowToSchema(tool, geoData.howItWorks);
   const breadcrumbSchema = {
         '@context': 'https://schema.org',
@@ -198,11 +198,6 @@ export default async function ToolPage({ params }: ToolPageProps) {
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(softwareSchema) }}
-      />
-      {/* Generative Engine Optimization (GEO): FAQPage JSON-LD */}
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
       />
       {/* Generative Engine Optimization (GEO): HowTo Procedural JSON-LD */}
       <script
@@ -252,7 +247,7 @@ export default async function ToolPage({ params }: ToolPageProps) {
               {tool.name}
             </h1>
             <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-300 mt-1.5 max-w-xl leading-relaxed">
-              {tool.description}
+              {answerLead}
             </p>
           </div>
 

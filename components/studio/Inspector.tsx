@@ -1093,6 +1093,7 @@ export function Inspector({
                 <button
                   type="button"
                   title="Bring to front"
+                  aria-label="Bring to front"
                   onClick={onBringToFront}
                   className="flex h-9 w-9 items-center justify-center rounded-lg border border-[var(--pe-border-strong)] text-[var(--pe-text-2)] hover:bg-[var(--pe-surface-3)]"
                 >
@@ -1103,6 +1104,7 @@ export function Inspector({
                 <button
                   type="button"
                   title="Send to back"
+                  aria-label="Send to back"
                   onClick={onSendToBack}
                   className="flex h-9 w-9 items-center justify-center rounded-lg border border-[var(--pe-border-strong)] text-[var(--pe-text-2)] hover:bg-[var(--pe-surface-3)]"
                 >

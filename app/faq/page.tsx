@@ -1,6 +1,6 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
-import { HelpCircle } from 'lucide-react';
+import { FaqFilter } from '@/components/faq-filter';
 
 export const metadata: Metadata = {
   title: { absolute: 'FAQ & Help Center | PDFEdit' },
@@ -377,34 +377,7 @@ export default function FaqPage() {
         Answers about how PDFEdit works, your privacy, file limits, and fixing common problems.
       </p>
 
-      {CATEGORIES.map((cat) => (
-        <section key={cat.id} id={cat.id} className='mb-10 scroll-mt-20'>
-          <div className='flex items-center gap-2 mb-1'>
-            <HelpCircle className='h-5 w-5 text-red-600 dark:text-red-400' aria-hidden='true' />
-            <h2 className='text-xl font-semibold text-slate-900 dark:text-white'>{cat.title}</h2>
-          </div>
-          <p className='text-sm text-slate-500 dark:text-slate-400 mb-4'>{cat.intro}</p>
-          <div className='space-y-3'>
-            {cat.items.map((item) => (
-              <details
-                key={item.q}
-                className='rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 overflow-hidden'
-              >
-                <summary className='cursor-pointer list-none px-5 py-4 font-medium text-slate-900 dark:text-white hover:text-red-600 dark:hover:text-red-400 transition flex items-center justify-between gap-4 [&::-webkit-details-marker]:hidden'>
-                  <span>{item.q}</span>
-                  <span
-                    aria-hidden='true'
-                    className='shrink-0 text-red-600 dark:text-red-400 text-lg leading-none'
-                  >
-                    +
-                  </span>
-                </summary>
-                <div className='px-5 pb-5 text-sm text-slate-700 dark:text-slate-300'>{item.a}</div>
-              </details>
-            ))}
-          </div>
-        </section>
-      ))}
+      <FaqFilter categories={CATEGORIES} />
 
       <section className='rounded-2xl bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 p-5 text-sm text-slate-600 dark:text-slate-400'>
         <h2 className='font-semibold text-slate-800 dark:text-slate-200 mb-2'>Still need help?</h2>
