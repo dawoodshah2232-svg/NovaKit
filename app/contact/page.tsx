@@ -140,14 +140,19 @@ export default function ContactPage() {
         </ul>
       </section>
 
-      <section className='rounded-2xl border border-amber-200 dark:border-amber-900/50 bg-amber-50 dark:bg-amber-950/30 p-5 mb-10'>
+      <section className='rounded-2xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-900/50 p-5 mb-10'>
         <h2 className='font-semibold text-slate-900 dark:text-white mb-2 flex items-center gap-2'>
           <Mail className='h-4 w-4 text-red-600 dark:text-red-400' aria-hidden='true' /> Email support
-          — coming soon
         </h2>
         <p className='text-sm text-slate-700 dark:text-slate-300'>
-          A dedicated support email address has not been published yet. This section will be updated
-          as soon as one is available.
+          Reach us at{' '}
+          <a
+            href='mailto:dawoodshah2232@gmail.com'
+            className='font-semibold text-red-600 dark:text-red-400 underline underline-offset-2'
+          >
+            dawoodshah2232@gmail.com
+          </a>
+          . Include the tool name and a description of the issue — screenshots help.
         </p>
       </section>
 
