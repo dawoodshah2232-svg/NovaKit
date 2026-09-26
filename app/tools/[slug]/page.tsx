@@ -8,6 +8,7 @@ import {
   getToolGeoData,
   generateSoftwareAppSchema,
   generateHowToSchema,
+  generateFaqSchema,
 } from '@/lib/geo-data';
 import { GeoFaq } from '@/components/geo-faq';
 import { ToolEngine } from './tool-engine';
@@ -254,6 +255,7 @@ export default async function ToolPage({ params }: ToolPageProps) {
       : undefined
   );
   const howToSchema = generateHowToSchema(tool, geoData.howItWorks);
+  const faqSchema = generateFaqSchema(geoData.faqs);
   const breadcrumbSchema = {
         '@context': 'https://schema.org',
         '@type': 'BreadcrumbList',
@@ -284,6 +286,11 @@ export default async function ToolPage({ params }: ToolPageProps) {
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(howToSchema) }}
+      />
+      {/* Answer Engine Optimization: FAQPage JSON-LD (matches the visible GeoFaq accordion) */}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
       />
       <script
         type="application/ld+json"

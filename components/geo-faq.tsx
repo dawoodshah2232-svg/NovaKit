@@ -30,8 +30,6 @@ export function GeoFaq({ faqs, toolName }: GeoFaqProps) {
   return (
     <section
       aria-labelledby="faq-section-heading"
-      itemScope
-      itemType="https://schema.org/FAQPage"
       className="w-full space-y-5 pt-4"
     >
       {/* Header Container */}
@@ -68,9 +66,6 @@ export function GeoFaq({ faqs, toolName }: GeoFaqProps) {
           return (
             <div
               key={index}
-              itemScope
-              itemProp="mainEntity"
-              itemType="https://schema.org/Question"
               className={`rounded-2xl sm:rounded-3xl border transition-all duration-200 overflow-hidden ${
                 isOpen
                   ? 'bg-white dark:bg-slate-900 border-blue-500/40 dark:border-blue-500/30 shadow-[0_4px_20px_rgba(0,0,0,0.04)] ring-1 ring-blue-500/20'
@@ -87,7 +82,6 @@ export function GeoFaq({ faqs, toolName }: GeoFaqProps) {
                 className="w-full min-h-[52px] sm:min-h-[56px] px-5 sm:px-6 py-4 flex items-center justify-between gap-3 sm:gap-4 text-left cursor-pointer select-none touch-manipulation group"
               >
                 <span
-                  itemProp="name"
                   className={`text-sm sm:text-base font-extrabold tracking-tight transition-colors ${
                     isOpen
                       ? 'text-blue-600 dark:text-blue-400'
@@ -116,12 +110,9 @@ export function GeoFaq({ faqs, toolName }: GeoFaqProps) {
                   id={answerId}
                   role="region"
                   aria-labelledby={questionId}
-                  itemScope
-                  itemProp="acceptedAnswer"
-                  itemType="https://schema.org/Answer"
                   className="px-5 sm:px-6 pb-5 pt-1 border-t border-slate-100 dark:border-slate-800/80 text-xs sm:text-sm text-slate-600 dark:text-slate-300 leading-relaxed space-y-3 animate-in fade-in duration-150"
                 >
-                  <p itemProp="text">{faq.answer}</p>
+                  <p>{faq.answer}</p>
 
                   {/* Micro Actions Bar */}
                   <div className="flex items-center justify-between pt-2 border-t border-slate-100 dark:border-slate-800/60 text-[11px] text-slate-400">

@@ -130,6 +130,35 @@ export default async function BlogPostPage({ params }: PageProps) {
         </p>
       </header>
 
+      {/* Answer-first summary for readers and AI/answer engines.
+          Every bullet is verbatim from this article: step headings for
+          how-to guides, or the questions the guide answers below. */}
+      {(post.howToSteps.length >= 2 || post.faqs.length > 0) && (
+        <section
+          aria-label="Key takeaways"
+          className="mt-6 rounded-2xl border border-[var(--pe-border)] bg-[var(--pe-surface)] p-5 sm:p-6"
+        >
+          <h2 className="text-xs font-bold uppercase tracking-[0.18em] text-[var(--pe-accent)]">
+            Key takeaways
+          </h2>
+          <ul className="mt-3 space-y-2 text-[15px] leading-relaxed text-[var(--pe-text-2)]">
+            {post.howToSteps.length >= 2
+              ? post.howToSteps.slice(0, 4).map((s) => (
+                  <li key={s.position} className="flex gap-2.5">
+                    <span aria-hidden="true" className="font-bold text-[var(--pe-accent)]">✓</span>
+                    <span>{s.name}</span>
+                  </li>
+                ))
+              : post.faqs.slice(0, 4).map((f) => (
+                  <li key={f.q} className="flex gap-2.5">
+                    <span aria-hidden="true" className="font-bold text-[var(--pe-accent)]">→</span>
+                    <span>Answered in this guide: {f.q}</span>
+                  </li>
+                ))}
+          </ul>
+        </section>
+      )}
+
       <figure className="mt-8 overflow-hidden rounded-2xl border border-[var(--pe-border)]">
         <Image
           src={post.image}
