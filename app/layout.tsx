@@ -159,6 +159,15 @@ export default function RootLayout({
             {CONSENT_DEFAULTS_SCRIPT}
           </Script>
         ) : null}
+        {/* Google AdSense: account verification + ad serving (ads.txt already
+            declares this publisher ID). beforeInteractive keeps the snippet in
+            the served <head> HTML so AdSense ownership verification passes. */}
+        <Script
+          id="adsense"
+          strategy="beforeInteractive"
+          src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6908561724114744"
+          crossOrigin="anonymous"
+        />
         <ThemeProvider
           attribute="class"
           defaultTheme="light"
