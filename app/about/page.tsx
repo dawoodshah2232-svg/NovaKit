@@ -165,9 +165,9 @@ export default function AboutPage() {
           <Link href='/contact' className='text-blue-600 underline'>contact page</Link>.
         </p>
         <p>
-          A dedicated support email address is coming soon. Until then, please
-          use our <Link href='/contact' className='text-blue-600 underline'>contact page</Link> for
-          support, feedback, business inquiries, or abuse reports.
+          Our support email address is published on our{' '}
+          <Link href='/contact' className='text-blue-600 underline'>contact page</Link> — write to
+          us any time for support, feedback, business inquiries, or abuse reports.
         </p>
       </section>
 

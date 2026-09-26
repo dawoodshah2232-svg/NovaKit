@@ -74,6 +74,15 @@ const nextConfig: NextConfig = {
   async redirects() {
     return [
       { source: '/google-sitemap.xml', destination: '/sitemap.xml', permanent: true },
+      // Canonical host consolidation: the apex domain serves the same app as
+      // www, so redirect apex -> www (301) to avoid duplicate-content split.
+      // Host-scoped: preview deployments and other hosts are unaffected.
+      {
+        source: '/:path*',
+        has: [{ type: 'host', value: 'pdfedit.website' }],
+        destination: 'https://www.pdfedit.website/:path*',
+        permanent: true,
+      },
       // No app/tools/page.tsx exists — the hub lives on the homepage.
       // Redirect to "/" (not "/#tools") — Googlebot cannot follow fragment redirects.
       { source: '/tools', destination: '/', permanent: true },

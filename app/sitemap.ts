@@ -1,6 +1,6 @@
 import type { MetadataRoute } from 'next';
 import { TOOLS_CONFIG } from '@/lib/tools-config';
-import { getAllPostSlugs } from '@/lib/blog';
+import { getAllPostsMeta } from '@/lib/blog';
 
 const BASE_URL = 'https://www.pdfedit.website';
 
@@ -205,8 +205,14 @@ export default function sitemap(): MetadataRoute.Sitemap {
       changeFrequency: 'weekly' as const,
       priority: 0.8,
     },
-    ...getAllPostSlugs().map((slug) => ({
-      url: `${BASE_URL}/blog/${slug}`,
+    /*
+     * Blog posts carry their real publication date as lastmod — taken from
+     * each post's frontmatter, never faked. Core/tool pages omit lastmod
+     * because we don't have a genuine per-page update date for them.
+     */
+    ...getAllPostsMeta().map((post) => ({
+      url: `${BASE_URL}/blog/${post.slug}`,
+      lastModified: post.date,
       changeFrequency: 'monthly' as const,
       priority: 0.7,
     })),
