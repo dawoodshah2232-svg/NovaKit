@@ -17,6 +17,7 @@ export const metadata: Metadata = {
       'Design a job-winning CV with live preview, 8 professional templates, and one-click PDF export. Free and private — files never leave your browser.',
     url,
     type: 'website',
+    images: [{ url: 'https://www.pdfedit.website/og-image.png', width: 1200, height: 630, alt: 'PDFEdit \u2013 Free Online PDF Editor & Tools' }],
   },
 };
 

@@ -11,8 +11,9 @@ export const metadata: Metadata = {
     title: 'Delete PDF Pages Online Free | PDFEdit',
     description: 'Delete unwanted or blank pages from your PDF document visually. 100% private in-browser processing.',
     url,
-  },
-  twitter: { card: 'summary_large_image', title: 'Delete PDF Pages Online Free | PDFEdit', description: 'Delete unwanted or blank pages from your PDF document visually. 100% private in-browser processing.' },
+      images: [{ url: 'https://www.pdfedit.website/og-image.png', width: 1200, height: 630, alt: 'PDFEdit \u2013 Free Online PDF Editor & Tools' }],
+},
+  twitter: { card: 'summary_large_image', title: 'Delete PDF Pages Online Free | PDFEdit', description: 'Delete unwanted or blank pages from your PDF document visually. 100% private in-browser processing.', images: ['https://www.pdfedit.website/og-image.png']},
 };
 
 export default function Page() {

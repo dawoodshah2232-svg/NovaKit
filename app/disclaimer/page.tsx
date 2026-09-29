@@ -14,13 +14,14 @@ export const metadata: Metadata = {
       'Important information about the limits of PDFEdit tools: accuracy, signatures, redaction, and professional advice.',
     url: 'https://www.pdfedit.website/disclaimer',
     type: 'website',
+    images: [{ url: 'https://www.pdfedit.website/og-image.png', width: 1200, height: 630, alt: 'PDFEdit \u2013 Free Online PDF Editor & Tools' }],
   },
   twitter: {
     card: 'summary_large_image',
     title: 'Disclaimer | PDFEdit',
     description:
       'Important information about the limits of PDFEdit tools: accuracy, signatures, redaction, and professional advice.',
-  },
+  images: ['https://www.pdfedit.website/og-image.png']},
 };
 
 export default function DisclaimerPage() {

@@ -14,6 +14,7 @@ export const metadata: Metadata = {
       'The rules for using PDFEdit free browser-based PDF tools.',
     url: 'https://www.pdfedit.website/terms',
     type: 'website',
+    images: [{ url: 'https://www.pdfedit.website/og-image.png', width: 1200, height: 630, alt: 'PDFEdit \u2013 Free Online PDF Editor & Tools' }],
   },
 };
 

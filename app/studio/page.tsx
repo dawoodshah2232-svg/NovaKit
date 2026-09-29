@@ -16,7 +16,8 @@ export const metadata: Metadata = {
     description:
       'Edit PDFs in your browser: annotate, sign, stamp, manage pages, and redact. 100% private — your files never leave your browser.',
     url,
-  },
+      images: [{ url: 'https://www.pdfedit.website/og-image.png', width: 1200, height: 630, alt: 'PDFEdit \u2013 Free Online PDF Editor & Tools' }],
+},
 };
 
 const STUDIO_FAQS: BlogFaq[] = [

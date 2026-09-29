@@ -136,6 +136,16 @@ export const viewport: Viewport = {
   ],
 };
 
+/*
+ * Google AdSense publisher ID. This is a PUBLIC identifier (it is also
+ * published in public/ads.txt, which AdSense requires) — not a secret. It is
+ * read from the server-only ADSENSE_CLIENT_ID env var so it isn't hardcoded
+ * through client code; the fallback keeps the served snippet working on
+ * existing deploys that don't set the variable yet.
+ */
+const ADSENSE_CLIENT_ID =
+  process.env.ADSENSE_CLIENT_ID || 'ca-pub-6908561724114744';
+
 export default function RootLayout({
   children,
 }: {
@@ -151,10 +161,12 @@ export default function RootLayout({
         suppressHydrationWarning
         className={`${inter.variable} ${jetbrainsMono.variable} min-h-full bg-[#f8fafc] font-sans text-slate-900 antialiased dark:bg-slate-950 dark:text-slate-100`}
       >
-        {/* GA4 Consent Mode defaults: deny analytics until the visitor accepts.
+        {/* Consent Mode defaults: deny ad + analytics storage until the visitor
+            accepts the cookie notice. AdSense runs on every page, so the
+            defaults apply even when no GA4 measurement ID is configured.
             beforeInteractive is required here (root layout) so it runs before
-            the gtag.js library loads. Renders nothing without a measurement ID. */}
-        {process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID ? (
+            the gtag.js / AdSense libraries load. */}
+        {process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID || ADSENSE_CLIENT_ID ? (
           <Script id="ga4-consent-defaults" strategy="beforeInteractive">
             {CONSENT_DEFAULTS_SCRIPT}
           </Script>
@@ -165,7 +177,7 @@ export default function RootLayout({
         <Script
           id="adsense"
           strategy="beforeInteractive"
-          src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6908561724114744"
+          src={`https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=${ADSENSE_CLIENT_ID}`}
           crossOrigin="anonymous"
         />
         <ThemeProvider

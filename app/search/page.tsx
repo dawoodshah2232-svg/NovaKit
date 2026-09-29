@@ -23,7 +23,7 @@ function toolHref(slug: string): string {
 
 export default async function SearchPage({ searchParams }: SearchPageProps) {
   const { q } = await searchParams;
-  const query = (q ?? '').trim();
+  const query = (q ?? '').trim().slice(0, 120);
   const needle = query.toLowerCase();
 
   const toolResults = needle
@@ -65,6 +65,7 @@ export default async function SearchPage({ searchParams }: SearchPageProps) {
           defaultValue={query}
           placeholder="Search tools & guides — e.g. merge, compress, sign…"
           aria-label="Search tools and guides"
+          maxLength={120}
           className="w-full rounded-2xl border border-[var(--pe-border)] bg-[var(--pe-surface)] py-3 pl-11 pr-4 text-sm text-[var(--pe-text)] placeholder:text-[var(--pe-text-3)] shadow-sm outline-none transition focus:border-red-400 focus:ring-2 focus:ring-red-100 dark:focus:ring-red-950"
         />
       </form>

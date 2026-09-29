@@ -39,13 +39,14 @@ export const metadata: Metadata = {
     url: 'https://www.pdfedit.website/',
     siteName: 'PDFEdit',
     type: 'website',
+    images: [{ url: 'https://www.pdfedit.website/og-image.png', width: 1200, height: 630, alt: 'PDFEdit \u2013 Free Online PDF Editor & Tools' }],
   },
   twitter: {
     card: 'summary_large_image',
     title: 'PDFEdit – Free Online PDF Editor & Tools',
     description:
       'Edit, convert, organize and sign PDFs with fast browser-based tools.',
-  },
+  images: ['https://www.pdfedit.website/og-image.png']},
 };
 
 const BASE_URL = 'https://www.pdfedit.website';

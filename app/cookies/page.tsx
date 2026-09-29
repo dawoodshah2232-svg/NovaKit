@@ -15,6 +15,7 @@ export const metadata: Metadata = {
       'PDFEdit does not set tracking cookies for visitors. Learn how our analytics, theme preference, and advertising cookies work.',
     url: 'https://www.pdfedit.website/cookies',
     type: 'website',
+    images: [{ url: 'https://www.pdfedit.website/og-image.png', width: 1200, height: 630, alt: 'PDFEdit \u2013 Free Online PDF Editor & Tools' }],
   },
 };
 

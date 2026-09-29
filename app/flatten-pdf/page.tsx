@@ -11,8 +11,9 @@ export const metadata: Metadata = {
     title: 'Flatten PDF Online Free | Lock Form Fields | PDFEdit',
     description: 'Flatten fillable form fields, comments, and annotations in PDF documents into static content client-side.',
     url,
-  },
-  twitter: { card: 'summary_large_image', title: 'Flatten PDF Online Free | Lock Form Fields | PDFEdit', description: 'Flatten fillable form fields, comments, and annotations in PDF documents into static content client-side.' },
+      images: [{ url: 'https://www.pdfedit.website/og-image.png', width: 1200, height: 630, alt: 'PDFEdit \u2013 Free Online PDF Editor & Tools' }],
+},
+  twitter: { card: 'summary_large_image', title: 'Flatten PDF Online Free | Lock Form Fields | PDFEdit', description: 'Flatten fillable form fields, comments, and annotations in PDF documents into static content client-side.', images: ['https://www.pdfedit.website/og-image.png']},
 };
 
 export default function Page() {

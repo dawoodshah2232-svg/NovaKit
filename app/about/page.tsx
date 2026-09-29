@@ -76,6 +76,7 @@ export const metadata: Metadata = {
       'Free, private, browser-based PDF tools. Files are processed locally on your device and never uploaded to our servers.',
     url: 'https://www.pdfedit.website/about',
     type: 'website',
+    images: [{ url: 'https://www.pdfedit.website/og-image.png', width: 1200, height: 630, alt: 'PDFEdit \u2013 Free Online PDF Editor & Tools' }],
   },
 };
 

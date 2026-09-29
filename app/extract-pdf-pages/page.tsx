@@ -11,8 +11,9 @@ export const metadata: Metadata = {
     title: 'Extract PDF Pages Online Free | PDFEdit',
     description: 'Extract specific pages or ranges from PDF files into a new PDF or ZIP archive client-side.',
     url,
-  },
-  twitter: { card: 'summary_large_image', title: 'Extract PDF Pages Online Free | PDFEdit', description: 'Extract specific pages or ranges from PDF files into a new PDF or ZIP archive client-side.' },
+      images: [{ url: 'https://www.pdfedit.website/og-image.png', width: 1200, height: 630, alt: 'PDFEdit \u2013 Free Online PDF Editor & Tools' }],
+},
+  twitter: { card: 'summary_large_image', title: 'Extract PDF Pages Online Free | PDFEdit', description: 'Extract specific pages or ranges from PDF files into a new PDF or ZIP archive client-side.', images: ['https://www.pdfedit.website/og-image.png']},
 };
 
 export default function Page() {

@@ -1,12 +1,22 @@
 /**
- * Shared cookie-consent state for Google Analytics (GA4).
+ * Shared cookie-consent state for Google Analytics (GA4) and Google AdSense.
  *
  * - Choice is stored in localStorage under CONSENT_STORAGE_KEY ('accepted' | 'declined').
- * - GA4 runs in Consent Mode: analytics_storage defaults to 'denied' and is
+ * - GA4 runs in Consent Mode: analytics/ad storage defaults to 'denied' and is
  *   only granted after the visitor explicitly accepts.
- * - The cookie banner only renders when NEXT_PUBLIC_GA_MEASUREMENT_ID is set —
- *   without a measurement ID there is nothing to consent to.
+ * - The cookie banner renders when a GA4 measurement ID is configured OR when
+ *   AdSense advertising cookies are active — AdSense runs on every page, so the
+ *   banner must appear even when no measurement ID is set.
  */
+
+/**
+ * AdSense is rendered on every page (see app/layout.tsx), which sets
+ * advertising cookies via Google's ad tag. Keep this true whenever the AdSense
+ * snippet is rendered — it gates the cookie banner alongside the GA4
+ * measurement ID. The client bundle cannot read the server-only
+ * ADSENSE_CLIENT_ID env var, so this stays a plain constant.
+ */
+export const ADSENSE_COOKIES_ACTIVE = true;
 
 export const CONSENT_STORAGE_KEY = 'pdfedit.cookie-consent';
 export const OPEN_SETTINGS_EVENT = 'pdfedit:open-cookie-settings';
@@ -56,7 +66,12 @@ export function pushConsentToGtag(granted: boolean): void {
   try {
     const gtag = (window as unknown as { gtag?: (...args: unknown[]) => void }).gtag;
     if (typeof gtag === 'function') {
-      gtag('consent', 'update', { analytics_storage: granted ? 'granted' : 'denied' });
+      gtag('consent', 'update', {
+        analytics_storage: granted ? 'granted' : 'denied',
+        ad_storage: granted ? 'granted' : 'denied',
+        ad_user_data: granted ? 'granted' : 'denied',
+        ad_personalization: granted ? 'granted' : 'denied',
+      });
     }
   } catch {
     /* Analytics must never break the page. */

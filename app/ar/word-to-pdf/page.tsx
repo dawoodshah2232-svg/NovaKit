@@ -21,13 +21,14 @@ export async function generateMetadata(): Promise<Metadata> {
       url: canonical,
       siteName: 'PDFEdit',
       type: 'website',
+      images: [{ url: 'https://www.pdfedit.website/og-image.png', width: 1200, height: 630, alt: 'PDFEdit \u2013 Free Online PDF Editor & Tools' }],
       locale: 'ar_AR',
     },
     twitter: {
       card: 'summary_large_image',
       title: tool.metaTitle,
       description: tool.metaDescription,
-    },
+    images: ['https://www.pdfedit.website/og-image.png']},
   };
 }
 

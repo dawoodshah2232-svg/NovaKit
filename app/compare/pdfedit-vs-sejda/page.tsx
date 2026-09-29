@@ -154,13 +154,14 @@ export const metadata: Metadata = {
     url,
     siteName: 'PDFEdit',
     type: 'website',
+    images: [{ url: 'https://www.pdfedit.website/og-image.png', width: 1200, height: 630, alt: 'PDFEdit \u2013 Free Online PDF Editor & Tools' }],
   },
   twitter: {
     card: 'summary_large_image',
     title: 'PDFEdit vs Sejda: Free Browser-Only Alternative | PDFEdit',
     description:
       'No 3-tasks-per-hour wall, no uploads. An honest side-by-side of PDFEdit and Sejda.',
-  },
+  images: ['https://www.pdfedit.website/og-image.png']},
 };
 
 export default function Page() {

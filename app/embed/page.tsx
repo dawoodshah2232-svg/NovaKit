@@ -29,6 +29,7 @@ export async function generateMetadata({ searchParams }: EmbedPageProps): Promis
       url: `${BASE_URL}/embed`,
       siteName: 'PDFEdit',
       type: 'website',
+      images: [{ url: 'https://www.pdfedit.website/og-image.png', width: 1200, height: 630, alt: 'PDFEdit \u2013 Free Online PDF Editor & Tools' }],
     },
   };
 }

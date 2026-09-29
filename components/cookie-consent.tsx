@@ -4,6 +4,7 @@ import { useCallback, useEffect, useState } from 'react';
 import Link from 'next/link';
 import { Cookie } from 'lucide-react';
 import {
+  ADSENSE_COOKIES_ACTIVE,
   OPEN_SETTINGS_EVENT,
   pushConsentToGtag,
   readConsentChoice,
@@ -11,21 +12,22 @@ import {
 } from '@/lib/cookie-consent';
 
 /**
- * Lightweight cookie-consent notice for Google Analytics.
+ * Lightweight cookie-consent notice for Google Analytics + Google AdSense.
  *
- * Only renders when NEXT_PUBLIC_GA_MEASUREMENT_ID is configured — without a
- * measurement ID there is nothing to consent to, so no banner is shown.
- * Choice persists in localStorage; visitors can change it any time via the
- * "Cookie Settings" link in the footer.
+ * Renders when NEXT_PUBLIC_GA_MEASUREMENT_ID is configured or when AdSense
+ * advertising cookies are active (AdSense runs on every page, so the banner
+ * must appear even without a measurement ID). Choice persists in localStorage;
+ * visitors can change it any time via the "Cookie Settings" link in the footer.
  */
 
 const GA_MEASUREMENT_ID = process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID;
+const CONSENT_REQUIRED = Boolean(GA_MEASUREMENT_ID) || ADSENSE_COOKIES_ACTIVE;
 
 export function CookieConsent() {
   const [visible, setVisible] = useState(false);
 
   useEffect(() => {
-    if (!GA_MEASUREMENT_ID) return;
+    if (!CONSENT_REQUIRED) return;
     if (readConsentChoice() === null) {
       // Small delay so the banner doesn't fight the first paint.
       const timer = setTimeout(() => setVisible(true), 1200);
@@ -64,9 +66,9 @@ export function CookieConsent() {
               We value your privacy
             </p>
             <p className="mt-1 text-xs leading-relaxed text-slate-600 dark:text-slate-300">
-              We use Google Analytics to understand which tools people use, so we
-              can improve them. No document content or file names are ever
-              collected.{' '}
+              We use optional analytics cookies to understand which tools people
+              use, and advertising cookies for the ads that keep PDFEdit free.
+              No document content or file names are ever collected.{' '}
               <Link
                 href="/cookies"
                 className="font-bold text-[var(--pe-accent)] underline-offset-2 hover:underline"
@@ -89,7 +91,7 @@ export function CookieConsent() {
             onClick={() => choose(true)}
             className="min-h-[44px] flex-1 rounded-xl bg-[var(--pe-accent)] px-4 py-2.5 text-xs font-bold text-white shadow-md shadow-[var(--pe-shadow-accent)] transition hover:bg-[var(--pe-accent-hover)] active:scale-95"
           >
-            Accept analytics
+            Accept all
           </button>
         </div>
       </div>

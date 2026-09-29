@@ -41,6 +41,7 @@ export const metadata: Metadata = {
       'Practical PDF guides from the PDFEdit team: edit, merge, compress, sign, convert and protect PDFs online.',
     url: 'https://www.pdfedit.website/blog',
     type: 'website',
+    images: [{ url: 'https://www.pdfedit.website/og-image.png', width: 1200, height: 630, alt: 'PDFEdit \u2013 Free Online PDF Editor & Tools' }],
   },
 };
 

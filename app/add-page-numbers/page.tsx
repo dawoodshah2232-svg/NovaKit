@@ -11,8 +11,9 @@ export const metadata: Metadata = {
     title: 'Add Page Numbers to PDF Free Online | PDFEdit',
     description: 'Add page numbers, Roman numerals, or custom pagination to PDF documents locally in your browser.',
     url,
-  },
-  twitter: { card: 'summary_large_image', title: 'Add Page Numbers to PDF Free Online | PDFEdit', description: 'Add page numbers, Roman numerals, or custom pagination to PDF documents locally in your browser.' },
+      images: [{ url: 'https://www.pdfedit.website/og-image.png', width: 1200, height: 630, alt: 'PDFEdit \u2013 Free Online PDF Editor & Tools' }],
+},
+  twitter: { card: 'summary_large_image', title: 'Add Page Numbers to PDF Free Online | PDFEdit', description: 'Add page numbers, Roman numerals, or custom pagination to PDF documents locally in your browser.', images: ['https://www.pdfedit.website/og-image.png']},
 };
 
 export default function Page() {

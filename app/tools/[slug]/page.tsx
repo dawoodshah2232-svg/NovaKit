@@ -223,7 +223,7 @@ export async function generateMetadata({ params }: ToolPageProps): Promise<Metad
       card: 'summary_large_image',
       title: `${tool.name} | PDFEdit Studio`,
       description,
-    },
+    images: ['https://www.pdfedit.website/og-image.png']},
     alternates: {
       canonical: canonicalUrl,
     },

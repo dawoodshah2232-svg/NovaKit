@@ -19,12 +19,13 @@ export const metadata: Metadata = {
     description:
       'Draw, type, or upload a signature image and place it on a PDF page locally.',
     url,
-  },
+      images: [{ url: 'https://www.pdfedit.website/og-image.png', width: 1200, height: 630, alt: 'PDFEdit \u2013 Free Online PDF Editor & Tools' }],
+},
   twitter: {
     card: 'summary_large_image',
     title: 'Sign PDF Online Free | PDFEdit',
     description:
       'Draw, type, or upload a signature image and place it on a PDF page locally.',
-  },
+  images: ['https://www.pdfedit.website/og-image.png']},
 };
 export default function Page() { return <ToolPage params={Promise.resolve({ slug: 'sign-pdf' })} />; }

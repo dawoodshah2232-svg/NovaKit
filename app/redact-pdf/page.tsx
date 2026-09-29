@@ -11,8 +11,9 @@ export const metadata: Metadata = {
     title: 'Redact PDF Online Free | Cover Sensitive Text | PDFEdit',
     description: 'Visually cover sensitive info in PDF files with black or white boxes, right in your browser with zero server uploads.',
     url,
-  },
-  twitter: { card: 'summary_large_image', title: 'Redact PDF Online Free | Cover Sensitive Text | PDFEdit', description: 'Visually cover sensitive info in PDF files with black or white boxes, right in your browser with zero server uploads.' },
+      images: [{ url: 'https://www.pdfedit.website/og-image.png', width: 1200, height: 630, alt: 'PDFEdit \u2013 Free Online PDF Editor & Tools' }],
+},
+  twitter: { card: 'summary_large_image', title: 'Redact PDF Online Free | Cover Sensitive Text | PDFEdit', description: 'Visually cover sensitive info in PDF files with black or white boxes, right in your browser with zero server uploads.', images: ['https://www.pdfedit.website/og-image.png']},
 };
 
 export default function Page() {
