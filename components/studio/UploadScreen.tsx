@@ -67,9 +67,9 @@ export function UploadScreen({ onFile, onSample, busy, status, error }: UploadSc
             <FileText size={12} />
             Enterprise Studio
           </p>
-          <h1 className="text-3xl font-bold tracking-tight text-[var(--pe-text)] sm:text-4xl">
+          <p className="text-3xl font-bold tracking-tight text-[var(--pe-text)] sm:text-4xl">
             PDFEdit Studio
-          </h1>
+          </p>
           <p className="mx-auto mt-3 max-w-md text-[15px] leading-7 text-[var(--pe-text-2)]">
             Edit PDFs right in your browser — add text, draw, highlight, sign,
             stamp and redact.

@@ -52,33 +52,11 @@ export const metadata: Metadata = {
 const BASE_URL = 'https://www.pdfedit.website';
 
 function jsonLd() {
+  // NOTE: WebSite + Organization are emitted site-wide from app/layout.tsx —
+  // keep only page-specific nodes here to avoid duplicate @ids.
   return {
     '@context': 'https://schema.org',
     '@graph': [
-      {
-        '@type': 'WebSite',
-        '@id': `${BASE_URL}/#website`,
-        url: `${BASE_URL}/`,
-        name: 'PDFEdit',
-        description:
-          'Free online PDF editor and PDF tools. Merge, split, compress, sign, convert and watermark PDF files directly in your browser — no uploads, no accounts.',
-        potentialAction: {
-          '@type': 'SearchAction',
-          target: {
-            '@type': 'EntryPoint',
-            urlTemplate: `${BASE_URL}/#tools`,
-          },
-          'query-input': 'required name=search_term_string',
-        },
-      },
-      {
-        '@type': 'Organization',
-        '@id': `${BASE_URL}/#organization`,
-        name: 'PDFEdit',
-        url: `${BASE_URL}/`,
-        logo: `${BASE_URL}/og-image.png`,
-        sameAs: [],
-      },
       {
         '@type': 'ItemList',
         name: 'PDFEdit tool library',
