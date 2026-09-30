@@ -259,6 +259,22 @@ export function blogPostUrl(slug: string): string {
   return `${BASE_URL}/blog/${slug}`;
 }
 
+/**
+ * BreadcrumbList JSON-LD for guide posts: Home > Blog > <post title>.
+ * Matches the visible breadcrumb nav on the page.
+ */
+export function breadcrumbJsonLd(post: BlogPost): Record<string, unknown> {
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+      { '@type': 'ListItem', position: 1, name: 'Home', item: BASE_URL },
+      { '@type': 'ListItem', position: 2, name: 'Blog', item: `${BASE_URL}/blog` },
+      { '@type': 'ListItem', position: 3, name: post.title, item: blogPostUrl(post.slug) },
+    ],
+  };
+}
+
 export function articleJsonLd(post: BlogPost): Record<string, unknown> {
   return {
     '@context': 'https://schema.org',

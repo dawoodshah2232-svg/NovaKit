@@ -8,6 +8,7 @@ import {
   getPost,
   blogPostUrl,
   articleJsonLd,
+  breadcrumbJsonLd,
   faqJsonLd,
   howToJsonLd,
 } from '@/lib/blog';
@@ -89,6 +90,7 @@ export default async function BlogPostPage({ params }: PageProps) {
     : all.filter((p) => p.slug !== post.slug).slice(0, 3);
 
   const articleLd = articleJsonLd(post);
+  const breadcrumbLd = breadcrumbJsonLd(post);
   const faqLd = faqJsonLd(post);
   const howToLd = howToJsonLd(post);
 
@@ -97,6 +99,10 @@ export default async function BlogPostPage({ params }: PageProps) {
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(articleLd) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbLd) }}
       />
       {faqLd && (
         <script

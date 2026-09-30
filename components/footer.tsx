@@ -13,6 +13,7 @@ const PRODUCT_LINKS = [
   { label: 'Rotate PDF', href: '/rotate-pdf' },
   { label: 'JPG to PDF', href: '/jpg-to-pdf' },
   { label: 'PDF to Images', href: '/pdf-to-images' },
+  { label: 'Embed tools', href: '/embed' },
 ];
 
 const COMPANY_LINKS = [
@@ -20,6 +21,7 @@ const COMPANY_LINKS = [
   { label: 'Blog', href: '/blog' },
   { label: 'Contact', href: '/contact' },
   { label: 'FAQ', href: '/faq' },
+  { label: 'Search', href: '/search' },
   { label: 'Security', href: '/#security' },
 ];
 
