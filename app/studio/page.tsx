@@ -9,7 +9,7 @@ const url = 'https://www.pdfedit.website/studio';
 export const metadata: Metadata = {
   title: { absolute: 'PDF Studio Online Free | Edit PDF in Your Browser | PDFEdit' },
   description:
-    'Open and edit PDFs in a full browser studio: add text, draw, highlight, insert shapes, images, signatures and stamps, reorder, rotate, duplicate, delete and extract pages, and apply redaction overlays. 100% private — files are processed in your browser and never uploaded to our servers.',
+    'Edit PDFs free in your browser: add text, draw, highlight, sign, stamp, manage pages and redact. 100% private — files never leave your device.',
   alternates: { canonical: url },
   openGraph: {
     title: 'PDF Studio Online Free | PDFEdit',
@@ -47,6 +47,21 @@ export default function MasterStudioPage() {
   return (
     <>
       <JsonLd schema={studioSchema} />
+      {/* Server-rendered H1 + intro: the studio app itself loads client-side
+          (ssr:false), so crawlers get the page headline and description here. */}
+      <header className="pe-preview bg-[var(--pe-bg)] px-4 pb-2 pt-10 text-center">
+        <p className="mb-3 inline-flex items-center rounded-full border border-[var(--pe-border)] bg-[var(--pe-surface)] px-3 py-1 text-[11px] font-bold uppercase tracking-[0.18em] text-[var(--pe-accent)]">
+          Free online PDF editor
+        </p>
+        <h1 className="mx-auto max-w-3xl text-3xl font-bold tracking-tight text-[var(--pe-text)] sm:text-4xl">
+          Edit PDF Online Free — PDFEdit Studio
+        </h1>
+        <p className="mx-auto mt-3 max-w-2xl text-[15px] leading-7 text-[var(--pe-text-2)]">
+          Open any PDF and edit it right in your browser — add text, draw,
+          highlight, sign, stamp, manage pages and redact. 100% private: your
+          files never leave your device.
+        </p>
+      </header>
       <PdfStudio />
       <main className="mx-auto w-full max-w-4xl px-4 pb-12 sm:px-6">
         <PageFaq

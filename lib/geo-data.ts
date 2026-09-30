@@ -30,7 +30,7 @@ export interface GeoToolData {
 export const GEO_DATA_MAP: Record<string, GeoToolData> = {
   'pdf-merger': {
     primaryKeyword: 'secure client-side PDF merger',
-    seoTitle: 'Secure Client-Side PDF Merger – Combine PDF Files Locally Free | PDFEdit Studio',
+    seoTitle: 'Merge PDF Online Free — Combine Files Securely | PDFEdit',
     metaDescription:
       'Combine multiple PDF files into one clean document with zero server uploads. 100% private, client-side in-memory processing via pdf-lib. Drag-and-drop page reordering with instant local download. Unlimited file size, no watermark, no sign-up required.',
     longTailKeywords: [
@@ -111,7 +111,7 @@ export const GEO_DATA_MAP: Record<string, GeoToolData> = {
   },
   'split-pdf': {
     primaryKeyword: 'client-side split PDF online free',
-    seoTitle: 'Split PDF Online Free – Extract Pages & Separate PDF Locally | PDFEdit Studio',
+    seoTitle: 'Split PDF Online Free — Extract Pages Easily | PDFEdit',
     metaDescription:
       'Extract individual pages or separate multi-page PDF documents into discrete files or bundled ZIP archives. 100% in-browser processing with zero server uploads. Extract custom page ranges or split all pages instantly.',
     longTailKeywords: [
@@ -268,7 +268,7 @@ export const GEO_DATA_MAP: Record<string, GeoToolData> = {
   },
   'pdf-to-image': {
     primaryKeyword: 'convert PDF to JPG PNG client-side',
-    seoTitle: 'PDF to Image Converter – High-Resolution JPG & PNG Online Free | PDFEdit Studio',
+    seoTitle: 'PDF to JPG/PNG Converter Online Free | PDFEdit',
     metaDescription:
       'Convert PDF pages into high-resolution JPG or PNG images directly in your browser using client-side canvas rendering. Zero server uploads, total privacy, batch ZIP download, no file size caps.',
     longTailKeywords: [
@@ -336,7 +336,7 @@ export const GEO_DATA_MAP: Record<string, GeoToolData> = {
   },
   'protect-pdf': {
     primaryKeyword: 'encrypt PDF document offline free',
-    seoTitle: 'Protect PDF Online – Encrypt & Password Protect PDF Locally | PDFEdit Studio',
+    seoTitle: 'Protect PDF Online — Encrypt with Password | PDFEdit',
     metaDescription:
       'Encrypt and password-protect your PDF documents with industry-standard security and permission controls. 100% local encryption—passwords and files never leave your device.',
     longTailKeywords: [
@@ -398,7 +398,7 @@ export const GEO_DATA_MAP: Record<string, GeoToolData> = {
   },
   'image-compressor': {
     primaryKeyword: 'browser-based image compressor without quality loss',
-    seoTitle: 'Browser-Based Image Compressor – Compress JPEG, PNG & WebP Locally | PDFEdit Studio',
+    seoTitle: 'Compress Image Online Free — JPEG, PNG, WebP | PDFEdit',
     metaDescription:
       'Compress JPEG, PNG, and WebP images directly in your browser with adjustable quality and instant side-by-side preview. Zero cloud uploads, 100% private WebAssembly canvas processing with maximum byte reduction.',
     longTailKeywords: [
@@ -466,7 +466,7 @@ export const GEO_DATA_MAP: Record<string, GeoToolData> = {
   },
   'color-extractor': {
     primaryKeyword: 'extract color palette from image online free',
-    seoTitle: 'Color Palette Extractor – Extract HEX & RGB Codes from Images | PDFEdit Studio',
+    seoTitle: 'Color Picker from Image — Extract HEX & RGB | PDFEdit',
     metaDescription:
       'Extract dominant color palettes, HEX/RGB codes, and accessibility contrast ratios directly from any uploaded image. Local canvas pixel sampling with zero server uploads. Free for designers and developers.',
     longTailKeywords: [
@@ -528,7 +528,7 @@ export const GEO_DATA_MAP: Record<string, GeoToolData> = {
   },
   'qr-generator': {
     primaryKeyword: 'high-speed QR code maker',
-    seoTitle: 'High-Speed QR Code Maker – Generate Custom SVG & PNG QR Codes Free | PDFEdit Studio',
+    seoTitle: 'QR Code Generator Free — Custom SVG & PNG | PDFEdit',
     metaDescription:
       'Generate customizable, high-resolution QR codes for URLs, Wi-Fi passwords, contact cards, and text with instant SVG vector and PNG downloads. 100% client-side, zero tracking, free forever.',
     longTailKeywords: [
@@ -591,7 +591,7 @@ export const GEO_DATA_MAP: Record<string, GeoToolData> = {
   },
   'invoice-generator': {
     primaryKeyword: 'instant invoice generator for freelancers',
-    seoTitle: 'Instant Invoice Generator for Freelancers – Free PDF Maker | PDFEdit Studio',
+    seoTitle: 'Free Invoice Generator — PDF Invoices Online | PDFEdit',
     metaDescription:
       'Create, customize, and export professional PDF invoices with custom tax rates, multi-currency support, discounts, and line items. Instant client-side PDF rendering with zero sign-up and zero data retention.',
     longTailKeywords: [
@@ -654,7 +654,7 @@ export const GEO_DATA_MAP: Record<string, GeoToolData> = {
   },
   'tax-calculator': {
     primaryKeyword: 'gross to net salary tax calculator',
-    seoTitle: 'Tax & Salary Calculator – Gross to Net Take-Home Pay Breakdown | PDFEdit Studio',
+    seoTitle: 'Salary Tax Calculator — Gross to Net Pay | PDFEdit',
     metaDescription:
       'Quickly compute sales tax, value-added tax (VAT), gross-to-net earnings, deductions, and effective tax rates with real-time breakdowns. 100% private client-side computation—financial figures never leave your device.',
     longTailKeywords: [
@@ -717,7 +717,7 @@ export const GEO_DATA_MAP: Record<string, GeoToolData> = {
   },
   'text-analyzer': {
     primaryKeyword: 'free SEO text analyzer and word counter',
-    seoTitle: 'SEO Text Analyzer & Word Counter – Keyword Density & Reading Time | PDFEdit Studio',
+    seoTitle: 'Word Counter & Text Analyzer Online Free | PDFEdit',
     metaDescription:
       'Analyze word count, reading time, speaking pace, keyword density, and sentence structure for high-ranking SEO copy. Instant local analysis in browser memory—your drafts remain strictly private.',
     longTailKeywords: [
@@ -780,7 +780,7 @@ export const GEO_DATA_MAP: Record<string, GeoToolData> = {
   },
   'password-generator': {
     primaryKeyword: 'cryptographically secure password generator',
-    seoTitle: 'Secure Password Generator – Strong Cryptographic Passwords & Passphrases | PDFEdit Studio',
+    seoTitle: 'Strong Password Generator Online Free | PDFEdit',
     metaDescription:
       'Create cryptographically secure, random passwords and passphrases with real-time entropy analysis and custom character rules. Powered by the browser Web Crypto API (crypto.getRandomValues)—passwords are never saved or transmitted.',
     longTailKeywords: [
@@ -843,7 +843,7 @@ export const GEO_DATA_MAP: Record<string, GeoToolData> = {
   },
   'image-to-pdf': {
     primaryKeyword: 'convert image to pdf online free',
-    seoTitle: 'Image to PDF Converter – Convert JPG & PNG to PDF Free | PDFEdit Studio',
+    seoTitle: 'JPG to PDF Converter Online Free | PDFEdit',
     metaDescription:
       'Convert JPG, PNG, and WebP pictures into a clean PDF document with zero server uploads. Reorder images visually, choose A4 or Letter, and download instantly.',
     longTailKeywords: [
@@ -884,7 +884,7 @@ export const GEO_DATA_MAP: Record<string, GeoToolData> = {
   },
   'pdf-to-images': {
     primaryKeyword: 'convert pdf to images online free',
-    seoTitle: 'PDF to Images Converter – Extract High-Res PNG & JPG Free | PDFEdit Studio',
+    seoTitle: 'PDF to JPG Converter — Extract Images Free | PDFEdit',
     metaDescription:
       'Extract PDF pages as crisp PNG or JPG images directly in your browser. Download pages individually or bundled as a ZIP archive with zero cloud uploads.',
     longTailKeywords: [
@@ -924,7 +924,7 @@ export const GEO_DATA_MAP: Record<string, GeoToolData> = {
   },
   'organize-pdf': {
     primaryKeyword: 'reorder pdf pages online free',
-    seoTitle: 'Organize & Reorder PDF Pages – Rearrange PDF Visually | PDFEdit Studio',
+    seoTitle: 'Reorder PDF Pages Online Free | PDFEdit',
     metaDescription:
       'Rearrange, delete, duplicate, and reorder PDF pages visually with interactive thumbnail cards. 100% private in-browser page organizer with zero server uploads.',
     longTailKeywords: [
@@ -960,7 +960,7 @@ export const GEO_DATA_MAP: Record<string, GeoToolData> = {
   },
   'unlock-pdf': {
     primaryKeyword: 'pdf password remover online free',
-    seoTitle: 'PDF Password Remover – Unlock Protected PDF Files Free | PDFEdit Studio',
+    seoTitle: 'Unlock PDF Online — Remove Password Free | PDFEdit',
     metaDescription:
       'Decrypt and remove password restrictions from PDF documents client-side. Fast, private, and secure in your browser without uploading confidential files.',
     longTailKeywords: [
@@ -996,7 +996,7 @@ export const GEO_DATA_MAP: Record<string, GeoToolData> = {
   },
   'rotate-pdf': {
     primaryKeyword: 'rotate pdf pages online free',
-    seoTitle: 'Rotate PDF Pages – Rotate 90, 180, 270 Degrees Free | PDFEdit Studio',
+    seoTitle: 'Rotate PDF Pages Online Free | PDFEdit',
     metaDescription:
       'Rotate individual pages or all pages of a PDF document by 90, 180, or 270 degrees. Lossless stream orientation directly in device memory with zero server uploads.',
     longTailKeywords: [
@@ -1032,7 +1032,7 @@ export const GEO_DATA_MAP: Record<string, GeoToolData> = {
   },
   'watermark-pdf': {
     primaryKeyword: 'watermark pdf online free',
-    seoTitle: 'PDF Watermarker – Add Custom Watermark to PDF Free | PDFEdit Studio',
+    seoTitle: 'Add Watermark to PDF Online Free | PDFEdit',
     metaDescription:
       'Add custom text watermarks to PDF files with adjustable opacity, angle, and position across all pages. 100% private in-browser watermarking with zero server uploads.',
     longTailKeywords: [
@@ -1068,7 +1068,7 @@ export const GEO_DATA_MAP: Record<string, GeoToolData> = {
   },
   'edit-pdf-metadata': {
     primaryKeyword: 'edit pdf metadata online free',
-    seoTitle: 'PDF Metadata Editor – Modify Title, Author & Properties | PDFEdit Studio',
+    seoTitle: 'Edit PDF Metadata Online Free | PDFEdit',
     metaDescription:
       'Inspect, edit, or sanitize Title, Author, Subject, and Keywords PDF catalog metadata client-side. Clean tracking headers or customize document properties for free.',
     longTailKeywords: [
@@ -1161,7 +1161,7 @@ export const GEO_DATA_MAP: Record<string, GeoToolData> = {
   },
   'ocr-pdf': {
     primaryKeyword: 'OCR PDF online free',
-    seoTitle: 'OCR PDF Online Free | Extract Text from Scanned PDFs | PDFEdit',
+    seoTitle: 'OCR PDF Online Free — Extract Text | PDFEdit',
     metaDescription: 'Extract text from scanned PDF pages with browser-based OCR supporting English, Spanish, French, and German. Files are processed locally in your browser and are not uploaded to our servers.',
     longTailKeywords: ['extract text from scanned pdf', 'free pdf ocr browser', 'ocr pdf to text privately', 'multi language pdf ocr'],
     highlights: ['Multi-language scanned-page OCR (English, Spanish, French, German)', 'Recognized text preview', 'TXT download', 'Local browser processing'],
@@ -1217,7 +1217,7 @@ export const GEO_DATA_MAP: Record<string, GeoToolData> = {
   },
   'extract-pdf-pages': {
     primaryKeyword: 'extract PDF pages online free',
-    seoTitle: 'Extract PDF Pages Online Free | Save Selected Pages | PDFEdit',
+    seoTitle: 'Extract PDF Pages Online Free | PDFEdit',
     metaDescription: 'Extract specific pages or page ranges from PDF files into a single merged document or download individual PDFs in a ZIP archive directly in your browser.',
     longTailKeywords: ['extract pages from pdf free', 'save specific pdf pages', 'split pdf pages to zip', 'extract pdf page range'],
     highlights: ['Consolidated PDF or ZIP archive download', 'Visual thumbnail selection & range input', 'Zero server uploads', 'Maintains original vector quality'],
@@ -1234,7 +1234,7 @@ export const GEO_DATA_MAP: Record<string, GeoToolData> = {
   },
   'add-page-numbers': {
     primaryKeyword: 'add page numbers to PDF online free',
-    seoTitle: 'Add Page Numbers to PDF Online Free | Number PDF Pages | PDFEdit',
+    seoTitle: 'Add Page Numbers to PDF Online Free | PDFEdit',
     metaDescription: 'Stamp customizable page numbers, Roman numerals, or Page X of Y pagination on PDF documents with live position preview in your browser.',
     longTailKeywords: ['number pdf pages online', 'add pagination to pdf', 'bates numbering pdf free', 'page x of y pdf stamp'],
     highlights: ['6 placement positions (headers and footers)', 'Multiple number formats (Standard, Page X of Y, Roman)', 'Custom font size, color, and start page', 'Live interactive page preview'],
@@ -1268,7 +1268,7 @@ export const GEO_DATA_MAP: Record<string, GeoToolData> = {
   },
   'pdf-to-text': {
     primaryKeyword: 'convert PDF to text online free',
-    seoTitle: 'PDF to Text Converter Online Free | Extract TXT from PDF | PDFEdit',
+    seoTitle: 'PDF to Text Converter Online Free | PDFEdit',
     metaDescription: 'Extract selectable digital text from PDF documents into clean plain text with word counts, search filter, and TXT download. 100% private in-browser extraction.',
     longTailKeywords: ['pdf to text converter online', 'extract text from pdf free', 'pdf to txt in browser', 'copy text from pdf'],
     highlights: ['Page-by-page text inspection', 'Total word, character, and line count statistics', 'In-text search and filter', '1-Click copy and .TXT download'],
@@ -1285,7 +1285,7 @@ export const GEO_DATA_MAP: Record<string, GeoToolData> = {
   },
   'flatten-pdf': {
     primaryKeyword: 'flatten PDF online free',
-    seoTitle: 'Flatten PDF Online Free | Lock Form Fields & Layers | PDFEdit',
+    seoTitle: 'Flatten PDF Online Free | PDFEdit',
     metaDescription: 'Lock fillable form fields, comments, signatures, and annotations into permanent uneditable static PDF content. Vector form flattening and full raster baking.',
     longTailKeywords: ['flatten pdf form fields', 'make pdf uneditable free', 'lock fillable pdf fields', 'raster freeze pdf'],
     highlights: ['Vector form flattening (preserves font sharpness)', 'High-security 2x visual raster bake', 'Removes interactive AcroForm fields', 'Zero server uploads'],
@@ -1302,7 +1302,7 @@ export const GEO_DATA_MAP: Record<string, GeoToolData> = {
   },
   'redact-pdf': {
     primaryKeyword: 'redact PDF online free',
-    seoTitle: 'Redact PDF Online Free | Blackout Sensitive Text & PII | PDFEdit',
+    seoTitle: 'Redact PDF Online Free | PDFEdit',
     metaDescription: 'Blackout or whiteout sensitive PII, SSNs, financial data, and sanitize metadata permanently from PDF documents client-side. Zero server uploads.',
     longTailKeywords: ['redact pdf online free', 'blackout text in pdf', 'hide sensitive info in pdf', 'sanitize pdf metadata', 'client side pdf redaction'],
     highlights: ['Interactive drag-and-drop blackout boxes', 'Blackout, whiteout, or custom text stamps (e.g. [REDACTED])', 'Automatic metadata sanitization', 'Zero server uploads & total privacy'],
@@ -1319,7 +1319,7 @@ export const GEO_DATA_MAP: Record<string, GeoToolData> = {
   },
   'heic-to-jpg': {
     primaryKeyword: 'convert HEIC to JPG online free',
-    seoTitle: 'HEIC to JPG Converter – Convert iPhone HEIC Photos Free, No Upload | PDFEdit Studio',
+    seoTitle: 'HEIC to JPG Converter Online Free | PDFEdit',
     metaDescription:
       'Convert iPhone HEIC photos to JPG images — or combine them into a single PDF — entirely in your browser. The HEIC decoder runs on your device, so your photos are never uploaded anywhere. Free, no account, no watermark.',
     longTailKeywords: [
@@ -1393,7 +1393,7 @@ export const GEO_DATA_MAP: Record<string, GeoToolData> = {
   },
   'excel-to-pdf': {
     primaryKeyword: 'convert Excel to PDF online free',
-    seoTitle: 'Excel to PDF Converter – Turn XLSX into PDF Free, No Upload | PDFEdit Studio',
+    seoTitle: 'Excel to PDF Converter Online Free | PDFEdit',
     metaDescription:
       'Convert Excel workbooks to clean, paginated PDFs in your browser. Choose which sheets to include, set portrait or landscape, and download — your spreadsheet data never leaves your device. Free, no account, no watermark.',
     longTailKeywords: [

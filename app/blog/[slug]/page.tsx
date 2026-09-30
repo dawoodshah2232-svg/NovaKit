@@ -32,8 +32,14 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
     return {};
   }
   const url = blogPostUrl(post.slug);
+  // Keep <title> within ~60 chars so Google shows it in full; the full
+  // headline stays as the on-page H1.
+  const seoTitle =
+    post.title.length > 60
+      ? post.title.slice(0, 57).replace(/\s+\S*$/, '') + '…'
+      : post.title;
   return {
-    title: post.title,
+    title: seoTitle,
     description: post.description,
     keywords: post.keywords,
     authors: [{ name: post.author }],
@@ -42,7 +48,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
     // are ineligible for Discover's large-card layout.
     robots: { index: true, follow: true, 'max-image-preview': 'large' },
     openGraph: {
-      title: `${post.title} | PDFEdit`,
+      title: `${seoTitle} | PDFEdit`,
       description: post.description,
       url,
       type: 'article',
@@ -52,7 +58,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
     },
     twitter: {
       card: 'summary_large_image',
-      title: `${post.title} | PDFEdit`,
+      title: `${seoTitle} | PDFEdit`,
       description: post.description,
       images: [post.image],
     },

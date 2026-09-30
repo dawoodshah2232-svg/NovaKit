@@ -211,7 +211,7 @@ export const TOOLS_CONFIG: ToolConfig[] = [
   // --- Additional Foundation PDF Tools ---
   {
     id: 'pdf-merger',
-    name: 'PDF Merger',
+    name: 'Merge PDF',
     description: 'Merge multiple PDF files into one clean document with drag-and-drop reordering and instant download.',
     slug: 'pdf-merger',
     category: 'PDF',

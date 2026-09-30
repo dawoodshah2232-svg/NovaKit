@@ -153,7 +153,7 @@ function HeroVisual() {
       <div className="pe-float-slow relative overflow-hidden rounded-[24px] border border-[var(--pe-border)] shadow-[var(--pe-shadow-lg)]">
         <Image
           src={heroBanner}
-          alt=""
+          alt="PDFEdit free online PDF editor — merge, compress, convert and sign PDFs in your browser"
           sizes="(max-width: 640px) 100vw, 520px"
           className="h-auto w-full"
           priority
@@ -200,9 +200,9 @@ export function Hero() {
             Browser-based PDF tools
           </p>
           <h1 className="pe-fade-up pe-fade-up-1 mt-4 text-balance text-[2.6rem] font-bold leading-[1.05] tracking-tight text-[var(--pe-text)] sm:text-6xl lg:text-[3.8rem]">
-            No account. No watermark.
+            Free Online PDF Editor.
             <br />
-            <span className="text-[var(--pe-accent)]">Just simple, powerful PDF tools.</span>
+            <span className="text-[var(--pe-accent)]">No account. No watermark.</span>
           </h1>
           <p className="pe-fade-up pe-fade-up-2 mx-auto mt-4 max-w-xl text-pretty text-base leading-relaxed text-[var(--pe-text-2)] sm:text-lg lg:mx-0">
             PDFEdit is a free PDF tool that works entirely in your browser — merge,
