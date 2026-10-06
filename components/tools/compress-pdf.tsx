@@ -556,7 +556,8 @@ export function CompressPdf() {
             )}
 
             {/* Sticky Bottom Action Bar (App-Level Frosted Glass on Mobile, In-Flow on Desktop) */}
-            <div className="fixed bottom-0 left-0 right-0 z-50 md:static p-4 bg-white/90 dark:bg-slate-900/90 backdrop-blur-md border-t border-slate-200 dark:border-slate-800 md:border-t-0 md:bg-transparent md:backdrop-blur-none md:p-0 shadow-lg md:shadow-none transition-all">
+            {/* bottom-[92px] on mobile: sits above the floating mobile nav pill (~86px tall) so the CTA is never covered */}
+            <div className="fixed bottom-[92px] left-0 right-0 z-50 md:static md:bottom-auto p-4 bg-white/90 dark:bg-slate-900/90 backdrop-blur-md border-t border-slate-200 dark:border-slate-800 md:border-t-0 md:bg-transparent md:backdrop-blur-none md:p-0 shadow-lg md:shadow-none transition-all">
               <div className="max-w-4xl mx-auto space-y-2">
                 {/* Quick Mobile Micro-Status Bar */}
                 <div className="flex items-center justify-between text-[11px] text-slate-500 dark:text-slate-400 md:hidden px-1">
