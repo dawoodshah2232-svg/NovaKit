@@ -25,6 +25,12 @@ const COMPANY_LINKS = [
   { label: 'Security', href: '/#security' },
 ];
 
+const COMPARE_LINKS = [
+  { label: 'PDFEdit vs iLovePDF', href: '/compare/pdfedit-vs-ilovepdf' },
+  { label: 'PDFEdit vs Smallpdf', href: '/compare/pdfedit-vs-smallpdf' },
+  { label: 'PDFEdit vs Sejda', href: '/compare/pdfedit-vs-sejda' },
+];
+
 const LEGAL_LINKS = [
   { label: 'Privacy Policy', href: '/privacy' },
   { label: 'Terms of Service', href: '/terms' },
@@ -36,7 +42,7 @@ export function Footer() {
   return (
     <footer className="mt-auto border-t border-[var(--pe-border)] bg-[var(--pe-surface)]">
       <div className="mx-auto max-w-7xl px-4 py-10 pb-28 sm:px-6 lg:px-8 lg:pb-10">
-        <div className="grid grid-cols-1 gap-8 sm:grid-cols-2 md:grid-cols-5">
+        <div className="grid grid-cols-1 gap-8 sm:grid-cols-2 md:grid-cols-6">
           <div className="space-y-4 md:col-span-2">
             <Logo size="sm" badgeText="100% Client-Side" />
 
@@ -87,6 +93,22 @@ export function Footer() {
 
             <ul className="space-y-2 text-sm text-[var(--pe-text-2)]">
               {COMPANY_LINKS.map((link) => (
+                <li key={link.href + link.label}>
+                  <Link href={link.href} className="transition hover:text-[var(--pe-accent)]">
+                    {link.label}
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </nav>
+
+          <nav aria-label="Compare">
+            <h4 className="mb-3 text-xs font-bold uppercase tracking-wider text-[var(--pe-text)]">
+              Compare
+            </h4>
+
+            <ul className="space-y-2 text-sm text-[var(--pe-text-2)]">
+              {COMPARE_LINKS.map((link) => (
                 <li key={link.href + link.label}>
                   <Link href={link.href} className="transition hover:text-[var(--pe-accent)]">
                     {link.label}

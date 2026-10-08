@@ -5,6 +5,8 @@ import { StudioV2PreviewLazy } from '@/components/studiov2/StudioV2PreviewLazy';
 
 export const metadata: Metadata = {
   title: 'Studio V2 Preview — PDFEdit',
+  description:
+    'Internal preview of the next PDFEdit Studio iteration. Not indexed.',
   robots: { index: false, follow: false },
 };
 

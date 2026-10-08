@@ -105,7 +105,7 @@ export function TranslatedHomePage({ locale }: { locale: PilotLocale }) {
             );
           })}
           <Link
-            href="/tools"
+            href="/"
             className="group rounded-3xl border border-dashed border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-950/40 p-6 transition hover:border-blue-300 dark:hover:border-blue-800 flex flex-col justify-center"
           >
             <h3 className="text-lg font-extrabold text-slate-900 dark:text-white">

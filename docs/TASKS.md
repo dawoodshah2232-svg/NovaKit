@@ -9,7 +9,9 @@ Small, sequenced. Statuses: DONE · DOING · TODO. Unknowns stay TODO — never 
 
 ## TODO (sequenced, small)
 
-1. [ ] Decide Studio V2 launch criteria (what must V2 do that v1 doesn't?).
+1. [ ] **Google Search Console (owner action, ~5 min):** site is NOT yet verified in GSC — no verification token exists repo-side, so nothing could be added in code. Fastest path: GSC → Add property → verify via the existing Google AdSense account (the AdSense snippet is already in the served `<head>`), or paste a `google-site-verification` meta tag and ask for a one-line repo patch. After verification: submit `https://www.pdfedit.website/sitemap.xml` (already referenced in `robots.ts`), check Indexing → Pages for the `/tools/<slug>` noindex duplicates (expected: excluded by canonical), and request indexing for `/studio`, `/merge-pdf`, `/compress-pdf`. Also add Bing Webmaster Tools via the same AdSense/Microsoft flow (only Yandex is verified repo-side today).
+2. [ ] **Backlink strategy (content-earned only — never buy/spam links):** (a) keep shipping the troubleshooting blog guides — they earn links from forums/Reddit/Stack answers; (b) `/embed` widget page is the linkable asset — promote it to bloggers who write PDF how-tos; (c) comparison pages (`/compare/*`) are outreach targets for "iLovePDF alternative" roundups; (d) llms.txt + FAQ/HowTo schema keep AI-search citations flowing, which increasingly turn into backlinks. No directories, no paid posts, no link schemes.
+3. [ ] Decide Studio V2 launch criteria (what must V2 do that v1 doesn't?).
 2. [ ] Compliance: icons — repo uses `lucide-react`; owner rule says Heroicons inline SVG only. Decide: migrate or formally keep lucide.
 3. [ ] Compliance: typography — repo loads Inter via `next/font`; owner rule is the Apple font stack. Decide before any change.
 4. [ ] i18n: expand beyond the `/es` + `/ar` pilot (priority languages unconfirmed).
@@ -17,7 +19,7 @@ Small, sequenced. Statuses: DONE · DOING · TODO. Unknowns stay TODO — never 
 6. [ ] Admin dashboard upgrade pass (schema file exists; scope unconfirmed).
 7. [ ] Continue daily blog content cadence (110 guides as of 2026-10-08).
 8. [ ] Expand `/compare` pages beyond the three existing (iLovePDF/Sejda/Smallpdf) — TODO: which competitors next.
-9. [ ] 20-point SEO sweep re-audit per the 2026-10-08 standard (baseline → fix → verify → commit → push), once scheduled.
+9. [x] 20-point SEO sweep re-audit per the 2026-10-08 standard — DONE 2026-10-08 (see MEMORY.md).
 10. [ ] doc-engine (`components/doc-engine/`) — purpose/roadmap unconfirmed; document or park.
 
 ## DONE (from git history, newest first)

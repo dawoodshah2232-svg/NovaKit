@@ -3,6 +3,7 @@ import Link from 'next/link';
 import { ArrowUpRight, CheckCircle2, FileText } from 'lucide-react';
 import { PREVIEW_TOOLS, categoryById } from '@/components/ui-preview/data';
 import { TOOLS_CONFIG } from '@/lib/tools-config';
+import { canonicalPathBySlug } from '@/lib/tool-paths';
 import { TOOL_ICON_MAP } from '@/components/tools-hub';
 
 /**
@@ -54,7 +55,7 @@ function buildIndex(): IndexEntry[] {
     if (UTILITY_SLUGS.has(tool.slug)) {
       entries.push({
         name: tool.name,
-        href: `/tools/${tool.slug}`,
+        href: canonicalPathBySlug[tool.slug] || `/tools/${tool.slug}`,
         blurb: tool.description,
         group: GROUP_LABELS[tool.category] ?? tool.category,
         icon: TOOL_ICON_MAP[tool.iconName] || FileText,

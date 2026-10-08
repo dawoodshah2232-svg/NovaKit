@@ -77,7 +77,7 @@ export function ComparePage({ config }: { config: CompareConfig }) {
             </li>
             <li aria-hidden="true">/</li>
             <li>
-              <Link href="/tools" className="hover:text-red-600 dark:hover:text-red-400">
+              <Link href="/" className="hover:text-red-600 dark:hover:text-red-400">
                 Tools
               </Link>
             </li>

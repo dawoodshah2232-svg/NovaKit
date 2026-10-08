@@ -4,6 +4,8 @@ Progress log: what shipped, what's in flight, what's next. Updated after each wo
 
 ## DONE
 
+- **2026-10-08** — 20-point SEO sweep (audit → fix → verify). Baseline was already strong (robots + sitemap.xml + canonicals + OG + JSON-LD from the 2026-09-30 sweep). Real fixes applied: (1) homepage tool hub + home index now link **canonical** tool paths (`lib/tool-paths.ts`) instead of the noindexed `/tools/<slug>` duplicates — the site's highest-authority page was pointing link equity at noindex URLs; (2) footer gained a **Compare** column linking the 3 `/compare/*` pages (previously orphaned — in sitemap, zero internal links); (3) compare-page breadcrumb + i18n "view all tools" `/tools` links pointed at `/` (the `/tools` URL only 301-redirects); (4) `/ui-preview` got meta-level `noindex` (robots.txt already disallowed it); `/studio-v2-preview` got a meta description. Verified: `npm run build` clean, sitemap.xml/robots.txt served, `/compress-pdf` serves dedicated metadata (no noindex; rewrite precedence confirmed safe), `/tools/compress-pdf` correctly noindexes + canonicalizes, canonical/host consolidation intact. Owner TODOs in TASKS.md: GSC verification + sitemap submission, Bing Webmaster, content-earned backlink strategy.
+
 - **2026-10-06** — Mobile CTA fix: merge/compress CTAs were hidden behind the floating nav pill on mobile (`f417a77`); redeploy picked up the fix (`fcf44c1`).
 - **2026-10-06** — Blog: "How to Print a PDF as a Booklet" guide.
 - **2026-10-03** — Blog: "How to Insert Pages Into a PDF" guide.

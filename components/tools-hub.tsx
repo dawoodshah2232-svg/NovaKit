@@ -40,6 +40,7 @@ import {
   Wrench,
 } from 'lucide-react';
 import { TOOLS_CONFIG, ToolConfig } from '@/lib/tools-config';
+import { canonicalPathBySlug } from '@/lib/tool-paths';
 
 // Map iconName to Lucide icon components (shared with the homepage A–Z index)
 export const TOOL_ICON_MAP: Record<string, React.ElementType> = {
@@ -156,7 +157,10 @@ const SECTIONS: HubSection[] = [
 ];
 
 function toolHref(tool: ToolConfig): string {
-  return tool.slug === 'studio' ? '/studio' : `/tools/${tool.slug}`;
+  // SEO: link the canonical public path (lib/tool-paths.ts), not the
+  // /tools/<slug> duplicate — the duplicate emits robots noindex and
+  // canonicalizes to the dedicated route for top-level tools.
+  return canonicalPathBySlug[tool.slug] || `/tools/${tool.slug}`;
 }
 
 export function ToolsHub() {

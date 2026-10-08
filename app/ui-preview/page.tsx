@@ -1,10 +1,17 @@
+import type { Metadata } from 'next';
 import { PreviewHeader, PreviewFooter, PreviewThemeSync } from '@/components/ui-preview/chrome';
 import { Hero, PopularTools, Categories, StudioPromo, Trust, WhyPdfEdit } from '@/components/ui-preview/sections';
 
 /**
  * /ui-preview — isolated homepage UI concept.
  * PREVIEW ONLY: does not replace or affect the production homepage (/).
+ * Kept out of search indexes (robots noindex + robots.txt disallow).
  */
+export const metadata: Metadata = {
+  title: 'UI Preview — PDFEdit (internal)',
+  description: 'Internal design preview of the PDFEdit homepage. Not indexed.',
+  robots: { index: false, follow: false },
+};
 export default function UiPreviewPage() {
   return (
     <div className="pe-preview -mx-4 -my-5 sm:-mx-6 sm:-my-7 lg:-mx-8">
